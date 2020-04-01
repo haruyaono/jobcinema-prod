@@ -26,8 +26,12 @@ phases:
       - IMAGE_NAME_PHP_FPM=php-fpm
       - REPOSITORY_URI_PHP_FPM=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${PROJECT_NAMESPACE}/${IMAGE_NAME_PHP_FPM}
       - REPOSITORY_URI_NGINX=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${PROJECT_NAMESPACE}/${IMAGE_NAME_NGINX}
+      - echo $REPOSITORY_URI_PHP_FPM
+      - echo $REPOSITORY_URI_NGINX
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo $COMMIT_HASH
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo $IMAGE_TAG
   build: #ビルドテスト
     commands:
       - echo Build started on 'date'

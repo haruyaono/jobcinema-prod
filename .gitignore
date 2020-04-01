@@ -13,7 +13,6 @@
 /vendor
 .env
 .env.dusk.local
-.env.example
 .env.testing
 .phpunit.result.cache
 Homestead.json
