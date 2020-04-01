@@ -1,0 +1,40 @@
+/********** ログインページ************/
+  
+.login-card {
+    margin: 2rem 0;
+    background-color: #f0f0f0;
+    border: 0;
+    border-radius: 3px;
+  }
+  .login-card-body{
+    margin: 1rem;
+  }
+  .login-card .btn{
+    border-radius: 3px;
+    border: 0;
+    width: 200px;
+    height: 50px;
+    background: #de9610;
+    font-weight: 400;
+    color: #fff;
+  }
+  .forget-passlink {
+    display: block;
+    margin-top: .5rem;
+  }
+
+  /********** 企業用ログインページ************/
+.emp-login-section .inner {
+    max-width: 660px;
+  }
+  
+  .emp-login-link {
+    list-style: none;
+    text-align: center;
+  }
+  .emp-login-link li {
+    margin-top: 10px;
+  }
+  .emp-login-link li a {
+    text-decoration: underline;
+  }

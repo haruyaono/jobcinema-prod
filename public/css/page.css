@@ -1,0 +1,250 @@
+/********** 固定ページ************/
+.page-section p {
+    margin-bottom: .5em
+}
+.page-section h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 16px 0;
+}
+.page-section h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 16px 0;
+}
+.page-section .page-subtitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.page-section-close-btn {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.page-thum-wrap {
+    margin-right: 16px;
+    margin-bottom: 16px;
+    width: 40%;
+    float: left;
+}
+.page-thum-wrap img {
+    width: 100%;
+}
+
+
+/* 利用規約 */
+.page-section .agree-box {
+    padding: 8px 16px 16px;
+}
+.page-section .list-decimal{
+    list-style-type: decimal;
+    padding: 4px 16px;
+    padding-right: 0;
+}
+.page-section .list-decimal.round-brackets li {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-left: .5em;
+    list-style-type: none;
+    counter-increment: cnt;
+}
+.page-section .list-decimal.round-brackets li:before {
+    display: marker;
+    content: "(" counter(cnt) ") ";
+    position: absolute;
+    left: -1.75em;
+}
+
+/*JOB CiNEMAとは？ページ  */
+.about-entry h1 {
+	font-size: 50px;
+	margin-bottom: 0;
+}
+.about-entry .pad {
+	padding: 1em 4em 5em;
+}
+.about-entry .beginners-intr {
+    width: 80%;
+    margin: 0 auto;
+	text-align: center;
+}
+.about-entry .sub-title {
+	font-size: 24px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.beginners-section h2 {
+	position: relative;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2em;
+    margin-top: 80px;
+	margin-bottom: 50px;
+    letter-spacing: 1.2px;
+	border: 0;
+}
+.beginners-section h2 span {
+	font-size: 18px;
+    color: #a29b93;
+    font-weight: normal;
+    font-family: 'arial';
+    display: block;
+    letter-spacing: 2px;
+    line-height: 1.8em;
+}
+.beginners-section h2::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 30px;
+    border-bottom: 1px solid #333;
+    bottom: -5px;
+    margin-left: -15px;
+}
+.flow-btn-wrap {
+    text-align: center;
+}
+.flow-btn {
+    display: inline-block;
+    max-width: 180px;
+    text-align: left;
+    border: 2px solid #de9610;
+    font-size: 16px;
+    color: #de9610;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin: 0 10px;
+	cursor: pointer;
+}
+.tab-current {
+    background-color: #de9610;
+    color: #FFF;
+}
+.beginners-flow-text {
+    border: 3px solid #bfbfbf;
+    border-radius: 3px;
+    padding: 16px;
+    margin-top: 40px;
+	display: none;
+}
+.content-current {
+	display: block;
+}
+.beginners-flow-text h3 {
+    display: inline-block;
+    margin: 0;
+    padding: 2px 8px;
+    font-weight: 400;
+    background-color: rgba(222,150,16,0.1);
+    font-size: 16px;
+}
+.beginners-flow-text h3 span {
+    padding-right: 5px;
+    color: #de9610;
+}
+.beginners-flow-text p {
+    margin: 12px 12px 24px;
+}
+.feature-text-span {
+	font-size: 16px;
+	font-weight: bold;
+	margin-left: -12px;
+}
+.beginners-flow p {
+	margin-left: 12px;
+}
+
+
+@media (max-width:768px) {
+/* 固定ページ（デフォルト） */
+    .page-section ol{
+    margin-left: 20px;
+    }
+    .page-section ul {
+    margin-left: 10px;
+    }
+/*JOB CiNEMAとは？ページ  */
+    .page-template-beginners .main-wrap {
+        padding: 0;
+    }
+    .about-entry h1 {
+        font-size: 30px;
+    }
+    .about-entry .pad {
+        padding: 1em 1em;
+    }
+    .about-entry .beginners-intr {
+        width: 90%;
+    }
+    .about-entry .sub-title {
+        font-size: 18px;
+        margin-top: 15px;
+    }
+    .beginners-section h2 {
+        font-size: 18px;
+        margin-top: 50px;
+        margin-bottom: 40px;
+    }
+    .beginners-section h2 span {
+        font-size: 14px;
+    }
+    .beginners-section h2::after {
+        width: 20px;
+        margin-left: -10px;
+    }
+    .beginners-flow-text {
+        border: 2px solid #bfbfbf;
+        padding: 16px 8px;
+        margin-top: 20px;
+    }
+    .beginners-flow-text h3 {
+        font-size: 16px!important;
+        width: auto!important;
+        display: inline-block;
+    }
+    .beginners-flow-text h3 span {
+        padding-right: 5px;
+        color: #de9610;
+    }
+    .beginners-flow-text p {
+        margin: 12px 12px 24px;
+    }
+    .feature-text-span {
+        font-size: 16px;
+        font-weight: bold;
+        margin-left: -12px;
+    }
+    .beginners-flow p {
+        margin-left: 12px;
+    }
+
+    
+}
+
+@media (max-width: 568px) {
+
+    /* 固定ページ（デフォルト） */
+    .page-section h1 {
+        font-size: 20px;
+        margin: 12px 0;
+    }
+    .page-section p {
+      font-size: 12px;
+    }
+    .page-section .agree-box {
+        padding: 8px 0 16px;
+    }
+    .page-section .list-decimal {
+        padding: 4px 8px;
+        padding-right: 0;
+    }
+    .page-section ol {
+        margin-left: 10px;
+    }
+}

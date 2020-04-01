@@ -1,0 +1,122 @@
+
+.mt-3 {
+    margin-top: 20px;
+}
+.mb-3 {
+    margin-bottom: 20px;
+}
+.card-header {
+    margin-top: 20px;
+}
+
+/* job detail */
+.admin-job-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.admin-job-detail-table tr{
+    border: 1px solid #acacac;
+   
+}
+.admin-job-detail-table th, .admin-job-detail-table td {
+    padding: 10px;
+}
+.admin-job-detail-table th {
+    border-right: 1px solid #acacac;
+}
+.admin-job-image-area {
+    clear: both;
+    
+}
+.admin-job-image-item {
+    float: left;
+    width: 32%;
+    margin-right: 2%;
+}
+.admin-job-image-item:last-child {
+    margin-right: 0;
+}
+
+.admin-image-wrap {
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 240px;
+    height: 180px;
+}
+.admin-job-image-item img  {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+}
+
+/* user detail */
+.applicant-detail .card-header {
+    background-color: #d3d3d3;
+    border-radius: 0px;
+    padding: 0.75rem 1.25rem;
+}
+.applicant-detail-job-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.applicant-detail-job-table.table-bordered  {
+    border: 1px solid #acacac;
+}
+.applicant-detail-job-table th, .applicant-detail-job-table td {
+    padding: 10px;
+    border: 1px solid #acacac!important;
+}
+
+.detail-box {
+    margin-bottom: 40px;
+    clear: both;
+    margin-top: 20px;
+}
+.detail-item {
+    letter-spacing: .1rem;
+}
+.item-row .row-label {
+    padding: 18px 20px;
+    display: table-cell;
+    width: 25%;
+    width: 250px;
+    border-left: 1px solid #acacac;
+    border-bottom: 1px solid #acacac;
+    border-right: 1px solid #acacac;
+    font-weight: bold;
+}
+.item-row .row-text {
+    padding: 18px 20px;
+    display: table-cell;
+    width: 75%;
+    width: 750px;
+    border-bottom: 1px solid #acacac;
+    border-right: 1px solid #acacac;
+}
+.detail-box .item-row:nth-child(1) .row-label, .detail-box .item-row:nth-child(1) .row-text {
+    border-top: 1px solid #acacac;
+}
+
+
+/* billing index */
+.tab-pane {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.billing-year-top {
+    display: flex;
+    align-items: center;
+    margin: 20px 0 40px;
+}
+.billing-year-top p {
+    margin-right: 25px;
+    font-size: 17px;
+}

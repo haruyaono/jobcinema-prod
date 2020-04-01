@@ -1,0 +1,432 @@
+/***************** 求職者マイページ ********************/
+/** マイページトップ **/
+.mypage-hello-text {
+  display: inline-block;
+}
+.mypage-btn-list-wrap {
+  width: 100%;
+    margin: 20px auto;
+  }
+  .mypage-btn-list-inner {
+    list-style: none;
+    clear: both;
+  }
+  .mypage-btn-list-inner li {
+    display: inline-block;
+    float: left;
+    margin: 1%;
+    width: 48%;
+  }
+  .mypage-btn-list-inner li .btn-gray {
+    display: inline-block;
+    color: #333;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 17px;
+    height: 43px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #c4c2ba;
+    padding-top: 8px;
+  }
+  .mypage-pagetop-btn {
+    text-align: center
+  }
+  
+  /** マイページ編集ページ**/
+  .mypage-nameform {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+  
+  }
+  .mypage-nameform:last-child{
+    margin-left: 2%;
+  }
+  .mypage-card .btn{
+    border-radius: 3px;
+    border: 0;
+    width: 200px;
+    height: 50px;
+    background: #de9610;
+    font-weight: 400;
+    color: #fff;
+  }
+  .resume-input {
+    border: 0;
+  }
+  
+  /** 応募管理ページ**/
+  .seeker-jobapp-item {
+    border: 1px solid #E8E8E8;
+    padding: 20px;
+    margin-bottom: 40px;
+  }
+  .jobapp-item-header {
+    display: block;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #E8E8E8;
+    clear: both;
+  }
+  .jobapp-item-header::after, .jobapp-item-middle::after{
+    clear: both;
+    content: "";
+    display: table;
+  }
+  .header-status {
+    font-size: 18px;
+    float: left;
+  }
+  .header-date {
+    font-size: 14px;
+    color: #9B9B9B;
+    float: left;
+    padding-top: 5px;
+    padding-left: 10px;
+  }
+  .header-money {
+    font-size: 16px;
+    float: right;
+  }
+  .header-money span {
+    color: #c93a40;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .jobapp-item-middle {
+    display: flex;
+  }
+
+.jobapp-item-img {
+  width: 20%;
+  max-width: 270px;
+  text-align: center;
+}
+.jobapp-item-img img {
+  width: 100%;
+}
+.jobapp-item-text {
+  width: 44%;
+  margin-left: 3%;
+}
+.jobapp-item-text table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
+.jobapp-item-text table th {
+  font-weight: normal;
+  width: 90px;
+  min-width: 80px;
+}
+.jobapp-item-text table td {
+  min-width: 200px;
+  width: 70%;
+}
+
+.jobapp-item-btn {
+  width: 30%;
+  margin-left: 3%;
+  text-align: center;
+}
+.jobapp-item-btn .btn {
+  margin-bottom: 20px;
+  font-weight: normal;
+  width: 100%;
+  font-size: 14px;
+}
+.jobapp-item-btn .btn-secondary {
+  color: #fff!important;
+}
+.jobapp-item-btn .btn-danger {
+  color: #fff!important;
+}
+
+.status_e_to_seeker {
+  padding: 10px;
+  background-color: #F7F7F7;
+  font-size: 18px;
+  border-top: 1px solid #E8E8E8;
+  border-left: 1px solid #E8E8E8;
+  border-right: 1px solid #E8E8E8;
+}
+
+.status_e_to_seeker .e-status_1 {
+  color: #de9610;
+  font-weight: bold;
+}
+.status_e_to_seeker .e-status_2 {
+  color: #3490dc;
+  font-weight: bold;
+}
+
+/* 結果報告 */
+.seeker-jobapp-result-wrap {
+  display: flex;
+  justify-content: space-between
+}
+.seeker-jobapp-result-wrap .seeker-jobapp-item {
+  width: 60%;
+}
+.seeker-jobapp-result-wrap .seeker-jobapp-item .jobapp-item-img {
+  width: 40%;
+}
+.seeker-jobapp-result-wrap .seeker-jobapp-item .jobapp-item-text {
+  width: 55%;
+}
+.seeker-jobapp-result-wrap .seeker-jobapp-result-btn {
+  width: 35%;
+  margin-left: 5%;
+}
+.seeker-jobapp-result-wrap .seeker-jobapp-result-btn .btn{
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.btn.btn-outline-yellow:hover{
+  color: #de9610;
+  opacity: 1;
+}
+.adopt-cancel-btn {
+  border: 0;
+  background-color: #fff;
+  color: #3490dc;
+}
+.seeker-oiwai-tabwrap {
+  border: 1px solid #E8E8E8;
+}
+
+.seeker-oiwai-tabwrap .tab_area {
+  display: flex;
+  margin-bottom: 40px;
+}
+.seeker-oiwai-tabwrap .tab_area label {
+  width: 50%;
+  display: inline-block;
+  text-align: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid #E8E8E8;
+  font-weight: bold;
+  color: #9B9B9B;
+  cursor: pointer;
+}
+.seeker-oiwai-tabwrap .tab_area label:first-child{
+  border-right: 1px solid #E8E8E8;
+}
+
+.seeker-oiwai-tabwrap .tab_area label.active {
+  color: #de9610;
+  pointer-events: none;
+  border-bottom: 3px solid #de9610;
+}
+
+.seeker-oiwai-tabwrap .panel_area {
+  padding: 0 20px;
+}
+.seeker-oiwai-tabwrap .panel_area .tab_panel .form-label{
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 14.70196%;
+  line-height: 40px;
+}
+.seeker-oiwai-tabwrap .panel_area .tab_panel .form-item::after{
+  clear: both;
+    content: "";
+    display: table;
+}
+
+.seeker-oiwai-tabwrap .panel_area .tab_panel input[type="text"] {
+  width: 80px;
+  height: 40px;
+  border: 1px solid #E8E8E8;
+  border-radius: 3px;
+  padding-left: 10px;
+}
+.seeker-oiwai-tabwrap .panel_area .tab_panel textarea {
+  width: 100%;
+  padding-left: 10px;
+}
+.seeker-oiwai-tabwrap .panel_area .tab_panel textarea:focus{
+  outline: 0;
+}
+.seeker-oiwai-tabwrap .panel_area .tab_panel sapn {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.seeker-oiwai-tabwrap .panel_area .tab_panel input[type="submit"] {
+  margin-left: 20px;
+  float: right;
+  width: 150px;
+  line-height: 30px;
+  background-color: #de9610;
+  color: #FFFFFF;
+  font-weight: normal;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.seeker-oiwai-tabwrap .panel_area #panel2 input[type="submit"] {
+  margin: 30px auto 0;
+  display: block;
+  float: none;
+}
+
+.tab_panel{
+   display:none;
+  }
+.tab_panel.active{
+  display:block;
+}
+
+@media (max-width:768px) {
+  .jobapp-item-text {
+    width: 67%;
+    margin-left: 0;
+  }
+  .jobapp-item-text table {
+    border-spacing: 0 3px;
+  }
+
+  .seeker-oiwai-tabwrap .panel_area .tab_panel input[type="submit"] {
+    float: none;
+    display: block;
+    width: 40%;
+    margin: 20px auto 0;
+}
+
+}
+
+  
+@media (max-width:568px) {
+  .s-mypage-section h2 {
+    font-size: 16px;
+  }
+  .mypage-hello-text {
+    font-size: 13px;
+    letter-spacing: -1px;
+  }
+  .mypage-btn-list-inner li {
+    display: block;
+    float: none;
+    margin: 4% auto;
+    width: 90%;
+  }
+  .mypage-btn-list-inner li .btn-gray {
+    font-size: 15px;
+    height: 44px;
+    padding-top: 0;
+    line-height: 44px;
+  }
+  
+  .seeker-jobapp-item {
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .jobapp-item-header {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .header-status {
+      font-size: 16px;
+  }
+  .header-date {
+    padding-top: 2px;
+  }
+
+  .jobapp-item-middle {
+      display: block;
+  }
+  .jobapp-item-text {
+    width: 100%;
+  }
+
+  .jobapp-item-btn {
+      width: 100%;
+      display: flex;
+      margin-left: 0;
+      justify-content: flex-end;
+      margin-top: 8px;
+  }
+
+  .jobapp-item-btn p {
+    margin-left: 8px;
+  }
+  .jobapp-item-btn .btn {
+    padding: 4px 8px;
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+
+  .status_e_to_seeker {
+    padding: 8px;
+    font-size: 14px;
+  }
+  .status_e_to_seeker .e-status {
+    font-size: 16px;
+  }
+
+  .seeker-jobapp-result-wrap .seeker-jobapp-item .jobapp-item-text {
+    width: 100%;
+  }
+  .seeker-jobapp-result-wrap {
+    display: block;
+  }
+
+  .seeker-jobapp-result-wrap .seeker-jobapp-item, .seeker-jobapp-result-wrap .seeker-jobapp-result-btn {
+    width: 100%;
+  }
+  .seeker-jobapp-result-wrap .seeker-jobapp-result-btn {
+    margin-left: 0;
+  }
+  .seeker-jobapp-result-wrap .seeker-jobapp-result-btn .btn {
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px;
+  }
+
+  .tab_panel {
+    font-size: 13px;
+  }
+
+  .seeker-oiwai-tabwrap .tab_area {
+    margin-bottom: 20px;
+  }
+  .seeker-oiwai-tabwrap .tab_area label {
+    font-size: 13px;
+  }
+  .seeker-oiwai-tabwrap .panel_area {
+    padding: 0 10px;
+  }
+  .seeker-oiwai-tabwrap .panel_area .tab_panel .form-label {
+    float: none;
+    line-height: 30px;
+    min-width: 65px;
+  }
+  .seeker-oiwai-tabwrap .panel_area .tab_panel input[type="text"] {
+    width: 60px;
+    height: 30px;
+    padding-left: 8px;
+  }
+  .seeker-oiwai-tabwrap .panel_area .tab_panel input[type="submit"] {
+    width: 60%;
+    margin: 20px auto 0;
+    line-height: 20px;
+  }
+  .seeker-oiwai-tabwrap .panel_area #panel2 input[type="submit"] {
+    margin: 10px auto 0;
+  }
+
+
+  .mypage-card .btn {
+    width: 160px;
+    height: 35px;
+  }
+ 
+}

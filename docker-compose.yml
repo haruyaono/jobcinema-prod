@@ -1,0 +1,57 @@
+version: '3.2'
+services:
+  nginx:
+    container_name: "nginx"
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./public:/var/www/html/src/public
+    restart: always
+  php-fpm:
+    container_name: "php-fpm"
+    build:
+      context: .
+      dockerfile: ./docker/php-fpm/Dockerfile
+    depends_on:
+      - mysql
+    volumes:
+      - ./:/var/www/html/src/
+      - ./docker/supervisor/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
+    restart: always
+    links:
+     - mysql
+  mysql:
+    container_name: "mysql"
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: default
+      MYSQL_USER: default
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - ../db:/var/lib/mysql
+      - ../data/logs/mysql:/var/log/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+  redis:
+    container_name: "redis"
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+  pma:
+    container_name: pma
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: mysql
+    ports:
+      - "8080:80"
+    restart: always
+    links:
+      - mysql

@@ -1,0 +1,170 @@
+.contact-section h1{
+    margin-bottom: 15px;
+    font-size: 26px;
+    font-weight: bold;
+}
+.contact-form-table {
+    width: 100%;
+    background-color: #fff;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 15px;
+}
+
+.contact-form-table td, .contact-form-table th {
+    padding: 15px;
+    border: 1px solid #ccc;
+}
+
+.contact-form-table th {
+    width: 20%;
+    min-width: 200px;
+    background-color: #fefefe;
+    color: #999;
+    font-size: 12px;
+    text-align: left;
+    vertical-align: top;
+}
+.contact-form-table td {
+    width: 80%;
+}
+
+.contact-form-heading-text {
+    display: inline-block;
+    float: left;
+}
+
+.contact-form-heading-label {
+    float: right;
+    display: inline-block;
+    padding: .35em 1em;
+    letter-spacing: 0;
+}
+
+.contact-form-table button, .contact-form-table input:not([type=checkbox]), .contact-form-table  input:not([type=radio]), .contact-form-table select, .contact-form-table textarea {
+    font-size: 100%;
+    font-family: ヒラギノ角ゴ Pro W3,Hiragino Kaku Gothic Pro,Osaka,メイリオ,Meiryo,ＭＳ\ Ｐゴシック,MS P Gothic,Verdana,sans-serif;
+    vertical-align: middle;
+    outline: none;
+}
+.contact-form-radio-wrap label {
+    margin-top: 10px
+}
+.contact-form-table input[type=radio] {
+    margin-right: 5px;
+    margin-top: -5px;
+}
+.contact-form-textarea, .contact-form-textfield {
+    display: inline-block;
+    padding: .7em 1em;
+    border: 1px solid #999;
+    background-color: #fff;
+    box-shadow: none;
+    -ms-appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: .4s;
+}
+
+.contact-form-textfield[size="15"] {
+    width: 15em;
+}
+.contact-form-textfield[size="20"] {
+    width: 20em;
+}
+.contact-form-textfield[size="25"] {
+    width: 25em;
+}
+
+.contact-form-select-wrap {
+    position: relative;
+    padding: 0;
+    vertical-align: bottom;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #999;
+    display: inline-block;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+}
+.contact-form-select-wrap select {
+    padding: .7em 2em .7em 1em;
+    border: none;
+    background: none;
+    line-height: 1;
+    vertical-align: top;
+    -ms-appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+  
+.contact-form-textarea {
+    width: 100%;
+    min-height: 80px;
+}
+
+.contact-button-wrap {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.c-complete-textbox {
+    background-color: #f5f5f5;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 30px;
+}
+
+.c-568-only {
+    display: none;
+}
+
+@media (max-width:768px) {
+.contact-section h1 {
+    font-size: 20px;
+}
+
+.contact-form-table td, .contact-form-table th {
+    width: 100%;
+    display: block;
+    padding: 8px;
+}
+.contact-form-table th {
+    background-color: #F7F7F7;
+}
+.contact-form-heading-text {
+    float: none;
+}
+.contact-form-heading-label {
+    float: none;
+    display: inline-block;
+    padding: .05em .5em;
+    font-size: 12px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+}
+
+@media (max-width: 568px) {
+
+    .contact-section h1 {
+        font-size: 18px;
+    }
+
+    .contact-form-textfield[size="25"] {
+        width: 100%;
+    }
+    .contact-form-select-wrap select {
+        padding: .3em 2em .3em 1em;
+    }
+
+    .c-568-only {
+        display: block;
+    }
+
+}

@@ -1,0 +1,773 @@
+/**** トップページ ****/
+.top-heading-h2 {
+  margin-bottom: 15px;
+  margin-top: 30px;
+}
+.top-subsection-item {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #ccc;
+}
+.top-subsection-item-inner h2 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.7
+}
+
+.top-subsection-item-inner {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+}
+
+.top-subsection-item-text {
+  margin-top: 15px;
+}
+
+/* トップカテゴリ一覧 */
+.top-category-wrap {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 0 15px;
+  position: relative;
+}
+.top-category-list {
+  padding: 15px 0 20px;
+  margin-bottom: 15px;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.top-category-list .top-category-list-item {
+  width: 32.3%;
+  margin-right: 1%;
+  line-height: 1.8;
+  list-style: none;
+}
+
+.top-category-list .top-category-list-item a {
+  font-weight: 600;
+}
+.top-category-list .top-category-list-item a:hover{
+  text-decoration: underline;
+}
+
+/* 案件一覧 */
+  /* .job-list {
+    margin: 2em 0;
+  } */
+  
+  .job-item {
+    width: 100%;
+    border: 2px solid #ececec;
+    display: table;
+    position: relative;
+  }
+  
+  .job-item:not(:last-child) {
+    margin-bottom: 2em;
+  }
+  .job-item-link {
+    display: block;
+    padding:  1em 1.5em;
+    color: #333;
+    border-top: 4px solid #C93A3F;
+  }
+  .job-item-link:hover {
+    color: inherit;
+  }
+  .job-item-link:hover h3 {
+    opacity: .8;
+  }
+  
+  .job-left img{
+    max-width:350px;
+    width: 100%;
+    height:auto;
+    vertical-align: bottom;
+    object-fit: cover;
+    transition:  all .3s ease-in-out;
+  }
+  
+  .job-list .job-left {
+    width: 30%;
+    align-self: flex-end;
+  }
+  .job-list .job-right {
+    width: 70%;
+    align-self: flex-end;
+    margin-left: 1em ;
+  }
+  
+  .job-item-heading {
+     display: flex;
+     align-items: center;
+     margin-bottom: 1em;
+  }
+  
+  .job-entry h3, .taxnomy-job-entry h2 {
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    display: inline-block;
+  }
+  .company_name_item {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 5px;
+  }
+  
+  .job-table {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .job-table th {
+    background-color:#F5F5F5;
+    white-space: nowrap;
+    width: 20%;
+  }
+  
+  .job-table th span {
+    color: #555;
+    font-weight: normal;
+  }
+  .job-table th span::before {
+    color: #555;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    padding-right :10px;/*文字との隙間*/
+  }
+  .job-table th span.money::before {
+    content: '\f53a';
+  }
+  .job-table th span.occupation::before {
+    content: '\f2b5';
+  }
+  .job-table th span.place::before {
+    content: '\f1d8';
+  }
+  .job-table th span.time::before  {
+    content: '\f017';
+  }
+  .job-table th span.date::before  {
+    content: '\f073';
+  }
+  .job-table th span.work::before  {
+    content: '\f684';
+  }
+  
+  .job-table th, .job-table td {
+    border: solid 1px #ececec;
+    padding: 8px 16px;
+  }
+
+  .job-table td  {
+    width: 80%;
+  }
+  
+  /********** 個別ページ************/
+  .media-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 40px 0 90px;
+  }
+  
+  .full-wide-slider {
+    position:relative;
+    width: 55%;
+    max-height: 300px;
+    height: 28vw;
+    min-height: 8vw;
+    margin-right: 5%;
+    transition: all 1.2s ease;
+    display: inline-block;
+  }
+  .full-wide-slider.slick-initialized {
+    opacity: 1;
+    visibility: visible;
+  }
+  .full-wide-slider .slick-list {
+    height: 100%;
+  }
+  .full-wide-slider .slick-track{
+    height: 100%;
+  }
+  
+  .full-wide-slider .slick-slide {
+    position:relative;
+    height: 30vw;
+  }
+  .full-wide-slider .slick-slide::before {
+    background-color: #000;
+    opacity: .3;
+    z-index: 1;
+  }
+  .full-wide-slider .slick-slide video {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-height: 100%;
+    width: 100%;
+    height:auto;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  
+  .full-wide-slider .slick-slide .slide-media {
+    -webkit-animation: slideOut 0.4s cubic-bezier(0.4, 0.29, 0.01, 1);
+            animation: slideOut 0.4s cubic-bezier(0.4, 0.29, 0.01, 1);
+  }
+  .full-wide-slider .slick-slide.slick-active {
+    z-index: 1;
+  }
+  .full-wide-slider .slick-slide.slick-active .slide-media {
+    -webkit-animation: slideIn 2.4s cubic-bezier(0.4, 0.29, 0.01, 1);
+            animation: slideIn 2.4s cubic-bezier(0.4, 0.29, 0.01, 1);
+  }
+  
+  
+  .full-wide-slider .slick-dots {
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  .full-wide-slider .slick-dots li {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 8px;
+  }
+  .full-wide-slider .slick-dots li button {
+    width: 16px;
+    height: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 0 transparent;
+    vertical-align: middle;
+    color: #fff;
+    background-color: #B6B6B6;
+    transition: all .3s ease;
+    opacity: .4;
+    font-size: 0;
+  }
+  .full-wide-slider .slick-arrow {
+    background: transparent;
+    margin-top:0;
+  }
+  .full-wide-slider .prev-arrow {
+     left: 0;
+     opacity: .7;
+  }
+  .full-wide-slider .next-arrow {
+      right: 0;
+      opacity: .7;
+  }
+  .full-wide-slider .prev-arrow::before, .full-wide-slider .next-arrow::before {
+      color: #555;
+  }
+  .full-wide-slider .slick-dots li button:focus {
+    outline: none;
+  }
+  .full-wide-slider .slick-dots li button:hover {
+    opacity: 1;
+  }
+  .full-wide-slider .slick-dots li.slick-active button {
+    box-shadow: 0 0 0 2px #fff;
+    opacity: 1;
+    background-color: #333;
+  }
+  
+  
+  
+  
+  @-webkit-keyframes slideIn {
+    from {
+      -webkit-filter: blur(15px);
+              filter: blur(15px);
+    }
+    to {
+      -webkit-filter: blur(0);
+              filter: blur(0);
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      -webkit-filter: blur(15px);
+              filter: blur(15px);
+    }
+    to {
+      -webkit-filter: blur(0);
+              filter: blur(0);
+    }
+  }
+  @-webkit-keyframes slideOut {
+    from {
+      -webkit-filter: blur(0);
+              filter: blur(0);
+    }
+    to {
+      -webkit-filter: blur(15px);
+              filter: blur(15px);
+    }
+  }
+  @keyframes slideOut {
+    from {
+      -webkit-filter: blur(0);
+              filter: blur(0);
+    }
+    to {
+      -webkit-filter: blur(15px);
+              filter: blur(15px);
+    }
+  }
+  
+  
+  .invi-job-entry .pad {
+    padding: 3em 3%;
+  }
+  
+  .invi-job-entry h1 {
+    margin-bottom: 3em;
+    padding: 0 .5em ;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #666;
+  }
+  
+  .invi-job-entry h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 1em 0em .5em;
+  }
+  
+  .detail-box {
+    margin-bottom: 40px;
+    clear: both;
+  }
+  .detail-item {
+    letter-spacing: .1rem;
+  }
+  .item-title {
+    width: 100%;
+    height: 50px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    background-color: #F5F5F5;
+    text-align: center;
+    border: 1px solid #E8E8E8;
+  }
+  .item-title h3 {
+    line-height: 50px;
+    font-size: 16px;
+  }
+   .box-item .item-row {
+    display: block;
+    font-size: 1.4rem;
+    line-height: 18px;
+    width: 100%;
+  }
+  .item-row .row-label {
+    padding: 18px 20px;
+    display: table-cell;
+    width: 25%;
+    width: 250px;
+    border-left: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8;
+    border-right: 1px solid #E8E8E8;
+    font-weight: bold;
+  }
+  .item-row .row-text {
+    padding: 18px 20px;
+    display: table-cell;
+    width: 75%;
+    width: 750px;
+    border-bottom: 1px solid #E8E8E8;
+    border-right: 1px solid #E8E8E8;
+  }
+  .item-row::after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+  
+  .invi-job-entry h3.recruit-info:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f086";
+    position: absolute;
+    left : .5em; /*左端からのアイコンまでの距離*/
+  }
+  .invi-job-entry h3.company-info:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f54f";
+    position: absolute;
+    left : .5em; /*左端からのアイコンまでの距離*/
+  }
+  
+  .image3-area {
+    /* margin: 3em 0 2em; */
+    width:40%;
+    display: inline-block;
+    margin-bottom: -7px;
+  }
+  
+  .image3-area ul {
+    margin: 0 auto;
+    list-style: none;
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .image3-area ul li {
+    display: inline-block;
+    width: 33%;
+  }
+  .image3-area ul li img{
+    width: 100%;
+    /* height: 100%; */
+    /* width: 250px; */
+    height: 150px;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+  
+  .text-contents {
+    max-width: 900px;
+    width: 100%;
+  }
+  
+  .detail-area .newjob-table {
+    width: 95%;
+    margin: 1.2em auto;
+  }
+  
+  .detail-area .newjob-table .sub-text {
+    font-weight: bold;
+    margin: .5em 0 0;
+  }
+  
+  .entrybtn-field .entry-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    display: block;
+    border-radius: 3px;
+    margin-right: 10px;
+  }
+  .entrybtn-field .apply-btn {
+    background: #de9610;
+    color: #fff;
+    width: 90%;
+    text-align: center;
+  }
+  .entrybtn-field .favourite-btn {
+    background: #f2f2f2;
+    color: #333;
+    width: 80%;
+    margin-left: auto;
+  }
+  .entrybtn-field .apply-btn::before {
+    content: '\f0a4';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 8px;
+    color: #fff;
+  }
+  
+  .d-flex {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+  }
+  
+  
+@media (max-width:768px) {
+  /* トップカテゴリ一覧 */
+  .top-category-wrap {
+    padding: 0 12px;
+  }
+  .top-category-list {
+    padding: 0;
+  }
+  .top-category-list .top-category-list-item {
+    width: 49%;
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+  .top-category-list .top-category-list-item a {
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: -.1px;
+  }
+
+  .top-sp-auth-btn-wrap a {
+    border-radius: 0!important;
+    padding: 12px 10px;
+  }
+
+  .title-img-wrap h2 {
+    width: 72%;
+  }
+  .job-list .job-left {
+    width: 25%;
+    margin-right: 3%;
+    align-self: flex-start;
+}
+  .job-list .job-right {
+    width: 100%;
+    margin-left: 0;
+}
+  
+  .newjob-list-border {
+    border: 2px solid #ececec;
+    border-left: 0;
+    border-right: 0;
+  } 
+  .newjob-item {
+      width: 100%;
+      border-radius: 3px;
+      display: table;
+      position: relative;
+  }
+  .newjob-item-link {
+    padding: 2em 0;
+  }
+    .title-img-wrap {
+      display: flex;
+    }
+    .newjob-entry h3 {
+      width: 65%;
+      margin-right: 2%;
+      font-size: 18px;
+    }
+    .newjob-entry h3 p {
+      margin-bottom: 0;
+    }
+    
+    
+  
+    
+
+  /******個別記事*******/
+
+  .invi-job-entry .pad {
+    padding: 2em 1%;
+  }
+  .invi-job-entry h1 {
+    margin-bottom: 2em;
+  }
+  .cat-item  {
+    font-size: 2vw;
+    margin-right: 10px;
+  }
+
+  .entrybtn-field .apply-btn,   .entrybtn-field .favourite-btn{
+    width: 100%;
+    font-size: 16px;
+  }
+  /******個別記事の動画スライダー*******/
+  .full-wide-slider {
+    width: 100%;
+    max-height: 450px;
+    height: 55vw;
+    min-height: 0;
+    margin-right: 0;
+    margin-bottom: 40px;
+}
+.full-wide-slider .slick-list {
+    height: 100%;
+}
+.full-wide-slider .slick-track {
+    height: 100%;
+}
+.full-wide-slider .slick-slide {
+    height: 55vw;
+}
+.full-wide-slider .slick-slide video {
+    height: 100%;
+    max-width: 650px;
+}
+.full-wide-slider .slick-dots {
+    padding: 0;
+    height: 20px;
+}
+.full-wide-slider .slick-dots li {
+    line-height: 20px;
+}
+.full-wide-slider .slick-dots li button {
+    width: 8px;
+    height: 8px;
+    border: 1px solid #fff;
+    padding: 0;
+}
+.full-wide-slider .slick-arrow {
+    width: 20px;
+    height: 20px;
+}
+.full-wide-slider .prev-arrow::before {
+    line-height: 20px;
+}
+.full-wide-slider .next-arrow::before {
+    line-height: 20px;
+}
+
+/* ３つ並びの画像 */
+
+.media-wrap {
+    flex-direction: column;
+    margin: 40px 0 20px;
+}
+.image3-area {
+    margin:.2em 0 2em;
+    width: 100%;
+}
+
+/* 個別記事の詳細 */
+.item-row .row-label {
+    padding: 18px 20px 0;
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    border-bottom: 0;
+}
+.item-row .row-text {
+    padding: 9px 20px;
+    display: block;
+    width: 100%;
+    border-left: 1px solid #E8E8E8;
+}
+
+
+}
+
+@media (max-width: 568px) {
+
+
+    /* 求人リスト */
+    .top-heading-h2 {
+      margin-bottom: 10px;
+      margin-top: 25px;
+      font-size: 14px;
+    }
+    .top-subsection-item-inner h2 {
+      font-size: 14px;
+      line-height: 1.5;
+  }
+  .top-subsection-item-inner {
+    padding: 10px;
+}
+    .pad {
+      padding: 1.5em .5em;
+    }
+    .newjob-item-link {
+      padding: 1em .5em;
+    }
+  
+  
+    .pager {
+      margin-top: 3em;
+    }
+  
+    .pager ul li a {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      font-size: .7em;
+    }
+  
+    .newjob-item-heading {
+      text-align: left;
+      margin-bottom: 1.5em;
+  }
+    .newjob-entry h3 {
+      font-size: 16px;
+    }
+  
+    .newjob-table th, .newjob-table td {
+      padding: 5px 10px;
+      font-size: 3vw
+    }
+
+    .job-item-link {
+      padding: .5em;
+    }
+    .job-item:not(:last-child) {
+      margin-bottom: 1em;
+  }
+    .title-img-wrap h2 {
+      width: 67%;
+      font-size: 16px;
+      line-height: .8;
+    }
+    .job-list .job-left {
+      width: 30%;
+      margin-right: 3%;
+  }
+    .job-table th, .job-table td {
+      padding: 4px 8px;
+      line-height: 1;
+    }
+
+    .job-table th {
+      font-size: 12px;
+      width: 15%;
+      line-height: 1.2;
+      text-align: center;
+      letter-spacing: .01em;
+    }
+    .job-table th span::before {
+      display: block;
+      padding-right: 0;
+    }
+
+
+  .invi-job-entry h1 {
+    font-size: 16px;
+    margin-bottom: 1em;
+  }
+  .invi-job-entry h2 {
+      font-size: 18px;
+      margin: .5em 0em .5em;
+  }
+  .text-contents p {
+    font-size: 14px;
+  }
+  .btn-area form {
+      padding-left: 70px;
+  }
+  .invi-job-entry .app-btn {
+      font-size: 18px;
+      padding: 20px 70px 20px 0;
+  }
+
+  .item-title {
+    height: 35px;
+  }
+  .item-title h3 {
+    line-height: 35px;
+    font-size: 14px;
+  }
+
+  .item-row .row-label {
+    padding: 10px 10px 0;
+    font-size: 14px;
+}
+.item-row .row-text {
+  padding: 8px 10px;
+
+}
+  .entrybtn-field .entrybtn-item {
+    width: 90%;
+    margin: 3% auto;
+}
+
+
+  
+}
+
