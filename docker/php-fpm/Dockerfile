@@ -58,9 +58,12 @@ RUN php artisan route:clear
 RUN php artisan view:clear
 RUN composer dump-autoload
 RUN php artisan clear-compiled
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
 
 ## Laravel Permission
 RUN chmod -R a+w storage/ bootstrap/cache
 RUN chown -R www-data:www-data storage
+RUN chmod -R 775 storage
 RUN chmod -R 775 storage
 RUN service supervisor start
