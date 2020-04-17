@@ -23,7 +23,7 @@
                 </div>
             </div> <!-- card --> 
             <div class="form-group text-center">
-            <a href="javascript:void(0);" class="btn btn-dark" onClick="window.opener.location.reload(),window.close()">OK</a>
+            <a href="javascript:void(0);" class="btn btn-dark" id="close_button">OK</a>
             </div>
     </div>
 </div>  <!-- pad -->
@@ -35,6 +35,26 @@
 @section('footer')
   @component('components.employer.mypage_footer')
   @endcomponent
+@endsection
+
+
+@section('js')
+<script>
+
+$(function() {
+    var job = @json($job);
+
+
+    if(job != '') {
+        window.opener.$("#film1").attr('src', "{{Session::get('data.file.edit_movie.main')}}");
+    } else {
+        window.opener.$("#film1").attr('src', "{{Session::get('data.file.movie.main')}}");
+    }
+
+
+});
+</script>
+ 
 @endsection
 
 

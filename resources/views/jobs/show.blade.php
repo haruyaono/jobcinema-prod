@@ -63,212 +63,224 @@
         </div>
     </div>
     <!--  案件内容の詳細-->
-        <div class="detail-box">
-          <div class="detail-item">
-            <div class="item-title">
-              <h3>
-                募集内容
-              </h3>
-            </div>
-            <div class="item-row">
-              <div class="row-label">勤務先</div>
-              <div class="row-text">
-                <p>{{ $job->job_office }}</p>
-              </div>
-            </div>
-            <div class="item-row">
-              <div class="row-label">雇用形態</div>
-              <div class="row-text">
-                <p>{{ optional($job->status_cat_get)->name}}</p>
-              </div>
-            </div>
-            <div class="item-row">
-              <div class="row-label">職種</div>
-              <div class="row-text">
-                <p>{{ $job->job_type}}</p>
-              </div>
-            </div>
-            <div class="item-row">
-              <div class="row-label">仕事内容</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->job_desc)) !!}</p>
-              </div>
-            </div>
-            <div class="item-row">
-              <div class="row-label">給与</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->job_hourly_salary)) !!}</p>
-              </div>
-            </div>
-            @if($job->salary_increase)
-            <div class="item-row">
-              <div class="row-label">昇給・賞与</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->salary_increase)) !!}</p>
-              </div>
-            </div>
-            @endif
-            <div class="item-row">
-              <div class="row-label">応募資格</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->job_target)) !!}</p>
-              </div>
-            </div>
-            <div class="item-row">
-              <div class="row-label">住所</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->job_office_address)) !!}</p>
-              </div>
-            </div>
-            <div class="item-row">
-              <div class="row-label">勤務時間</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->job_time)) !!}</p>
-              </div>
-            </div>
-  
-            
-            <div class="item-row">
-              <div class="row-label">待遇・福利厚生</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->job_treatment)) !!}</p>
-              </div>
-            </div>
-            @if($job->remarks)
-            <div class="item-row">
-              <div class="row-label">その他</div>
-              <div class="row-text">
-                <p>{!! nl2br(e($job->remarks)) !!}</p>
-              </div>
-            </div>
-            @endif
-            <?php
-              if($job->pub_start != '最短で掲載') {
-                $job_start = $job->pub_start;
-              } else {
-                $job_start = '';
-              }
-
-              if($job->pub_end != '無期限で掲載') {
-                $job_end = $job->pub_end;
-              } else {
-                $job_end = '';
-              }
-              
-            ?>
-            @if($job_end != '')
-            <div class="item-row">
-              <div class="row-label">掲載期間</div>
-              <div class="row-text">
-                <p> {{ $job_start }}〜{{ $job_end }}</p>
-              </div>
-            </div>
-            @endif
-          </div> <!-- detail-item -->
-        </div> <!-- detail-box -->
-
-        <div class="detail-box">
-          <div class="detail-item">
-            <div class="item-title">
-              <h3>
-                会社情報
-              </h3>
-            </div>
-            @if($job->company->cname)
-            <div class="item-row">
-              <div class="row-label">会社名</div>
-              <div class="row-text">
-                <p>{{ $job->company->cname }}</p>
-              </div>
-            </div>
-            @endif
-            <div class="item-row">
-              <div class="row-label">本社所在地</div>
-              <div class="row-text">
-                @if($job->company->postcode)
-                  <p>{{ $job->company->postcode }}</p>
-                @endif
-                @if($job->company->prefecture)
-                  <p>{{ $job->company->prefecture }}</p>
-                @endif
-                @if($job->company->address)
-                  <p>{{ $job->company->address }}</p>
-                @endif
-              </div>
-            </div>
-            @if($job->company->ceo)
-            <div class="item-row">
-              <div class="row-label">代表</div>
-              <div class="row-text">
-                <p>{{ $job->company->ceo }}</p>
-              </div>
-            </div>
-            @endif
-            @if($job->company->foundation)
-            <div class="item-row">
-              <div class="row-label">設立</div>
-              <div class="row-text">
-                <p>{{ $job->company->foundation }}</p>
-              </div>
-            </div>
-            @endif
-            @if($job->company->capital)
-            <div class="item-row">
-              <div class="row-label">資本金</div>
-              <div class="row-text">
-                <p>{{ $job->company->capital }}円</p>
-              </div>
-            </div>
-            @endif
-            @if($job->company->employee_number)
-            <div class="item-row">
-              <div class="row-label">従業員数</div>
-              <div class="row-text">
-                <p>{{ $job->company->employee_number }}</p>
-              </div>
-            </div>
-            @endif
-            @if($job->company->description)
-            <div class="item-row">
-              <div class="row-label">事業内容</div>
-              <div class="row-text">
-                <p>{!! nl2br(e( $job->company->description )) !!}</p>
-              </div>
-            </div>
-            @endif
-            @if($job->company->website)
-            <div class="item-row">
-              <div class="row-label">ホームページ</div>
-              <div class="row-text">
-                <p><a href="{{ $job->company->website }}">{{ $job->company->website }}</a></p>
-              </div>
-            </div>
-            @endif
+      <div class="detail-box">
+        <div class="detail-item">
+          <div class="item-title">
+            <h3>
+              募集内容
+            </h3>
           </div>
-        </div>
-        
-          <div class="entrybtn-field">
-            @if(Auth::guard()->check())
-              <favourite-component :jobid={{$job->id}} :favourited={{$job->checkSaved()?'true':'false'}}></favourite-component>
-              <div class="entrybtn-item">
-              @if(!$job->checkApplication())
-                  <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$job->id])}}">応募する</a>
-              @else
-                <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>
+          <div class="item-row">
+            <div class="row-label">勤務先</div>
+            <div class="row-text row-job-place">
+              <p>{{ $job->job_office }}</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <div class="row-label">雇用形態</div>
+            <div class="row-text">
+              <p>{{ optional($job->status_cat_get)->name}}</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <div class="row-label">職種</div>
+            <div class="row-text row-job-occupation">
+              <p>{{ $job->job_type}}</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <div class="row-label">仕事内容</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->job_desc)) !!}</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <div class="row-label">給与</div>
+            <div class="row-text row-job-salary">
+              <p>{!! nl2br(e($job->job_hourly_salary)) !!}</p>
+            </div>
+          </div>
+          @if($job->salary_increase)
+          <div class="item-row">
+            <div class="row-label">昇給・賞与</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->salary_increase)) !!}</p>
+            </div>
+          </div>
+          @endif
+          <div class="item-row">
+            <div class="row-label">応募資格</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->job_target)) !!}</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <div class="row-label">住所</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->job_office_address)) !!}</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <div class="row-label">勤務時間</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->job_time)) !!}</p>
+            </div>
+          </div>
+
+          
+          <div class="item-row">
+            <div class="row-label">待遇・福利厚生</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->job_treatment)) !!}</p>
+            </div>
+          </div>
+          @if($job->remarks)
+          <div class="item-row">
+            <div class="row-label">その他</div>
+            <div class="row-text">
+              <p>{!! nl2br(e($job->remarks)) !!}</p>
+            </div>
+          </div>
+          @endif
+          <?php
+            if($job->pub_start != '最短で掲載') {
+              $job_start = $job->pub_start;
+            } else {
+              $job_start = '';
+            }
+
+            if($job->pub_end != '無期限で掲載') {
+              $job_end = $job->pub_end;
+            } else {
+              $job_end = '';
+            }
+            
+          ?>
+          @if($job_end != '')
+          <div class="item-row">
+            <div class="row-label">掲載期間</div>
+            <div class="row-text">
+              <p> {{ $job_start }}〜{{ $job_end }}</p>
+            </div>
+          </div>
+          @endif
+        </div> <!-- detail-item -->
+      </div> <!-- detail-box -->
+
+      <div class="detail-box">
+        <div class="detail-item">
+          <div class="item-title">
+            <h3>
+              会社情報
+            </h3>
+          </div>
+          @if($job->company->cname)
+          <div class="item-row">
+            <div class="row-label">会社名</div>
+            <div class="row-text">
+              <p>{{ $job->company->cname }}</p>
+            </div>
+          </div>
+          @endif
+          <div class="item-row">
+            <div class="row-label">本社所在地</div>
+            <div class="row-text">
+              @if($job->company->postcode)
+                <p>{{ $job->company->postcode }}</p>
+              @endif
+              @if($job->company->prefecture)
+                <p>{{ $job->company->prefecture }}</p>
+              @endif
+              @if($job->company->address)
+                <p>{{ $job->company->address }}</p>
               @endif
             </div>
-            @else
-              @if(!Auth::guard('employer')->check())
-                <div class="entrybtn-item">
-                  <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$job->id])}}">応募する</a>
-                </div>
-              @endif
-            @endif
-            
-        
-        
+          </div>
+          @if($job->company->ceo)
+          <div class="item-row">
+            <div class="row-label">代表</div>
+            <div class="row-text">
+              <p>{{ $job->company->ceo }}</p>
+            </div>
+          </div>
+          @endif
+          @if($job->company->foundation)
+          <div class="item-row">
+            <div class="row-label">設立</div>
+            <div class="row-text">
+              <p>{{ $job->company->foundation }}</p>
+            </div>
+          </div>
+          @endif
+          @if($job->company->capital)
+          <div class="item-row">
+            <div class="row-label">資本金</div>
+            <div class="row-text">
+              <p>{{ $job->company->capital }}円</p>
+            </div>
+          </div>
+          @endif
+          @if($job->company->employee_number)
+          <div class="item-row">
+            <div class="row-label">従業員数</div>
+            <div class="row-text">
+              <p>{{ $job->company->employee_number }}</p>
+            </div>
+          </div>
+          @endif
+          @if($job->company->description)
+          <div class="item-row">
+            <div class="row-label">事業内容</div>
+            <div class="row-text">
+              <p>{!! nl2br(e( $job->company->description )) !!}</p>
+            </div>
+          </div>
+          @endif
+          @if($job->company->website)
+          <div class="item-row">
+            <div class="row-label">ホームページ</div>
+            <div class="row-text">
+              <p><a href="{{ $job->company->website }}">{{ $job->company->website }}</a></p>
+            </div>
+          </div>
+          @endif
         </div>
+      </div>
+        
+      <div class="entrybtn-field">
+        @if(Auth::guard()->check())
+          <favourite-component :jobid={{$job->id}} :favourited={{$job->checkSaved()?'true':'false'}}></favourite-component>
+          <div class="entrybtn-item">
+          @if(!$job->checkApplication())
+              <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$job->id])}}">応募する</a>
+          @else
+            <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>
+          @endif
+          </div>
+        @else
+          @if(!Auth::guard('employer')->check())
+            <div class="entrybtn-item">
+              <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$job->id])}}">応募する</a>
+            </div>
+          @endif
+        @endif
+        
+      </div> <!-- entrybtn-field -->
+
+      <recent-component></recent-component>
+
+      <div class="main-section-item top-subsection-item">
+					<div class="top-subsection-item-inner">
+						<h2>アルバイト/正社員の求人情報JOBCiNEMA
+						</h2>
+						<div class="top-subsection-item-text">
+						釧路に特化した求人情報サイト「JOBCiNEMA」では、アルバイト採用者5,000円/正社員採用者1万円のお祝い金をプレゼントしております！<br>釧路のお仕事情報を地域、職種、時給などさまざまな方法で検索可能です。<br>職場の雰囲気をリアルに伝えるために多数の動画を掲載！
+						</div>
+					</div>
+				</div>
+
 		 </div> <!-- pad -->
+
 		</div> <!-- inner -->
 	</section> <!-- job-entry -->
 
@@ -279,3 +291,9 @@
   @component('components.footer')
   @endcomponent
 @endsection
+
+@section('js')
+
+
+@endsection
+

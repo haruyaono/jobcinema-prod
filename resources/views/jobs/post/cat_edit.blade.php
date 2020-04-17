@@ -83,7 +83,7 @@ if( ! function_exists('is_route'))
                     <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform01">
                         @foreach(App\Models\StatusCat::all() as $statusCat)
-                        <input id="status_cat_id_{{$statusCat->id}}" type="radio" name="status_cat_id" @if(Session::has('edit_cat_list.status')) {{Session::get('edit_cat_list.status') == $statusCat->id ? 'checked' : ''}}@else {{$job->status_cat_id == $statusCat->id ? 'checked' : ''}} @endif value="{{ $statusCat->id }}">
+                        <input id="status_cat_id_{{$statusCat->id}}" type="radio" name="status_cat_id" @if(Session::has('data.form.edit_category.status')) {{Session::get('data.form.edit_category.status') == $statusCat->id ? 'checked' : ''}}@else {{$job->status_cat_id == $statusCat->id ? 'checked' : ''}} @endif value="{{ $statusCat->id }}">
                         <label for="status_cat_id_{{$statusCat->id}}">{{ $statusCat->name }}</label><br>
                         <br>
                         @endforeach
@@ -100,7 +100,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Models\TypeCat::all() as $typeCat)
                         <div class="e-radio-item02">
-                            <input id="type_cat_id_{{$typeCat->id}}" class="" type="radio" name="type_cat_id" @if(Session::has('edit_cat_list.type')) {{Session::get('edit_cat_list.type') == $typeCat->id ? 'checked' : ''}}@else {{$job->type_cat_id == $typeCat->id ? 'checked' : ''}} @endif value="{{ $typeCat->id }}">
+                            <input id="type_cat_id_{{$typeCat->id}}" class="" type="radio" name="type_cat_id" @if(Session::has('data.form.edit_category.type')) {{Session::get('data.form.edit_category.type') == $typeCat->id ? 'checked' : ''}}@else {{$job->type_cat_id == $typeCat->id ? 'checked' : ''}} @endif value="{{ $typeCat->id }}">
                             <label for="type_cat_id_{{$typeCat->id}}">{{ $typeCat->name }}</label>
                         </div>
                         @endforeach
@@ -116,7 +116,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Models\AreaCat::all() as $areaCat)
                         <div class="e-radio-item02">
-                            <input id="area_cat_id_{{$areaCat->id}}" class="" type="radio" name="area_cat_id" @if(Session::has('edit_cat_list.area')) {{Session::get('edit_cat_list.area') == $areaCat->id ? 'checked' : ''}}@else {{$job->area_cat_id == $areaCat->id ? 'checked' : ''}} @endif value="{{ $areaCat->id }}">
+                            <input id="area_cat_id_{{$areaCat->id}}" class="" type="radio" name="area_cat_id" @if(Session::has('data.form.edit_category.area')) {{Session::get('data.form.edit_category.area') == $areaCat->id ? 'checked' : ''}}@else {{$job->area_cat_id == $areaCat->id ? 'checked' : ''}} @endif value="{{ $areaCat->id }}">
                             <label for="area_cat_id_{{$areaCat->id}}">{{ $areaCat->name }}</label>
                         </div>
                         @endforeach
@@ -132,7 +132,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Models\HourlySalaryCat::all() as $hourlySalaryCat)
                         <div class="e-radio-item02">
-                            <input id="hourly_salary_cat_id_{{$hourlySalaryCat->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(Session::has('edit_cat_list.hourly_salary')) {{Session::get('edit_cat_list.hourly_salary') == $hourlySalaryCat->id ? 'checked' : ''}}@else {{$job->hourly_salary_cat_id == $hourlySalaryCat->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCat->id }}">
+                            <input id="hourly_salary_cat_id_{{$hourlySalaryCat->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(Session::has('data.form.edit_category.hourly_salary')) {{Session::get('data.form.edit_category.hourly_salary') == $hourlySalaryCat->id ? 'checked' : ''}}@else {{$job->hourly_salary_cat_id == $hourlySalaryCat->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCat->id }}">
                             <label for="hourly_salary_cat_id_{{$hourlySalaryCat->id}}">{{ $hourlySalaryCat->name }}</label>
                         </div>
                         @endforeach
@@ -149,7 +149,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Models\DateCat::all() as $dateCat)
                         <div class="e-radio-item02">
-                            <input id="date_cat_id_{{$dateCat->id}}" class="" type="radio" name="date_cat_id" @if(Session::has('edit_cat_list.date')) {{Session::get('edit_cat_list.date') == $dateCat->id ? 'checked' : ''}}@else {{$job->date_cat_id == $dateCat->id ? 'checked' : ''}} @endif value="{{ $dateCat->id }}">
+                            <input id="date_cat_id_{{$dateCat->id}}" class="" type="radio" name="date_cat_id" @if(Session::has('data.form.edit_category.date')) {{Session::get('data.form.edit_category.date') == $dateCat->id ? 'checked' : ''}}@else {{$job->date_cat_id == $dateCat->id ? 'checked' : ''}} @endif value="{{ $dateCat->id }}">
                             <label for="date_cat_id_{{$dateCat->id}}">{{ $dateCat->name }}</label>
                         </div>
                         @endforeach

@@ -35,21 +35,24 @@
                 {{ Session::get('message_danger') }}
             </div>
         @endif
-        <form class="file-apload-form" action="@if($job){{route('sub.image2.post', [$job->id])}}@else{{route('sub.image2.post')}}@endif" method="POST" enctype="multipart/form-data">@csrf
+        <form class="file-apload-form" action="@if($job){{route('sub.image2.post', [$job->id])}}@else{{route('sub.image2.post')}}@endif" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="data[File][suffix]" value="sub2" id="FileSuffix">
+        
             <div class="card">
                 <div class="card-header">サブ写真の登録</div>
                 <div class="card-body">
                         <p>ファイルを選択から登録したい画像を選んでください</p>
                         <div class="my-5">
-                            <input name="job_sub_img2" type="file" id="job_sub_img2" accept=".jpg,.gif,.png,image/gif,image/jpeg,image/png">
+                            <input name="data[File][image]" type="file" id="FileImage" accept=".jpg,.gif,.png,image/gif,image/jpeg,image/png">
                         </div>
-                        @if($job == '' && Session::has('image_path_list.sub2'))
+                        @if($job == '' && Session::has('data.file.image.sub2'))
                         <p>現在登録されている画像</p>
-                        <p class="pre-main-image"><img src="{{Session::get('image_path_list.sub2')}}" alt="写真を登録してください"></p>
-                        @elseif($job != '' && Session::has('edit_image_path_list.sub2') && Session::get('edit_image_path_list.sub2') != '')
+                        <p class="pre-main-image"><img src="{{Session::get('data.file.image.sub2')}}" alt="写真を登録してください"></p>
+                        @elseif($job != '' && Session::has('data.file.edit_image.sub2') && Session::get('data.file.edit_image.sub2') != '')
                         <p>現在登録されている画像</p>
-                        <p class="pre-main-image"><img src="{{Session::get('edit_image_path_list.sub2')}}" alt="写真を登録してください"></p>
-                        @elseif($job != '' && Session::has('edit_image_path_list.sub2') == false && $job->job_img3 != null)
+                        <p class="pre-main-image"><img src="{{Session::get('data.file.edit_image.sub2')}}" alt="写真を登録してください"></p>
+                        @elseif($job != '' && Session::has('data.file.edit_image.sub2') == false && $job->job_img3 != null)
                         <p>現在登録されている画像</p>
                         <p class="pre-main-image"><img src="{{$job->job_img3}}" alt="写真を登録してください"></p>
                         @endif
@@ -63,8 +66,8 @@
             </div> <!-- card --> 
             <div class="form-group text-center">
                     <button type="submit" class="btn btn-primary">登録する</button>
-                    <a href="@if($job){{route('sub.image2.delete', [$job->id])}}@else{{route('sub.image2.delete')}}@endif" class="btn btn-secondary">登録された画像を削除</a>
-                    <a class="create-image-back-btn" href="javascript:void(0);"　class="btn btn-outline-secondary"  onClick="window.opener.location.reload(),window.close()">戻る</a>
+                    <a href="javascript:void(0);" class="btn btn-secondary" id="deleteImage">登録された画像を削除</a>
+                    <a class="create-image-back-btn" href="javascript:void(0);"　class="btn btn-outline-secondary" id="close_button">戻る</a>
             </div>
         </form>
     </div>
@@ -78,6 +81,31 @@
 @section('footer')
   @component('components.employer.mypage_footer')
   @endcomponent
+@endsection
+
+@section('js')
+<script>
+$(function() {
+    var job = @json($job);
+
+    $('#deleteImage').click(function() {
+        if(window.confirm('登録されているサブ写真2を削除します。よろしいですか？')) {
+            
+            if(job != '') {
+                window.location.href = '/jobs/sub/image02/delete/' + job.id;
+            } else {
+                window.location.href = '/jobs/sub/image02/delete';
+            }
+
+            window.opener.$("#photo3").attr('src', '/uploads/images/no-image.gif');
+            window.opener.$('#FileIsExist3').val(0);
+        
+            return false;
+        }
+    });
+});
+</script>
+
 @endsection
 
 

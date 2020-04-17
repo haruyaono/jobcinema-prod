@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <title>@isset ($title) {{$title}} | @endisset @yield('title')</title>
+  
   <script defer src="{{ asset('js/app.js') }}"  ></script>
   
   @include('../partials.head')

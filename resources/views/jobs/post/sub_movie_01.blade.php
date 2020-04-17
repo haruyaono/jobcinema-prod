@@ -35,30 +35,32 @@
                 {{ Session::get('message_danger') }}
             </div>
         @endif
-        <form class="file-apload-form" action="@if($job){{route('sub.movie1.post', [$job->id])}}@else{{route('sub.movie1.post')}}@endif" method="POST" enctype="multipart/form-data">@csrf
+        <form class="file-apload-form" action="@if($job){{route('sub.movie1.post', [$job->id])}}@else{{route('sub.movie1.post')}}@endif" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="data[File][suffix]" value="sub1" id="FileSuffix">
             <div class="card">
                 <div class="card-header">サブ動画の登録</div>
                 <div class="card-body">
                         <p>ファイルを選択から登録したい動画を選んでください</p>
                         <div class="my-5">
-                            <input name="job_sub_mov" type="file" id="job_sub_mov">
+                            <input name="data[File][movie]" type="file" id="job_main_mov" accept="video/*">
                         </div>
-                        @if($job == '' && Session::has('movie_path_list.sub1'))
+                        @if($job == '' && Session::has('data.file.movie.sub1'))
                         <p>現在登録されている動画</p>
                         <p class="pre-main-movie">
                         <p  oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{Session::get('movie_path_list.sub1')}}"/></iframe>
+                                <source src="{{Session::get('data.file.movie.sub1')}}"/></iframe>
                             </video>
                         </p>
-                        @elseif($job != '' && Session::has('movie_path_list.sub1') && Session::get('movie_path_list.sub1') != '')
+                        @elseif($job != '' && Session::has('data.file.edit_movie.sub1') && Session::get('data.file.edit_movie.sub1') != '')
                         <p>現在登録されている動画</p>
                         <p  oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{Session::get('edit_movie_path_list.sub1')}}"/></iframe>
+                                <source src="{{Session::get('data.file.edit_movie.sub1')}}"/></iframe>
                             </video>
                         </p>
-                        @elseif($job != '' && Session::has('edit_movie_path_list.sub1') == false && $job->job_mov2 != null)
+                        @elseif($job != '' && Session::has('data.file.edit_movie.sub1') == false && $job->job_mov2 != null)
                         <p>現在登録されている動画</p>
                         <p  oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
@@ -76,8 +78,8 @@
             </div> <!-- card --> 
             <div class="form-group text-center">
                     <button type="submit" class="btn btn-primary">登録する</button>
-                    <a href="@if($job){{route('sub.movie1.delete', [$job->id])}}@else{{route('sub.movie1.delete')}}@endif" class="btn btn-secondary">登録された動画を削除</a>
-                    <a class="create-image-back-btn" href="javascript:void(0);"　class="btn btn-outline-secondary"  onClick="window.opener.location.reload(),window.close()">戻る</a>
+                    <a href="javascript:void(0);" class="btn btn-secondary" id="deleteMovie">登録されている動画を削除</a>
+                    <a class="create-image-back-btn" href="javascript:void(0);"　class="btn btn-outline-secondary" id="close_button">戻る</a>
             </div>
         </form>
     </div>
@@ -94,5 +96,29 @@
 @endsection
 
 
+@section('js')
+<script>
+$(function() {
+    var job = @json($job);
+
+    $('#deleteMovie').click(function() {
+        if(window.confirm('登録されているサブ動画１を削除します。よろしいですか？')) {
+            
+            if(job != '') {
+                window.location.href = '/jobs/sub/movie01/delete/' + job.id;
+            } else {
+                window.location.href = '/jobs/sub/movie01/delete';
+            }
+
+            window.opener.$("#film2").attr('src', '');
+            window.opener.$('#FileMovieIsExist2').val(0);
+        
+            return false;
+        }
+    });
+});
+</script>
+
+@endsection
 
 

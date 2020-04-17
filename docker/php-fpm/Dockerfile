@@ -24,6 +24,9 @@ RUN apt-get update \
     vim \
     libpq-dev \
     supervisor \
+    redis-server \
+    iputils-ping \
+    net-tools \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd exif pdo_mysql pdo_pgsql \
     && curl -sL https://deb.nodesource.com/setup_11.x | bash - \

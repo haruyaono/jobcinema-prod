@@ -28,6 +28,8 @@ docker-compose exec php-fpm php artisan config:clear &&
 docker-compose exec php-fpm php artisan route:clear &&
 docker-compose exec php-fpm php artisan view:clear &&
 
+docker-compose exec php-fpm php artisan storage:link &&
+
 # supervisor開始
 docker-compose exec php-fpm service supervisor start &&
 

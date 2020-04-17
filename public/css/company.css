@@ -294,6 +294,7 @@
   .job-create-table th{
     background-color: rgb(252, 231, 225);
     padding: 20px ;
+    width: 20%;
   }
   .job-create-table td {
     padding: 20px ;
@@ -432,6 +433,7 @@
   }
   .job-create-table th {
     padding: 5px 10px;
+    width: 100%;
   }
   .job-create-table td {
     padding: 15px 5px;

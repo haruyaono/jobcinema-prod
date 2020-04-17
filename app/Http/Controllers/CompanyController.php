@@ -70,6 +70,7 @@ class CompanyController extends Controller
 
     public function mypageIndex()
     {
+
         return view('companies.mypage');
     }
 

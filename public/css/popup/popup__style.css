@@ -1,0 +1,190 @@
+@charset "utf-8";
+
+/* -------------------------------------------------------------------
+  全体
+------------------------------------------------------------------- */
+.lock {
+    overflow:hidden;
+}
+
+/* -------------------------------------------------------------------
+ オーバーレイ
+------------------------------------------------------------------- */
+/* window全体 */
+.overlayPopup {
+    z-index:900000000;
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:120%;
+    background-color:rgba(0,0,0,0.8); /* #14640 [.75]->[.8]へ変更 */
+}
+
+
+/* ポップアップ全体 */
+.wrapPopup {
+    z-index:900000100;
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    overflow:auto;
+}
+
+/* -------------------------------------------------------------------
+ ポップアップ
+------------------------------------------------------------------- */
+/** エリア全体 */
+.k_popup {
+    position: relative;
+    display: none;
+    width: 850px;
+    margin: 20px auto 20px;
+    padding: 10px 20px;
+    border: 2px solid #b6b6b6;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.33);
+}
+.k_popup .k_clearfix::after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.k_popup #k_clientMain {
+    float: none;
+    margin: 20px 0;
+    width: 100%;
+}
+.k_popup .k_clientSub {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+/** タイトル */
+.k_popup h1 {
+    all:unset;
+}
+.k_popup h1 img {
+    height: 40px;
+}
+.k_popup h2 {
+    display: none;
+}
+
+/* -------------------------------------------------------------------
+ アクションボタンを配置するエリア
+------------------------------------------------------------------- */
+.actionButtonArea{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.popupMainButton {
+    width: 120px;
+    height: 40px;
+    line-height: 10px;
+    margin-left: 15px;
+}
+.actionButtonOk.popupMainButton {
+    width: auto;
+}
+.actionButtonCancel.popupMainButton {
+    position: absolute;
+    left: 0;
+    margin: 15px;
+    width: auto;
+    height: auto;
+    color: #08548f;
+    background: none;
+    border: none;
+    border-bottom: solid 1px #08548f;
+}
+
+/* -------------------------------------------------------------------
+ 実行中のダイアログ
+------------------------------------------------------------------- */
+#wrapExecute {
+    z-index: 900000200;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* #13332 opacityをやめてrgbaにして子要素は透過にしない */ /* #14640 [.7]->[.8]へ変更 */
+    text-align: center;
+/*    opacity: 0.7;*/
+}
+.infoExecute{
+    top: 50%;
+    left: 40%;
+    position: absolute;
+    text-align: center;
+    padding: 20px 0;
+    /* #13332 背景色と文字色を反転 */
+    color: #000000;
+    background: #ffffff;
+    font-weight: bold;
+    border-radius: 3px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 2px 0px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 2px 0px;
+}
+/* メッセージエリア #13332 */
+.infoExecuteMessage{
+    float:left;
+    margin-right: 10px;
+}
+/* 処理中画像 #13332 */
+.infoExecuteImgloading{
+    background-image:url("../img/common/loading.gif");
+    background-size:20px;
+    float: left;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 20px;
+}
+
+/* -------------------------------------------------------------------
+ TWO-4403 プログレスバー実行中のダイアログ
+------------------------------------------------------------------- */
+.infoExecuteProgressBar {
+	top: 50%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	position: absolute;
+	text-align: center;
+	padding: 30px 0;
+	/* #13332 背景色と文字色を反転 */
+	color: #000000;
+	background: #ffffff;
+	font-weight: bold;
+	border-radius: 3px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 2px 0px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 2px 0px;
+	box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 2px 0px;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	width: 90%;
+	max-width: 800px;
+}
+
+.infoExecuteProgressBar .infoExecuteMessage {
+	float: none;
+	margin: 0 0 20px 0;
+	display: block;
+}
+
+.infoExecuteProgressBar progress {
+	height: 30px;
+	width: 90%;
+}

@@ -36,4 +36,4 @@ docker-compose exec php-fpm php artisan route:clear &&
 docker-compose exec php-fpm php artisan view:clear &&
 
 # supervisor開始
-docker-compose exec php-fpm service supervisor start &&
+docker-compose exec php-fpm service supervisor start

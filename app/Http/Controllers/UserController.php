@@ -80,6 +80,7 @@ class UserController extends Controller
         $postcode1 = substr($postcode,0,3);
         $postcode2 = substr($postcode,3);
 
+
         return view('mypages.edit', compact('postcode1', 'postcode2'));
     }
 
@@ -150,8 +151,11 @@ class UserController extends Controller
         $user_id = auth()->user()->id;
         $filename = $request->file('resume')->hashName();
         $path = $request->file('resume')->storeAs('public/files', $filename);
+
+       
         $contents = Storage::get('public/files/'.$filename);
-        Storage::disk('s3')->put('uploads/resume/'.$filename, $contents, 'public');
+
+        Storage::disk('s3')->put('resume/'.$filename, $contents, 'public');
         Profile::where('user_id', $user_id)->update([
             'resume' => $path,
         ]);
@@ -165,10 +169,11 @@ class UserController extends Controller
         if (is_null($user->profile->resume)) {
             return redirect()->back()->with('error', '削除する履歴書ファイルがありません');
         }
-        Storage::disk('public')->delete($user->profile->resume);
+
+        Storage::disk('local')->delete($user->profile->resume);
 
         $filenames = explode("/", $user->profile->resume);
-        Storage::disk('s3')->delete('uploads/resume/'.$filenames[2]);;
+        Storage::disk('s3')->delete('resume/'.$filenames[2]);;
         Profile::where('user_id', $user_id)->update([
             'resume' => null,
         ]);

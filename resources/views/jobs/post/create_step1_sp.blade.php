@@ -56,7 +56,7 @@
                         <select name="status_cat_id" id="">
                             <option value="">選択してください</option>
                             @foreach(App\Models\StatusCat::all() as $statusCat)
-                            <option id="status_cat_id_{{$statusCat->id}}"  {{ old('status_cat_id') == $statusCat->id ? 'selected' : ''}}@if(Session::has('data1.status_cat_id') && !old('status_cat_id')) {{Session::get('data1.status_cat_id') == $statusCat->id ? 'selected' : ''}} @endif value="{{ $statusCat->id }}">{{ $statusCat->name }}</option>
+                            <option id="status_cat_id_{{$statusCat->id}}"  {{ old('status_cat_id') == $statusCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.status_cat_id') && !old('status_cat_id')) {{Session::get('data.form.category.status_cat_id') == $statusCat->id ? 'selected' : ''}} @endif value="{{ $statusCat->id }}">{{ $statusCat->name }}</option>
                             @endforeach
                         </select>
                         
@@ -71,7 +71,7 @@
                         <select name="type_cat_id" id="">
                             <option value="">選択してください</option>
                             @foreach(App\Models\TypeCat::all() as $typeCat)
-                            <option id="type_cat_id_{{$typeCat->id}}"  {{ old('type_cat_id') == $typeCat->id ? 'selected' : ''}}@if(Session::has('data1.type_cat_id') && !old('type_cat_id')) {{Session::get('data1.type_cat_id') == $typeCat->id ? 'selected' : ''}} @endif value="{{ $typeCat->id }}">{{ $typeCat->name }}</option>
+                            <option id="type_cat_id_{{$typeCat->id}}"  {{ old('type_cat_id') == $typeCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.type_cat_id') && !old('type_cat_id')) {{Session::get('data.form.category.type_cat_id') == $typeCat->id ? 'selected' : ''}} @endif value="{{ $typeCat->id }}">{{ $typeCat->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -85,7 +85,7 @@
                         <select name="area_cat_id" id="">
                             <option value="">選択してください</option>
                             @foreach(App\Models\AreaCat::all() as $areaCat)
-                            <option id="area_cat_id_{{$areaCat->id}}"  {{ old('area_cat_id') == $areaCat->id ? 'selected' : ''}}@if(Session::has('data1.area_cat_id') && !old('area_cat_id')) {{Session::get('data1.area_cat_id') == $areaCat->id ? 'selected' : ''}} @endif value="{{ $areaCat->id }}">{{ $areaCat->name }}</option>
+                            <option id="area_cat_id_{{$areaCat->id}}"  {{ old('area_cat_id') == $areaCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.area_cat_id') && !old('area_cat_id')) {{Session::get('data.form.category.area_cat_id') == $areaCat->id ? 'selected' : ''}} @endif value="{{ $areaCat->id }}">{{ $areaCat->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -99,7 +99,7 @@
                         <select name="hourly_salary_cat_id" id="">
                             <option value="">選択してください</option>
                             @foreach(App\Models\HourlySalaryCat::all() as $hourlySalaryCat)
-                            <option id="hourly_salary_cat_id_{{$areaCat->id}}"  {{ old('hourly_salary_cat_id') == $hourlySalaryCat->id ? 'selected' : ''}}@if(Session::has('data1.hourly_salary_cat_id') && !old('hourly_salary_cat_id')) {{Session::get('data1.hourly_salary_cat_id') == $hourlySalaryCat->id ? 'selected' : ''}} @endif value="{{ $hourlySalaryCat->id }}">{{ $hourlySalaryCat->name }}</option>
+                            <option id="hourly_salary_cat_id_{{$areaCat->id}}"  {{ old('hourly_salary_cat_id') == $hourlySalaryCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.hourly_salary_cat_id') && !old('hourly_salary_cat_id')) {{Session::get('data.form.category.hourly_salary_cat_id') == $hourlySalaryCat->id ? 'selected' : ''}} @endif value="{{ $hourlySalaryCat->id }}">{{ $hourlySalaryCat->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -113,7 +113,7 @@
                         <select name="date_cat_id" id="">
                             <option value="">選択してください</option>
                             @foreach(App\Models\DateCat::all() as $dateCat)
-                            <option id="date_cat_id_{{$dateCat->id}}"  {{ old('date_cat_id') == $dateCat->id ? 'selected' : ''}}@if(Session::has('data1.date_cat_id') && !old('date_cat_id')) {{Session::get('data1.date_cat_id') == $dateCat->id ? 'selected' : ''}} @endif value="{{ $dateCat->id }}">{{ $dateCat->name }}</option>
+                            <option id="date_cat_id_{{$dateCat->id}}"  {{ old('date_cat_id') == $dateCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.date_cat_id') && !old('date_cat_id')) {{Session::get('data.form.category.date_cat_id') == $dateCat->id ? 'selected' : ''}} @endif value="{{ $dateCat->id }}">{{ $dateCat->name }}</option>
                             @endforeach
                         </select>
                     </div>

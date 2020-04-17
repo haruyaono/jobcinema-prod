@@ -10,9 +10,6 @@ class JobItem extends Model
 {
     protected $guarded  = [];
 
-    public function getRouteKeyName() {
-        return 'slug';
-    }
 
     protected $dates = [
         'created_at',

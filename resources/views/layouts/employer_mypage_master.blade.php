@@ -30,8 +30,16 @@
             return false;
         });
 
+        
 
     });
 </script>
+<script language="JavaScript">
+
+    $('#close_button').click(function() {
+        window.close();
+    });
+</script>
+@yield('js')
 </body>
 </html>

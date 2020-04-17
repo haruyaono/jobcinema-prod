@@ -57,7 +57,7 @@
         <!-- globalnav -->
 			<nav class="gnav">
 				<ul>
-						<li><a href="/jobs/all">求人を探す</a></li>
+						<li><a href="/jobs/search/all">求人を探す</a></li>
 						<li><a href="/lp" target="_blank">広告掲載をお考えの方へ</a></li>
 						<li><a href="/published-contact">お祝い金申請</a></li>
             <li><a href="{{route('keeplist')}}">キープリスト</a></li>
@@ -102,7 +102,7 @@
           <ul class="drawer-list">
             <li><a href="/">JOB CiNEMAトップ</a></li>
             <li><a href="/beginners">初めての方へ</a></li>
-            <li><a href="/jobs/all">釧路の求人を探す</a></li>
+            <li><a href="/jobs/search/all">釧路の求人を探す</a></li>
 
           </ul>
           <p class="drawer-sub-ttl">仕事を探す</p>

@@ -28,7 +28,7 @@ class CreateJobItemsTable extends Migration
             $table->string('job_mov2')->nullable();
             $table->string('job_mov3')->nullable();
             $table->string('job_type')->nullable();
-            $table->string('job_hourly_salary')->nullable();
+            $table->text('job_hourly_salary')->nullable();
             $table->string('job_office')->comment('勤務先の企業名・店舗名')->nullable();
             $table->text('job_office_address')->comment('勤務先の住所')->nullable();
             $table->text('job_desc')->nullable();

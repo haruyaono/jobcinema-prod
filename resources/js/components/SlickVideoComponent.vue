@@ -32,13 +32,11 @@
                 // slickの設定
                 slickOptions: {
                     autoplay: true,
-                    fade:true,
                     autoplaySpeed:6000,
-                    speed:600,
+                    speed:200,
                     arrows:false,
                     dots:true,
-                    cssEase:"cubic-bezier(0.87, 0.03, 0.41, 0.9)",
-                    accessibility	: true,
+                    accessibility: true,
                     pauseOnFocus: true,
                     
                 },

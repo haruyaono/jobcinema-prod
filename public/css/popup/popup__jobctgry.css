@@ -1,0 +1,137 @@
+@charset "utf-8";
+
+/* -------------------------------------------------------------------
+TWO-1002 職種選択モーダル
+------------------------------------------------------------------- */
+#lblJobctgryNotSet {
+	font-size: 12px;
+	color: #232323;
+}
+
+#popupJobctgry {
+	width: 920px;
+	margin: 50px auto 50px;
+}
+
+#popupJobctgry .material-icons{
+	position: absolute;
+	color: #b6b6b6;
+	font-size: 26px;
+	margin-bottom: 3.5px;
+	padding: 8px;
+}
+#popupJobctgry #srchJobctgryText {
+	width: 870px;
+	margin-bottom: 8px;
+	padding: 8px 8px 8px 40px;
+	border: solid 1px #b6b6b6;
+	border-radius: 4px;
+	font-size: 18px;
+}
+
+#popupJobctgry #jobctgryArea {
+	position: relative;
+	clear: both;
+}
+
+#popupJobctgry #jobctgryArea #jobctgryLargeArea {
+	overflow-y: auto;
+	height: 595px;
+	width: 28%;
+	padding: 2px 4px;
+	border: solid 1px #b6b6b6;
+	background-color: #ffdfaa;
+}
+
+#popupJobctgry #jobctgryArea #jobctgryMiddleArea {
+	overflow-y: auto;
+	overflow-x: hidden;
+	position: absolute;
+	left: 30%;
+	top: 0;
+	height: 595px;
+	width: 69%;
+	padding: 2px 4px 2px;
+	border: solid 1px #fc9b00;
+}
+
+#popupJobctgry #jobctgryArea #jobctgryMiddleArea #TwxPopupJobctgrySrchResultText {
+	color: #e94200;
+	position: relative;
+	width: 100%;
+	text-align: center;
+	margin: 50px 0px;
+	float: left;
+}
+
+#popupJobctgry #jobctgryArea input[type="radio"] {
+	display: none;
+}
+#popupJobctgry #jobctgryArea input[type="radio"] + label {
+	display: block;
+	padding: 4px 8px;
+	background: #ffffff;
+	border: solid 1px #b6b6b6;
+	border-radius: 4px;
+	letter-spacing: 0px
+}
+
+#popupJobctgry #jobctgryArea #jobctgryLargeArea input[type="radio"] + label {
+	margin: 2.5px auto 2.5px;
+	font-weight: bold;
+	border-radius: 2px;
+}
+
+#popupJobctgry #jobctgryArea #jobctgryLargeArea input[type="radio"] + label .material-icons{
+	position: relative;
+	padding: 2px;
+	color: #000000;
+	font-size: 20px;
+	float: right;
+}
+
+#popupJobctgry #jobctgryArea #jobctgryMiddleArea input[type="radio"] + label {
+	width: 46.2%;
+	float: left;
+	margin: 3px 2.5px;
+	padding: 2px 8px;
+	font-size: 13px;
+}
+
+#popupJobctgry #jobctgryArea input[type="radio"]:checked + label {
+	background: #fc9b00;
+	border-color: #fc9b00;
+}
+
+#popupJobctgry .jobctgrySetNavi {
+	margin-left: auto;
+	margin-right: auto;
+}
+#popupJobctgry .jobctgrySetNavi:after {
+	content: "";
+	clear: both;
+	display: block;
+}
+#popupJobctgry .jobctgrySetNavi ul li {
+	display: block;
+	float: right;
+	padding: 16px 0;
+	font-size: 18px;
+}
+#popupJobctgry input[type="button"] {
+	display: inline-block;
+	padding: 8px 16px;
+	color: #fff;
+	background: #006eb7;
+	border: solid 1px #006eb7;
+	border-radius: 4px;
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, .4);
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, .4);
+	cursor: pointer;
+	font-size: 18px;
+}
+#popupJobctgry .defaultLink {
+	color: #08548f;
+	padding: 8px 16px;
+	display: block;
+}

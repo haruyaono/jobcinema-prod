@@ -485,6 +485,13 @@
     align-items: center;
     justify-content:space-between;
   }
+
+  #recent-joblist .wrap-text p {
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #333;
+    letter-spacing: 0;
+  }
   
   
 @media (max-width:768px) {
@@ -681,10 +688,14 @@
       font-size: .7em;
     }
   
+    div.newjob-entry:last-child {
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+    }
     .newjob-item-heading {
       text-align: left;
       margin-bottom: 1.5em;
-  }
+    }
     .newjob-entry h3 {
       font-size: 16px;
     }
@@ -727,45 +738,45 @@
     }
 
 
-  .invi-job-entry h1 {
-    font-size: 16px;
-    margin-bottom: 1em;
-  }
-  .invi-job-entry h2 {
-      font-size: 18px;
-      margin: .5em 0em .5em;
-  }
-  .text-contents p {
-    font-size: 14px;
-  }
-  .btn-area form {
-      padding-left: 70px;
-  }
-  .invi-job-entry .app-btn {
-      font-size: 18px;
-      padding: 20px 70px 20px 0;
-  }
+    .invi-job-entry h1 {
+      font-size: 16px;
+      margin-bottom: 1em;
+    }
+    .invi-job-entry h2 {
+        font-size: 18px;
+        margin: .5em 0em .5em;
+    }
+    .text-contents p {
+      font-size: 14px;
+    }
+    .btn-area form {
+        padding-left: 70px;
+    }
+    .invi-job-entry .app-btn {
+        font-size: 18px;
+        padding: 20px 70px 20px 0;
+    }
 
-  .item-title {
-    height: 35px;
-  }
-  .item-title h3 {
-    line-height: 35px;
-    font-size: 14px;
-  }
+    .item-title {
+      height: 35px;
+    }
+    .item-title h3 {
+      line-height: 35px;
+      font-size: 14px;
+    }
 
-  .item-row .row-label {
-    padding: 10px 10px 0;
-    font-size: 14px;
-}
-.item-row .row-text {
-  padding: 8px 10px;
+    .item-row .row-label {
+      padding: 10px 10px 0;
+      font-size: 14px;
+  }
+  .item-row .row-text {
+    padding: 8px 10px;
 
-}
-  .entrybtn-field .entrybtn-item {
-    width: 90%;
-    margin: 3% auto;
-}
+  }
+    .entrybtn-field .entrybtn-item {
+      width: 90%;
+      margin: 3% auto;
+  }
 
 
   

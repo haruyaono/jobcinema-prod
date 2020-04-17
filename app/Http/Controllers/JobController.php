@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Arr;
 use App\Models\User;
 use App\Models\JobItem;
 use App\Models\Profile;
@@ -17,9 +18,7 @@ use App\Models\DateCat;
 use App\Http\Requests\JobCreateStep1Request;
 use App\Http\Requests\JobCreateStep2Request;
 use App\Http\Requests\JobCreateTmpSaveRequest;
-use App\Http\Requests\MainImageUploadRequest;
-use App\Http\Requests\SubImageUploadRequest;
-use App\Http\Requests\MainMovieUploadRequest;
+
 use App\Mail\JobAppliedSeeker;
 use App\Mail\JobAppliedEmployer;
 use Illuminate\Support\Facades\Mail;
@@ -27,10 +26,7 @@ use File;
 use Storage;
 use Auth;
 use DB;
-use Image;
-use FFMpeg;
-use FFMpeg\Coordinate\Dimension;
-use FFMpeg\Format\Video\X264;
+
 
 class JobController extends Controller
 
@@ -40,7 +36,7 @@ class JobController extends Controller
 
     public function __construct(JobItem $JobItem)
     {
-      $this->middleware(['employer'], ['except'=>array('index','show', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
+      $this->middleware(['employer'], ['except'=>array('index','show', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;
     }
@@ -54,21 +50,52 @@ class JobController extends Controller
       return view('jobs.index', compact('jobs','topLimitJobs'));
     }
 
-    public function show($id, JobItem $job)
+    public function show($id)
     {
       session()->forget('jobapp_count');
       session()->forget('jobapp_data');
+      
 
       $job = JobItem::find($id);
 
+      if(session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
+        
+        $jobitem_id_list = session()->get('recent_jobs');
+        
+        if(in_array($id, $jobitem_id_list) == false ) {
+          session()->push('recent_jobs', $id);
+        } 
+        
+      } else {
+        session()->push('recent_jobs', $id);
+      }
+    
       if($job->status == 2) {
         $title = $job->company->cname;
         return view('jobs.show', compact('job', 'title'));
+      } else {
+        if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
+          $index = array_search( $id, $jobitem_id_list, true );
+          session()->forget("recent_jobs.$index");
+        } 
       }
+
+      
 
       return redirect()->to('/');
 
 
+    }
+
+    // 最近見た求人
+    public function postJobHistory(Request $request) {
+      if($request->session()->has('recent_jobs') && is_array($request->session()->get('recent_jobs'))) {
+        $jobitem_id_list = $request->session()->get('recent_jobs');
+      } else {
+        $jobitem_id_list = [];
+      }
+      $recent_jobitems = JobItem::find($jobitem_id_list);
+      return response()->json($recent_jobitems);
     }
 
 
@@ -132,9 +159,7 @@ class JobController extends Controller
         abort(404);
       }
 
-      session()->forget('count');
-      session()->forget('data1');
-      session()->forget('data2');
+      
 
       $employer_id = auth('employer')->user()->id;
       $job_list = JobItem::where('employer_id', $employer_id)->get(['job_img', 'job_img2', 'job_img3']);
@@ -144,9 +169,9 @@ class JobController extends Controller
       $job_movie_list = array_diff(array_flatten($job_list_2->toArray()), array(null));
 
       // image session
-      if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))){
+      if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))){
 
-        $image_path_list = session()->get('image_path_list');
+        $image_path_list = session()->get('data.file.image');
         foreach($image_path_list as $index => $image_path) {
 
           if(File::exists(public_path() . $image_path)) {
@@ -154,12 +179,14 @@ class JobController extends Controller
           }
 
         }
-        session()->forget('image_path_list');
+
+        session()->forget('data.file.image');
+
       }
 
-      if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list')))
+      if(session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image')))
       {
-        $edit_image_path_list = session()->get('edit_image_path_list');
+        $edit_image_path_list = session()->get('data.file.edit_image');
 
         foreach($edit_image_path_list as $index => $image_path) {
           if($index == 'main' || $index == 'sub1' || $index == 'sub2' and $image_path != '')  {
@@ -171,15 +198,15 @@ class JobController extends Controller
           }
         }
 
-        session()->forget('edit_image_path_list');
+        session()->forget('data.file.edit_image');
 
       }
 
 
       // movie Yaf_Session
-      if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))){
+      if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))){
 
-        $movie_path_list = session()->get('movie_path_list');
+        $movie_path_list = session()->get('data.file.movie');
         foreach($movie_path_list as $index => $movie_path) {
 
           if(File::exists(public_path() . $movie_path)) {
@@ -187,12 +214,12 @@ class JobController extends Controller
           }
 
         }
-        session()->forget('movie_path_list');
+        session()->forget('data.file.movie');
       }
 
-      if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list')))
+      if(session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie')))
       {
-        $edit_movie_path_list = session()->get('edit_movie_path_list');
+        $edit_movie_path_list = session()->get('data.file.edit_movie');
 
         foreach($edit_movie_path_list as $index => $movie_path) {
           if($index == 'main' || $index == 'sub1' || $index == 'sub2' and $movie_path != '')  {
@@ -204,12 +231,9 @@ class JobController extends Controller
           }
         }
 
-        session()->forget('edit_movie_path_list');
+        session()->forget('data.file.edit_movie');
 
       }
-
-
-      session()->forget('edit_cat_list');
 
 
       return view('jobs.myjob', compact('jobs'));
@@ -218,28 +242,28 @@ class JobController extends Controller
     public function edit($id)
     {
 
-      if($id != '') {
-
+      try{
         session()->put('count', 1);
 
         // 新規作成時のファイル用セッションが残っていたら削除
-        if(session()->has('image_path_list')) {
-          session()->forget('image_path_list');
+        if(session()->has('data.file.image')) {
+          session()->forget('data.file.image');
         }
-        if(session()->has('movie_path_list')) {
-          session()->forget('movie_path_list');
+        if(session()->has('data.file.movie')) {
+          session()->forget('data.file.movie');
         }
-
         $job = JobItem::findOrFail($id);
 
-        return view('jobs.post.edit', compact('job'));
+       
 
-      } else {
+      }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
 
         return redirect()->route('my.job')->with('message_alert', '該当する求人票が見つかりません。');
 
       }
 
+      return view('jobs.post.edit', compact('job'));
+      
     }
 
     public function catEdit($id, $category)
@@ -253,35 +277,35 @@ class JobController extends Controller
     {
       $job = JobItem::findOrFail($id);
 
-      if(session()->has('edit_cat_list')){
-        $edit_cat_list = session()->get('edit_cat_list');
+      if(session()->has('data.form.edit_category')){
+        $edit_cat_list = session()->get('data.form.edit_category');
       }
 
 
       if($request->input('cat_flag') == 'status') {
 
         $edit_cat_list['status'] = $request->input('status_cat_id');
-        $request->session()->put('edit_cat_list', $edit_cat_list);
+        $request->session()->put('data.form.edit_category', $edit_cat_list);
 
       } elseif($request->input('cat_flag') == 'type') {
 
         $edit_cat_list['type'] = $request->input('type_cat_id');
-        $request->session()->put('edit_cat_list', $edit_cat_list);
+        $request->session()->put('data.form.edit_category', $edit_cat_list);
 
       } elseif($request->input('cat_flag') == 'area') {
 
         $edit_cat_list['area'] = $request->input('area_cat_id');
-        $request->session()->put('edit_cat_list', $edit_cat_list);
+        $request->session()->put('data.form.edit_category', $edit_cat_list);
 
       } elseif($request->input('cat_flag') == 'hourly_salary') {
 
         $edit_cat_list['hourly_salary'] = $request->input('hourly_salary_cat_id');
-        $request->session()->put('edit_cat_list', $edit_cat_list);
+        $request->session()->put('data.form.edit_category', $edit_cat_list);
 
       } elseif($request->input('cat_flag') == 'date') {
 
         $edit_cat_list['date'] = $request->input('date_cat_id');
-        $request->session()->put('edit_cat_list', $edit_cat_list);
+        $request->session()->put('data.form.edit_category', $edit_cat_list);
 
       }
 
@@ -289,806 +313,7 @@ class JobController extends Controller
     }
 
 
-    //main image
-    public function getMainImage($id='')
-    {
-      if($id != '') {
-        $job = JobItem::findOrFail($id);
-
-        return view('jobs.post.main_image', compact('job'));
-
-      }
-
-      $job = '';
-      return view('jobs.post.main_image', compact('job'));
-    }
-
-    public function postMainImage(MainImageUploadRequest $request, $id='')
-    {
-      if($request->hasfile('job_main_img')) {
-
-        if($id != '') {
-          //edit
-          $job = JobItem::findOrFail($id);
-
-          if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list'))) {
-            $edit_image_path_list = session()->get('edit_image_path_list');
-            if(isset($edit_image_path_list['main'])) {
-              if (File::exists(public_path() . $edit_image_path_list['main']) && $job->job_img != $edit_image_path_list['main']) {
-                File::delete(public_path() . $edit_image_path_list['main']);
-              }
-
-              unset($edit_image_path_list['main']);
-            }
-
-          }
-
-        } else {
-          // 新規作成時
-          if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))) {
-            $image_path_list = session()->get('image_path_list');
-            if(isset($edit_image_path_list['main'])) {
-              if (File::exists(public_path() . $image_path_list['main'])) {
-                File::delete(public_path() . $image_path_list['main']);
-
-              }
-              unset($image_path_list['main']);
-            }
-          }
-        }
-
-
-        $main_image  = $request->file('job_main_img');
-        $resize_image = Image::make($main_image)->widen(300);
-        $main_image_name = uniqid("main_image").".".$main_image->guessExtension();
-
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$main_image_name));
-        $image_path = \Config::get('fpath.tmp_img').$main_image_name;
-
-        if($id != '') {
-          $edit_image_path_list['main'] = $image_path;
-          $request->session()->put('edit_image_path_list', $edit_image_path_list);
-        } else {
-          $image_path_list['main'] = $image_path;
-          $request->session()->put('image_path_list', $image_path_list);
-        }
-
-        return view('jobs.post.main_image_complete');
-
-      } else {
-
-        return view('jobs.post.main_image');
-
-      }
-
-    }
-
-    public function mainImageDelete($id='')
-    {
-
-      if($id != '') {
-        // edit
-        $job = JobItem::findOrFail($id);
-
-        if(session()->has('edit_image_path_list.main') && is_array(session()->get('edit_image_path_list'))) {
-
-          $edit_image_path_list = session()->get('edit_image_path_list');
-
-          if (File::exists(public_path() . $edit_image_path_list['main']) && $job->job_img != $edit_image_path_list['main']) {
-              File::delete(public_path() . $edit_image_path_list['main']);
-          }
-
-          if($job->job_img != null) {
-            $edit_image_path_list['main'] = '';
-          } else {
-            unset($edit_image_path_list['main']);
-          }
-
-          session()->put('edit_image_path_list', $edit_image_path_list);
-
-          return redirect()->back()->with('message_success', 'メイン写真を削除しました');
-
-        } else {
-
-          if($job->job_img != null) {
-            session()->put('edit_image_path_list.main', '');
-            return redirect()->back()->with('message_success', 'メイン写真を削除しました');
-          }
-
-          return redirect()->back()->with('message_danger', '削除するメイン写真はありません');
-        }
-
-
-      } else {
-        // 新規作成時
-
-        if (session()->has('image_path_list.main') && is_array(session()->get('image_path_list'))) {
-
-          $image_path_list = session()->get('image_path_list');
-
-          if (File::exists(public_path() . $image_path_list['main'])) {
-            File::delete(public_path() . $image_path_list['main']);
-          }
-
-          unset($image_path_list['main']);
-          session()->put('image_path_list', $image_path_list);
-
-          return redirect()->back()->with('message_success', 'メイン写真を削除しました');
-
-        } else {
-
-          return redirect()->back()->with('message_danger', '削除するメイン写真はありません');
-
-        }
-
-      }
-
-    }
-
-    //sub image
-    public function getSubImage1($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_image_01', compact('job'));
-      }
-
-      $job = '';
-      return view('jobs.post.sub_image_01', compact('job'));
-
-    }
-
-    public function getSubImage2($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_image_02', compact('job'));
-      }
-
-      $job = '';
-      return view('jobs.post.sub_image_02', compact('job'));
-
-    }
-
-    public function postSubImage1(SubImageUploadRequest $request, $id='')
-    {
-
-      if($request->hasfile('job_sub_img')) {
-
-        if($id != '') {
-          //edit
-          $job = JobItem::findOrFail($id);
-
-          if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list'))) {
-            $edit_image_path_list = session()->get('edit_image_path_list');
-            if(isset($edit_image_path_list['sub1'])) {
-              if (File::exists(public_path() . $edit_image_path_list['sub1']) && $job->job_img2 != $edit_image_path_list['sub1']) {
-                File::delete(public_path() . $edit_image_path_list['sub1']);
-              }
-
-              unset($edit_image_path_list['sub1']);
-            }
-
-          }
-
-        } else {
-          // 新規作成時
-          if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))) {
-
-            $image_path_list = session()->get('image_path_list');
-
-            if(isset($image_path_list['sub1'])) {
-              if (File::exists(public_path() . $image_path_list['sub1'])) {
-                File::delete(public_path() . $image_path_list['sub1']);
-              }
-
-              unset($image_path_list['sub1']);
-            }
-          }
-        }
-
-
-        $sub1_image  = $request->file('job_sub_img');
-        $resize_image = Image::make($sub1_image)->widen(300);
-        $sub1_image_name = uniqid("sub1_image").".".$sub1_image->guessExtension();
-
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$sub1_image_name));
-        $image_path = \Config::get('fpath.tmp_img').$sub1_image_name;
-
-        if($id != '') {
-          $edit_image_path_list['sub1'] = $image_path;
-          $request->session()->put('edit_image_path_list', $edit_image_path_list);
-        } else {
-          $image_path_list['sub1'] = $image_path;
-          $request->session()->put('image_path_list', $image_path_list);
-        }
-
-        return view('jobs.post.sub_image_complete');
-
-      } else {
-        return redirect()->back()->with('message_danger', '登録するサブ画像が選ばれていません');
-      }
-
-    }
-
-    public function postSubImage2(SubImageUploadRequest $request, $id='')
-    {
-      if ($request->hasfile('job_sub_img2')) {
-
-        if($id != '') {
-          //edit
-          $job = JobItem::findOrFail($id);
-
-          if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list'))) {
-            $edit_image_path_list = session()->get('edit_image_path_list');
-            if(isset($edit_image_path_list['sub2'])) {
-              if (File::exists(public_path() . $edit_image_path_list['sub2']) && $job->job_img3 != $edit_image_path_list['sub2']) {
-                File::delete(public_path() . $edit_image_path_list['sub2']);
-              }
-
-              unset($edit_image_path_list['sub2']);
-            }
-
-          }
-
-        } else {
-          // 新規作成時
-          if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))) {
-            $image_path_list = session()->get('image_path_list');
-            if(isset($edit_image_path_list['sub2'])) {
-              if (File::exists(public_path() . $image_path_list['sub2'])) {
-                File::delete(public_path() . $image_path_list['sub2']);
-
-              }
-
-              unset($image_path_list['sub2']);
-            }
-          }
-        }
-
-
-        $sub2_image  = $request->file('job_sub_img2');
-        $resize_image = Image::make($sub2_image)->widen(300);
-        $sub2_image_name = uniqid("sub2_image").".".$sub2_image->guessExtension();
-
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$sub2_image_name));
-        $image_path = \Config::get('fpath.tmp_img').$sub2_image_name;
-
-        if($id != '') {
-          $edit_image_path_list['sub2'] = $image_path;
-          $request->session()->put('edit_image_path_list', $edit_image_path_list);
-        } else {
-          $image_path_list['sub2'] = $image_path;
-          $request->session()->put('image_path_list', $image_path_list);
-        }
-
-        return view('jobs.post.sub_image_complete');
-
-      } else {
-        return redirect()->back()->with('message_danger', '登録するサブ画像が選ばれていません');
-      }
-    }
-
-    public function subImageDelete1($id='')
-    {
-
-      if($id != '') {
-        // edit
-        $job = JobItem::findOrFail($id);
-
-        if(session()->has('edit_image_path_list.sub1') && is_array(session()->get('edit_image_path_list'))) {
-
-          $edit_image_path_list = session()->get('edit_image_path_list');
-
-          if (File::exists(public_path() . $edit_image_path_list['sub1']) && $job->job_img2 != $edit_image_path_list['sub1']) {
-              File::delete(public_path() . $edit_image_path_list['sub1']);
-          }
-
-          if($job->job_img2 != null) {
-            $edit_image_path_list['sub1'] = '';
-          } else {
-            unset($edit_image_path_list['sub1']);
-          }
-
-          session()->put('edit_image_path_list', $edit_image_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-
-        } else {
-
-          if($job->job_img2 != null) {
-            session()->put('edit_image_path_list.sub1', '');
-            return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-          }
-
-          return redirect()->back()->with('message_danger', '削除するサブ写真はありません');
-        }
-
-
-      } else {
-        // 新規作成時
-
-        if (session()->has('image_path_list.sub1') && is_array(session()->get('image_path_list'))) {
-
-          $image_path_list = session()->get('image_path_list');
-
-          if (File::exists(public_path() . $image_path_list['sub1'])) {
-            File::delete(public_path() . $image_path_list['sub1']);
-          }
-
-          unset($image_path_list['sub1']);
-          session()->put('image_path_list', $image_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-
-        } else {
-
-          return redirect()->back()->with('message_danger', '削除するサブ写真はありません');
-
-        }
-
-      }
-
-    }
-    public function subImageDelete2($id='')
-    {
-      if($id != '') {
-        // edit
-        $job = JobItem::findOrFail($id);
-
-        if(session()->has('edit_image_path_list.sub2') && is_array(session()->get('edit_image_path_list'))) {
-
-          $edit_image_path_list = session()->get('edit_image_path_list');
-
-          if (File::exists(public_path() . $edit_image_path_list['sub2']) && $job->job_img3 != $edit_image_path_list['sub2']) {
-              File::delete(public_path() . $edit_image_path_list['sub2']);
-          }
-
-          if($job->job_img3 != null) {
-            $edit_image_path_list['sub2'] = '';
-          } else {
-            unset($edit_image_path_list['sub2']);
-          }
-
-          session()->put('edit_image_path_list', $edit_image_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-
-        } else {
-
-          if($job->job_img3 != null) {
-            session()->put('edit_image_path_list.sub2', '');
-            return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-          }
-
-          return redirect()->back()->with('message_danger', '削除するサブ写真はありません');
-        }
-
-
-      } else {
-        // 新規作成時
-
-        if (session()->has('image_path_list.sub2') && is_array(session()->get('image_path_list'))) {
-
-          $image_path_list = session()->get('image_path_list');
-
-          if (File::exists(public_path() . $image_path_list['sub2'])) {
-            File::delete(public_path() . $image_path_list['sub2']);
-          }
-
-          unset($image_path_list['sub2']);
-          session()->put('image_path_list', $image_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-
-        } else {
-
-          return redirect()->back()->with('message_danger', '削除するサブ写真はありません');
-
-        }
-
-      }
-
-
-    }
-
-    //main movie
-    public function getMainMovie($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.main_movie', compact('job'));
-      }
-      $job = '';
-
-      return view('jobs.post.main_movie', compact('job'));
-    }
-
-    public function postMainMovie(MainMovieUploadRequest $request, $id='')
-    {
-      if($request->hasfile('job_main_mov')) {
-
-        if($id != '') {
-          //edit
-          $job = JobItem::findOrFail($id);
-
-          if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list'))) {
-            $edit_movie_path_list = session()->get('edit_movie_path_list');
-            if(isset($edit_movie_path_list['main'])) {
-              if (File::exists(public_path() . $edit_movie_path_list['main']) && $job->job_mov != $edit_movie_path_list['main']) {
-                File::delete(public_path() . $edit_movie_path_list['main']);
-              }
-
-              unset($edit_movie_path_list['main']);
-            }
-
-          }
-
-        } else {
-          // 新規作成時
-          if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))) {
-            $movie_path_list = session()->get('movie_path_list');
-            if(isset($movie_path_list['main'])) {
-              if (File::exists(public_path() . $movie_path_list['main'])) {
-                File::delete(public_path() . $movie_path_list['main']);
-
-              }
-              unset($movie_path_list['main']);
-            }
-          }
-        }
-
-
-        $main_movie_name = uniqid("main_movie").".".$request->file('job_main_mov')->guessExtension();
-        $request->file('job_main_mov')->move(public_path() . \Config::get('fpath.tmp_mov'), $main_movie_name);
-
-        $movie_path =  \Config::get('fpath.tmp_mov') . $main_movie_name;
-
-        // $after_movie = shell_exec('ffmpeg -i ' . '/public' . \Config::get('fpath.tmp_mov') . $main_movie_name .  '-vf scale=320:-1' . '/public' . \Config::get('fpath.tmp_mov') . 'sample.mp4' . 'pipe:1');
-        // $beforeMovie = FFMpeg::fromDisk('local')->open(\Config::get('fpath.tmp_mov'), $main_movie_name);
-        // $beforeMovieStreams = $beforeMovie->getStreams()->first();
-        // $beforeMovie->addFilter(function ($filters) {
-        //     $filters->resize(new \FFMpeg\Coordinate\Dimension(720, 480));
-        // })
-        // ->export()
-        // ->toDisk('public')
-        // ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-        // ->save(\Config::get('fpath.tmp_mov'), $main_movie_name);
-
-        if($id != '') {
-          $edit_movie_path_list['main'] = $movie_path;
-          $request->session()->put('edit_movie_path_list', $edit_movie_path_list);
-        } else {
-          $movie_path_list['main'] = $movie_path;
-          $request->session()->put('movie_path_list', $movie_path_list);
-        }
-
-        return view('jobs.post.main_movie_complete');
-
-      } else {
-
-        return redirect()->back()->with('message_danger', '登録するメイン動画が選ばれていません');
-
-      }
-
-    }
-
-    public function mainMovieDelete($id='')
-    {
-      if($id != '') {
-        // edit
-
-        $job = JobItem::findOrFail($id);
-
-        if(session()->has('edit_movie_path_list.main') && is_array(session()->get('edit_movie_path_list'))) {
-
-          $edit_movie_path_list = session()->get('edit_movie_path_list');
-
-          if($edit_movie_path_list['main'] == '') {
-            return redirect()->back()->with('message_danger', '削除するメイン動画はありません');
-          }
-
-          if (File::exists(public_path() . $edit_movie_path_list['main']) && $job->job_mov != $edit_movie_path_list['main']) {
-              File::delete(public_path() . $edit_movie_path_list['main']);
-          }
-
-          if($job->job_mov != null) {
-            $edit_movie_path_list['main'] = '';
-          } else {
-            unset($edit_movie_path_list['main']);
-          }
-
-          session()->put('edit_movie_path_list', $edit_movie_path_list);
-
-          return redirect()->back()->with('message_success', 'メイン動画を削除しました');
-
-        } else {
-
-          if($job->job_mov != null) {
-            session()->put('edit_movie_path_list.main', '');
-            return redirect()->back()->with('message_success', 'メイン動画を削除しました');
-          }
-
-          return redirect()->back()->with('message_danger', '削除するメイン動画はありません');
-
-        }
-
-      } else {
-        // 新規作成時
-
-        if (session()->has('movie_path_list.main') && is_array(session()->get('movie_path_list'))) {
-
-          $movie_path_list = session()->get('movie_path_list');
-
-          if (File::exists(public_path() . $movie_path_list['main'])) {
-            File::delete(public_path() . $movie_path_list['main']);
-          }
-
-          unset($movie_path_list['main']);
-          session()->put('movie_path_list', $movie_path_list);
-
-          return redirect()->back()->with('message_success', 'メイン動画を削除しました');
-
-        } else {
-          return redirect()->back()->with('message_danger', '削除するメイン動画はありません');
-        }
-
-      }
-
-    }
-
-    //sub movie
-    public function getSubMovie1($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_movie_01', compact('job'));
-      }
-
-      $job = '';
-      return view('jobs.post.sub_movie_01', compact('job'));
-    }
-
-    public function getSubMovie2($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_movie_02', compact('job'));
-      }
-
-      $job = '';
-      return view('jobs.post.sub_movie_02', compact('job'));
-    }
-
-    public function postSubMovie1(MainMovieUploadRequest $request, $id='')
-    {
-
-      if($request->hasfile('job_sub_mov')) {
-
-        if($id != '') {
-          //edit
-          $job = JobItem::findOrFail($id);
-
-          if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list'))) {
-            $edit_movie_path_list = session()->get('edit_movie_path_list');
-            if(isset($edit_movie_path_list['sub1'])) {
-              if (File::exists(public_path() . $edit_movie_path_list['sub1']) && $job->job_mov2 != $edit_movie_path_list['sub1']) {
-                File::delete(public_path() . $edit_movie_path_list['sub1']);
-              }
-
-              unset($edit_movie_path_list['sub1']);
-            }
-
-          }
-
-        } else {
-          // 新規作成時
-          if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))) {
-            $movie_path_list = session()->get('movie_path_list');
-            if(isset($movie_path_list['sub1'])) {
-              if (File::exists(public_path() . $movie_path_list['sub1'])) {
-                File::delete(public_path() . $movie_path_list['sub1']);
-
-              }
-              unset($movie_path_list['sub1']);
-            }
-          }
-        }
-
-        $sub_mov_name = uniqid("sub_movie").".".$request->file('job_sub_mov')->guessExtension();
-        $request->file('job_sub_mov')->move(public_path() . \Config::get('fpath.tmp_mov'), $sub_mov_name);
-        $movie_path = \Config::get('fpath.tmp_mov') . $sub_mov_name;
-
-        if($id != '') {
-          $edit_movie_path_list['sub1'] = $movie_path;
-          $request->session()->put('edit_movie_path_list', $edit_movie_path_list);
-        } else {
-          $movie_path_list['sub1'] = $movie_path;
-          $request->session()->put('movie_path_list', $movie_path_list);
-        }
-
-        return view('jobs.post.sub_movie_complete');
-
-      } else {
-
-        return redirect()->back()->with('message_danger', '登録するサブ動画が選ばれていません');
-
-      }
-
-    }
-
-    public function postSubMovie2(MainMovieUploadRequest $request, $id='')
-    {
-      if ($request->hasfile('job_sub_mov2')) {
-
-        if($id != '') {
-          //edit
-          $job = JobItem::findOrFail($id);
-
-          if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list'))) {
-            $edit_movie_path_list = session()->get('edit_movie_path_list');
-            if(isset($edit_movie_path_list['sub2'])) {
-              if (File::exists(public_path() . $edit_movie_path_list['sub2']) && $job->job_mov3 != $edit_movie_path_list['sub2']) {
-                File::delete(public_path() . $edit_movie_path_list['sub2']);
-              }
-
-              unset($edit_movie_path_list['sub2']);
-            }
-
-          }
-
-        } else {
-          // 新規作成時
-          if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))) {
-            $movie_path_list = session()->get('movie_path_list');
-            if(isset($movie_path_list['sub2'])) {
-              if (File::exists(public_path() . $movie_path_list['sub2'])) {
-                File::delete(public_path() . $movie_path_list['sub2']);
-
-              }
-              unset($movie_path_list['sub2']);
-            }
-          }
-        }
-
-        $sub_mov_name2 = uniqid("sub_movie02").".".$request->file('job_sub_mov2')->guessExtension();
-        $request->file('job_sub_mov2')->move(public_path() . \Config::get('fpath.tmp_mov'), $sub_mov_name2);
-        $movie_path = \Config::get('fpath.tmp_mov').$sub_mov_name2;
-
-        if($id != '') {
-          $edit_movie_path_list['sub2'] = $movie_path;
-          $request->session()->put('edit_movie_path_list', $edit_movie_path_list);
-        } else {
-          $movie_path_list['sub2'] = $movie_path;
-          $request->session()->put('movie_path_list', $movie_path_list);
-        }
-
-        return view('jobs.post.sub_movie_complete');
-
-      } else {
-
-        return redirect()->back()->with('message_danger', '登録するサブ動画が選ばれていません');
-
-      }
-    }
-
-    public function subMovieDelete1($id='')
-    {
-      if($id != '') {
-        // edit
-
-        $job = JobItem::findOrFail($id);
-
-        if(session()->has('edit_movie_path_list.sub1') && is_array(session()->get('edit_movie_path_list'))) {
-
-          $edit_movie_path_list = session()->get('edit_movie_path_list');
-
-          if (File::exists(public_path() . $edit_movie_path_list['sub1']) && $job->job_mov2 != $edit_movie_path_list['sub1']) {
-              File::delete(public_path() . $edit_movie_path_list['sub1']);
-          }
-
-          if($job->job_mov2 != null) {
-            $edit_movie_path_list['sub1'] = '';
-          } else {
-            unset($edit_movie_path_list['sub1']);
-          }
-
-          session()->put('edit_movie_path_list', $edit_movie_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-
-        } else {
-
-          if($job->job_mov2 != null) {
-            session()->put('edit_movie_path_list.sub1', '');
-            return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-          }
-
-          return redirect()->back()->with('message_danger', '削除するサブ動画はありません');
-
-        }
-
-      } else {
-          // 新規作成時
-
-          if (session()->has('movie_path_list.sub1') && is_array(session()->get('movie_path_list'))) {
-
-            $movie_path_list = session()->get('movie_path_list');
-
-            if (File::exists(public_path() . $movie_path_list['sub1'])) {
-              File::delete(public_path() . $movie_path_list['sub1']);
-            }
-
-            unset($movie_path_list['sub1']);
-            session()->put('movie_path_list', $movie_path_list);
-
-            return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-
-          } else {
-            return redirect()->back()->with('message_danger', '削除するサブ動画はありません');
-          }
-
-      }
-
-    }
-
-    public function subMovieDelete2($id='')
-    {
-      if($id != '') {
-        // edit
-
-        $job = JobItem::findOrFail($id);
-
-        if (session()->has('movie_path_list.sub2') && is_array(session()->get('movie_path_list'))) {
-
-          $edit_movie_path_list = session()->get('edit_movie_path_list');
-
-          if (File::exists(public_path() . $edit_movie_path_list['sub2']) && $job->job_mov3 != $edit_movie_path_list['sub2']) {
-              File::delete(public_path() . $edit_movie_path_list['sub2']);
-          }
-
-          if($job->job_mov3 != null) {
-            $edit_movie_path_list['sub2'] = '';
-          } else {
-            unset($edit_movie_path_list['sub2']);
-          }
-
-          session()->put('edit_movie_path_list', $edit_movie_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-
-        } else {
-
-          if($job->job_mov3 != null) {
-            session()->put('edit_movie_path_list.sub2', '');
-            return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-          }
-
-          return redirect()->back()->with('message_danger', '削除するサブ動画はありません');
-        }
-
-      } else {
-        // 新規作成時
-
-        if (session()->has('movie_path_list.sub2') && is_array(session()->get('movie_path_list'))) {
-
-          $movie_path_list = session()->get('movie_path_list');
-
-          if (File::exists(public_path() . $movie_path_list['sub2'])) {
-            File::delete(public_path() . $movie_path_list['sub2']);
-          }
-
-          unset($movie_path_list['sub2']);
-          session()->put('movie_path_list', $movie_path_list);
-
-          return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-
-        } else {
-          return redirect()->back()->with('message_danger', '削除するサブ動画はありません');
-        }
-
-      }
-    }
+    
 
     public function createTop()
     {
@@ -1100,16 +325,13 @@ class JobController extends Controller
       $job_image_list = array_diff(array_flatten($job_list->toArray()), array(null));
       $job_movie_list = array_diff(array_flatten($job_list_2->toArray()), array(null));
 
-      session()->forget('edit_cat_list');
-      session()->forget('data1');
-      session()->forget('data2');
-      session()->forget('count');
+     
 
       // image session
 
-      if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))){
+      if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))){
 
-        $image_path_list = session()->get('image_path_list');
+        $image_path_list = session()->get('data.file.image');
         foreach($image_path_list as $index => $image_path) {
 
           if(File::exists(public_path() . $image_path)) {
@@ -1117,11 +339,10 @@ class JobController extends Controller
           }
 
         }
-        session()->forget('image_path_list');
       }
 
-      if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list'))) {
-        $edit_image_path_list = session()->get('edit_image_path_list');
+      if(session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image'))) {
+        $edit_image_path_list = session()->get('data.file.edit_image');
 
         foreach($edit_image_path_list as $index => $image_path) {
           if($index == 'main' || $index == 'sub1' || $index == 'sub2' and $image_path != '')  {
@@ -1133,14 +354,12 @@ class JobController extends Controller
           }
         }
 
-        session()->forget('edit_image_path_list');
-
       }
 
       // movie sessoin
-      if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))){
+      if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))){
 
-        $movie_path_list = session()->get('movie_path_list');
+        $movie_path_list = session()->get('data.file.movie');
         foreach($movie_path_list as $index => $movie_path) {
 
           if(File::exists(public_path() . $movie_path)) {
@@ -1148,11 +367,11 @@ class JobController extends Controller
           }
 
         }
-        session()->forget('movie_path_list');
+ 
       }
 
-      if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list'))) {
-        $edit_movie_path_list = session()->get('edit_movie_path_list');
+      if(session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie'))) {
+        $edit_movie_path_list = session()->get('ata.file.edit_movie');
 
         foreach($edit_movie_path_list as $index => $movie_path) {
           if($index == 'main' || $index == 'sub1' || $index == 'sub2' and $movie_path != '')  {
@@ -1164,9 +383,10 @@ class JobController extends Controller
           }
         }
 
-        session()->forget('edit_movie_path_list');
-
       }
+      
+      session()->forget('data');
+      session()->forget('count');
 
       return view('jobs.post.top_create');
 
@@ -1183,13 +403,14 @@ class JobController extends Controller
     }
     public function createStep2()
     {
+     
 
       if(session()->has('count') == 1 || session()->has('count') == 3) {
 
-        session()->forget('edit_image_path_list');
-        session()->forget('edit_movie_path_list');
+        session()->forget('data.file.edit_image');
+        session()->forget('data.file.edit_movie');
 
-        return view('jobs.post.create_step2');
+        return view('jobs.post.create_step2', compact('jobItem'));
 
       } else {
 
@@ -1203,10 +424,11 @@ class JobController extends Controller
 
     public function storeStep1 (JobCreateStep1Request $request)
     {
-      $request->session()->put('data1', $request->all());
+
+      $request->session()->put('data.form.category', $request->all());
       $request->session()->put('count', 1);
 
-      return redirect()->to('/jobs/create/step2');
+      return redirect()->route('job.create.step2');
     }
 
     public function draftOrStep2(Request $request, $id=''){
@@ -1232,7 +454,7 @@ class JobController extends Controller
       } elseif (Input::get('storestep2')){
 
           if ( JobItem::where('id',$id)->exists() == false ) {
-            if(session()->has('image_path_list.main')==false){
+            if(session()->has('data.file.image.main')==false){
               return redirect()->back()->with('message','メイン画像を登録してください');
             };
             $this->storeStep2($request);
@@ -1241,13 +463,13 @@ class JobController extends Controller
           } else {
             $job = JobItem::findOrFail($id);
 
-            if(session()->has('edit_image_path_list.main')==false ){
+            if(session()->has('data.file.edit_image.main')==false ){
 
               if($job->job_img == null) {
                 return redirect()->back()->with('message_danger','メイン画像を登録してください');
               }
 
-            } elseif(session()->has('edit_image_path_list.main')==true && session()->get('edit_image_path_list.main')=="") {
+            } elseif(session()->has('data.file.edit_image.main')==true && session()->get('data.file.edit_image.main')=="") {
               return redirect()->back()->with('message_danger','メイン画像を登録してください');
             };
 
@@ -1283,6 +505,8 @@ class JobController extends Controller
             'job_q3' => 'nullable|max:191',
       ]);
 
+      $disk = Storage::disk('s3');
+
       if(session()->has('count') == 1) {
         $employer_id = auth('employer')->user()->id;
         $company = Company::where('employer_id', $employer_id)->first();
@@ -1293,7 +517,6 @@ class JobController extends Controller
         $movie_path_list = [];
         $edit_movie_path_list = [];
 
-        $disk = Storage::disk('s3');
 
         if($request->input('pub_start')) {
           if($request->input('pub_start') == 'start_specified') {
@@ -1326,9 +549,9 @@ class JobController extends Controller
 
           // 一時保存から本番の格納場所へ移動
           //image upload
-          if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list'))) {
+          if(session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image'))) {
 
-            $edit_image_path_list = session()->get('edit_image_path_list');
+            $edit_image_path_list = session()->get('data.file.edit_image');
 
             foreach($edit_image_path_list as $index => $image_path) {
               //main
@@ -1493,9 +716,9 @@ class JobController extends Controller
           }
 
           //movie upload
-          if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list'))) {
+          if(session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie'))) {
 
-            $edit_movie_path_list = session()->get('edit_movie_path_list');
+            $edit_movie_path_list = session()->get('data.file.edit_movie');
 
             foreach($edit_movie_path_list as $index => $movie_path) {
               //main
@@ -1664,8 +887,8 @@ class JobController extends Controller
 
 
 
-          if(session()->has('edit_cat_list')){
-            $edit_cat_list = session()->get('edit_cat_list');
+          if(session()->has('data.form.edit_category')){
+            $edit_cat_list = session()->get('data.form.edit_category');
 
             if(!isset($edit_cat_list['status'])) {
               $edit_cat_list['status'] = $job->status_cat_id;
@@ -1749,16 +972,16 @@ class JobController extends Controller
             'job_q1' => $request->input('job_q1'),
             'job_q2' => $request->input('job_q2'),
             'job_q3' => $request->input('job_q3'),
-            'status_cat_id' => session()->get('data1.status_cat_id'),
-            'type_cat_id' => session()->get('data1.type_cat_id'),
-            'area_cat_id' => session()->get('data1.area_cat_id'),
-            'hourly_salary_cat_id' => session()->get('data1.hourly_salary_cat_id'),
-            'date_cat_id' => session()->get('data1.date_cat_id'),
+            'status_cat_id' => session()->get('data.form.category.status_cat_id'),
+            'type_cat_id' => session()->get('data.form.category.type_cat_id'),
+            'area_cat_id' => session()->get('data.form.category.area_cat_id'),
+            'hourly_salary_cat_id' => session()->get('data.form.category.hourly_salary_cat_id'),
+            'date_cat_id' => session()->get('data.form.category.date_cat_id'),
           ]);
 
           if(JobItem::where('id',$data->id)->exists()) {
             $lastInsertedId = $data->id;
-            $job = JobItem::findOrFail($data->id);
+            $job = JobItem::findOrFail($lastInsertedId);
 
             // ディレクトリを作成
             if (!file_exists(public_path() . \Config::get('fpath.real_img') . $lastInsertedId)) {
@@ -1770,9 +993,9 @@ class JobController extends Controller
 
             // 一時保存から本番の格納場所へ移動
             // image upload
-            if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))) {
+            if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
 
-              $image_path_list = session()->get('image_path_list');
+              $image_path_list = session()->get('data.file.image');
 
               foreach($image_path_list as $index => $image_path) {
                 if($index == 'main')  {
@@ -1840,9 +1063,9 @@ class JobController extends Controller
 
 
             // movie upload
-            if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))) {
+            if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
 
-              $movie_path_list = session()->get('movie_path_list');
+              $movie_path_list = session()->get('data.file.movie');
 
               foreach($movie_path_list as $index => $movie_path) {
                 if($index == 'main')  {
@@ -1919,15 +1142,8 @@ class JobController extends Controller
 
         }
 
-        session()->forget('data1');
-        session()->forget('data2');
+        session()->forget('data');
         session()->forget('count');
-        session()->forget('image_path_list');
-        session()->forget('edit_image_path_list');
-        session()->forget('movie_path_list');
-        session()->forget('edit_movie_path_list');
-        session()->forget('edit_cat_list');
-
 
       } else {
         session()->forget('count');
@@ -1960,7 +1176,7 @@ class JobController extends Controller
 
       if($request->session()->has('count') == 1) {
 
-        $request->session()->put('data2', $request->all());
+        $request->session()->put('data.form.text', $request->all());
         $request->session()->forget('count');
         $request->session()->put('count', 2);
         return redirect()->to('/jobs/create/confirm');
@@ -2005,24 +1221,27 @@ class JobController extends Controller
           $movie_path_list = [];
           $edit_movie_path_list = [];
 
+          $disk = Storage::disk('s3');
 
-          if(session()->has('data2.pub_start')) {
-            if(session()->get('data2.pub_start') == 'start_specified') {
-              $pub_start = session()->get('data2.start_specified_date');
+
+          if(session()->has('data.form.text.pub_start')) {
+            if(session()->get('data.form.text.pub_start') == 'start_specified') {
+              $pub_start = session()->get('data.form.text.start_specified_date');
             } else {
-              $pub_start = session()->get('data2.pub_start');
+              $pub_start = session()->get('data.form.text.pub_start');
             }
           }
 
-          if(session()->has('data2.pub_end')) {
-            if(session()->get('data2.pub_end') == 'end_specified') {
-              $pub_end = session()->get('data2.end_specified_date');
+          if(session()->has('data.form.text.pub_end')) {
+            if(session()->get('data.form.text.pub_end') == 'end_specified') {
+              $pub_end = session()->get('data.form.text.end_specified_date');
             } else {
-              $pub_end = session()->get('data2.pub_end');
+              $pub_end = session()->get('data.form.pub_end');
             }
           }
 
           if(JobItem::where('id',$id)->exists()) {
+            // edit
             $job = JobItem::findOrFail($id);
 
             // ディレクトリを作成
@@ -2035,9 +1254,9 @@ class JobController extends Controller
 
             // 一時保存から本番の格納場所へ移動
             // image upload
-            if(session()->has('edit_image_path_list') && is_array(session()->get('edit_image_path_list'))) {
+            if(session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image'))) {
 
-              $edit_image_path_list = session()->get('edit_image_path_list');
+              $edit_image_path_list = session()->get('data.file.edit_image');
 
               foreach($edit_image_path_list as $index => $image_path) {
                 if($index == 'main')  {
@@ -2202,9 +1421,9 @@ class JobController extends Controller
             }
 
             // movie upload
-            if(session()->has('edit_movie_path_list') && is_array(session()->get('edit_movie_path_list'))) {
+            if(session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie'))) {
 
-              $edit_movie_path_list = session()->get('edit_movie_path_list');
+              $edit_movie_path_list = session()->get('data.file.edit_movie');
 
               foreach($edit_movie_path_list as $index => $movie_path) {
                 if($index == 'main')  {
@@ -2367,8 +1586,8 @@ class JobController extends Controller
             }
 
 
-            if(session()->has('edit_cat_list')){
-              $edit_cat_list = session()->get('edit_cat_list');
+            if(session()->has('data.form.edit_category')){
+              $edit_cat_list = session()->get('data.form.edit_category');
 
               if(!isset($edit_cat_list['status'])) {
                 $edit_cat_list['status'] = $job->status_cat_id;
@@ -2398,35 +1617,37 @@ class JobController extends Controller
 
             $job->update([
               'status' => 1,
-              'job_title' => session()->get('data2.job_title'),
-              'job_intro' => session()->get('data2.job_intro'),
-              'job_office' => session()->get('data2.job_office'),
-              'job_office_address' => session()->get('data2.job_office_address'),
+              'job_title' => session()->get('data.form.text.job_title'),
+              'job_intro' => session()->get('data.form.text.job_intro'),
+              'job_office' => session()->get('data.form.text.job_office'),
+              'job_office_address' => session()->get('data.form.text.job_office_address'),
               'job_img' => $edit_image_path_list['main'],
               'job_img2' => $edit_image_path_list['sub1'],
               'job_img3' => $edit_image_path_list['sub2'],
               'job_mov' => $edit_movie_path_list['main'],
               'job_mov2' => $edit_movie_path_list['sub1'],
               'job_mov3' => $edit_movie_path_list['sub2'],
-              'job_type' => session()->get('data2.job_type'),
-              'job_hourly_salary' => session()->get('data2.job_hourly_salary'),
-              'job_desc' => session()->get('data2.job_desc'),
-              'job_time' => session()->get('data2.job_time'),
-              'salary_increase' => session()->get('data2.salary_increase'),
-              'job_target' => session()->get('data2.job_target'),
-              'job_treatment' => session()->get('data2.job_treatment'),
+              'job_type' => session()->get('data.form.text.job_type'),
+              'job_hourly_salary' => session()->get('data.form.text.job_hourly_salary'),
+              'job_desc' => session()->get('data.form.text.job_desc'),
+              'job_time' => session()->get('data.form.text.job_time'),
+              'salary_increase' => session()->get('data.form.text.salary_increase'),
+              'job_target' => session()->get('data.form.text.job_target'),
+              'job_treatment' => session()->get('data.form.text.job_treatment'),
               'pub_start' => $pub_start,
               'pub_end' => $pub_end,
-              'remarks' => session()->get('data2.remarks'),
+              'remarks' => session()->get('data.form.text.remarks'),
               'status_cat_id' => $edit_cat_list['status'],
               'type_cat_id' => $edit_cat_list['type'],
               'area_cat_id' => $edit_cat_list['area'],
               'hourly_salary_cat_id' => $edit_cat_list['hourly_salary'],
               'date_cat_id' => $edit_cat_list['date'],
-              'job_q1' => session()->get('data2.job_q1'),
-              'job_q2' => session()->get('data2.job_q2'),
-              'job_q3' => session()->get('data2.job_q3'),
+              'job_q1' => session()->get('data.form.text.job_q1'),
+              'job_q2' => session()->get('data.form.text.job_q2'),
+              'job_q3' => session()->get('data.form.text.job_q3'),
             ]);
+
+
 
           } else {
 
@@ -2434,35 +1655,35 @@ class JobController extends Controller
               'employer_id' => $employer_id,
               'company_id' => $company_id,
               'status' => 1,
-              'job_title' => session()->get('data2.job_title'),
-              'job_intro' => session()->get('data2.job_intro'),
-              'job_office' => session()->get('data2.job_office'),
-              'job_office_address' => session()->get('data2.job_office_address'),
+              'job_title' => session()->get('data.form.text.job_title'),
+              'job_intro' => session()->get('data.form.text.job_intro'),
+              'job_office' => session()->get('data.form.text.job_office'),
+              'job_office_address' => session()->get('data.form.text.job_office_address'),
               'slug' => str_slug($company_id),
-              'job_type' => session()->get('data2.job_type'),
-              'job_hourly_salary' => session()->get('data2.job_hourly_salary'),
-              'job_desc' => session()->get('data2.job_desc'),
-              'job_time' => session()->get('data2.job_time'),
-              'salary_increase' => session()->get('data2.salary_increase'),
-              'job_target' => session()->get('data2.job_target'),
-              'job_treatment' => session()->get('data2.job_treatment'),
+              'job_type' => session()->get('data.form.text.job_type'),
+              'job_hourly_salary' => session()->get('data.form.text.job_hourly_salary'),
+              'job_desc' => session()->get('data.form.text.job_desc'),
+              'job_time' => session()->get('data.form.text.job_time'),
+              'salary_increase' => session()->get('data.form.text.salary_increase'),
+              'job_target' => session()->get('data.form.text.job_target'),
+              'job_treatment' => session()->get('data.form.text.job_treatment'),
               'pub_start' => $pub_start,
               'pub_end' => $pub_end,
-              'remarks' => session()->get('data2.remarks'),
-              'job_q1' => session()->get('data2.job_q1'),
-              'job_q2' => session()->get('data2.job_q2'),
-              'job_q3' => session()->get('data2.job_q3'),
-              'status_cat_id' => session()->get('data1.status_cat_id'),
-              'type_cat_id' => session()->get('data1.type_cat_id'),
-              'area_cat_id' => session()->get('data1.area_cat_id'),
-              'hourly_salary_cat_id' => session()->get('data1.hourly_salary_cat_id'),
-              'date_cat_id' => session()->get('data1.date_cat_id'),
+              'remarks' => session()->get('data.form.text.remarks'),
+              'job_q1' => session()->get('data.form.text.job_q1'),
+              'job_q2' => session()->get('data.form.text.job_q2'),
+              'job_q3' => session()->get('data.form.text.job_q3'),
+              'status_cat_id' => session()->get('data.form.category.status_cat_id'),
+              'type_cat_id' => session()->get('data.form.category.type_cat_id'),
+              'area_cat_id' => session()->get('data.form.category.area_cat_id'),
+              'hourly_salary_cat_id' => session()->get('data.form.category.hourly_salary_cat_id'),
+              'date_cat_id' => session()->get('data.form.category.date_cat_id'),
             ]);
 
             if(JobItem::where('id',$data->id)->exists()) {
 
               $lastInsertedId = $data->id;
-              $job = JobItem::findOrFail($data->id);
+              $job = JobItem::findOrFail($lastInsertedId);
 
               // ディレクトリを作成
               if (!file_exists(public_path() . \Config::get('fpath.real_img') . $lastInsertedId)) {
@@ -2474,9 +1695,9 @@ class JobController extends Controller
 
               // 一時保存から本番の格納場所へ移動
               // image upload
-              if(session()->has('image_path_list') && is_array(session()->get('image_path_list'))) {
+              if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
 
-                $image_path_list = session()->get('image_path_list');
+                $image_path_list = session()->get('data.file.image');
 
                 foreach($image_path_list as $index => $image_path) {
                   if($index == 'main')  {
@@ -2543,9 +1764,9 @@ class JobController extends Controller
 
 
               // movie upload
-              if(session()->has('movie_path_list') && is_array(session()->get('movie_path_list'))) {
+              if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
 
-                $movie_path_list = session()->get('movie_path_list');
+                $movie_path_list = session()->get('data.file.movie');
 
                 foreach($movie_path_list as $index => $movie_path) {
                   if($index == 'main')  {
@@ -2624,14 +1845,8 @@ class JobController extends Controller
           }
 
 
-          session()->forget('data1');
-          session()->forget('data2');
+          session()->forget('data');
           session()->forget('count');
-          session()->forget('image_path_list');
-          session()->forget('edit_image_path_list');
-          session()->forget('movie_path_list');
-          session()->forget('edit_movie_path_list');
-          session()->forget('edit_cat_list');
 
           return view('jobs.post.create_complete');
 

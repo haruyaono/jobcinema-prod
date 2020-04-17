@@ -3,7 +3,8 @@
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
- */
+ *
+*/
 
 require('./bootstrap');
 require('./main');
@@ -26,6 +27,8 @@ Vue.component('favourite-component', require('./components/FavouriteComponent.vu
 Vue.component('v-slick-top', require('./components/SlickTopComponent.vue').default);
 Vue.component('v-slick1', require('./components/SlickComponent.vue').default);
 Vue.component('v-slick', require('./components/SlickVideoComponent.vue').default);
+Vue.component('recent-component', require('./components/RecentJobComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

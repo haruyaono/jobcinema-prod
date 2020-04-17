@@ -38,7 +38,7 @@
 							<!-- ▽ ループ開始 ▽ -->
 						@forelse ($topLimitJobs as $job)
 							<div class="newjob-item">
-								<a href="{{ route('jobs.show', [$job->id, $job->slug])}}" class="newjob-item-link">
+								<a href="{{ route('jobs.show', [$job->id])}}" class="newjob-item-link">
 									<p class="title-img-wrap">
 										@if(($job->job_img) ==! null)
 											<img src="{{asset($job->job_img)}}" style="width:100%;" alt=""/>
@@ -73,6 +73,8 @@
 					</div>
 					
 				</div>
+
+				<recent-component></recent-component>
 				
 				<div class="main-section-item top-subsection-item">
 					<div class="top-subsection-item-inner">
@@ -100,5 +102,6 @@
 @endsection
 
 @section('js')
-  <script src="{{ asset('js/main.js') }}"></script>
+  <!-- <script src="{{ asset('js/main.js') }}"></script> -->
+
 @endsection

@@ -23,7 +23,9 @@
                 </div>
             </div> <!-- card --> 
             <div class="form-group text-center">
-                    <a href="javascript:void(0);" class="btn btn-dark" onClick="window.opener.location.reload(),window.close()">OK</a>
+                    <!-- <a href="javascript:void(0);" class="btn btn-dark" onClick="window.opener.location.reload(),window.close()">OK</a> -->
+                    <a href="javascript:void(0);" class="btn btn-dark" id="close_button">OK</a>
+                    
             </div>
     </div>
 </div>  <!-- pad -->
@@ -36,6 +38,36 @@
   @component('components.employer.mypage_footer')
   @endcomponent
 @endsection
+
+@section('js')
+<script>
+
+$(function() {
+    var job = @json($job);
+
+    // var imagePath = $('#FileCurrentPath').attr('value');
+
+    // if (imagePath != '') {
+    //     window.opener.$('#photo1').attr('src', imagePath);
+    //     if (imagePath == '/uploads/images/no-image.gif') {
+    //         window.opener.$('#FileIsExist1').val(0);
+    //     } else {
+    //         window.opener.$('#FileIsExist1').val(1);
+    //     }
+    // }
+
+    if(job != '') {
+        window.opener.$("#photo1").attr('src', "{{Session::get('data.file.edit_image.main')}}");
+    } else {
+        window.opener.$("#photo1").attr('src', "{{Session::get('data.file.image.main')}}");
+    }
+
+
+});
+</script>
+ 
+@endsection 
+
 
 
 

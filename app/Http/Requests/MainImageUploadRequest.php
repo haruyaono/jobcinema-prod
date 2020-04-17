@@ -24,7 +24,7 @@ class MainImageUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'job_main_img' => 'required|image|max:20000|mimes:jpeg,gif,png',
+            'data.File.image' => 'required|image|max:20000|mimes:jpeg,gif,png',
         ];
     }
     public function messages()

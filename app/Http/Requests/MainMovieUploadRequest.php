@@ -24,9 +24,7 @@ class MainMovieUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'job_main_mov' => 'max:80000|mimes:mp4,qt,x-ms-wmv,mpeg,x-msvideo',
-            'job_sub_mov' => 'max:80000|mimes:mp4,qt,x-ms-wmv,mpeg,x-msvideo',
-            'job_sub_mov2' => 'max:80000|mimes:mp4,qt,x-ms-wmv,mpeg,x-msvideo',
+            'data.File.movie' => 'max:80000|mimes:mp4,qt,x-ms-wmv,mpeg,x-msvideo',
         ];
     }
     public function messages()
