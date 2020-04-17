@@ -148,9 +148,9 @@
                         <tr>
                             <th>履歴書&nbsp</th>
                             <td>
-                                @if(!empty(Auth::user()->profile->resume) || Auth::user()->profile->resume !== null)
+                                @if(!empty(Auth::user()->profile->resume) && $resumePath != '')
                                     <p>
-                                        <a class="d-inline-block" href="{{ Storage::url(Auth::user()->profile->resume) }}" target="_blank">
+                                        <a class="d-inline-block" href="{{ $resumePath }}" target="_blank">
                                             履歴書
                                         </a>
                                         {!! Form::open(['url' => '/mypage/resume/delete', 'method' => 'post']) !!}

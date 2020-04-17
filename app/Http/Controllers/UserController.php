@@ -71,17 +71,24 @@ class UserController extends Controller
 
     public function create() 
     {
-        $user_id = auth()->user()->id;
+        $user = auth()->user();
+        $user_id = $user->id;
         $profile = Profile::where('user_id',$user_id)->first();
-        
 
         $postcode = $profile['postcode'];
         $postcode = str_replace("-", "", $postcode);
         $postcode1 = substr($postcode,0,3);
         $postcode2 = substr($postcode,3);
 
+        $exists = Storage::disk('s3')->exists('resume/'.$user->profile->resume);
+        if($exists) {
+            $resumePath =  Storage::disk('s3')->url('resume/'.$user->profile->resume);
+            $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
+        } else {
+            $resumePath = '';
+        }
 
-        return view('mypages.edit', compact('postcode1', 'postcode2'));
+        return view('mypages.edit', compact('postcode1', 'postcode2', 'resumePath'));
     }
 
     public function careerCreate() 
@@ -148,32 +155,38 @@ class UserController extends Controller
         $this->validate($request,[
             'resume' => 'required | max:20000' ,
         ]);
-        $user_id = auth()->user()->id;
+
+        $user = auth()->user();
+        $user_id = $user->id;
+
+        if($user->profile->resume) {
+            Storage::disk('public')->delete($user->profile->resume);
+            Storage::disk('s3')->delete('resume/'.$user->profile->resume);;
+        }
+
         $filename = $request->file('resume')->hashName();
-        $path = $request->file('resume')->storeAs('public/files', $filename);
-
+        $path = $request->file('resume')->storeAs('public/files/'.$user_id, $filename);
        
-        $contents = Storage::get('public/files/'.$filename);
+        $contents = Storage::get('public/files/'.$user_id.'/'.$filename);
 
-        Storage::disk('s3')->put('resume/'.$filename, $contents, 'public');
+        Storage::disk('s3')->put('resume/files/'.$user_id.'/'.$filename, $contents, 'public');
         Profile::where('user_id', $user_id)->update([
-            'resume' => $path,
+            'resume' => 'files/'.$user_id.'/'.$filename,
         ]);
         return redirect()->back()->with('message','履歴書を更新しました');
     }
 
     public function resumeDelete(Request $request)
     {
-        $user = User::find(auth()->id());
-        $user_id = auth()->user()->id;
+        $user = auth()->user();
+        $user_id = $user->id;
         if (is_null($user->profile->resume)) {
             return redirect()->back()->with('error', '削除する履歴書ファイルがありません');
         }
 
-        Storage::disk('local')->delete($user->profile->resume);
+        Storage::disk('public')->delete($user->profile->resume);
 
-        $filenames = explode("/", $user->profile->resume);
-        Storage::disk('s3')->delete('resume/'.$filenames[2]);;
+        Storage::disk('s3')->delete('resume/'.$user->profile->resume);
         Profile::where('user_id', $user_id)->update([
             'resume' => null,
         ]);
