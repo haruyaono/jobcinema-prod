@@ -166,12 +166,14 @@ class CompanyController extends Controller
             $file = $request->file('logo');
             $ext = $file->getClientOriginalExtension(); 
             $filename = time(). '.' .$ext;
-            $file->move('upload/c_logo/', $filename);
-    
-            $contents = File::get(public_path().'/upload/c_logo/'.$filename);
-            Storage::disk('s3')->put('upload/c_logo/'.$filename, $contents, 'public');
+            
+            $file->move('upload/c_logo/'.$employer_id .'/', $filename);
+            $contents = File::get(public_path().'/upload/c_logo/'.$employer_id.'/'.$filename);
+
+            Storage::disk('s3')->put('upload/c_logo/'.$employer_id.'/'.$filename, $contents, 'public');
+               
             Company::where('employer_id', $employer_id)->update([
-                'logo' => 'upload/c_logo/'.$filename,
+                'logo' => 'upload/c_logo/'.$employer_id.'/'.$filename,
             ]);
             return redirect()->back()->with('message_success','企業ロゴを登録しました');
         } else {
