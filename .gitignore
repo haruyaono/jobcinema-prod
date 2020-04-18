@@ -5,10 +5,7 @@
 /public/upload/jobitem/movies/tmp/
 /storage/app/public/
 /node_modules
-/public/hot
 /public/storage
-/schema
-/schemaspy
 /storage/*.key
 /vendor
 .env

@@ -18,7 +18,7 @@ if(document.getElementById("start_specified_date") && document.getElementById("e
     function pubstartflg0(ischecked){
         if(ischecked == true){
             start_specified_date.disabled = true;
-            dstart_specified_date.value = "";
+            start_specified_date.value = "";
         } else {
             start_specified_date.disabled = false;
         }
@@ -152,17 +152,6 @@ $(function() {
     });
 
 
-
-    // トップページの最近見た求人を表示
-    setHistoryList($('#recent-joblist'), 'ajax_history_sheet_list', 0);
-    // 詳細ページの最近見た求人を表示
-    // setHistoryList($('#detail-history'), 'ajax_history_sheet_list', 0);
-    // myページの最近見た求人を表示
-    // setHistoryList($('#mypage-history'), 'ajax_mypage_history', 0);
-
-
-
-
     // window.opener.execBeforeUnload = false;
     // window.opener.refresh();
 
@@ -172,32 +161,4 @@ $(function() {
 
         
 });
-
-
-
-// 最近見た求人を表示
-function setHistoryList(obj, action, $htag) {
-    if (obj.size() > 0) {
-        obj.html('<div style="width: 32px; margin: 0 auto;"><img src="/assets/css/ajax-loader.gif" /></div>');
-
-      
-        var url = '/jobs/' + action + '/';
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            dataType: 'html',
-            cache: false,
-            success: function(data) {
-                obj.html(data);
-                console.log(data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                obj.html('');
-                obj.hide();
-                console.log(errorThrown);
-            }
-        });
-    }
-}
 

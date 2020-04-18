@@ -67,4 +67,5 @@ RUN php artisan storage:link
 RUN chmod -R a+w storage/ bootstrap/cache
 RUN chown -R www-data:www-data storage
 RUN chmod -R 775 storage
+RUN chmod -R 777 public/
 RUN service supervisor start

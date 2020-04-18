@@ -4,7 +4,7 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<meta name="description" content="@yield('description')">
+<meta name="description" content="@yield('description')"> 
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"/>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -14,25 +14,26 @@
       rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/app.css') }} ">
 <link rel="stylesheet" href="{{ asset('css/styles.css') }} ">
-<link rel="stylesheet" href="{{ asset('css/popup/popup__style.css') }} ">
-<!-- <link rel="stylesheet" href="{{ asset('css/popup/popup__qr.css') }} ">
-<link rel="stylesheet" href="{{ asset('css/popup/popup__jobctgry.css') }} "> -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<!-- js -->
-<script
-  src="https://code.jquery.com/jquery-3.4.1.js"
-  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-  crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
-
+<!------ js ------>
+<!-- jquery -->
+<script src="{{ asset('js/jquery-3.5.0.min.js') }}"></script>
+<!-- vue -->
+<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->
+@if(config('app.env') === 'production')
+<script type="text/javascript" src="{{ asset('js/vue.min.js') }}"></script>
+@else
+<script type="text/javascript" src="{{ asset('js/vue.js') }}"></script>
+@endif
+<!-- jquery-ui -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
 
-<script type="text/javascript" src="{{ asset('js/jc_functions.js') }}"></script>
-<!-- <script type="text/javascript" src="{{ asset('js/jc_ajax.js') }}"></script> -->
-<script type="text/javascript" src="{{ asset('js/jc_popup.js') }}"></script>
+<!-- slick -->
+<!-- <script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script> -->
+
+<script type="text/javascript" src="{{ asset('js/slick.min.js') }}"></script>
+
 
 
 <script>
