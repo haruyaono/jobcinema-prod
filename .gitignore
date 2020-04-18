@@ -1,9 +1,3 @@
-/public/upload/c_logo/
-/public/upload/jobitem/images/real/
-/public/upload/jobitem/images/tmp/
-/public/upload/jobitem/movies/real/
-/public/upload/jobitem/movies/tmp/
-/storage/app/public/
 /node_modules
 /public/storage
 /storage/*.key
