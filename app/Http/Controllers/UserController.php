@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Library\CustomValidator;
 use App\Models\Profile;
 use App\Models\User;
-use App\Models\JobItem;
+use App\Job\JobItems\JobItem;
 use DB;
 use Storage;
 use Hash;

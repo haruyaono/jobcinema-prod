@@ -6,19 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
 use App\Models\User;
-use App\Models\JobItem;
+use App\Job\JobItems\JobItem;
 use App\Models\Profile;
 use App\Models\PostalCode;
 use App\Models\Company;
-use App\Models\StatusCat;
-use App\Models\TypeCat;
-use App\Models\AreaCat;
-use App\Models\HourlySalaryCat;
-use App\Models\DateCat;
+use App\Job\Categories\StatusCategory;
+use App\Job\Categories\TypeCategory;
+use App\Job\Categories\HourlySalaryCategory;
+use App\Job\Categories\AreaCategory;
+use App\Job\Categories\DateCategory;
 use App\Http\Requests\JobCreateStep1Request;
 use App\Http\Requests\JobCreateStep2Request;
 use App\Http\Requests\JobCreateTmpSaveRequest;
-
 use App\Mail\JobAppliedSeeker;
 use App\Mail\JobAppliedEmployer;
 use Illuminate\Support\Facades\Mail;
@@ -27,24 +26,40 @@ use Storage;
 use Auth;
 use DB;
 
+use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+
 
 class JobController extends Controller
 
 {
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepo;
     private $job_form_session = 'count';
+    
   
 
-    public function __construct(JobItem $JobItem)
+     /**
+     * JobController constructor.
+     * @param JobItem $JobItem
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(JobItem $JobItem, CategoryRepositoryInterface $categoryRepository)
     {
       $this->middleware(['employer'], ['except'=>array('index','show', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;
+      $this->categoryRepo = $categoryRepository;
     }
 
     public function index()
     {
-      $jobs_models = JobItem::activeJobitem();
+      $jobs_models = $this->JobItem->activeJobitem();
       $jobs = $jobs_models->get();
+      // $allCategory = $this->categoryRepo->allCategories();
+      // dd($allCategory[0]->get());
       $topLimitJobs = $jobs_models->latest()->limit(3)->get();
 
       return view('jobs.index', compact('jobs','topLimitJobs'));
@@ -256,7 +271,7 @@ class JobController extends Controller
 
        
 
-      }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+      } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
 
         return redirect()->route('my.job')->with('message_alert', '該当する求人票が見つかりません。');
 
@@ -1199,6 +1214,8 @@ class JobController extends Controller
         }
         session()->forget('count');
         session()->put('count', 3);
+
+        
 
         return view('jobs.post.confirm', compact('job'));
       } else {

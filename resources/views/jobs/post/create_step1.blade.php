@@ -53,9 +53,9 @@
                 <div class="card-body">
                     <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform01">
-                        @foreach(App\Models\StatusCat::all() as $statusCat)
-                        <input id="status_cat_id_{{$statusCat->id}}" type="radio" name="status_cat_id" {{ old('status_cat_id') == $statusCat->id ? 'checked' : ''}}@if(Session::has('data1.status_cat_id') && !old('status_cat_id')) {{Session::get('data1.status_cat_id') == $statusCat->id ? 'checked' : ''}} @endif value="{{ $statusCat->id }}">
-                        <label for="status_cat_id_{{$statusCat->id}}">{{ $statusCat->name }}</label><br>
+                        @foreach(App\Job\Categories\StatusCategory::all() as $statusCategory)
+                        <input id="status_cat_id_{{$statusCategory->id}}" type="radio" name="status_cat_id" {{ old('status_cat_id') == $statusCategory->id ? 'checked' : ''}}@if(Session::has('data1.status_cat_id') && !old('status_cat_id')) {{Session::get('data1.status_cat_id') == $statusCategory->id ? 'checked' : ''}} @endif value="{{ $statusCategory->id }}">
+                        <label for="status_cat_id_{{$statusCategory->id}}">{{ $statusCategory->name }}</label><br>
                         <br>
                         @endforeach
                     </div>
@@ -66,10 +66,10 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Models\TypeCat::all() as $typeCat)
+                        @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
                         <div class="e-radio-item02">
-                            <input id="type_cat_id_{{$typeCat->id}}" class="" type="radio" name="type_cat_id" {{ old('type_cat_id') == $typeCat->id ? 'checked' : ''}} @if(Session::has('data1.type_cat_id') && !old('type_cat_id')) {{Session::get('data1.type_cat_id') == $typeCat->id ? 'checked' : ''}} @endif value="{{ $typeCat->id }}">
-                            <label for="type_cat_id_{{$typeCat->id}}">{{ $typeCat->name }}</label>
+                            <input id="type_cat_id_{{$typeCategory->id}}" class="" type="radio" name="type_cat_id" {{ old('type_cat_id') == $typeCategory->id ? 'checked' : ''}} @if(Session::has('data1.type_cat_id') && !old('type_cat_id')) {{Session::get('data1.type_cat_id') == $typeCategory->id ? 'checked' : ''}} @endif value="{{ $typeCategory->id }}">
+                            <label for="type_cat_id_{{$typeCategory->id}}">{{ $typeCategory->name }}</label>
                         </div>
                         @endforeach
                     </div>
@@ -80,10 +80,10 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Models\AreaCat::all() as $areaCat)
+                        @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
                         <div class="e-radio-item02">
-                            <input id="area_cat_id_{{$areaCat->id}}" class="" type="radio" name="area_cat_id" {{ old('area_cat_id') == $areaCat->id ? 'checked' : ''}} @if(Session::has('data1.area_cat_id') && !old('area_cat_id')) {{Session::get('data1.area_cat_id') == $areaCat->id ? 'checked' : ''}} @endif value="{{ $areaCat->id }}">
-                            <label for="area_cat_id_{{$areaCat->id}}">{{ $areaCat->name }}</label>
+                            <input id="area_cat_id_{{$areaCategory->id}}" class="" type="radio" name="area_cat_id" {{ old('area_cat_id') == $areaCategory->id ? 'checked' : ''}} @if(Session::has('data1.area_cat_id') && !old('area_cat_id')) {{Session::get('data1.area_cat_id') == $areaCategory->id ? 'checked' : ''}} @endif value="{{ $areaCategory->id }}">
+                            <label for="area_cat_id_{{$areaCategory->id}}">{{ $areaCategory->name }}</label>
                         </div>
                         @endforeach
                     </div>
@@ -94,10 +94,10 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Models\HourlySalaryCat::all() as $hourlySalaryCat)
+                        @foreach(App\Job\Categories\HourlySalaryCategory::all() as $hourlySalaryCategory)
                         <div class="e-radio-item02">
-                            <input id="hourly_salary_cat_id_{{$hourlySalaryCat->id}}" class="" type="radio" name="hourly_salary_cat_id" {{ old('hourly_salary_cat_id') == $hourlySalaryCat->id ? 'checked' : ''}} @if(Session::has('data1.hourly_salary_cat_id') && !old('hourly_salary_cat_id')) {{Session::get('data1.hourly_salary_cat_id') == $hourlySalaryCat->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCat->id }}">
-                            <label for="hourly_salary_cat_id_{{$hourlySalaryCat->id}}">{{ $hourlySalaryCat->name }}</label>
+                            <input id="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}" class="" type="radio" name="hourly_salary_cat_id" {{ old('hourly_salary_cat_id') == $hourlySalaryCategory->id ? 'checked' : ''}} @if(Session::has('data1.hourly_salary_cat_id') && !old('hourly_salary_cat_id')) {{Session::get('data1.hourly_salary_cat_id') == $hourlySalaryCategory->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCategory->id }}">
+                            <label for="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}">{{ $hourlySalaryCategory->name }}</label>
                         </div>
                         @endforeach
                     </div>
@@ -108,10 +108,10 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Models\DateCat::all() as $dateCat)
+                        @foreach(App\Job\Categories\DateCategory::all() as $dateCategory)
                         <div class="e-radio-item02">
-                            <input id="date_cat_id_{{$dateCat->id}}" class="" type="radio" name="date_cat_id" {{ old('date_cat_id') == $dateCat->id ? 'checked' : ''}} @if(Session::has('data1.date_cat_id') && !old('date_cat_id')) {{Session::get('data1.date_cat_id') == $dateCat->id ? 'checked' : ''}} @endif value="{{ $dateCat->id }}">
-                            <label for="date_cat_id_{{$dateCat->id}}">{{ $dateCat->name }}</label>
+                            <input id="date_cat_id_{{$dateCategory->id}}" class="" type="radio" name="date_cat_id" {{ old('date_cat_id') == $dateCategory->id ? 'checked' : ''}} @if(Session::has('data1.date_cat_id') && !old('date_cat_id')) {{Session::get('data1.date_cat_id') == $dateCategory->id ? 'checked' : ''}} @endif value="{{ $dateCategory->id }}">
+                            <label for="date_cat_id_{{$dateCategory->id}}">{{ $dateCategory->name }}</label>
                         </div>
                         @endforeach
                     </div>

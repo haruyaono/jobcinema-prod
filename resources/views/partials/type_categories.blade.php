@@ -4,7 +4,7 @@
     
     <div class="top-category-wrap">
       <ul class="top-category-list">
-      @foreach(App\Models\TypeCat::all() as $typeCategory)
+      @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
         <li class="top-category-list-item">
           <a href="{{route('type.cat.get', [$typeCategory->id])}}" class="h-100 feature-item">
            {{$typeCategory->name}}

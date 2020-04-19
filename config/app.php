@@ -178,9 +178,9 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ValidatorServiceProvider::class, //add
-
-        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        App\Providers\ValidatorServiceProvider::class, 
+        App\Providers\RepositoryServiceProvider::class,
+        // Prettus\Repository\Providers\RepositoryServiceProvider::class,
         App\Providers\JobItemServiceProvider::class
 
     ],

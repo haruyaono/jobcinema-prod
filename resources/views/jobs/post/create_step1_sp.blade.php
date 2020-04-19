@@ -55,8 +55,8 @@
                     <div class="form-group e-radioform e-radioform01">
                         <select name="status_cat_id" id="">
                             <option value="">選択してください</option>
-                            @foreach(App\Models\StatusCat::all() as $statusCat)
-                            <option id="status_cat_id_{{$statusCat->id}}"  {{ old('status_cat_id') == $statusCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.status_cat_id') && !old('status_cat_id')) {{Session::get('data.form.category.status_cat_id') == $statusCat->id ? 'selected' : ''}} @endif value="{{ $statusCat->id }}">{{ $statusCat->name }}</option>
+                            @foreach(App\Job\Categories\StatusCategory::all() as $statusCategory)
+                            <option id="status_cat_id_{{$statusCategory->id}}"  {{ old('status_cat_id') == $statusCategory->id ? 'selected' : ''}}@if(Session::has('data.form.category.status_cat_id') && !old('status_cat_id')) {{Session::get('data.form.category.status_cat_id') == $statusCategory->id ? 'selected' : ''}} @endif value="{{ $statusCategory->id }}">{{ $statusCategory->name }}</option>
                             @endforeach
                         </select>
                         
@@ -70,8 +70,8 @@
                     <div class="form-group e-radioform e-radioform02">
                         <select name="type_cat_id" id="">
                             <option value="">選択してください</option>
-                            @foreach(App\Models\TypeCat::all() as $typeCat)
-                            <option id="type_cat_id_{{$typeCat->id}}"  {{ old('type_cat_id') == $typeCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.type_cat_id') && !old('type_cat_id')) {{Session::get('data.form.category.type_cat_id') == $typeCat->id ? 'selected' : ''}} @endif value="{{ $typeCat->id }}">{{ $typeCat->name }}</option>
+                            @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
+                            <option id="type_cat_id_{{$typeCategory->id}}"  {{ old('type_cat_id') == $typeCategory->id ? 'selected' : ''}}@if(Session::has('data.form.category.type_cat_id') && !old('type_cat_id')) {{Session::get('data.form.category.type_cat_id') == $typeCategory->id ? 'selected' : ''}} @endif value="{{ $typeCategory->id }}">{{ $typeCategory->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -84,8 +84,8 @@
                     <div class="form-group e-radioform e-radioform02">
                         <select name="area_cat_id" id="">
                             <option value="">選択してください</option>
-                            @foreach(App\Models\AreaCat::all() as $areaCat)
-                            <option id="area_cat_id_{{$areaCat->id}}"  {{ old('area_cat_id') == $areaCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.area_cat_id') && !old('area_cat_id')) {{Session::get('data.form.category.area_cat_id') == $areaCat->id ? 'selected' : ''}} @endif value="{{ $areaCat->id }}">{{ $areaCat->name }}</option>
+                            @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
+                            <option id="area_cat_id_{{$areaCategory->id}}"  {{ old('area_cat_id') == $areaCategory->id ? 'selected' : ''}}@if(Session::has('data.form.category.area_cat_id') && !old('area_cat_id')) {{Session::get('data.form.category.area_cat_id') == $areaCategory->id ? 'selected' : ''}} @endif value="{{ $areaCategory->id }}">{{ $areaCategory->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -98,8 +98,8 @@
                     <div class="form-group e-radioform e-radioform02">
                         <select name="hourly_salary_cat_id" id="">
                             <option value="">選択してください</option>
-                            @foreach(App\Models\HourlySalaryCat::all() as $hourlySalaryCat)
-                            <option id="hourly_salary_cat_id_{{$areaCat->id}}"  {{ old('hourly_salary_cat_id') == $hourlySalaryCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.hourly_salary_cat_id') && !old('hourly_salary_cat_id')) {{Session::get('data.form.category.hourly_salary_cat_id') == $hourlySalaryCat->id ? 'selected' : ''}} @endif value="{{ $hourlySalaryCat->id }}">{{ $hourlySalaryCat->name }}</option>
+                            @foreach(App\Job\Categories\HourlySalaryCategory::all() as $hourlySalaryCategory)
+                            <option id="hourly_salary_cat_id_{{$areaCategory->id}}"  {{ old('hourly_salary_cat_id') == $hourlySalaryCategory->id ? 'selected' : ''}}@if(Session::has('data.form.category.hourly_salary_cat_id') && !old('hourly_salary_cat_id')) {{Session::get('data.form.category.hourly_salary_cat_id') == $hourlySalaryCategory->id ? 'selected' : ''}} @endif value="{{ $hourlySalaryCategory->id }}">{{ $hourlySalaryCategory->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -112,8 +112,8 @@
                     <div class="form-group e-radioform e-radioform02">
                         <select name="date_cat_id" id="">
                             <option value="">選択してください</option>
-                            @foreach(App\Models\DateCat::all() as $dateCat)
-                            <option id="date_cat_id_{{$dateCat->id}}"  {{ old('date_cat_id') == $dateCat->id ? 'selected' : ''}}@if(Session::has('data.form.category.date_cat_id') && !old('date_cat_id')) {{Session::get('data.form.category.date_cat_id') == $dateCat->id ? 'selected' : ''}} @endif value="{{ $dateCat->id }}">{{ $dateCat->name }}</option>
+                            @foreach(App\Job\Categories\DateCategory::all() as $dateCategory)
+                            <option id="date_cat_id_{{$dateCategory->id}}"  {{ old('date_cat_id') == $dateCategory->id ? 'selected' : ''}}@if(Session::has('data.form.category.date_cat_id') && !old('date_cat_id')) {{Session::get('data.form.category.date_cat_id') == $dateCategory->id ? 'selected' : ''}} @endif value="{{ $dateCategory->id }}">{{ $dateCategory->name }}</option>
                             @endforeach
                         </select>
                     </div>

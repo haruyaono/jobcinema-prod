@@ -63,27 +63,27 @@
                     <table class="job-create-table jobcat-edit-create-table">
                         <tr>
                             <th>雇用形態</th>
-                            <td>@if(Session::has('data.form.edit_category.status')){{App\Models\StatusCat::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\Models\StatusCat::find($job->status_cat_id)->name}}@endif</td>
+                            <td>@if(Session::has('data.form.edit_category.status')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'status'])}}">変更する</a></td>
                         </tr>
                         <tr>
                             <th>職種</th>
-                            <td>@if(Session::has('data.form.edit_category.type')){{App\Models\TypeCat::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\Models\TypeCat::find($job->type_cat_id)->name}}@endif</td>
+                            <td>@if(Session::has('data.form.edit_category.type')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'type'])}}">変更する</a></td>
                         </tr>
                         <tr>
                             <th>勤務地エリア</th>
-                            <td>@if(Session::has('data.form.edit_category.area')){{App\Models\AreaCat::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\Models\AreaCat::find($job->area_cat_id)->name}}@endif</td>
+                            <td>@if(Session::has('data.form.edit_category.area')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'area'])}}">変更する</a></td>
                         </tr>
                         <tr>
                             <th>最低時給</th>
-                            <td>@if(Session::has('data.form.edit_category.hourly_salary')){{App\Models\HourlySalaryCat::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\Models\HourlySalaryCat::find($job->hourly_salary_cat_id)->name}}@endif</td>
+                            <td>@if(Session::has('data.form.edit_category.hourly_salary')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'hourly_salary'])}}">変更する</a></td>
                         </tr>
                         <tr>
                             <th>最低勤務日数</th>
-                            <td>@if(Session::has('data.form.edit_category.date')){{App\Models\DateCat::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\Models\DateCat::find($job->date_cat_id)->name}}@endif</td>
+                            <td>@if(Session::has('data.form.edit_category.date')){{App\Job\Categories\DateCategory::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'date'])}}">変更する</a></td>
                         </tr>
                     </table>

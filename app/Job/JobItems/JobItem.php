@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Job\JobItems;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -18,27 +18,27 @@ class JobItem extends Model
 
     public function status_cat_get()
     {
-        return $this->belongsTo(StatusCat::class, 'status_cat_id');
+        return $this->belongsTo(\App\Job\Categories\StatusCategory::class, 'status_cat_id');
     }
 
     public function type_cat_get()
     {
-        return $this->belongsTo(TypeCat::class, 'type_cat_id');
+        return $this->belongsTo(\App\Job\Categories\TypeCategory::class, 'type_cat_id');
     }
 
     public function area_cat_get()
     {
-        return $this->belongsTo(AreaCat::class, 'area_cat_id');
+        return $this->belongsTo(\App\Job\Categories\AreaCategory::class, 'area_cat_id');
     }
 
     public function hourly_salary_cat_get()
     {
-        return $this->belongsTo(HourlySalaryCat::class, 'hourly_salary_cat_id');
+        return $this->belongsTo(\App\Job\Categories\HourlySalaryCategory::class, 'hourly_salary_cat_id');
     }
 
     public function date_cat_get()
     {
-        return $this->belongsTo(DateCat::class, 'date_cat_id');
+        return $this->belongsTo(\App\Job\Categories\DateCategory::class, 'date_cat_id');
     }
 
     public function company()

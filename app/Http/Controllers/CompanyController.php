@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
-use App\Models\JobItem; 
+use App\Job\JobItems\JobItem; 
 use App\Models\Employer; 
 use Storage;
 use File; 

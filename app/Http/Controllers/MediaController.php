@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\JobItem;
+use App\Job\JobItems\JobItem;
 use App\Http\Requests\MainImageUploadRequest;
 use App\Http\Requests\SubImageUploadRequest;
 use App\Http\Requests\MainMovieUploadRequest;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
-use App\Models\JobItem;
+use App\Job\JobItems\JobItem;
 
 class HomeController extends Controller
 {

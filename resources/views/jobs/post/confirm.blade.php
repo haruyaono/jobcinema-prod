@@ -30,31 +30,31 @@
                         <tr>
                             <th>雇用形態</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.status_cat_id')){{App\models\StatusCat::find(Session::get('data.form.category.status_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.status')){{App\models\StatusCat::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\models\StatusCat::find($job->status_cat_id)->name}}@endif</p>
+                                <p>@if(Session::has('data.form.category.status_cat_id')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.category.status_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.status')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</p>
                             </td>
                         </tr>
                         <tr>
                             <th>募集職種</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.type_cat_id')){{App\models\TypeCat::find(Session::get('data.form.category.type_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.type')){{App\models\TypeCat::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\models\TypeCat::find($job->type_cat_id)->name}}@endif</p>
+                                <p>@if(Session::has('data.form.category.type_cat_id')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.category.type_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.type')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</p>
                             </td>
                         </tr>
                         <tr>
                             <th>勤務地エリア</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.area_cat_id')){{App\models\AreaCat::find(Session::get('data.form.category.area_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.area')){{App\models\AreaCat::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\models\AreaCat::find($job->area_cat_id)->name}}@endif</p>
+                                <p>@if(Session::has('data.form.category.area_cat_id')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.category.area_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.area')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</p>
                             </td>
                         </tr>
                         <tr>
                             <th>最低時給</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.hourly_salary_cat_id')){{App\models\HourlySalaryCat::find(Session::get('data.form.category.hourly_salary_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.hourly_salary')){{App\models\HourlySalaryCat::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\models\HourlySalaryCat::find($job->hourly_salary_cat_id)->name}}@endif</p>
+                                <p>@if(Session::has('data.form.category.hourly_salary_cat_id')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.category.hourly_salary_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.hourly_salary')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</p>
                             </td>
                         </tr>
                         <tr>
                             <th>最低勤務日数</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.date_cat_id')){{App\models\DateCat::find(Session::get('data.form.category.date_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.date')){{App\models\DateCat::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\models\DateCat::find($job->date_cat_id)->name}}@endif</p>
+                                <p>@if(Session::has('data.form.category.date_cat_id')){{App\Job\Categories\DateCategory::find(Session::get('data.form.category.date_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.date')){{App\Job\Categories\DateCategory::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</p>
                             </td>
                         </tr>
                     </table>

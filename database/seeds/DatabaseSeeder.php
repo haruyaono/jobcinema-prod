@@ -2,11 +2,11 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\StatusCat;
-use App\Models\TypeCat;
-use App\Models\AreaCat;
-use App\Models\HourlySalaryCat; 
-use App\Models\DateCat;
+use App\Job\Categories\StatusCategory;
+use App\Job\Categories\TypeCategory;
+use App\Job\Categories\HourlySalaryCategory;
+use App\Job\Categories\AreaCategory;
+use App\Job\Categories\DateCategory;
 
 
 class DatabaseSeeder extends Seeder
@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder
         // DB::table('employers')->truncate();
         // DB::table('companies')->truncate();
         // DB::table('job_items')->truncate();
-        DB::table('status_cats')->truncate();
-        DB::table('type_cats')->truncate();
-        DB::table('area_cats')->truncate();
-        DB::table('hourly_salary_cats')->truncate();
-        DB::table('date_cats')->truncate();
+        DB::table('status_categories')->truncate();
+        DB::table('type_categories')->truncate();
+        DB::table('area_categories')->truncate();
+        DB::table('hourly_salary_categories')->truncate();
+        DB::table('date_categories')->truncate();
         DB::table('profiles')->truncate();
         DB::table('job_item_user')->truncate();
         DB::table('favourites')->truncate();
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             '業務委託・完全歩合制',
         ];
         foreach($statusCats as $statusCat) {
-            StatusCat::create(['name' => $statusCat]);
+            StatusCategory::create(['name' => $statusCat]);
         }
         $typeCats = [
             '事務・オフィス',
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'その他',
         ];
         foreach($typeCats as $typeCat) {
-            TypeCat::create(['name' => $typeCat]);
+            TypeCategory::create(['name' => $typeCat]);
         }
 
         $areaCats = [
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
             '中標津・標茶・厚岸',
         ];
         foreach($areaCats as $areaCat) {
-            AreaCat::create(['name' => $areaCat]);
+            AreaCategory::create(['name' => $areaCat]);
         }
 
 
@@ -105,7 +105,7 @@ class DatabaseSeeder extends Seeder
             '1500円以上',
         ];
         foreach($hourlySalaryCats as $hourlySalaryCat) {
-            HourlySalaryCat::create(['name' => $hourlySalaryCat]);
+            HourlySalaryCategory::create(['name' => $hourlySalaryCat]);
         }
 
         $dateCats = [
@@ -117,7 +117,7 @@ class DatabaseSeeder extends Seeder
             '週６日〜',
         ];
         foreach($dateCats as $dateCat) {
-            DateCat::create(['name' => $dateCat]);
+            DateCategory::create(['name' => $dateCat]);
         }
     }
 }

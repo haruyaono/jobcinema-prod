@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStatusCatsTable extends Migration
+class CreateAreaCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateStatusCatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_cats', function (Blueprint $table) {
+        Schema::create('area_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->softDeletes(); 
             $table->timestamps();
         });
+        Schema::dropIfExists('area_cats');
     }
 
     /**
@@ -28,6 +29,7 @@ class CreateStatusCatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_cats');
+        Schema::dropIfExists('area_categories');
+        
     }
 }

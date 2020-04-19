@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHourlySalaryCatsTable extends Migration
+class CreateDateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateHourlySalaryCatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('hourly_salary_cats', function (Blueprint $table) {
+        Schema::create('date_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->softDeletes(); 
             $table->timestamps();
         });
+        Schema::dropIfExists('date_cats');
     }
 
     /**
@@ -28,6 +29,7 @@ class CreateHourlySalaryCatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hourly_salary_cats');
+        Schema::dropIfExists('date_categories');
+        
     }
 }

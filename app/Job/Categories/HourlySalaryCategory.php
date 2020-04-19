@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Job\Categories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class StatusCat extends Model
+class HourlySalaryCategory extends Model
 {
     use SoftDeletes;  
 
@@ -14,6 +14,6 @@ class StatusCat extends Model
 
     public function jobs()
     {
-        return $this->hasMany('App\Models\JobItem');
+        return $this->hasMany('App\Job\JobItems\JobItem');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDateCatsTable extends Migration
+class CreateTypeCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateDateCatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('date_cats', function (Blueprint $table) {
+        Schema::create('type_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->softDeletes(); 
             $table->timestamps();
         });
+        Schema::dropIfExists('type_cats');
     }
 
     /**
@@ -28,6 +29,7 @@ class CreateDateCatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('date_cats');
+        Schema::dropIfExists('type_categories');
+        
     }
 }

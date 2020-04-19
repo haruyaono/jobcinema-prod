@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Profile;
 use App\Models\Company;
-use App\Models\JobItem;
+use App\Job\JobItems\JobItem;
 use App\Notifications\EmailVerificationJa;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
