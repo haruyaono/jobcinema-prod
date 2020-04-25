@@ -2113,27 +2113,27 @@ class JobController extends Controller
 
         $query->whereHas('status_cat_get', function ($query) use($status){
           if(!empty($status)){
-            $query->where('status_cats.id', $status);
+            $query->where('status_categories.id', $status);
           }
         });
         $query->whereHas('type_cat_get', function ($query) use($type){
           if(!empty($type)){
-            $query->where('type_cats.id', $type);
+            $query->where('type_categories.id', $type);
           }
         });
         $query->whereHas('area_cat_get', function ($query) use($area){
           if(!empty($area)){
-            $query->where('area_cats.id', $area);
+            $query->where('area_categories.id', $area);
           }
         });
         $query->whereHas('hourly_salary_cat_get', function ($query) use($hourlySaraly){
           if(!empty($hourlySaraly)){
-            $query->where('hourly_salary_cats.id', $hourlySaraly);
+            $query->where('hourly_salary_categories.id', $hourlySaraly);
           }
         });
         $query->whereHas('date_cat_get', function ($query) use($date){
           if(!empty($date)){
-            $query->where('date_cats.id', $date);
+            $query->where('date_categories.id', $date);
           }
         });
 
