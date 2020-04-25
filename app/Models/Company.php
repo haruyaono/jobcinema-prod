@@ -21,7 +21,7 @@ class Company extends Model
 
     public function jobs()
     {
-        return $this->hasMany(JobItem::class, 'company_id');
+        return $this->hasMany(\App\Job\JobItems\JobItem::class, 'company_id');
     }
 
     public function employer()

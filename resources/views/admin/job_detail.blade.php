@@ -20,31 +20,31 @@
                     <tr>
                         <th>雇用形態</th>
                         <td>
-                            <p>@if($job->status_cat_id){{App\models\StatusCat::find($job->status_cat_id)->name}}@endif</p>
+                            <p>@if($job->status_cat_id){{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>募集職種</th>
                         <td>
-                            <p>@if($job->type_cat_id){{App\models\TypeCat::find($job->type_cat_id)->name}}@endif</p>
+                            <p>@if($job->type_cat_id){{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>勤務地エリア</th>
                         <td>
-                            <p>@if($job->area_cat_id){{App\models\AreaCat::find($job->area_cat_id)->name}}@endif</p>
+                            <p>@if($job->area_cat_id){{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>最低時給</th>
                         <td>
-                            <p>@if($job->hourly_salary_cat_id){{App\models\HourlySalaryCat::find($job->hourly_salary_cat_id)->name}}@endif</p>
+                            <p>@if($job->hourly_salary_cat_id){{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>最低勤務日数</th>
                         <td>
-                            <p>@if($job->date_cat_id){{App\models\DateCat::find($job->date_cat_id)->name}}@endif</p>
+                            <p>@if($job->date_cat_id){{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                 </table>

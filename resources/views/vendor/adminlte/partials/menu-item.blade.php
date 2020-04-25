@@ -27,7 +27,7 @@
             @if($item['text'] == '承認待ち')
             <span class="pull-right-container">
                 <span class="label label-{{ $item['label_color'] ?? 'primary' }} pull-right">
-                        {{App\models\JobItem::where('status', 1)->count()}}
+                        {{App\Job\JobItems\JobItem::where('status', 1)->count()}}
                 </span>
             </span>
             @endif

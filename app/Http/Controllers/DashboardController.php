@@ -344,19 +344,19 @@ class DashboardController extends Controller
     public function category($url)
     {
         if($url == 'status') {
-            $catList = StatusCat::paginate(self::NUM_PER_PAGE);
+            $catList = StatusCategory::paginate(self::NUM_PER_PAGE);
             $catTitle = '雇用形態';
         } elseif($url == 'type') {
-            $catList = TypeCat::paginate(self::NUM_PER_PAGE);
+            $catList = TypeCategory::paginate(self::NUM_PER_PAGE);
             $catTitle = '職種';
         } elseif($url == 'area') {
-            $catList = AreaCat::paginate(self::NUM_PER_PAGE);
+            $catList = AreaCategory::paginate(self::NUM_PER_PAGE);
             $catTitle = 'エリア';
         } elseif($url == 'hourly_salary') {
-            $catList = HourlySalaryCat::paginate(self::NUM_PER_PAGE);
+            $catList = HourlySalaryCategory::paginate(self::NUM_PER_PAGE);
             $catTitle = '時給';
         } elseif($url == 'date') {
-            $catList = DateCat::paginate(self::NUM_PER_PAGE);
+            $catList = DateCategory::paginate(self::NUM_PER_PAGE);
             $catTitle = '勤務日数';
         } else {
         }
@@ -377,15 +377,15 @@ class DashboardController extends Controller
         $input = $request->input();
         $category_id = $request->input('category_id');
         if($flag == 'status') {
-            $category = StatusCat::updateOrCreate(compact('id'), $input);
+            $category = StatusCategory::updateOrCreate(compact('id'), $input);
         } elseif($flag == 'type') {
-            $category = TypeCat::updateOrCreate(compact('id'), $input);
+            $category = TypeCategory::updateOrCreate(compact('id'), $input);
         } elseif($flag == 'area') {
-            $category = AreaCat::updateOrCreate(compact('id'), $input);
+            $category = AreaCategory::updateOrCreate(compact('id'), $input);
         } elseif($flag == 'hourly_salary') {
-            $category = HourlySalaryCat::updateOrCreate(compact('id'), $input);
+            $category = HourlySalaryCategory::updateOrCreate(compact('id'), $input);
         } elseif($flag == 'date') {
-            $category = DateCat::updateOrCreate(compact('id'), $input);
+            $category = DateCategory::updateOrCreate(compact('id'), $input);
         } else {
             $category = '';
         }
@@ -404,15 +404,15 @@ class DashboardController extends Controller
     {
         $category_id = $request->input('category_id');
         if($flag == 'status') {
-            StatusCat::destroy($category_id);
+            StatusCategory::destroy($category_id);
         } elseif($flag == 'type') {
-            TypeCat::destroy($category_id);
+            TypeCategory::destroy($category_id);
         } elseif($flag == 'area') {
-            AreaCat::destroy($category_id);
+            AreaCategory::destroy($category_id);
         } elseif($flag == 'hourly_salary') {
-            HourlySalaryCat::destroy($category_id);
+            HourlySalaryCategory::destroy($category_id);
         } elseif($flag == 'date') {
-            DateCat::destroy($category_id);
+            DateCategory::destroy($category_id);
         } 
 
         // APIなので json のレスポンスを返す
