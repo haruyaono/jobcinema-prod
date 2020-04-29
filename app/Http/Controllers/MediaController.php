@@ -7,6 +7,8 @@ use App\Job\JobItems\JobItem;
 use App\Http\Requests\MainImageUploadRequest;
 use App\Http\Requests\SubImageUploadRequest;
 use App\Http\Requests\MainMovieUploadRequest;
+use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\ShJobop\JobItems\Repositories\JobItemRepository;
 use File;
 use Storage;
 use Auth;
@@ -17,7 +19,31 @@ use FFMpeg\Format\Video\X264;
 
 class MediaController extends Controller
 {
-    //main image
+
+  /**
+   * @var JobItemRepositoryInterface
+   */
+  private $JobItemRepo;
+
+  /**
+   * JobItemController constructor.
+   * 
+   * @param JobItemRepositoryInterface $jobItemRepository
+   */
+
+   public function __construct(JobItemRepositoryInterface $jobItemRepository)
+   {
+     $this->JobItemRepo = $jobItemRepository;
+
+     $this->middleware(['employer']);
+   }
+
+
+    /**
+     * Display a main page of the uploading main image
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function getMainImage($id='')
     {
       if($id != '') {
@@ -35,6 +61,10 @@ class MediaController extends Controller
     {
   
       if($request->hasfile('data.File.image')) {
+
+        $disk = Storage::disk('s3');
+        $imageFlag = $request->input('imageFlag');
+
 
         if($id != '') {
           //edit
@@ -58,32 +88,25 @@ class MediaController extends Controller
           $job = '';
 
           if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
-            $image_path_list = session()->get('data.file.image');
-            if(isset($image_path_list['main'])) {
-              if (File::exists(public_path() . $image_path_list['main'])) {
-                File::delete(public_path() . $image_path_list['main']);
 
-              }
-              unset($image_path_list['main']);
-            }
+            // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+            $image_path_list = $this->JobItemRepo->existJobItemImageAndDeleteOnPost($imageFlag);
+            
           }
         }
 
-
-        $main_image  = $request->file('data.File.image');
-        $resize_image = Image::make($main_image)->widen(300);
-        $main_image_name = uniqid("main_image").".".$main_image->guessExtension();
-
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$main_image_name));
-        $image_path = \Config::get('fpath.tmp_img').$main_image_name;
-
+        // 画像ファイルをs3・ローカルに保存に保存
+        $image_path = $this->JobItemRepo->saveJobItemImages($request->file('data.File.image'), $imageFlag);
+        
         if($id != '') {
+          
           $edit_image_path_list['main'] = $image_path;
           $request->session()->put('data.file.edit_image', $edit_image_path_list);
 
           return view('jobs.post.main_image_complete', compact('job'));
 
         } else {
+
           $image_path_list['main'] = $image_path;
           $request->session()->put('data.file.image', $image_path_list);
         }
@@ -98,8 +121,11 @@ class MediaController extends Controller
 
     }
 
-    public function mainImageDelete($id='')
+    public function mainImageDelete(Request $request, $id='')
     {
+
+      $disk = Storage::disk('s3');
+      $imageFlag = $request->imageflag;
 
       if($id != '') {
         // edit
@@ -112,6 +138,8 @@ class MediaController extends Controller
           if (File::exists(public_path() . $edit_image_path_list['main']) && $job->job_img != $edit_image_path_list['main']) {
               File::delete(public_path() . $edit_image_path_list['main']);
           }
+
+          
 
           if($job->job_img != null) {
             $edit_image_path_list['main'] = '';
@@ -139,14 +167,8 @@ class MediaController extends Controller
 
         if (session()->has('data.file.image.main') && is_array(session()->get('data.file.image'))) {
 
-          $image_path_list = session()->get('data.file.image');
-
-          if (File::exists(public_path() . $image_path_list['main'])) {
-            File::delete(public_path() . $image_path_list['main']);
-          }
-
-          unset($image_path_list['main']);
-          session()->put('data.file.image', $image_path_list);
+          // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+          $this->JobItemRepo->existJobItemImageAndDeleteOnDelete($imageFlag);
 
           return redirect()->back()->with('message_success', 'メイン写真を削除しました');
 
@@ -167,6 +189,11 @@ class MediaController extends Controller
         $job = JobItem::findOrFail($id);
         return view('jobs.post.sub_image_01', compact('job'));
       }
+
+
+      echo '<pre>';
+      var_dump(session()->get('data.file.image'));
+      echo '</pre>';
 
       $job = '';
       return view('jobs.post.sub_image_01', compact('job'));
@@ -190,6 +217,9 @@ class MediaController extends Controller
 
       if($request->hasfile('data.File.image')) {
 
+        $disk = Storage::disk('s3');
+        $imageFlag = $request->input('imageFlag');
+
         if($id != '') {
           //edit
           $job = JobItem::findOrFail($id);
@@ -212,27 +242,16 @@ class MediaController extends Controller
 
           if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
 
-            $image_path_list = session()->get('data.file.image');
-
-            if(isset($image_path_list['sub1'])) {
-              if (File::exists(public_path() . $image_path_list['sub1'])) {
-                File::delete(public_path() . $image_path_list['sub1']);
-              }
-
-              unset($image_path_list['sub1']);
-            }
+            // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+            $image_path_list = $this->JobItemRepo->existJobItemImageAndDeleteOnPost($imageFlag);
           }
         }
 
         $suffix = $request->input('data.File.suffix');
 
-        $sub1_image  = $request->file('data.File.image');
-        $resize_image = Image::make($sub1_image)->widen(300);
-        $sub1_image_name = uniqid("sub1_image").".".$sub1_image->guessExtension();
-
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$sub1_image_name));
-        $image_path = \Config::get('fpath.tmp_img').$sub1_image_name;
-
+        // 画像ファイルをs3・ローカルに保存に保存
+        $image_path = $this->JobItemRepo->saveJobItemImages($request->file('data.File.image'), $imageFlag);
+        
         if($id != '') {
           $edit_image_path_list['sub1'] = $image_path;
           $request->session()->put('data.file.edit_image', $edit_image_path_list);
@@ -257,6 +276,10 @@ class MediaController extends Controller
     {
       if ($request->hasfile('data.File.image')) {
 
+        $disk = Storage::disk('s3');
+        $imageFlag = $request->input('imageFlag');
+
+
         if($id != '') {
           //edit
           $job = JobItem::findOrFail($id);
@@ -277,27 +300,19 @@ class MediaController extends Controller
           // 新規作成時
 
           $job = '';
+
           if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
-            $image_path_list = session()->get('data.file.image');
-            if(isset($edit_image_path_list['sub2'])) {
-              if (File::exists(public_path() . $image_path_list['sub2'])) {
-                File::delete(public_path() . $image_path_list['sub2']);
+            
+            // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+            $image_path_list = $this->JobItemRepo->existJobItemImageAndDeleteOnPost($imageFlag);
 
-              }
-
-              unset($image_path_list['sub2']);
-            }
           }
         }
 
         $suffix = $request->input('data.File.suffix');
 
-        $sub2_image  = $request->file('data.File.image');
-        $resize_image = Image::make($sub2_image)->widen(300);
-        $sub2_image_name = uniqid("sub2_image").".".$sub2_image->guessExtension();
-
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$sub2_image_name));
-        $image_path = \Config::get('fpath.tmp_img').$sub2_image_name;
+         // 画像ファイルをs3・ローカルに保存に保存
+        $image_path = $this->JobItemRepo->saveJobItemImages($request->file('data.File.image'), $imageFlag);
 
         if($id != '') {
           $edit_image_path_list['sub2'] = $image_path;
@@ -317,8 +332,11 @@ class MediaController extends Controller
       }
     }
 
-    public function subImageDelete1($id='')
+    public function subImageDelete1(Request $request, $id='')
     {
+
+      $disk = Storage::disk('s3');
+      $imageFlag = $request->imageflag;
 
       if($id != '') {
         // edit
@@ -358,14 +376,9 @@ class MediaController extends Controller
 
         if (session()->has('data.file.image.sub1') && is_array(session()->get('data.file.image'))) {
 
-          $image_path_list = session()->get('data.file.image');
+         // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+          $this->JobItemRepo->existJobItemImageAndDeleteOnDelete($imageFlag);
 
-          if (File::exists(public_path() . $image_path_list['sub1'])) {
-            File::delete(public_path() . $image_path_list['sub1']);
-          }
-
-          unset($image_path_list['sub1']);
-          session()->put('data.file.image', $image_path_list);
 
           return redirect()->back()->with('message_success', 'サブ写真を削除しました');
 
@@ -378,8 +391,11 @@ class MediaController extends Controller
       }
 
     }
-    public function subImageDelete2($id='')
+    public function subImageDelete2(Request $request, $id='')
     {
+      $disk = Storage::disk('s3');
+      $imageFlag = $request->imageflag;
+
       if($id != '') {
         // edit
         $job = JobItem::findOrFail($id);
@@ -418,14 +434,8 @@ class MediaController extends Controller
 
         if (session()->has('data.file.image.sub2') && is_array(session()->get('data.file.image'))) {
 
-          $image_path_list = session()->get('data.file.image');
-
-          if (File::exists(public_path() . $image_path_list['sub2'])) {
-            File::delete(public_path() . $image_path_list['sub2']);
-          }
-
-          unset($image_path_list['sub2']);
-          session()->put('data.file.image', $image_path_list);
+           // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+          $this->JobItemRepo->existJobItemImageAndDeleteOnDelete($imageFlag);
 
           return redirect()->back()->with('message_success', 'サブ写真を削除しました');
 

@@ -39,6 +39,7 @@
         <form class="file-apload-form" action="@if($job){{route('main.image.post', [$job->id])}}@else{{route('main.image.post')}}@endif" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="data[File][currentPath]" value="@if($job == '' && Session::has('data.file.image.main')){{Session::get('data.file.image.main')}}@elseif($job != '' && Session::has('data.file.edit_image.main') && Session::get('data.file.edit_image.main') != ''){{Session::get('data.file.edit_image.main')}}@elseif($job != '' && Session::has('data.file.edit_image.main') == false && $job->job_img != null){{$job->job_img}}@else '/uploads/images/no-image.gif' @endif" id="FileCurrentPath">
+        <input type="hidden" name="imageFlag" value="main">
             <div class="card">
         
                 <div class="card-header">メイン写真の登録</div>
@@ -94,9 +95,9 @@ $(function() {
         if(window.confirm('登録されているメイン写真を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/main/image/delete/' + job.id;
+                window.location.href = '/jobs/main/image/delete/' + job.id　+ '?imageflag=main';
             } else {
-                window.location.href = '/jobs/main/image/delete';
+                window.location.href = '/jobs/main/image/delete?imageflag=main';
             }
 
             window.opener.$("#photo1").attr('src', '/uploads/images/no-image.gif');

@@ -31,7 +31,7 @@ Route::get('/status/{statusVal}/type/{typeVal}/area/{areaVal}/hourly_salary/{hou
 Route::post('/jobs/create/draftOrStep2/{id?}', 'JobController@draftOrStep2')->name('job.draftOrStep2');
 Route::get('/jobs/create/confirm/{id?}', 'JobController@createConfirm')->name('job.create.confirm');
 Route::post('/jobs/create/complete/{id?}', 'JobController@storeComplete')->name('job.store.complete');
-//main image
+//image get
 Route::get('/jobs/main/image/delete/{id?}', 'MediaController@mainImageDelete')->name('main.image.delete');
 Route::get('/jobs/main/image/{id?}', 'MediaController@getMainImage')->name('main.image.get');
 Route::post('/jobs/main/image/{id?}', 'MediaController@postMainImage')->name('main.image.post');
