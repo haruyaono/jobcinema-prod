@@ -257,6 +257,10 @@ class JobController extends Controller
     public function edit($id)
     {
 
+      echo '<pre>';
+      var_dump(session()->get('data.file'));
+      echo '</pre>';
+      
       try{
         session()->put('count', 1);
 

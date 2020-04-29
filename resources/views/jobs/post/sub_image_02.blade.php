@@ -93,7 +93,7 @@ $(function() {
         if(window.confirm('登録されているサブ写真2を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/sub/image02/delete/' + job.id;
+                window.location.href = '/jobs/sub/image02/delete/' + job.id + '?imageflag=sub2';
             } else {
                 window.location.href = '/jobs/sub/image02/delete?imageflag=sub2';
             }

@@ -11,11 +11,11 @@ interface JobItemRepositoryInterface
 
     // public function findJobItemImages() : Collection;
 
-    public function existJobItemImageAndDeleteOnPost($imageFlag);
+    public function existJobItemImageAndDeleteOnPost(string $imageFlag, int $editFlag = 0);
 
-    public function saveJobItemImages(UploadedFile $file, $imageFlag) : string;
+    public function saveJobItemImages(UploadedFile $file, string $imageFlag) : string;
 
-    public function existJobItemImageAndDeleteOnDelete($imageFlag);
+    public function existJobItemImageAndDeleteOnDelete($imageFlag, int $editFlag = 0, $job = '');
 
 
     public function existJobItemMovieAndDeleteOnPost(string $movieFlag);

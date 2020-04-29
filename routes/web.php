@@ -31,19 +31,20 @@ Route::get('/status/{statusVal}/type/{typeVal}/area/{areaVal}/hourly_salary/{hou
 Route::post('/jobs/create/draftOrStep2/{id?}', 'JobController@draftOrStep2')->name('job.draftOrStep2');
 Route::get('/jobs/create/confirm/{id?}', 'JobController@createConfirm')->name('job.create.confirm');
 Route::post('/jobs/create/complete/{id?}', 'JobController@storeComplete')->name('job.store.complete');
-//image get
-Route::get('/jobs/main/image/delete/{id?}', 'MediaController@mainImageDelete')->name('main.image.delete');
+
+//main image
+Route::get('/jobs/main/image/delete/{id?}', 'MediaController@imageDelete')->name('main.image.delete');
 Route::get('/jobs/main/image/{id?}', 'MediaController@getMainImage')->name('main.image.get');
-Route::post('/jobs/main/image/{id?}', 'MediaController@postMainImage')->name('main.image.post');
+Route::post('/jobs/main/image/{id?}', 'MediaController@postImage')->name('main.image.post');
 
 //sub image1
-Route::get('/jobs/sub/image01/delete/{id?}', 'MediaController@subImageDelete1')->name('sub.image1.delete');
+Route::get('/jobs/sub/image01/delete/{id?}', 'MediaController@imageDelete')->name('sub.image1.delete');
 Route::get('/jobs/sub/image01/{id?}', 'MediaController@getSubImage1')->name('sub.image1.get');
-Route::post('/jobs/sub/image01/{id?}', 'MediaController@postSubImage1')->name('sub.image1.post');
+Route::post('/jobs/sub/image01/{id?}', 'MediaController@postImage')->name('sub.image1.post');
 //sub image2
-Route::get('/jobs/sub/image02/delete/{id?}', 'MediaController@subImageDelete2')->name('sub.image2.delete');
+Route::get('/jobs/sub/image02/delete/{id?}', 'MediaController@imageDelete')->name('sub.image2.delete');
 Route::get('/jobs/sub/image02/{id?}', 'MediaController@getSubImage2')->name('sub.image2.get');
-Route::post('/jobs/sub/image02/{id?}', 'MediaController@postSubImage2')->name('sub.image2.post');
+Route::post('/jobs/sub/image02/{id?}', 'MediaController@postImage')->name('sub.image2.post');
 
 //main movie
 Route::get('/jobs/main/movie/delete/{id?}', 'MediaController@mainMovieDelete')->name('main.movie.delete');

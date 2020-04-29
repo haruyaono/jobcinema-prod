@@ -36,56 +36,56 @@ class JobItemRepository implements JobItemRepositoryInterface
      *
      * @return void
      */
-    public function existJobItemImageAndDeleteOnPost($imageFlag)
+    public function existJobItemImageAndDeleteOnPost(string $imageFlag, int $editFlag = 0)
     {
         $disk = Storage::disk('s3');
 
-        $image_path_list = session()->get('data.file.image');
+        // 新規作成時か編集時か
+        if($editFlag === 0) {
+            // 新規作成時
+            $image_path_list = session()->get('data.file.image');
 
-        if($imageFlag == 'main') {
-            if(isset($image_path_list['main'])) {
-                if (File::exists(public_path() . $image_path_list['main'])) {
-                    File::delete(public_path() . $image_path_list['main']);
+            if($imageFlag) {
+                if(isset($image_path_list[$imageFlag])) {
+                    if (File::exists(public_path() . $image_path_list[$imageFlag])) {
+                        File::delete(public_path() . $image_path_list[$imageFlag]);
+                    }
+    
+                    if($disk->exists($image_path_list[$imageFlag])) {
+                        $disk->delete($image_path_list[$imageFlag]);
+                    }
+    
+                    unset($image_path_list[$imageFlag]);
                 }
+                
+            } 
+    
+            return $image_path_list;
+    
+        } else {
+            // 編集時
+            $edit_image_path_list = session()->get('data.file.edit_image');
 
-                if($disk->exists($image_path_list['main'])) {
-                    $disk->delete($image_path_list['main']);
+            if($imageFlag) {
+                if(isset($edit_image_path_list[$imageFlag])) {
+                    if (File::exists(public_path() . $edit_image_path_list[$imageFlag])) {
+                        File::delete(public_path() . $edit_image_path_list[$imageFlag]);
+                    }
+    
+                    if($disk->exists($edit_image_path_list[$imageFlag])) {
+                        $disk->delete($edit_image_path_list[$imageFlag]);
+                    }
+    
+                    unset($edit_image_path_list[$imageFlag]);
                 }
-
-                unset($image_path_list['main']);
-                echo 'mainだよ';
-            }
-            
-        } elseif($imageFlag == 'sub1') {
-            if(isset($image_path_list['sub1'])) {
-                if (File::exists(public_path() . $image_path_list['sub1'])) {
-                  File::delete(public_path() . $image_path_list['sub1']);
-                }
-  
-                if($disk->exists($image_path_list['sub1'])) {
-                  $disk->delete($image_path_list['sub1']);
-                }
-  
-                unset($image_path_list['sub1']);
-                echo 'sub1だよ';
-            }
-            
-        } elseif($imageFlag == 'sub2') {
-            if(isset($image_path_list['sub2'])) {
-                if (File::exists(public_path() . $image_path_list['sub2'])) {
-                  File::delete(public_path() . $image_path_list['sub2']);
-                }
-  
-                if($disk->exists($image_path_list['sub2'])) {
-                  $disk->delete($image_path_list['sub2']);
-                }
-  
-                unset($image_path_list['sub2']);
-            }
+                
+            } 
+    
+            return $edit_image_path_list;
+    
         }
 
-        return $image_path_list;
-
+       
        
     }
 
@@ -100,18 +100,10 @@ class JobItemRepository implements JobItemRepositoryInterface
 
         $resize_image = Image::make($file)->widen(300);
 
-        switch ($imageFlag) {
-            case $imageFlag == 'main':
-                $image_name = uniqid("main_image").".".$file->guessExtension();
-                break;
-            case $imageFlag == 'sub1':
-                $image_name = uniqid("sub1_image").".".$file->guessExtension();
-                break;
-            case $imageFlag == 'sub2':
-                $image_name = uniqid("sub2_image").".".$file->guessExtension();
-                break;
-            default:
-                $image_name = $file->hashname();
+        if($imageFlag) {
+            $image_name = uniqid($imageFlag . "_image").".".$file->guessExtension();
+        } else {
+            $image_name = $file->hashName();
         }
 
         // ファイルを保存
@@ -134,50 +126,73 @@ class JobItemRepository implements JobItemRepositoryInterface
      *
      * @return void
      */
-    public function existJobItemImageAndDeleteOnDelete($imageFlag)
+    public function existJobItemImageAndDeleteOnDelete($imageFlag, int $editFlag = 0, $job = '')
     {
         $disk = Storage::disk('s3');
 
-        $image_path_list = session()->get('data.file.image');
+         // 新規作成時か編集時か
+         if($editFlag === 0) {
+            // 新規作成時
 
-        switch ($imageFlag) {
-            case $imageFlag == 'main':
+            $image_path_list = session()->get('data.file.image');
 
-                if (File::exists(public_path() . $image_path_list['main'])) {
-                  File::delete(public_path() . $image_path_list['main']);
+            if(isset($image_path_list[$imageFlag])) {
+
+                if (File::exists(public_path() . $image_path_list[$imageFlag])) {
+                    File::delete(public_path() . $image_path_list[$imageFlag]);
+                  }
+                  if($disk->exists($image_path_list[$imageFlag])) {
+                    $disk->delete($image_path_list[$imageFlag]);
+                  }
+    
+                  unset($image_path_list[$imageFlag]);
+            }
+    
+            session()->put('data.file.image', $image_path_list);
+
+         } else {
+            // 
+            
+            $edit_image_path_list = session()->get('data.file.edit_image');
+
+            if(isset($edit_image_path_list[$imageFlag])) {
+
+                if (File::exists(public_path() . $edit_image_path_list[$imageFlag])) {
+                    File::delete(public_path() . $edit_image_path_list[$imageFlag]);
                 }
-                if($disk->exists($image_path_list['main'])) {
-                  $disk->delete($image_path_list['main']);
+                if($disk->exists($edit_image_path_list[$imageFlag])) {
+                    $disk->delete($edit_image_path_list[$imageFlag]);
                 }
-  
-                unset($image_path_list['main']);
-                break;
+    
+                  unset($edit_image_path_list[$imageFlag]);
+            }
 
-            case $imageFlag == 'sub1':
+            switch($imageFlag) {
+                case $imageFlag == 'main':
+                    $jobImagePath = $job->job_img;
+                    break;
+                case $imageFlag == 'sub1':
+                    $jobImagePath = $job->job_img2;
+                    break;
+                case $imageFlag == 'sub2':
+                    $jobImagePath = $job->job_img3;
+                    break;
+                default:
+                    $jobImagePath = null;
+            }
+    
 
-                if (File::exists(public_path() . $image_path_list['sub1'])) {
-                    File::delete(public_path() . $image_path_list['sub1']);
-                }
-                if($disk->exists($image_path_list['sub1'])) {
-                    $disk->delete($image_path_list['sub1']);
-                }
+            if($jobImagePath != null) {
+                $edit_image_path_list[$imageFlag] = '';
+            } else {
+                unset($edit_image_path_list[$imageFlag]);
+            }
 
-                unset($image_path_list['sub1']);
-                break;
+            session()->put('data.file.edit_image', $edit_image_path_list);
 
-            case $imageFlag == 'sub2':
-                if (File::exists(public_path() . $image_path_list['sub2'])) {
-                    File::delete(public_path() . $image_path_list['sub2']);
-                }
-                if($disk->exists($image_path_list['sub2'])) {
-                    $disk->delete($image_path_list['sub2']);
-                }
+         }
 
-                unset($image_path_list['sub2']);
-                break;
-        }
-
-        session()->put('data.file.image', $image_path_list);
+        
     }
 
 
