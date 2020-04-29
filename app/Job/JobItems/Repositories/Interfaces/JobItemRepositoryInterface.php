@@ -16,5 +16,12 @@ interface JobItemRepositoryInterface
     public function saveJobItemImages(UploadedFile $file, $imageFlag) : string;
 
     public function existJobItemImageAndDeleteOnDelete($imageFlag);
+
+
+    public function existJobItemMovieAndDeleteOnPost(string $movieFlag);
+
+    public function saveJobItemMovies(UploadedFile $file, string $movieFlag) : string;
+
+    public function existJobItemMovieAndDeleteOnDelete($movieFlag);
  
 }

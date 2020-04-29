@@ -180,5 +180,92 @@ class JobItemRepository implements JobItemRepositoryInterface
         session()->put('data.file.image', $image_path_list);
     }
 
+
+    /**
+     * @param string $movieFlag
+     *
+     * @return array $movie_path_list
+     */
+    public function existJobItemMovieAndDeleteOnPost(string $movieFlag) : array
+    {
+        $disk = Storage::disk('s3');
+
+        $movie_path_list = session()->get('data.file.movie');
+
+        if($movieFlag) {
+            if(isset($movie_path_list[$movieFlag])) {
+                if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
+                    File::delete(public_path() . $movie_path_list[$movieFlag ]);
+                }
+
+                if($disk->exists($movie_path_list[$movieFlag ])) {
+                    $disk->delete($movie_path_list[$movieFlag ]);
+                }
+
+                unset($movie_path_list[$movieFlag ]);
+            }  
+        } 
+
+        return $movie_path_list;
+    }
+
+    /**
+     * @param UploadedFile $file
+     *
+     * @return string $movie_path
+     */
+    public function saveJobItemMovies(UploadedFile $file, string $movieFlag) : string
+    {
+        $disk = Storage::disk('s3');
+
+        if($movieFlag) {
+            $movie_name = uniqid($movieFlag . "_movie").".".$file->guessExtension();
+        } else {
+            $movie_name = $file->hashName();
+        }
+
+        // ファイルを保存
+        $file->move(public_path() . \Config::get('fpath.tmp_mov'), $movie_name);
+       
+        // ファイルパスを取得
+        $movie_path = \Config::get('fpath.tmp_mov').$movie_name;
+
+        // ファイル情報を取得
+        $movieContents = File::get(public_path(\Config::get('fpath.tmp_mov').$movie_name));
+
+        $disk->put($movie_path, $movieContents, 'public');
+
+        return $movie_path;
+    }
+
+
+    /**
+     * @param string $movieFlag
+     *
+     * @return void
+     */
+    public function existJobItemMovieAndDeleteOnDelete($movieFlag)
+    {
+        $disk = Storage::disk('s3');
+
+        $movie_path_list = session()->get('data.file.movie');
+
+        if(isset($movie_path_list[$movieFlag])) {
+            if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
+                File::delete(public_path() . $movie_path_list[$movieFlag]);
+            }
+            if($disk->exists($movie_path_list[$movieFlag])) {
+                $disk->delete($movie_path_list[$movieFlag]);
+            }
+
+            unset($movie_path_list[$movieFlag]);
+
+        }
+       
+        
+        session()->put('data.file.movie', $movie_path_list);
+    }
+
+
    
 }

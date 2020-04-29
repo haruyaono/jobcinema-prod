@@ -419,6 +419,9 @@ class JobController extends Controller
     public function createStep2()
     {
      
+      echo '<pre>';
+      var_dump(session()->get('data.file'));
+      echo '</pre>';
 
       if(session()->has('count') == 1 || session()->has('count') == 3) {
 

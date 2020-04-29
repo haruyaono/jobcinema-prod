@@ -190,11 +190,6 @@ class MediaController extends Controller
         return view('jobs.post.sub_image_01', compact('job'));
       }
 
-
-      echo '<pre>';
-      var_dump(session()->get('data.file.image'));
-      echo '</pre>';
-
       $job = '';
       return view('jobs.post.sub_image_01', compact('job'));
 
@@ -466,6 +461,10 @@ class MediaController extends Controller
     {
       if($request->hasfile('data.File.movie')) {
 
+        $disk = Storage::disk('s3');
+        $movieFlag = $request->input('movieFlag');
+
+
         if($id != '') {
           //edit
           $job = JobItem::findOrFail($id);
@@ -488,23 +487,15 @@ class MediaController extends Controller
           $job = '';
 
           if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
-            $movie_path_list = session()->get('data.file.movie');
-            if(isset($movie_path_list['main'])) {
-              if (File::exists(public_path() . $movie_path_list['main'])) {
-                File::delete(public_path() . $movie_path_list['main']);
 
-              }
-              unset($movie_path_list['main']);
-            }
+            // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+            $movie_path_list = $this->JobItemRepo->existJobItemMovieAndDeleteOnPost($movieFlag);
+
           }
         }
 
-        $suffix = $request->input('data.File.suffix');
-
-        $main_movie_name = uniqid("main_movie").".".$request->file('data.File.movie')->guessExtension();
-        $request->file('data.File.movie')->move(public_path() . \Config::get('fpath.tmp_mov'), $main_movie_name);
-
-        $movie_path =  \Config::get('fpath.tmp_mov') . $main_movie_name;
+        // 動画ファイルをs3・ローカルに保存に保存
+        $movie_path = $this->JobItemRepo->saveJobItemMovies($request->file('data.File.movie'), $movieFlag);
 
         // $after_movie = shell_exec('ffmpeg -i ' . '/public' . \Config::get('fpath.tmp_mov') . $main_movie_name .  '-vf scale=320:-1' . '/public' . \Config::get('fpath.tmp_mov') . 'sample.mp4' . 'pipe:1');
         // $beforeMovie = FFMpeg::fromDisk('local')->open(\Config::get('fpath.tmp_mov'), $main_movie_name);
@@ -540,8 +531,11 @@ class MediaController extends Controller
 
     }
 
-    public function mainMovieDelete($id='')
+    public function mainMovieDelete(Request $request, $id='')
     {
+      $disk = Storage::disk('s3');
+      $movieFlag = $request->movieflag;
+
       if($id != '') {
         // edit
 
@@ -585,14 +579,8 @@ class MediaController extends Controller
 
         if (session()->has('data.file.movie.main') && is_array(session()->get('data.file.movie'))) {
 
-          $movie_path_list = session()->get('data.file.movie');
-
-          if (File::exists(public_path() . $movie_path_list['main'])) {
-            File::delete(public_path() . $movie_path_list['main']);
-          }
-
-          unset($movie_path_list['main']);
-          session()->put('data.file.movie', $movie_path_list);
+           // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+           $this->JobItemRepo->existJobItemMovieAndDeleteOnDelete($movieFlag);
 
           return redirect()->back()->with('message_success', 'メイン動画を削除しました');
 
@@ -632,6 +620,10 @@ class MediaController extends Controller
 
       if($request->hasfile('data.File.movie')) {
 
+        $disk = Storage::disk('s3');
+        $movieFlag = $request->movieFlag;
+
+
         if($id != '') {
           //edit
           $job = JobItem::findOrFail($id);
@@ -652,22 +644,18 @@ class MediaController extends Controller
           // 新規作成時
           $job = '';
           if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
-            $movie_path_list = session()->get('data.file.movie');
-            if(isset($movie_path_list['sub1'])) {
-              if (File::exists(public_path() . $movie_path_list['sub1'])) {
-                File::delete(public_path() . $movie_path_list['sub1']);
+            
+             // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+             $movie_path_list = $this->JobItemRepo->existJobItemMovieAndDeleteOnPost($movieFlag);
 
-              }
-              unset($movie_path_list['sub1']);
-            }
           }
         }
 
         $suffix = $request->input('data.File.suffix');
 
-        $sub_mov_name = uniqid("sub_movie").".".$request->file('data.File.movie')->guessExtension();
-        $request->file('data.File.movie')->move(public_path() . \Config::get('fpath.tmp_mov'), $sub_mov_name);
-        $movie_path = \Config::get('fpath.tmp_mov') . $sub_mov_name;
+        // 動画ファイルをs3・ローカルに保存に保存
+        $movie_path = $this->JobItemRepo->saveJobItemMovies($request->file('data.File.movie'), $movieFlag);
+
 
         if($id != '') {
           $edit_movie_path_list['sub1'] = $movie_path;
@@ -676,16 +664,26 @@ class MediaController extends Controller
           return view('jobs.post.sub_movie_complete', compact('job', 'suffix'));
 
         } else {
-          $movie_path_list['sub1'] = $movie_path;
+          $movie_path_list[$movieFlag] = $movie_path;
           $request->session()->put('data.file.movie', $movie_path_list);
         }
 
-        return view('jobs.post.sub_movie_complete', compact('job', 'suffix'));
+
+        // 登録完了画面を返す
+        if($movieFlag == 'main') {
+          return view('jobs.post.main_movie_complete', compact('job', 'suffix'));
+        } else {
+          return view('jobs.post.sub_movie_complete', compact('job', 'suffix'));
+        }
 
       } else {
 
-        return redirect()->back()->with('message_danger', '登録するサブ動画が選ばれていません');
-
+        if($movieFlag == 'main') {
+          return redirect()->back()->with('message_danger', '登録するメイン動画が選ばれていません');
+        } else {
+          return redirect()->back()->with('message_danger', '登録するサブ動画が選ばれていません');
+        }
+      
       }
 
     }
@@ -693,6 +691,9 @@ class MediaController extends Controller
     public function postSubMovie2(MainMovieUploadRequest $request, $id='')
     {
       if ($request->hasfile('data.File.movie')) {
+        
+        $disk = Storage::disk('s3');
+        $movieFlag = $request->movieFlag;
 
         if($id != '') {
           //edit
@@ -715,22 +716,18 @@ class MediaController extends Controller
           $job = '';
 
           if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
-            $movie_path_list = session()->get('data.file.movie');
-            if(isset($movie_path_list['sub2'])) {
-              if (File::exists(public_path() . $movie_path_list['sub2'])) {
-                File::delete(public_path() . $movie_path_list['sub2']);
+            
+             // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+             $movie_path_list = $this->JobItemRepo->existJobItemMovieAndDeleteOnPost($movieFlag);
 
-              }
-              unset($movie_path_list['sub2']);
-            }
           }
         }
 
         $suffix = $request->input('data.File.suffix');
 
-        $sub_mov_name2 = uniqid("sub_movie02").".".$request->file('data.File.movie')->guessExtension();
-        $request->file('data.File.movie')->move(public_path() . \Config::get('fpath.tmp_mov'), $sub_mov_name2);
-        $movie_path = \Config::get('fpath.tmp_mov').$sub_mov_name2;
+        // 動画ファイルをs3・ローカルに保存に保存
+        $movie_path = $this->JobItemRepo->saveJobItemMovies($request->file('data.File.movie'), $movieFlag);
+
 
         if($id != '') {
           $edit_movie_path_list['sub2'] = $movie_path;
@@ -752,8 +749,11 @@ class MediaController extends Controller
       }
     }
 
-    public function subMovieDelete1($id='')
+    public function subMovieDelete1(Request $request, $id='')
     {
+      $disk = Storage::disk('s3');
+      $movieFlag = $request->movieflag;
+
       if($id != '') {
         // edit
 
@@ -793,14 +793,8 @@ class MediaController extends Controller
 
           if (session()->has('data.file.movie.sub1') && is_array(session()->get('data.file.movie'))) {
 
-            $movie_path_list = session()->get('data.file.movie');
-
-            if (File::exists(public_path() . $movie_path_list['sub1'])) {
-              File::delete(public_path() . $movie_path_list['sub1']);
-            }
-
-            unset($movie_path_list['sub1']);
-            session()->put('data.file.movie', $movie_path_list);
+            // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+            $this->JobItemRepo->existJobItemMovieAndDeleteOnDelete($movieFlag);
 
             return redirect()->back()->with('message_success', 'サブ動画を削除しました');
 
@@ -812,8 +806,13 @@ class MediaController extends Controller
 
     }
 
-    public function subMovieDelete2($id='')
+    public function subMovieDelete2(Request $request, $id='')
     {
+      $disk = Storage::disk('s3');
+      $movieFlag = $request->movieflag;
+
+      var_dump($movieFlag);
+
       if($id != '') {
         // edit
 
@@ -852,14 +851,8 @@ class MediaController extends Controller
 
         if (session()->has('data.file.movie.sub2') && is_array(session()->get('data.file.movie'))) {
 
-          $movie_path_list = session()->get('data.file.movie');
-
-          if (File::exists(public_path() . $movie_path_list['sub2'])) {
-            File::delete(public_path() . $movie_path_list['sub2']);
-          }
-
-          unset($movie_path_list['sub2']);
-          session()->put('data.file.movie', $movie_path_list);
+           // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
+           $this->JobItemRepo->existJobItemMovieAndDeleteOnDelete($movieFlag);
 
           return redirect()->back()->with('message_success', 'サブ動画を削除しました');
 

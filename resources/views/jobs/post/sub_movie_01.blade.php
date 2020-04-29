@@ -38,6 +38,7 @@
         <form class="file-apload-form" action="@if($job){{route('sub.movie1.post', [$job->id])}}@else{{route('sub.movie1.post')}}@endif" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="data[File][suffix]" value="sub1" id="FileSuffix">
+        <input type="hidden" name="movieFlag" value="sub1">
             <div class="card">
                 <div class="card-header">サブ動画の登録</div>
                 <div class="card-body">
@@ -107,7 +108,7 @@ $(function() {
             if(job != '') {
                 window.location.href = '/jobs/sub/movie01/delete/' + job.id;
             } else {
-                window.location.href = '/jobs/sub/movie01/delete';
+                window.location.href = '/jobs/sub/movie01/delete?movieflag=sub1';
             }
 
             window.opener.$("#film2").attr('src', '');
