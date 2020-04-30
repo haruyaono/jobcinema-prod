@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Job\Categories\Repositories\CategoryRepository;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\Job\JobItems\Repositories\JobItemRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             CategoryRepositoryInterface::class,
             CategoryRepository::class
+        );
+
+        $this->app->bind(
+            JobItemRepositoryInterface::class,
+            JobItemRepository::class
         );
     }
 

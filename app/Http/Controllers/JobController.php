@@ -570,117 +570,66 @@ class JobController extends Controller
 
             foreach($edit_image_path_list as $index => $image_path) {
               //main
-              if($index == 'main')  {
-                if($image_path != '') {
-                  if($job->job_img != null && $image_path != $job->job_img && File::exists(public_path() . $job->job_img)) {
-                    // local
-                    File::delete(public_path() . $job->job_img);
-                    // s3
-                    if($disk->exists($job->job_img)) {
-                      $disk->delete($job->job_img);
-                    }
-                  
-                  }
+              switch($index) {
+                case $index == 'main':
+                  $jobImageDbPath = $job->job_img;
+                  break;
+                case $index == 'sub1':
+                  $jobImageDbPath = $job->job_img2;
+                  break;
+                case $index == 'sub2':
+                  $jobImageDbPath = $job->job_img3;
+                  break;
+              }
 
-                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_img') . $id . "/";
-
-                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-
-                  $edit_image_path_list['main'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($edit_image_path_list['main'], $contents, 'public');
-
-                } elseif($image_path == '' && $job->job_img != null) {
+              if($image_path != '') {
+                if($jobImageDbPath != null && $image_path != $jobImageDbPath && File::exists(public_path() . $jobImageDbPath)) {
                   // local
-                  if(File::exists(public_path() . $job->job_img)) {
-                    File::delete(public_path() . $job->job_img);
-                  }
+                  File::delete(public_path() . $jobImageDbPath);
                   // s3
-                  if($disk->exists($job->job_img)) {
-                    $disk->delete($job->job_img);
+                  if($disk->exists($jobImageDbPath)) {
+                    $disk->delete($jobImageDbPath);
                   }
-
-                } else {
-                  $edit_image_path_list['main'] = '';
                 }
 
-              } elseif ($index == 'sub1')  {
-                if($image_path != '') {
-                  if($job->job_img2 != null && $image_path != $job->job_img2 && File::exists(public_path() . $job->job_img2)) {
+                $file_name = pathinfo($image_path, PATHINFO_BASENAME);
+                $common_path = \Config::get('fpath.real_img') . $id . "/";
 
-                    File::delete(public_path() . $job->job_img2);
+                // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
+                rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
 
-                    if($disk->exists($job->job_img2)) {
-                      $disk->delete($job->job_img2);
-                    }
+                // ローカルの本番フォルダにある画像パスを変数に格納
+                $edit_image_path_list[$index] = $common_path . "real." . $file_name;
 
-                  }
-
-                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_img') . $id . "/";
-
-                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $edit_image_path_list['sub1'] = $common_path . "real." . $file_name;
-                  
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($edit_image_path_list['sub1'], $contents, 'public');
-
-                } elseif($image_path == '' && $job->job_img2 != null) {
-
-                  if(File::exists(public_path() . $job->job_img2)) {
-                    File::delete(public_path() . $job->job_img2);
-                  }
-                  // s3
-                  if($disk->exists($job->job_img2)) {
-                    $disk->delete($job->job_img2);
-                  }
-
-                } else {
-                  $edit_image_path_list['sub1'] = '';
+                // s3の一時保存フォルダにある画像を削除
+                if($disk->exists($image_path)) {
+                  $disk->delete($image_path);
                 }
 
-              } elseif($index == 'sub2')  {
-                if($image_path != '') {
-                  if($job->job_img3 != null && $image_path != $job->job_img3 && File::exists(public_path() . $job->job_img3)) {
+                // s3の本番フォルダに保存
+                $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                $disk->put($edit_image_path_list[$index], $contents, 'public');
 
-                    File::delete(public_path() . $job->job_img3);
-
-                    if($disk->exists($job->job_img3)) {
-                      $disk->delete($job->job_img3);
-                    }
-
-                  }
-
-                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_img') . $id . "/";
-
-                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $edit_image_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($edit_image_path_list['sub2'], $contents, 'public');
-
-                } elseif($image_path == '' && $job->job_img3 != null) {
-
-                  if(File::exists(public_path() . $job->job_img3)) {
-                    File::delete(public_path() . $job->job_img3);
-                  }
-                  // s3
-                  if($disk->exists($job->job_img3)) {
-                    $disk->delete($job->job_img3);
-                  }
-
-                } else {
-                  $edit_image_path_list['sub2'] = '';
+              } elseif($image_path == '' && $jobImageDbPath != null) {
+                // local
+                if(File::exists(public_path() . $jobImageDbPath)) {
+                  File::delete(public_path() . $jobImageDbPath);
+                }
+                // s3
+                if($disk->exists($jobImageDbPath)) {
+                  $disk->delete($jobImageDbPath);
                 }
 
+              } else {
+                $edit_image_path_list[$index] = '';
+              }
+
+              if(!isset($edit_image_path_list[$index]) && $jobImageDbPath != null) {
+                $edit_image_path_list[$index] = $jobImageDbPath;
+              } elseif(!isset($edit_image_path_list[$index]) && $jobImageDbPath == null) {
+                $edit_image_path_list[$index] = null;
+              } elseif($edit_image_path_list[$index] == '') {
+                $edit_image_path_list[$index] = null;
               }
 
             }
@@ -708,6 +657,8 @@ class JobController extends Controller
             } elseif($edit_image_path_list['sub2'] == '') {
               $edit_image_path_list['sub2'] = null;
             }
+
+
 
           } else {
             if($job->job_img != null) {
@@ -737,121 +688,63 @@ class JobController extends Controller
 
             foreach($edit_movie_path_list as $index => $movie_path) {
               //main
-              if($index == 'main')  {
-                if($movie_path != '') {
-                  if($job->job_mov != null && $movie_path != $job->job_mov && File::exists(public_path() . $job->job_mov)) {
-
-                    File::delete(public_path() . $job->job_mov);
-
-                    // s3
-                    if($disk->exists($job->job_mov)) {
-                      $disk->delete($job->job_mov);
-                    }
-
-                  }
-
-                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $edit_movie_path_list['main'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($edit_movie_path_list['main'], $contents, 'public');
-
-                } elseif($movie_path == '' && $job->job_mov != null) {
-
-                  if(File::exists(public_path() . $job->job_mov)) {
-                    File::delete(public_path() . $job->job_mov);
-                  }
-                  // s3
-                  if($disk->exists($job->job_mov)) {
-                    $disk->delete($job->job_mov);
-                  }
-
-                } else {
-                  $edit_movie_path_list['main'] = '';
-                }
-
-              } elseif ($index == 'sub1')  {
-                if($movie_path != '') {
-                  if($job->job_mov2 != null && $movie_path != $job->job_mov2 && File::exists(public_path() . $job->job_mov2)) {
-
-                    File::delete(public_path() . $job->job_mov2);
-
-                    // s3
-                    if($disk->exists($job->job_mov2)) {
-                      $disk->delete($job->job_mov2);
-                    }
-
-                  }
-
-                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $edit_movie_path_list['sub1'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($edit_movie_path_list['sub1'], $contents, 'public');
-
-                } elseif($movie_path == '' && $job->job_mov2 != null) {
-
-                  if(File::exists(public_path() . $job->job_mov2)) {
-                    File::delete(public_path() . $job->job_mov2);
-                  }
-                  // s3
-                  if($disk->exists($job->job_mov2)) {
-                    $disk->delete($job->job_mov2);
-                  }
-
-                } else {
-                  $edit_movie_path_list['sub1'] = '';
-                }
-
-              } elseif($index == 'sub2')  {
-                if($movie_path != '') {
-                  if($job->job_mov3 != null && $movie_path != $job->job_mov3 && File::exists(public_path() . $job->job_mov3)) {
-
-                    File::delete(public_path() . $job->job_mov3);
-                    // s3
-                    if($disk->exists($job->job_mov3)) {
-                      $disk->delete($job->job_mov3);
-                    }
-
-                  }
-
-                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $edit_movie_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($edit_movie_path_list['sub2'], $contents, 'public');
-
-                } elseif($movie_path == '' && $job->job_mov3 != null) {
-
-                  if(File::exists(public_path() . $job->job_mov3)) {
-                    File::delete(public_path() . $job->job_mov3);
-                  }
-                  // s3
-                  if($disk->exists($job->job_mov3)) {
-                    $disk->delete($job->job_mov3);
-                  }
-
-                } else {
-                  $edit_movie_path_list['sub2'] = '';
-                }
-
+              switch($index) {
+                case $index == 'main':
+                  $jobMovieDbPath = $job->job_mov;
+                  break;
+                case $index == 'sub1':
+                  $jobMovieDbPath = $job->job_mov2;
+                  break;
+                case $index == 'sub2':
+                  $jobMovieDbPath = $job->job_mov3;
+                  break;
               }
 
+              if($movie_path != '') {
+                
+                if($jobMovieDbPath != null && $movie_path != $jobMovieDbPath && File::exists(public_path() . $jobMovieDbPath)) {
+
+                  File::delete(public_path() . $jobMovieDbPath);
+
+                  // s3
+                  if($disk->exists($jobMovieDbPath)) {
+                    $disk->delete($jobMovieDbPath);
+                  }
+
+                }
+
+                $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
+                $common_path = \Config::get('fpath.real_mov') . $id . "/";
+
+                // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
+                rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
+                
+                 // ローカルの本番フォルダにある動画パスを変数に格納
+                $edit_movie_path_list[$index] = $common_path . "real." . $file_name;
+
+                // s3の一時保存フォルダにある画像を削除
+                if($disk->exists($movie_path)) {
+                  $disk->delete($movie_path);
+                }
+
+                // s3の本番フォルダに保存
+                $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                $disk->put($edit_movie_path_list[$index], $contents, 'public');
+
+              } elseif($movie_path == '' && $jobMovieDbPath != null) {
+
+                // ローカルファイル削除
+                if(File::exists(public_path() . $jobMovieDbPath)) {
+                  File::delete(public_path() . $jobMovieDbPath);
+                }
+                // s3にあるファイルを削除
+                if($disk->exists($jobMovieDbPath)) {
+                  $disk->delete($jobMovieDbPath);
+                }
+
+              } else {
+                $edit_movie_path_list[$index] = '';
+              }
             }
 
             if(!isset($edit_movie_path_list['main']) && $job->job_mov != null) {
@@ -1013,51 +906,25 @@ class JobController extends Controller
               $image_path_list = session()->get('data.file.image');
 
               foreach($image_path_list as $index => $image_path) {
-                if($index == 'main')  {
 
-                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
+                $file_name = pathinfo($image_path, PATHINFO_BASENAME);
+                $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
 
-                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $image_path_list['main'] = $common_path . "real." . $file_name;
+                // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
+                rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
+                
+                // ローカルの本番フォルダにある画像パスを変数に格納
+                $image_path_list[$index] = $common_path . "real." . $file_name;
 
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($image_path_list['main'], $contents, 'public');
-
-
-                } elseif ($index == 'sub1') {
-
-                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
-
-                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $image_path_list['sub1'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($image_path_list['sub1'], $contents, 'public');
-
-
-                } elseif ($index == 'sub2') {
-
-                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
-
-                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $image_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($image_path_list['sub2'], $contents, 'public');
-
-
-                } else {
-
+                // s3の一時保存フォルダにある画像を削除
+                if($disk->exists($image_path)) {
+                  $disk->delete($image_path);
                 }
+
+                // s3の本番フォルダに保存
+                $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                $disk->put($image_path_list[$index], $contents, 'public');
+                
               }
 
               if(!isset($image_path_list['main'])) {
@@ -1083,47 +950,24 @@ class JobController extends Controller
               $movie_path_list = session()->get('data.file.movie');
 
               foreach($movie_path_list as $index => $movie_path) {
-                if($index == 'main')  {
 
-                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
+                $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
+                $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
 
-                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $movie_path_list['main'] = $common_path . "real." . $file_name;
+                // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
+                rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
+                
+                 // ローカルの本番フォルダにある動画パスを変数に格納
+                $movie_path_list[$index] = $common_path . "real." . $file_name;
 
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($movie_path_list['main'], $contents, 'public');
-
-                } elseif ($index == 'sub1') {
-
-                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
-
-                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $movie_path_list['sub1'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($movie_path_list['sub1'], $contents, 'public');
-
-                } elseif ($index == 'sub2') {
-
-                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                  $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
-
-                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                  
-                  $movie_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                  // s3
-                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                  $disk->put($movie_path_list['sub2'], $contents, 'public');
-
-                } else {
+                // s3の一時保存フォルダにある動画を削除
+                if($disk->exists($movie_path)) {
+                  $disk->delete($movie_path);
                 }
+
+                // s3の本番フォルダに保存
+                $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                $disk->put($movie_path_list[$index], $contents, 'public');
 
               }
 
@@ -1276,121 +1120,60 @@ class JobController extends Controller
               $edit_image_path_list = session()->get('data.file.edit_image');
 
               foreach($edit_image_path_list as $index => $image_path) {
-                if($index == 'main')  {
-                  if($image_path != '') {
-                    if($job->job_img != null && $image_path != $job->job_img && File::exists(public_path() . $job->job_img)) {
 
-                      File::delete(public_path() . $job->job_img);
-                      // s3
-                      if($disk->exists($job->job_img)) {
-                        $disk->delete($job->job_img);
-                      }
-
-                    }
-
-                    $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_img') . $id . "/";
-
-                    rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-
-                    $edit_image_path_list['main'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($edit_image_path_list['main'], $contents, 'public');
-
-                  } elseif($image_path == '' && $job->job_img != null) {
-
-                    if(File::exists(public_path() . $job->job_img)) {
-                      File::delete(public_path() . $job->job_img);
-                    }
-                    // s3
-                    if($disk->exists($job->job_img)) {
-                      $disk->delete($job->job_img);
-                    }
-
-                  } else {
-                    $edit_image_path_list['main'] = '';
-                  }
-
-                } elseif ($index == 'sub1')  {
-                  if($image_path != '') {
-                    if($job->job_img2 != null && $image_path != $job->job_img2 && File::exists(public_path() . $job->job_img2)) {
-
-                      File::delete(public_path() . $job->job_img2);
-                      // s3
-                      if($disk->exists($job->job_img2)) {
-                        $disk->delete($job->job_img2);
-                      }
-
-                    }
-
-                    $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_img') . $id . "/";
-  
-                    rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $edit_image_path_list['sub1'] = $common_path . "real." . $file_name;
-                    
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($edit_image_path_list['sub1'], $contents, 'public');
-  
-
-                  } elseif($image_path == '' && $job->job_img2 != null) {
-
-                    if(File::exists(public_path() . $job->job_img2)) {
-                      File::delete(public_path() . $job->job_img2);
-                    }
-                    // s3
-                    if($disk->exists($job->job_img2)) {
-                      $disk->delete($job->job_img2);
-                    }
-
-                  } else {
-                    $edit_image_path_list['sub1'] = '';
-                  }
-
-                } elseif($index == 'sub2')  {
-                  if($image_path != '') {
-                    if($job->job_img3 != null && $image_path != $job->job_img3 && File::exists(public_path() . $job->job_img3)) {
-
-                      File::delete(public_path() . $job->job_img3);
-                      // s3
-                      if($disk->exists($job->job_img3)) {
-                        $disk->delete($job->job_img3);
-                      }
-
-                    }
-
-                    $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_img') . $id . "/";
-
-                    rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $edit_image_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($edit_image_path_list['sub2'], $contents, 'public');
-
-                  } elseif($image_path == '' && $job->job_img3 != null) {
-
-                    if(File::exists(public_path() . $job->job_img3)) {
-                      File::delete(public_path() . $job->job_img3);
-                    }
-                    // s3
-                    if($disk->exists($job->job_img3)) {
-                      $disk->delete($job->job_img3);
-                    }
-
-                  } else {
-                    $edit_image_path_list['sub2'] = '';
-                  }
-
+                switch($index) {
+                  case $index == 'main':
+                    $jobImageDbPath = $job->job_img;
+                    break;
+                  case $index == 'sub1':
+                    $jobImageDbPath = $job->job_img2;
+                    break;
+                  case $index == 'sub2':
+                    $jobImageDbPath = $job->job_img3;
+                    break;
                 }
 
+              
+                if($image_path != '') {
+                  if($jobImageDbPath != null && $image_path != $jobImageDbPath && File::exists(public_path() . $jobImageDbPath)) {
 
+                    File::delete(public_path() . $jobImageDbPath);
+                    // s3
+                    if($disk->exists($jobImageDbPath)) {
+                      $disk->delete($jobImageDbPath);
+                    }
+
+                  }
+
+                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
+                  $common_path = \Config::get('fpath.real_img') . $id . "/";
+
+                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
+
+                  $edit_image_path_list[$index] = $common_path . "real." . $file_name;
+
+                  // s3の一時保存フォルダにある画像を削除
+                  if($disk->exists($image_path)) {
+                    $disk->delete($image_path);
+                  }
+
+                  // s3の本番フォルダに保存
+                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                  $disk->put($edit_image_path_list[$index], $contents, 'public');
+
+                } elseif($image_path == '' && $jobImageDbPath != null) {
+
+                  if(File::exists(public_path() . $jobImageDbPath)) {
+                    File::delete(public_path() . $jobImageDbPath);
+                  }
+                  // s3
+                  if($disk->exists($jobImageDbPath)) {
+                    $disk->delete($jobImageDbPath);
+                  }
+
+                } else {
+                  $edit_image_path_list[$index] = '';
+                }
               }
 
               if(!isset($edit_image_path_list['main']) && $job->job_img != null) {
@@ -1443,118 +1226,59 @@ class JobController extends Controller
               $edit_movie_path_list = session()->get('data.file.edit_movie');
 
               foreach($edit_movie_path_list as $index => $movie_path) {
-                if($index == 'main')  {
-                  if($movie_path != '') {
-                    if($job->job_mov != null && $movie_path != $job->job_mov && File::exists(public_path() . $job->job_mov)) {
 
-                      File::delete(public_path() . $job->job_mov);
-                      // s3
-                      if($disk->exists($job->job_mov)) {
-                        $disk->delete($job->job_mov);
-                      }
-
-                    }
-
-                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $edit_movie_path_list['main'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($edit_movie_path_list['main'], $contents, 'public');
-
-                  } elseif($movie_path == '' && $job->job_mov != null) {
-
-                    if(File::exists(public_path() . $job->job_mov)) {
-                      File::delete(public_path() . $job->job_mov);
-                    }
-                    // s3
-                    if($disk->exists($job->job_mov)) {
-                      $disk->delete($job->job_mov);
-                    }
-
-                  } else {
-                    $edit_movie_path_list['main'] = '';
-                  }
-
-                } elseif ($index == 'sub1')  {
-                  if($movie_path != '') {
-                    if($job->job_mov2 != null && $movie_path != $job->job_mov2 && File::exists(public_path() . $job->job_mov2)) {
-
-                      File::delete(public_path() . $job->job_mov2);
-                      // s3
-                      if($disk->exists($job->job_mov2)) {
-                        $disk->delete($job->job_mov2);
-                      }
-
-                    }
-
-                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $edit_movie_path_list['sub1'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($edit_movie_path_list['sub1'], $contents, 'public');
-
-                  } elseif($movie_path == '' && $job->job_mov2 != null) {
-
-                    if(File::exists(public_path() . $job->job_mov2)) {
-                      File::delete(public_path() . $job->job_mov2);
-                    }
-                    // s3
-                    if($disk->exists($job->job_mov2)) {
-                      $disk->delete($job->job_mov2);
-                    }
-
-                  } else {
-                    $edit_movie_path_list['sub1'] = '';
-                  }
-
-                } elseif($index == 'sub2')  {
-                  if($movie_path != '') {
-                    if($job->job_mov3 != null && $movie_path != $job->job_mov3 && File::exists(public_path() . $job->job_mov3)) {
-
-                      File::delete(public_path() . $job->job_mov3);
-                      // s3
-                      if($disk->exists($job->job_mov3)) {
-                        $disk->delete($job->job_mov3);
-                      }
-
-                    }
-
-                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $edit_movie_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($edit_movie_path_list['sub2'], $contents, 'public');
-
-                  } elseif($movie_path == '' && $job->job_mov3 != null) {
-
-                    if(File::exists(public_path() . $job->job_mov3)) {
-                      File::delete(public_path() . $job->job_mov3);
-                    }
-                    // s3
-                    if($disk->exists($job->job_mov3)) {
-                      $disk->delete($job->job_mov3);
-                    }
-
-                  } else {
-                    $edit_movie_path_list['sub2'] = '';
-                  }
-
+                switch($index) {
+                  case $index == 'main':
+                    $jobMovieDbPath = $job->job_mov;
+                    break;
+                  case $index == 'sub1':
+                    $jobMovieDbPath = $job->job_mov2;
+                    break;
+                  case $index == 'sub2':
+                    $jobMovieDbPath = $job->job_mov3;
+                    break;
                 }
+
+                  if($movie_path != '') {
+                    if($jobMovieDbPath != null && $movie_path != $jobMovieDbPath && File::exists(public_path() . $jobMovieDbPath)) {
+
+                      File::delete(public_path() . $jobMovieDbPath);
+                      // s3
+                      if($disk->exists($jobMovieDbPath)) {
+                        $disk->delete($jobMovieDbPath);
+                      }
+
+                    }
+
+                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
+                    $common_path = \Config::get('fpath.real_mov') . $id . "/";
+
+                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
+                    
+                    $edit_movie_path_list[$index] = $common_path . "real." . $file_name;
+
+                    // s3の一時保存フォルダにある動画を削除
+                    if($disk->exists($movie_path)) {
+                      $disk->delete($movie_path);
+                    }
+
+                    // s3の本番フォルダに保存
+                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                    $disk->put($edit_movie_path_list[$index], $contents, 'public');
+
+                  } elseif($movie_path == '' && $jobMovieDbPath != null) {
+
+                    if(File::exists(public_path() . $jobMovieDbPath)) {
+                      File::delete(public_path() . $jobMovieDbPath);
+                    }
+                    // s3
+                    if($disk->exists($jobMovieDbPath)) {
+                      $disk->delete($jobMovieDbPath);
+                    }
+
+                  } else {
+                    $edit_movie_path_list[$index ] = '';
+                  }
 
               }
 
@@ -1717,49 +1441,22 @@ class JobController extends Controller
                 $image_path_list = session()->get('data.file.image');
 
                 foreach($image_path_list as $index => $image_path) {
-                  if($index == 'main')  {
 
-                    $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
-  
-                    rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $image_path_list['main'] = $common_path . "real." . $file_name;
-  
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($image_path_list['main'], $contents, 'public');
+                  $file_name = pathinfo($image_path, PATHINFO_BASENAME);
+                  $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
 
-                  } elseif ($index == 'sub1') {
+                  rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
+                  
+                  $image_path_list[$index] = $common_path . "real." . $file_name;
 
-                    $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
-
-                    rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $image_path_list['sub1'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($image_path_list['sub1'], $contents, 'public');
-
-
-                  } elseif ($index == 'sub2') {
-
-                    $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_img') . $lastInsertedId . "/";
-
-                    rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $image_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($image_path_list['sub2'], $contents, 'public');
-
-                  } else {
-
+                  // s3の一時保存フォルダにある画像を削除
+                  if($disk->exists($image_path)) {
+                    $disk->delete($image_path);
                   }
+
+                  // s3の本番フォルダに保存
+                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                  $disk->put($image_path_list[$index], $contents, 'public');
 
                 }
 
@@ -1786,49 +1483,22 @@ class JobController extends Controller
                 $movie_path_list = session()->get('data.file.movie');
 
                 foreach($movie_path_list as $index => $movie_path) {
-                  if($index == 'main')  {
+                
+                  $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
+                  $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
 
-                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
+                  rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
+                  
+                  $movie_path_list[$index] = $common_path . "real." . $file_name;
 
-                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $movie_path_list['main'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($movie_path_list['main'], $contents, 'public');
-
-                  } elseif ($index == 'sub1') {
-
-                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
-
-                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $movie_path_list['sub1'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($movie_path_list['sub1'], $contents, 'public');
-
-
-                  } elseif ($index == 'sub2') {
-
-                    $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-                    $common_path = \Config::get('fpath.real_mov') . $lastInsertedId . "/";
-
-                    rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-                    
-                    $movie_path_list['sub2'] = $common_path . "real." . $file_name;
-
-                    // s3
-                    $contents = File::get(public_path() . $common_path . "real." . $file_name);
-                    $disk->put($movie_path_list['sub2'], $contents, 'public');
-
-                  } else {
-
+                  // s3の一時保存フォルダにある動画を削除
+                  if($disk->exists($movie_path)) {
+                    $disk->delete($movie_path);
                   }
+
+                  // s3の本番フォルダに保存
+                  $contents = File::get(public_path() . $common_path . "real." . $file_name);
+                  $disk->put($movie_path_list[$index], $contents, 'public');
 
                 }
 

@@ -38,6 +38,7 @@
         <form class="file-apload-form" action="@if($job){{route('sub.movie2.post', [$job->id])}}@else{{route('sub.movie2.post')}}@endif" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="data[File][suffix]" value="sub2" id="FileSuffix">
+        <input type="hidden" name="movieFlag" value="sub2">
             <div class="card">
                 <div class="card-header">サブ動画の登録</div>
                 <div class="card-body">
@@ -79,7 +80,7 @@
             <div class="form-group text-center">
                     <button type="submit" class="btn btn-primary">登録する</button>
                     <a href="javascript:void(0);" class="btn btn-secondary" id="deleteMovie">登録されている動画を削除</a>
-                    <a class="create-image-back-btn" href="javascript:void(0);"　class="btn btn-outline-secondary" id="close_button">戻る</a>
+                    <a class="create-image-back-btn" href="javascript:void(0);" class="btn btn-outline-secondary" id="close_button">戻る</a>
             </div>
         </form>
     </div>
@@ -100,14 +101,15 @@
 <script>
 $(function() {
     var job = @json($job);
+    console.log(job);
 
     $('#deleteMovie').click(function() {
         if(window.confirm('登録されているサブ動画２を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/sub/movie02/delete/' + job.id;
+                window.location.href = '/jobs/sub/movie02/delete/' + job.id + '?movieflag=sub2';
             } else {
-                window.location.href = '/jobs/sub/movie02/delete';
+                window.location.href = '/jobs/sub/movie02/delete?movieflag=sub2';
             }
 
             window.opener.$("#film3").attr('src', '');

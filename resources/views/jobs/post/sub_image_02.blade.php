@@ -38,6 +38,7 @@
         <form class="file-apload-form" action="@if($job){{route('sub.image2.post', [$job->id])}}@else{{route('sub.image2.post')}}@endif" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="data[File][suffix]" value="sub2" id="FileSuffix">
+        <input type="hidden" name="imageFlag" value="sub2">
         
             <div class="card">
                 <div class="card-header">サブ写真の登録</div>
@@ -92,9 +93,9 @@ $(function() {
         if(window.confirm('登録されているサブ写真2を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/sub/image02/delete/' + job.id;
+                window.location.href = '/jobs/sub/image02/delete/' + job.id + '?imageflag=sub2';
             } else {
-                window.location.href = '/jobs/sub/image02/delete';
+                window.location.href = '/jobs/sub/image02/delete?imageflag=sub2';
             }
 
             window.opener.$("#photo3").attr('src', '/uploads/images/no-image.gif');

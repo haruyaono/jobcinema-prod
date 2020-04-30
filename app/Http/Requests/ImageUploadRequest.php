@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MainMovieUploadRequest extends FormRequest
+class ImageUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,19 @@ class MainMovieUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'data.File.movie' => 'max:80000|mimes:mp4,qt,x-ms-wmv,mpeg,x-msvideo',
+            'data.File.image' => 'required|image|max:20000|mimes:jpeg,gif,png',
         ];
     }
     public function messages()
     {
         return [
-            // "required" => "登録したい動画が選ばれていません。",
+            "required" => "登録したい画像が選ばれていません。",
+            "image" => "画像にしてください。",
             "max" => [
-                'file' => '80MB以下のファイルを選択してください。'
+                'file' => '20MB以下のファイルを選択してください。'
             ],
-            'mimes'  => '登録できる動画はMP4/MOV/WMV/MPEG/MPG/AVI形式のみです。',
+            'mimes'  => '登録できる画像はJPEG/GIF/PNG形式のみです。',
         ];
     }
+
 }

@@ -31,32 +31,33 @@ Route::get('/status/{statusVal}/type/{typeVal}/area/{areaVal}/hourly_salary/{hou
 Route::post('/jobs/create/draftOrStep2/{id?}', 'JobController@draftOrStep2')->name('job.draftOrStep2');
 Route::get('/jobs/create/confirm/{id?}', 'JobController@createConfirm')->name('job.create.confirm');
 Route::post('/jobs/create/complete/{id?}', 'JobController@storeComplete')->name('job.store.complete');
+
 //main image
-Route::get('/jobs/main/image/delete/{id?}', 'MediaController@mainImageDelete')->name('main.image.delete');
+Route::get('/jobs/main/image/delete/{id?}', 'MediaController@imageDelete')->name('main.image.delete');
 Route::get('/jobs/main/image/{id?}', 'MediaController@getMainImage')->name('main.image.get');
-Route::post('/jobs/main/image/{id?}', 'MediaController@postMainImage')->name('main.image.post');
+Route::post('/jobs/main/image/{id?}', 'MediaController@postImage')->name('main.image.post');
 
 //sub image1
-Route::get('/jobs/sub/image01/delete/{id?}', 'MediaController@subImageDelete1')->name('sub.image1.delete');
+Route::get('/jobs/sub/image01/delete/{id?}', 'MediaController@imageDelete')->name('sub.image1.delete');
 Route::get('/jobs/sub/image01/{id?}', 'MediaController@getSubImage1')->name('sub.image1.get');
-Route::post('/jobs/sub/image01/{id?}', 'MediaController@postSubImage1')->name('sub.image1.post');
+Route::post('/jobs/sub/image01/{id?}', 'MediaController@postImage')->name('sub.image1.post');
 //sub image2
-Route::get('/jobs/sub/image02/delete/{id?}', 'MediaController@subImageDelete2')->name('sub.image2.delete');
+Route::get('/jobs/sub/image02/delete/{id?}', 'MediaController@imageDelete')->name('sub.image2.delete');
 Route::get('/jobs/sub/image02/{id?}', 'MediaController@getSubImage2')->name('sub.image2.get');
-Route::post('/jobs/sub/image02/{id?}', 'MediaController@postSubImage2')->name('sub.image2.post');
+Route::post('/jobs/sub/image02/{id?}', 'MediaController@postImage')->name('sub.image2.post');
 
 //main movie
-Route::get('/jobs/main/movie/delete/{id?}', 'MediaController@mainMovieDelete')->name('main.movie.delete');
+Route::get('/jobs/main/movie/delete/{id?}', 'MediaController@movieDelete')->name('main.movie.delete');
 Route::get('/jobs/main/movie/{id?}', 'MediaController@getMainMovie')->name('main.movie.get');
-Route::post('/jobs/main/movie/{id?}', 'MediaController@postMainMovie')->name('main.movie.post');
+Route::post('/jobs/main/movie/{id?}', 'MediaController@postMovie')->name('main.movie.post');
 //sub movie1
-Route::get('/jobs/sub/movie01/delete/{id?}', 'MediaController@subMovieDelete1')->name('sub.movie1.delete');
+Route::get('/jobs/sub/movie01/delete/{id?}', 'MediaController@movieDelete')->name('sub.movie1.delete');
 Route::get('/jobs/sub/movie01/{id?}', 'MediaController@getSubMovie1')->name('sub.movie1.get');
-Route::post('/jobs/sub/movie01/{id?}', 'MediaController@postSubMovie1')->name('sub.movie1.post');
+Route::post('/jobs/sub/movie01/{id?}', 'MediaController@postMovie')->name('sub.movie1.post');
 //sub movie2
-Route::get('/jobs/sub/movie02/delete/{id?}', 'MediaController@subMovieDelete2')->name('sub.movie2.delete');
+Route::get('/jobs/sub/movie02/delete/{id?}', 'MediaController@movieDelete')->name('sub.movie2.delete');
 Route::get('/jobs/sub/movie02/{id?}', 'MediaController@getSubMovie2')->name('sub.movie2.get');
-Route::post('/jobs/sub/movie02/{id?}', 'MediaController@postSubMovie2')->name('sub.movie2.post');
+Route::post('/jobs/sub/movie02/{id?}', 'MediaController@postMovie')->name('sub.movie2.post');
 
 // 最近見た求人
 Route::post('/jobs/ajax_history_sheet_list', 'JobController@postJobHistory');
