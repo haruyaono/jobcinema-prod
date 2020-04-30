@@ -18,10 +18,10 @@ interface JobItemRepositoryInterface
     public function existJobItemImageAndDeleteOnDelete($imageFlag, int $editFlag = 0, $job = '');
 
 
-    public function existJobItemMovieAndDeleteOnPost(string $movieFlag);
+    public function existJobItemMovieAndDeleteOnPost(string $movieFlag, int $editFlag = 0);
 
     public function saveJobItemMovies(UploadedFile $file, string $movieFlag) : string;
 
-    public function existJobItemMovieAndDeleteOnDelete($movieFlag);
+    public function existJobItemMovieAndDeleteOnDelete($movieFlag, int $editFlag = 0, $job = '');
  
 }

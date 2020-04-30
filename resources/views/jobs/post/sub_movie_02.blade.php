@@ -107,7 +107,7 @@ $(function() {
         if(window.confirm('登録されているサブ動画２を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/sub/movie02/delete/' + job.id;
+                window.location.href = '/jobs/sub/movie02/delete/' + job.id + '?movieflag=sub2';
             } else {
                 window.location.href = '/jobs/sub/movie02/delete?movieflag=sub2';
             }

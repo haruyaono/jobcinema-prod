@@ -151,9 +151,13 @@ class JobItemRepository implements JobItemRepositoryInterface
             session()->put('data.file.image', $image_path_list);
 
          } else {
-            // 
+            // 編集時
             
             $edit_image_path_list = session()->get('data.file.edit_image');
+
+            if($edit_image_path_list[$imageFlag] == '') {
+                return false;
+            }
 
             if(isset($edit_image_path_list[$imageFlag])) {
 
@@ -164,7 +168,6 @@ class JobItemRepository implements JobItemRepositoryInterface
                     $disk->delete($edit_image_path_list[$imageFlag]);
                 }
     
-                  unset($edit_image_path_list[$imageFlag]);
             }
 
             switch($imageFlag) {
@@ -201,27 +204,56 @@ class JobItemRepository implements JobItemRepositoryInterface
      *
      * @return array $movie_path_list
      */
-    public function existJobItemMovieAndDeleteOnPost(string $movieFlag) : array
+    public function existJobItemMovieAndDeleteOnPost(string $movieFlag, int $editFlag = 0) : array
     {
         $disk = Storage::disk('s3');
 
-        $movie_path_list = session()->get('data.file.movie');
+        // 新規作成時か編集時か
+        if($editFlag === 0) {
+            // 新規作成時
 
-        if($movieFlag) {
-            if(isset($movie_path_list[$movieFlag])) {
-                if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
-                    File::delete(public_path() . $movie_path_list[$movieFlag ]);
-                }
+            $movie_path_list = session()->get('data.file.movie');
 
-                if($disk->exists($movie_path_list[$movieFlag ])) {
-                    $disk->delete($movie_path_list[$movieFlag ]);
-                }
+            if($movieFlag) {
+                if(isset($movie_path_list[$movieFlag])) {
+                    if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
+                        File::delete(public_path() . $movie_path_list[$movieFlag ]);
+                    }
+    
+                    if($disk->exists($movie_path_list[$movieFlag ])) {
+                        $disk->delete($movie_path_list[$movieFlag ]);
+                    }
+    
+                    unset($movie_path_list[$movieFlag]);
+                }  
+            } 
+    
+            return $movie_path_list;
 
-                unset($movie_path_list[$movieFlag ]);
-            }  
-        } 
+        } else {
+            // 編集時
 
-        return $movie_path_list;
+            $edit_movie_path_list = session()->get('data.file.edit_movie');
+
+            if($movieFlag) {
+                if(isset($edit_movie_path_list[$movieFlag])) {
+                    if (File::exists(public_path() . $edit_movie_path_list[$movieFlag])) {
+                        File::delete(public_path() . $edit_movie_path_list[$movieFlag ]);
+                    }
+    
+                    if($disk->exists($edit_movie_path_list[$movieFlag ])) {
+                        $disk->delete($edit_movie_path_list[$movieFlag ]);
+                    }
+    
+                    unset($edit_movie_path_list[$movieFlag]);
+                }  
+            } 
+    
+            return $edit_movie_path_list;
+        }
+
+
+        
     }
 
     /**
@@ -259,26 +291,77 @@ class JobItemRepository implements JobItemRepositoryInterface
      *
      * @return void
      */
-    public function existJobItemMovieAndDeleteOnDelete($movieFlag)
+    public function existJobItemMovieAndDeleteOnDelete($movieFlag, int $editFlag = 0, $job = '')
     {
         $disk = Storage::disk('s3');
 
-        $movie_path_list = session()->get('data.file.movie');
+        // 新規作成時か編集時か
+        if($editFlag === 0) {
+            // 新規作成時
 
-        if(isset($movie_path_list[$movieFlag])) {
-            if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
-                File::delete(public_path() . $movie_path_list[$movieFlag]);
-            }
-            if($disk->exists($movie_path_list[$movieFlag])) {
-                $disk->delete($movie_path_list[$movieFlag]);
+            $movie_path_list = session()->get('data.file.movie');
+
+            if(isset($movie_path_list[$movieFlag])) {
+                if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
+                    File::delete(public_path() . $movie_path_list[$movieFlag]);
+                }
+                if($disk->exists($movie_path_list[$movieFlag])) {
+                    $disk->delete($movie_path_list[$movieFlag]);
+                }
+
+                unset($movie_path_list[$movieFlag]);
+
             }
 
-            unset($movie_path_list[$movieFlag]);
+            session()->put('data.file.movie', $movie_path_list);
+
+        } else {
+            // 編集時
+
+            $edit_movie_path_list = session()->get('data.file.edit_movie');
+
+ 
+            if($edit_movie_path_list[$movieFlag] == '') {
+                return false;
+            }
+                   
+
+            if(isset($edit_movie_path_list[$movieFlag])) {
+                if (File::exists(public_path() . $edit_movie_path_list[$movieFlag])) {
+                    File::delete(public_path() . $edit_movie_path_list[$movieFlag]);
+                }
+                if($disk->exists($edit_movie_path_list[$movieFlag])) {
+                    $disk->delete($edit_movie_path_list[$movieFlag]);
+                }
+
+            }
+
+            switch($movieFlag) {
+                case $movieFlag == 'main':
+                    $jobMoviePath = $job->job_mov;
+                    break;
+                case $movieFlag == 'sub1':
+                    $jobMoviePath = $job->job_mov2;
+                    break;
+                case $movieFlag == 'sub2':
+                    $jobMoviePath = $job->job_mov3;
+                    break;
+                default:
+                    $jobMoviePath = null;
+            }
+    
+
+            if($jobMoviePath != null) {
+                $edit_movie_path_list[$movieFlag] = '';
+            } else {
+                unset($edit_movie_path_list[$movieFlag]);
+            }
+
+            session()->put('data.file.edit_movie', $edit_movie_path_list);
 
         }
-       
         
-        session()->put('data.file.movie', $movie_path_list);
+    
     }
 
 

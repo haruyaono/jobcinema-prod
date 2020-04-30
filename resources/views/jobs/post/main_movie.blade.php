@@ -104,7 +104,7 @@ $(function() {
         if(window.confirm('登録されているメイン動画を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/main/movie/delete/' + job.id;
+                window.location.href = '/jobs/main/movie/delete/' + job.id + '?movieflag=main';
             } else {
                 window.location.href = '/jobs/main/movie/delete?movieflag=main';
             }
