@@ -83,7 +83,11 @@ class UserController extends Controller
         $exists = Storage::disk('s3')->exists('resume/'.$user->profile->resume);
         if($exists) {
             $resumePath =  Storage::disk('s3')->url('resume/'.$user->profile->resume);
-            $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
+
+            if(!app()->isLocal()) {
+                $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
+            }
+
         } else {
             $resumePath = '';
         }
