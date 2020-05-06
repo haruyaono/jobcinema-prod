@@ -9,6 +9,7 @@
 @endsection
 
 @section('contents')
+
 <div class="main-slider-wrap">
 	<v-slick-top></v-slick-top>
 </div>
@@ -90,9 +91,6 @@
 		</div> <!-- inner -->
 	</section> <!-- newjob-entry -->
 
-	
-
-
 </div> <!-- main-wrap-->
 @endsection
 
@@ -101,7 +99,20 @@
   @endcomponent
 @endsection
 
+
 @section('js')
   <!-- <script src="{{ asset('js/main.js') }}"></script> -->
+<script type="text/javascript">
+    $(function(){
+        $(".wide-notice-overlay").show();
+        Cookies.get('btnFlg') == 'on'?$(".wide-notice-overlay").hide():$(".wide-notice-overlay").show();
+        $(".notice-close").click(function(){
+            $(".wide-notice-overlay").fadeOut();
+			Cookies.set('btnFlg', 'on', { expires: 30,path: '/' }); //cookieの保存
+			
+		});
+		console.log(Cookies.get('btnFlg'));
+	});
 
+</script>
 @endsection

@@ -55,6 +55,47 @@
   text-decoration: underline;
 }
 
+/* ベータ版モーダル 表示 */
+.wide-notice-overlay{
+  display:none;
+  width:100%;
+  height:100vh;
+  background: rgba(0,0,0,0.6);
+  position:fixed;
+  z-index:100;
+}
+.wide-notice-overlay .wide-notice-layout {
+  width: 50%;
+  margin: 0 auto;
+  background: #fff;
+  padding: 40px 4vw 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.wide-notice-overlay .wide-notice-layout .notice-box p {
+  margin-bottom: 20px;
+}
+.wide-notice-overlay .notice-close{
+  display: inline-block;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  font-weight: normal;
+  text-align: center;
+  cursor: pointer;
+}
+.wide-notice-overlay .notice-close::after {
+  font-family: "Font Awesome 5 Free",FontAwesome;
+  font-weight: 900;
+  content: "\f00d";
+}
+
+
 /* 案件一覧 */
   /* .job-list {
     margin: 2em 0;
@@ -495,6 +536,27 @@
   
   
 @media (max-width:768px) {
+  /* ベータ版モーダル 表示 */
+.wide-notice-overlay .wide-notice-layout {
+  padding: 40px 4vw 20px;
+  width: 90%;
+}
+.wide-notice-overlay .wide-notice-layout .notice-box p {
+  margin-bottom: 20px;
+}
+.wide-notice-overlay .notice-close{
+  display: inline-block;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  font-weight: normal;
+  text-align: center;
+  cursor: pointer;
+}
+
   /* トップカテゴリ一覧 */
   .top-category-wrap {
     padding: 0 12px;

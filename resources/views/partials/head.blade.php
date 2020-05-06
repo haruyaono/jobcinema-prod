@@ -19,6 +19,7 @@
 <!------ js ------>
 <!-- jquery -->
 <script src="{{ asset('js/jquery-3.5.0.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <!-- vue -->
 <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->
 @if(config('app.env') === 'production')
