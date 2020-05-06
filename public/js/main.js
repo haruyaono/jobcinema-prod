@@ -1,3 +1,4 @@
+'use strict';
 
 if(document.getElementById("start_specified_date") && document.getElementById("end_specified_date")) {
 
@@ -161,4 +162,6 @@ $(function() {
 
         
 });
+
+
 
