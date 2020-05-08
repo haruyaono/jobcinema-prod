@@ -44,21 +44,22 @@ $(function() {
     var job = @json($job),
         suffix = @json($suffix);
 
-        console.log(suffix);
+    data1 = $().setBaseImageUrlAndSetEnvName();
+
 
 
     if(job != '') {
       if(suffix == 'sub1') {
-        window.opener.$("#film2").attr('src', "{{Session::get('data.file.edit_movie.sub1')}}");
+        window.opener.$("#film2").attr('src', data1['base_image_url'] + "{{Session::get('data.file.edit_movie.sub1')}}");
       } else if(suffix == 'sub2') {
-        window.opener.$("#film3").attr('src', "{{Session::get('data.file.edit_movie.sub2')}}");
+        window.opener.$("#film3").attr('src', data1['base_image_url'] + "{{Session::get('data.file.edit_movie.sub2')}}");
       }
         
     } else {
       if(suffix == 'sub1') {
-        window.opener.$("#film2").attr('src', "{{Session::get('data.file.movie.sub1')}}");
+        window.opener.$("#film2").attr('src', data1['base_image_url'] + "{{Session::get('data.file.movie.sub1')}}");
       } else if(suffix == 'sub2') {
-        window.opener.$("#film3").attr('src', "{{Session::get('data.file.movie.sub2')}}");
+        window.opener.$("#film3").attr('src', data1['base_image_url'] + "{{Session::get('data.file.movie.sub2')}}");
       }
     }
    

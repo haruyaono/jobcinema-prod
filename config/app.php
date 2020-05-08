@@ -28,6 +28,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    's3_url' => env('MIX_S3_URL', 'https://s3.job-cinema.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

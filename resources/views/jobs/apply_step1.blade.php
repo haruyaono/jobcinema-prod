@@ -21,7 +21,7 @@
                 <div class="d-flex">
                   <div class="job-left only-pc">
                     @if($job->job_img)
-                    <img src="{{$job->job_img}}" style="width:100%;" alt=""/>
+                    <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" style="width:100%;" alt=""/>
                     @else
                     <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
                     @endif 

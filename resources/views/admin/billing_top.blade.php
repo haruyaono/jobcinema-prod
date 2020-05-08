@@ -62,7 +62,7 @@
                         <td><a href="{{route('admin.company.detail',[$company->id])}}" target="_blank">{{ $company['id']}}</a>
                         </td>
                         <td>{{ $company['cname']}}</a></td>
-                        <td>{{ App\Models\JobItem::where('employer_id', $company['employer_id'])->count()}}</td>
+                        <td>{{ App\Job\JobItems\JobItem::where('employer_id', $company['employer_id'])->count()}}</td>
                         <?php 
                             $app_job_count = DB::table('job_item_user')->where('employer_id', $company['employer_id'])->count();
                             $app_total_money = $app_job_count * 30000;

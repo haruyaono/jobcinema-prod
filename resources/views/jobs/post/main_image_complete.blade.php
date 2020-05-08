@@ -23,7 +23,6 @@
                 </div>
             </div> <!-- card --> 
             <div class="form-group text-center">
-                    <!-- <a href="javascript:void(0);" class="btn btn-dark" onClick="window.opener.location.reload(),window.close()">OK</a> -->
                     <a href="javascript:void(0);" class="btn btn-dark" id="close_button">OK</a>
                     
             </div>
@@ -45,6 +44,9 @@
 $(function() {
     var job = @json($job);
 
+    data1 = $().setBaseImageUrlAndSetEnvName();
+    
+
     // var imagePath = $('#FileCurrentPath').attr('value');
 
     // if (imagePath != '') {
@@ -56,10 +58,16 @@ $(function() {
     //     }
     // }
 
+
     if(job != '') {
-        window.opener.$("#photo1").attr('src', "{{Session::get('data.file.edit_image.main')}}");
+        window.opener.$("#photo1").attr('src', data1['base_image_url'] + "{{Session::get('data.file.edit_image.main')}}");
     } else {
-        window.opener.$("#photo1").attr('src', "{{Session::get('data.file.image.main')}}");
+        // if(data1['env_name'] != '' && data1['env_name'] == 'production' && data1['base_image_url'] != '') {
+            window.opener.$("#photo1").attr('src', data1['base_image_url'] + "{{Session::get('data.file.image.main')}}");
+
+        // } else if(data1['env_name'] != '' && data1['env_name'] == 'local' && data1['base_image_url'] != '' ) {
+            // window.opener.$("#photo1").attr('src/', "{{Session::get('data.file.image.main')}}");
+        // }
     }
 
 

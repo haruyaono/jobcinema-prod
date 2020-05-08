@@ -1806,6 +1806,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['job'],
   data: function data() {
@@ -1813,7 +1814,9 @@ __webpack_require__.r(__webpack_exports__);
       show: false,
       loading: true,
       items: [],
-      itemflag: false
+      itemflag: false,
+      env: "local",
+      baseurl: "https://s3.job-cinema.com"
     };
   },
   mounted: function mounted() {
@@ -1870,7 +1873,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_slick__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-slick */ "./node_modules/vue-slick/dist/slickCarousel.esm.js");
+/* WEBPACK VAR INJECTION */(function(Vue) {/* harmony import */ var vue_slick__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-slick */ "./node_modules/vue-slick/dist/slickCarousel.esm.js");
 //
 //
 //
@@ -1881,7 +1884,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-// vue-slickをインポート
+//
+//
+//
+Vue.config.devtools = true; // vue-slickをインポート
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // bladeから受け取るデータを指定
@@ -1920,7 +1927,9 @@ __webpack_require__.r(__webpack_exports__);
             slidesToScroll: 1
           }
         }]
-      }
+      },
+      env: "local",
+      baseurl: "https://s3.job-cinema.com"
     };
   },
   methods: {
@@ -1939,6 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js")))
 
 /***/ }),
 
@@ -2047,6 +2057,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 // vue-slickをインポート
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2072,7 +2085,9 @@ __webpack_require__.r(__webpack_exports__);
         dots: true,
         accessibility: true,
         pauseOnFocus: true
-      }
+      },
+      env: "local",
+      baseurl: "https://s3.job-cinema.com"
     };
   },
   methods: {
@@ -37793,7 +37808,11 @@ var render = function() {
               [
                 _c("a", { attrs: { href: "/jobs/" + item.id } }, [
                   _c("div", { staticClass: "wrap-img" }, [
-                    _c("img", { attrs: { src: item.job_img } })
+                    _vm.env == "local"
+                      ? _c("img", { attrs: { src: item.job_img } })
+                      : _c("img", {
+                          attrs: { src: _vm.baseurl + item.job_img }
+                        })
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "wrap-text" }, [
@@ -37865,11 +37884,17 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("slick", { ref: "slick", attrs: { options: _vm.slickOptions } }, [
-    _c("img", { attrs: { src: _vm.jobjson.job_img } }),
+    _vm.env == "local"
+      ? _c("img", { attrs: { src: _vm.jobjson.job_img } })
+      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobjson.job_img } }),
     _vm._v(" "),
-    _c("img", { attrs: { src: _vm.jobjson.job_img2 } }),
+    _vm.env == "local"
+      ? _c("img", { attrs: { src: _vm.jobjson.job_img2 } })
+      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobjson.job_img2 } }),
     _vm._v(" "),
-    _c("img", { attrs: { src: _vm.jobjson.job_img3 } })
+    _vm.env == "local"
+      ? _c("img", { attrs: { src: _vm.jobjson.job_img3 } })
+      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobjson.job_img3 } })
   ])
 }
 var staticRenderFns = []
@@ -37950,35 +37975,20 @@ var render = function() {
       "video",
       {
         staticClass: "slide-video slide-media",
-        attrs: {
-          autoplay: "",
-          loop: "",
-          muted: "",
-          preload: "metadata",
-          poster: "/uploads/images/no-image.gif"
-        },
-        domProps: { muted: true }
-      },
-      [_c("source", { attrs: { src: _vm.jobjson.job_mov, type: "video/mp4" } })]
-    ),
-    _vm._v(" "),
-    _c(
-      "video",
-      {
-        staticClass: "slide-video slide-media",
-        attrs: {
-          autoplay: "",
-          loop: "",
-          muted: "",
-          preload: "metadata",
-          poster: "/uploads/images/no-image.gif"
-        },
+        attrs: { autoplay: "", loop: "", muted: "", preload: "metadata" },
         domProps: { muted: true }
       },
       [
-        _c("source", {
-          attrs: { src: _vm.jobjson.job_mov2, type: "video/mp4" }
-        })
+        _vm.env == "local"
+          ? _c("source", {
+              attrs: { src: _vm.jobjson.job_mov, type: "video/mp4" }
+            })
+          : _c("source", {
+              attrs: {
+                src: _vm.baseurl + _vm.jobjson.job_mov,
+                type: "video/mp4"
+              }
+            })
       ]
     ),
     _vm._v(" "),
@@ -37986,19 +37996,41 @@ var render = function() {
       "video",
       {
         staticClass: "slide-video slide-media",
-        attrs: {
-          autoplay: "",
-          loop: "",
-          muted: "",
-          preload: "metadata",
-          poster: "/uploads/images/no-image.gif"
-        },
+        attrs: { autoplay: "", loop: "", muted: "", preload: "metadata" },
         domProps: { muted: true }
       },
       [
-        _c("source", {
-          attrs: { src: _vm.jobjson.job_mov3, type: "video/mp4" }
-        })
+        _vm.env == "local"
+          ? _c("source", {
+              attrs: { src: _vm.jobjson.job_mov2, type: "video/mp4" }
+            })
+          : _c("source", {
+              attrs: {
+                src: _vm.baseurl + _vm.jobjson.job_mov2,
+                type: "video/mp4"
+              }
+            })
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "video",
+      {
+        staticClass: "slide-video slide-media",
+        attrs: { autoplay: "", loop: "", muted: "", preload: "metadata" },
+        domProps: { muted: true }
+      },
+      [
+        _vm.env == "local"
+          ? _c("source", {
+              attrs: { src: _vm.jobjson.job_mov3, type: "video/mp4" }
+            })
+          : _c("source", {
+              attrs: {
+                src: _vm.baseurl + _vm.jobjson.job_mov3,
+                type: "video/mp4"
+              }
+            })
       ]
     )
   ])

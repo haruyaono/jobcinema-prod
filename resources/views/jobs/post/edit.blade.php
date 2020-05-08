@@ -56,7 +56,7 @@
                 {{ Session::get('message_success') }}
             </div>
         @endif
-        <form  action="{{route('job.draftOrStep2', [$job->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+        <form id="jobsheet-create-form" action="{{route('job.draftOrStep2', [$job->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
             <div class="card">
                 <div class="card-header">募集カテゴリを選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
@@ -95,21 +95,21 @@
                 <div class="card-body">
                     <div class="form-group e-image-register-area">
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if($job->job_img != null && Session::has('data.file.edit_image.main') == false ) {{$job->job_img}}@elseif(Session::get('data.file.edit_image.main') != $job->job_img && Session::get('data.file.edit_image.main') != ''){{Session::get('data.file.edit_image.main')}}@elseif(Session::get('data.file.edit_image.main')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo1" id="photo1"></p>
+                            <p class="e-image-wrap"><img src="@if($job->job_img != null && Session::has('data.file.edit_image.main') == false ){{$jobImageBaseUrl.$job->job_img}}@elseif(Session::get('data.file.edit_image.main') != $job->job_img && Session::get('data.file.edit_image.main') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.main')}}@elseif(Session::get('data.file.edit_image.main')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo1" id="photo1"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('main.image.get', [$job->id])}}" target="_blank">メイン写真を登録</a>
                                 <input type="hidden" name="data[File][isExist1]" value="0" id="FileIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if($job->job_img2 != null && Session::has('data.file.edit_image.sub1') == false ) {{$job->job_img2}}@elseif(Session::get('data.file.edit_image.sub1') != $job->job_img2 && Session::get('data.file.edit_image.sub1') != ''){{Session::get('data.file.edit_image.sub1')}}@elseif(Session::get('data.file.edit_image.sub1')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo2" id="photo2"></p>
+                            <p class="e-image-wrap"><img src="@if($job->job_img2 != null && Session::has('data.file.edit_image.sub1') == false ) {{$jobImageBaseUrl.$job->job_img2}}@elseif(Session::get('data.file.edit_image.sub1') != $job->job_img2 && Session::get('data.file.edit_image.sub1') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.sub1')}}@elseif(Session::get('data.file.edit_image.sub1')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo2" id="photo2"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image1.get', [$job->id])}}" target="_blank">サブ写真を登録</a>
                                 <input type="hidden" name="data[File][isExist2]" value="0" id="FileIsExist2" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if($job->job_img3 != null && Session::has('data.file.edit_image.sub2') == false ) {{$job->job_img3}}@elseif(Session::get('data.file.edit_image.sub2') != $job->job_img2 && Session::get('data.file.edit_image.sub2') != ''){{Session::get('data.file.edit_image.sub2')}}@elseif(Session::get('data.file.edit_image.sub2')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo3" id="photo3"></p>
+                            <p class="e-image-wrap"><img src="@if($job->job_img3 != null && Session::has('data.file.edit_image.sub2') == false ) {{$jobImageBaseUrl.$job->job_img3}}@elseif(Session::get('data.file.edit_image.sub2') != $job->job_img2 && Session::get('data.file.edit_image.sub2') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.sub2')}}@elseif(Session::get('data.file.edit_image.sub2')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo3" id="photo3"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image2.get', [$job->id])}}" target="_blank">サブ写真を登録</a>
                                 <input type="hidden" name="data[File][isExist3]" value="0" id="FileIsExist3" class="">
@@ -125,7 +125,7 @@
                     <div  oncontextmenu="return false;" class="form-group e-image-register-area">
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
-                                <video src="@if($job->job_mov != null && Session::has('data.file.edit_movie.main') == false ){{$job->job_mov}}@elseif(Session::get('data.file.edit_movie.main') != $job->job_mov && Session::get('data.file.edit_movie.main') != ''){{Session::get('data.file.edit_movie.main')}}@elseif(Session::get('data.file.edit_movie.main')  == '')@else @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film1" id="film1">
+                                <video src="@if($job->job_mov != null && Session::has('data.file.edit_movie.main') == false ){{$jobImageBaseUrl.$job->job_mov}}@elseif(Session::get('data.file.edit_movie.main') != $job->job_mov && Session::get('data.file.edit_movie.main') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_movie.main')}}@elseif(Session::get('data.file.edit_movie.main')  == '')@else @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film1" id="film1">
                                 </video>
                             </p>
                             <p class="text-center">
@@ -135,7 +135,7 @@
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
-                                <video src="@if($job->job_mov2 != null && Session::has('data.file.edit_movie.sub1') == false ) {{$job->job_mov2}}@elseif(Session::get('data.file.edit_movie.sub1') != $job->job_mov2 && Session::get('data.file.edit_movie.sub1') != ''){{Session::get('data.file.edit_movie.sub1')}}@elseif(Session::get('data.file.edit_movie.sub1')  == '')@else @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film2" id="film2">
+                                <video src="@if($job->job_mov2 != null && Session::has('data.file.edit_movie.sub1') == false ) {{$jobImageBaseUrl.$job->job_mov2}}@elseif(Session::get('data.file.edit_movie.sub1') != $job->job_mov2 && Session::get('data.file.edit_movie.sub1') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_movie.sub1')}}@elseif(Session::get('data.file.edit_movie.sub1')  == '')@else @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film2" id="film2">
                                 </video>
                             </p>
                             <p class="text-center">
@@ -145,7 +145,7 @@
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
-                                <video src="@if($job->job_mov3 != null && Session::has('data.file.edit_movie.sub2') == false ) {{$job->job_mov3}}@elseif(Session::get('data.file.edit_movie.sub2') != $job->job_mov3 && Session::get('data.file.edit_movie.sub2') != ''){{Session::get('data.file.edit_movie.sub2')}}@elseif(Session::get('data.file.edit_movie.sub2')  == '')@else @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film3" id="film3">
+                                <video src="@if($job->job_mov3 != null && Session::has('data.file.edit_movie.sub2') == false ) {{$jobImageBaseUrl.$job->job_mov3}}@elseif(Session::get('data.file.edit_movie.sub2') != $job->job_mov3 && Session::get('data.file.edit_movie.sub2') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_movie.sub2')}}@elseif(Session::get('data.file.edit_movie.sub2')  == '')@else @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film3" id="film3">
                                 </video>
                             </p>
                             <p class="text-center">
@@ -164,19 +164,19 @@
                         <tr>
                             <th>掲載開始日</th>
                             <td>
-                                <input id="shortest" type="radio" name="pub_start" value="最短で掲載" checked {{ old('pub_start') == '最短で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == '最短で掲載' ? 'checked' : ''}}@endif @if(Session::has('data.form.text.pub_start')==false && !old('pub_start')){{$job->pub_start == '最短で掲載' ? 'checked' : ''}}@else @endif onClick="pubstartflg0(this.checked);">
+                                <input id="shortest" type="radio" name="pub_start" value="最短で掲載" checked {{ old('pub_start') == '最短で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == '最短で掲載' ? 'checked' : ''}}@elseif(Session::has('data.form.text.pub_start')==false && !old('pub_start')){{$job->pub_start == '最短で掲載' ? 'checked' : ''}}@else @endif>
                                 <label for="shortest">最短で掲載</label><br>
-                                <input id="start_specified"  type="radio"  name="pub_start" value="start_specified" {{ old('pub_start') == 'start_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == 'start_specified' ? 'checked' : ''}}@endif @if(Session::has('data.form.text.pub_start')==false && !old('pub_start')){{$job->pub_start != '最短で掲載' ? 'checked' : ''}} @endif onClick="pubstartflg1(this.checked);">
-                                <label for="start_specified">掲載開始日を指定</label><input class="ml-2" id="start_specified_date" type="text"  name="start_specified_date" disabled="disabled" value="{{old('start_specified_date')}} @if(!old('start_specified_date')) {{Session::get('data.form.text.start_specified_date')}}@endif @if(!old('start_specified_date') && Session::has('data.form.text.start_specified_date')==false){{$job->pub_start == '最短で掲載' ? '':$job->pub_start}}@endif" required><br>
+                                <input id="start_specified"  type="radio"  name="pub_start" value="start_specified" {{ old('pub_start') == 'start_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == 'start_specified' ? 'checked' : ''}}@elseif(Session::has('data.form.text.pub_start')==false && !old('pub_start')){{$job->pub_start != '最短で掲載' ? 'checked' : ''}}@endif>
+                                <label for="start_specified">掲載開始日を指定</label><input class="ml-2" id="start_specified_date" type="text"  name="start_specified_date" disabled="disabled" value="{{old('start_specified_date')}} @if(!old('start_specified_date') && Session::has('data.form.text.start_specified_date')) {{Session::get('data.form.text.start_specified_date')}}@elseif(!old('start_specified_date') && Session::has('data.form.text.start_specified_date')==false){{$job->pub_start == '最短で掲載' ? '':$job->pub_start}}@endif" required><br>
                             </td>
                         </tr>
                         <tr>
                         <th>掲載終了日</th>
                             <td>
-                                <input id="not_specified" type="radio" name="pub_end" value="無期限で掲載" checked {{ old('pub_end') == '無期限で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == '無期限で掲載' ? 'checked' : ''}}@elseif(Session::has('data.form.text.pub_end')==false && !old('pub_end')){{$job->pub_end == '無期限で掲載' ? 'checked' : ''}}@else @endif onClick="pubendflg0(this.checked);">
+                                <input id="not_specified" type="radio" name="pub_end" value="無期限で掲載" checked {{ old('pub_end') == '無期限で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == '無期限で掲載' ? 'checked' : ''}}@elseif(Session::has('data.form.text.pub_end')==false && !old('pub_end')){{$job->pub_end == '無期限で掲載' ? 'checked' : ''}}@else @endif>
                                 <label for="not_specified">無期限で掲載</label><br>
-                                <input id="end_specified" type="radio" name="pub_end" value="end_specified" {{ old('pub_end') == 'end_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == 'end_specified' ? 'checked' : ''}}@endif @if(Session::has('data.form.text.pub_end')==false && !old('pub_end')){{$job->pub_end != '無期限で掲載' ? 'checked' : ''}} @endif onClick="pubendflg1(this.checked);">
-                                <label for="end_specified">掲載終了日を指定</label><input class="ml-2" id="end_specified_date" type="text" name ="end_specified_date" disabled="disabled" value="{{old('end_specified_date')}} @if(!old('end_specified_date')) {{Session::get('data.form.text.end_specified_date')}}@endif @if(!old('end_specified_date') && Session::has('data.form.text.end_specified_date')==false){{$job->pub_end == '無期限で掲載' ? '':$job->pub_end}}@endif" required><br>
+                                <input id="end_specified" type="radio" name="pub_end" value="end_specified" {{ old('pub_end') == 'end_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == 'end_specified' ? 'checked' : ''}}@endif @if(Session::has('data.form.text.pub_end')==false && !old('pub_end')){{$job->pub_end != '無期限で掲載' ? 'checked' : ''}} @endif>
+                                <label for="end_specified">掲載終了日を指定</label><input class="ml-2" id="end_specified_date" type="text" name ="end_specified_date" disabled="disabled" value="{{old('end_specified_date')}} @if(!old('end_specified_date') && Session::has('data.form.text.end_specified_date')) {{Session::get('data.form.text.end_specified_date')}}@elseif(!old('end_specified_date') && Session::has('data.form.text.end_specified_date')==false){{$job->pub_end == '無期限で掲載' ? '':$job->pub_end}}@endif" required><br>
                             </td>
                         </tr>
                     </table>
@@ -192,7 +192,7 @@
                             <p class="chara-count" v-bind:class="{'text-danger': charaCount1 > 30 }">(@{{ charaCount1 }}/30字)</p>
                             </th>
                             <td>
-                            <input type="text" v-model="typedText1" name="job_title" class="form-control {{ $errors->has('job_title') ? 'is-invalid' : ''}}" value="{{ old('job_title') }}@if(!old('job_title') && Session::has('data.form.text.job_title')){{Session::get('data.form.text.job_title')}}@elseif(!old('job_title') && Session::has('data.form.text.job_title')==false){{$job->job_title}}@else @endif">
+                            <input type="text" id="job_title" v-model="typedText1" name="job_title" class="form-control {{ $errors->has('job_title') ? 'is-invalid' : ''}}" value="{{ old('job_title') }}@if(!old('job_title') && Session::has('data.form.text.job_title')){{Session::get('data.form.text.job_title')}}@elseif(!old('job_title') && Session::has('data.form.text.job_title')==false){{$job->job_title}}@else @endif">
                             </td>
                         </tr>
                         <tr>
@@ -200,7 +200,7 @@
                             <p class="chara-count" v-bind:class="{'text-danger': charaCount2 > 250 }">(@{{ charaCount2 }}/250字)</p>
                         </th>
                             <td>
-                            <textarea v-model="typedText2" name="job_intro" class="form-control {{ $errors->has('job_intro') ? 'is-invalid' : ''}}">{{ old('job_intro') }}@if(!old('job_intro') && Session::has('data.form.text.job_intro')){{Session::get('data.form.text.job_intro')}}@elseif(!old('job_intro') && Session::has('data.form.text.job_intro')==false){{$job->job_intro}}@else @endif</textarea>
+                            <textarea v-model="typedText2" id="job_intro" name="job_intro" class="form-control {{ $errors->has('job_intro') ? 'is-invalid' : ''}}">{{ old('job_intro') }}@if(!old('job_intro') && Session::has('data.form.text.job_intro')){{Session::get('data.form.text.job_intro')}}@elseif(!old('job_intro') && Session::has('data.form.text.job_intro')==false){{$job->job_intro}}@else @endif</textarea>
                             </td>
                         </tr>
                         <tr>
@@ -229,7 +229,7 @@
                         </th>
                             <td>
                             <p class="text-danger mb-2">具体的な仕事の内容、業務の範囲などをご入力ください</p>
-                            <textarea v-model="typedText3" type="text" name="job_desc" class="form-control {{ $errors->has('job_desc') ? 'is-invalid' : ''}}" >{{ old('job_desc') }}@if(!old('job_desc') && Session::has('data.form.text.job_desc')){{Session::get('data.form.text.job_desc')}}@elseif(!old('job_desc') && Session::has('data.form.text.job_desc')==false){{$job->job_desc}}@else @endif</textarea>
+                            <textarea id="job_desc" v-model="typedText3" type="text" name="job_desc" class="form-control {{ $errors->has('job_desc') ? 'is-invalid' : ''}}" >{{ old('job_desc') }}@if(!old('job_desc') && Session::has('data.form.text.job_desc')){{Session::get('data.form.text.job_desc')}}@elseif(!old('job_desc') && Session::has('data.form.text.job_desc')==false){{$job->job_desc}}@else @endif</textarea>
                         </td>
                         </tr>
                         <tr>
@@ -269,7 +269,7 @@
                         </th>
                         <td>
                             <p class="text-danger mb-2">その他に定める事や応募者への連絡事項など、ご自由にご入力ください</p>
-                            <textarea v-model="typedText4" type="text" name="remarks" class="form-control {{ $errors->has('remarks') ? 'is-invalid' : ''}}" >{{ old('remarks') }}@if(!old('remarks') && Session::has('data.form.text.remarks')){{Session::get('data.form.text.remarks')}}@elseif(!old('remarks') && Session::has('data.form.text.remarks')==false){{$job->remarks}}@else @endif</textarea>
+                            <textarea id="remarks" v-model="typedText4" type="text" name="remarks" class="form-control {{ $errors->has('remarks') ? 'is-invalid' : ''}}" >{{ old('remarks') }}@if(!old('remarks') && Session::has('data.form.text.remarks')){{Session::get('data.form.text.remarks')}}@elseif(!old('remarks') && Session::has('data.form.text.remarks')==false){{$job->remarks}}@else @endif</textarea>
                         </td>
                         </tr>
                     </table>

@@ -44,7 +44,7 @@
           @if ($jobs->count() > 0 )
           @foreach ($jobs as $job)
 					<div class="job-item">
-						<a href="{{ route('jobs.show', [$job->id, $job->slug])}}" class="job-item-link">
+						<a href="{{ route('jobs.show', [$job->id])}}" class="job-item-link">
               <div class="job-item-heading only-pc">
 								<!-- カテゴリ -->
                  <span class="cat-item org">{{ optional($job->type_cat_get)->name}}</span>
@@ -66,7 +66,7 @@
               <div class="d-flex">
                 <div class="job-left only-pc">
                   @if(($job->job_img) ==! null)
-                  <img src="{{$job->job_img}}" style="width:100%;" alt=""/>
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" style="width:100%;" alt=""/>
                   @else
                   <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif

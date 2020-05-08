@@ -14,6 +14,7 @@
             @yield('footer')
         </div>
     </div> 
+<input type="hidden" id="env_name" name="env_name" value="{{config('app.env')}}">
 <script defer src="{{ asset('js/main.js') }}"></script>
 <script>
     $(function() {
@@ -35,10 +36,26 @@
     });
 </script>
 <script language="JavaScript">
+$(function() {
 
     $('#close_button').click(function() {
         window.close();
     });
+    
+    if($('#env_name').length) {
+        var env_name = $('#env_name').attr('value');
+        if(env_name == 'local') {
+            var base_image_url = 'https://s3.job-cinema.com';
+        } 
+    } else {
+        var env_name = '';
+    }
+
+
+    
+});
+    
+
 </script>
 @yield('js')
 </body>

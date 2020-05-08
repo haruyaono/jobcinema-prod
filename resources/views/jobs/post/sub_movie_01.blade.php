@@ -49,23 +49,23 @@
                         @if($job == '' && Session::has('data.file.movie.sub1'))
                         <p>現在登録されている動画</p>
                         <p class="pre-main-movie">
-                        <p  oncontextmenu="return false;" class="pre-main-movie">
+                        <p oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{Session::get('data.file.movie.sub1')}}"/></iframe>
+                                <source src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{Session::get('data.file.movie.sub1')}}@else{{Session::get('data.file.movie.sub1')}}@endif"/></iframe>
                             </video>
                         </p>
                         @elseif($job != '' && Session::has('data.file.edit_movie.sub1') && Session::get('data.file.edit_movie.sub1') != '')
                         <p>現在登録されている動画</p>
-                        <p  oncontextmenu="return false;" class="pre-main-movie">
+                        <p oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{Session::get('data.file.edit_movie.sub1')}}"/></iframe>
+                                <source src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{Session::get('data.file.edit_movie.sub1')}}@else{{Session::get('data.file.edit_movie.sub1')}}@endif"/></iframe>
                             </video>
                         </p>
                         @elseif($job != '' && Session::has('data.file.edit_movie.sub1') == false && $job->job_mov2 != null)
                         <p>現在登録されている動画</p>
-                        <p  oncontextmenu="return false;" class="pre-main-movie">
+                        <p oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{$job->job_mov2}}"/></iframe>
+                                <source src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_mov2}}@else{{$job->job_mov2}}@endif"/></iframe>
                             </video>
                         </p>
                         @endif

@@ -87,7 +87,14 @@ class JobController extends Controller
     
       if($job->status == 2) {
         $title = $job->company->cname;
-        return view('jobs.show', compact('job', 'title'));
+
+        if(config('app.env') == 'production') {
+          $jobImageBaseUrl = config('app.s3_url');
+        } else {
+          $jobImageBaseUrl = '';
+        }
+
+        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl'));
       } else {
         if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
           $index = array_search( $id, $jobitem_id_list, true );
@@ -269,6 +276,11 @@ class JobController extends Controller
         }
         $job = JobItem::findOrFail($id);
 
+        if(config('app.env') == 'production') {
+          $jobImageBaseUrl = config('app.s3_url');
+        } else {
+          $jobImageBaseUrl = '';
+        }
        
 
       } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
@@ -277,7 +289,7 @@ class JobController extends Controller
 
       }
 
-      return view('jobs.post.edit', compact('job'));
+      return view('jobs.post.edit', compact('job', 'jobImageBaseUrl'));
       
     }
 
@@ -1059,8 +1071,6 @@ class JobController extends Controller
         session()->forget('count');
         session()->put('count', 3);
 
-        
-
         return view('jobs.post.confirm', compact('job'));
       } else {
         return redirect()->to('/jobs/create/step1');
@@ -1097,7 +1107,7 @@ class JobController extends Controller
             if(session()->get('data.form.text.pub_end') == 'end_specified') {
               $pub_end = session()->get('data.form.text.end_specified_date');
             } else {
-              $pub_end = session()->get('data.form.pub_end');
+              $pub_end = session()->get('data.form.text.pub_end');
             }
           }
 
