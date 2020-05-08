@@ -42,7 +42,7 @@
 								<a href="{{ route('jobs.show', [$job->id])}}" class="newjob-item-link">
 									<p class="title-img-wrap">
 										@if(($job->job_img) ==! null)
-											<img src="{{asset($job->job_img)}}" style="width:100%;" alt=""/>
+											<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{asset($job->job_img)}}@endif" style="width:100%;" alt=""/>
 										@else
 											<img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
 										@endif
@@ -101,7 +101,6 @@
 
 
 @section('js')
-  <!-- <script src="{{ asset('js/main.js') }}"></script> -->
 <script type="text/javascript">
     $(function(){
         $(".wide-notice-overlay").show();

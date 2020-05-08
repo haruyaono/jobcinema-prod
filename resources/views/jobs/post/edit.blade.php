@@ -56,7 +56,7 @@
                 {{ Session::get('message_success') }}
             </div>
         @endif
-        <form  action="{{route('job.draftOrStep2', [$job->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+        <form id="jobsheet-create-form" action="{{route('job.draftOrStep2', [$job->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
             <div class="card">
                 <div class="card-header">募集カテゴリを選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">

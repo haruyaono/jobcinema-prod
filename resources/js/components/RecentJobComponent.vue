@@ -8,7 +8,8 @@
             <li class="wrap-items" v-for="item in limitCount" v-bind:job="item" v-bind:key="item.id">
                 <a :href="'/jobs/' + item.id">
                     <div class="wrap-img">
-                        <img :src="item.job_img">
+                        <img v-if="env == 'local'" :src="item.job_img">
+                        <img v-else :src="baseurl + item.job_img">
                     </div>
                     <div class="wrap-text">
                         <p>勤務先: {{item.job_office | truncate(9)}}</p>
@@ -32,7 +33,9 @@
                 show: false,
                 loading: true,
                 items: [],
-                itemflag: false
+                itemflag: false,
+                env: process.env.MIX_APP_ENV,
+                baseurl: process.env.MIX_S3_URL,
                 
             }
         },
@@ -64,10 +67,10 @@
             }
         },
         computed: {
-    　　　limitCount() {
-    　　　　return this.items.slice(0,4)
-    　　　} 
-    　　},
+          limitCount() {
+            return this.items.slice(0,4)
+          } 
+        },
         filters: {
             truncate: function(value, length, omission) {
                 var length = length ? parseInt(length, 10) : 20;

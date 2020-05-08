@@ -31,7 +31,7 @@
 </div><!-- contents -->
 </div> <!-- wrap -->
 @yield('js')
-<!-- <script defer src="{{ asset('js/main.js') }}" ></script> -->
+<script defer src="{{ asset('js/main.js') }}" ></script>
 <script>
 
 $(function() {

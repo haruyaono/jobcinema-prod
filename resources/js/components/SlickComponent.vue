@@ -2,13 +2,17 @@
     <slick
     ref="slick"
     :options="slickOptions">
-        <img v-bind:src="jobjson.job_img">
-        <img v-bind:src="jobjson.job_img2">
-        <img v-bind:src="jobjson.job_img3">
+        <img v-if="env == 'local'" v-bind:src="jobjson.job_img">
+        <img v-else v-bind:src="baseurl + jobjson.job_img">
+        <img v-if="env == 'local'" v-bind:src="jobjson.job_img2">
+        <img v-else v-bind:src="baseurl + jobjson.job_img2">
+        <img v-if="env == 'local'" v-bind:src="jobjson.job_img3">
+        <img v-else v-bind:src="baseurl + jobjson.job_img3">
     </slick>
 </template>
  
 <script>
+Vue.config.devtools = true;
     // vue-slickをインポート
     import Slick from 'vue-slick';
     export default {
@@ -50,6 +54,9 @@
                         },
                     ]
                 },
+                env: process.env.MIX_APP_ENV,
+                baseurl: process.env.MIX_S3_URL,
+               
             };
         },
         methods: {
@@ -66,4 +73,6 @@
             },
         },
     }
+
+
 </script>

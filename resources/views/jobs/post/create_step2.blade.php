@@ -50,7 +50,7 @@
             </ul>
         </div>
         @endif
-        <form action="{{route('job.draftOrStep2')}}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+        <form id="jobsheet-create-form" action="{{route('job.draftOrStep2')}}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
             <div class="card">
                 <div class="card-header">写真/画像（メイン写真は必ず登録してください）<span class="text-danger">＊</span></div>
                 <div class="card-body">

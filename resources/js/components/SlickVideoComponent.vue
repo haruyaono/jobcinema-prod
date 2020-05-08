@@ -2,14 +2,17 @@
     <slick
     ref="slick"
     :options="slickOptions">
-       <video class="slide-video slide-media" autoplay loop  muted preload="metadata" poster="/uploads/images/no-image.gif">
-            <source v-bind:src="jobjson.job_mov" type="video/mp4" />
+       <video class="slide-video slide-media" autoplay loop  muted preload="metadata">
+            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov" type="video/mp4" />
+            <source v-else v-bind:src="baseurl + jobjson.job_mov" type="video/mp4" />
         </video>
-        <video class="slide-video slide-media" autoplay loop  muted preload="metadata" poster="/uploads/images/no-image.gif">
-            <source v-bind:src="jobjson.job_mov2" type="video/mp4" />
+        <video class="slide-video slide-media" autoplay loop  muted preload="metadata">
+            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov2" type="video/mp4" />
+            <source v-else v-bind:src="baseurl + jobjson.job_mov2" type="video/mp4" />
         </video>
-        <video class="slide-video slide-media" autoplay loop  muted preload="metadata" poster="/uploads/images/no-image.gif">
-            <source v-bind:src="jobjson.job_mov3" type="video/mp4" />
+        <video class="slide-video slide-media" autoplay loop  muted preload="metadata">
+            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov3" type="video/mp4" />
+            <source v-else v-bind:src="baseurl + jobjson.job_mov3" type="video/mp4" />
         </video>
     </slick>
 </template>
@@ -40,6 +43,8 @@
                     pauseOnFocus: true,
                     
                 },
+                env: process.env.MIX_APP_ENV,
+                baseurl: process.env.MIX_S3_URL,
             };
         },
         methods: {

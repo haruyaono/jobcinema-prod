@@ -55,31 +55,41 @@ $(function() {
 
    
 
-    
 
-const app = new Vue({
-    el: '#app',
-    data: {
-        typedText1: document.getElementById('job_title').value,
-        typedText2: document.getElementById('job_intro').value,
-        typedText3: document.getElementById('job_desc').value,
-        typedText4: document.getElementById('remarks').value,
-    },
-    computed: {
-        charaCount1: function() {
-            return this.typedText1.length;
+if(document.getElementById('jobsheet-create-form') != null ) {
+    var jobSheetCountText = {
+        txt1 : document.getElementById('job_title'),
+        txt2 : document.getElementById('job_intro'),
+        txt3 : document.getElementById('job_desc'),
+        txt4 : document.getElementById('remarks'),
+    };
+    
+    new Vue({
+
+        el: '#jobsheet-create-form',
+        data: {
+            typedText1: jobSheetCountText.txt1 != null ? jobSheetCountText.txt1.value : '',
+            typedText2: jobSheetCountText.txt2 != null ? jobSheetCountText.txt2.value : '',
+            typedText3: jobSheetCountText.txt3 != null ? jobSheetCountText.txt3.value : '',
+            typedText4: jobSheetCountText.txt4 != null ? jobSheetCountText.txt4.value : '',
         },
-        charaCount2: function() {
-            return this.typedText2.length;
+        computed: {
+            charaCount1: function() {
+                return this.typedText1.length;
+            },
+            charaCount2: function() {
+                return this.typedText2.length;
+            },
+            charaCount3: function() {
+                return this.typedText3.length;
+            },
+            charaCount4: function() {
+                return this.typedText4.length;
+            },
         },
-        charaCount3: function() {
-            return this.typedText3.length;
-        },
-        charaCount4: function() {
-            return this.typedText4.length;
-        },
-    },
-});
+    });
+}
+
 
 
 
@@ -95,12 +105,12 @@ $(function() {
 
     $('#composite-form').change(function(){
         
-        var status_val = 0
+        var status_val = 0,
             type_val = 0,
             area_val = 0,
             hourly_salary_val = 0,
             date_val = 0,
-            text_val = ''
+            text_val = '';
 
         if( $('#search-status').val()) {
             status_val = $('#search-status').val();
