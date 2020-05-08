@@ -5,6 +5,9 @@ namespace App\Job\JobItems;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
+use App\Models\Company;
+use App\Models\Employer;
+use App\Models\User;
 
 class JobItem extends Model
 {

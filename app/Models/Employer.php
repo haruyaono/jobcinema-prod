@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Company;
+use App\Job\JobItems\JobItem;
 use App\Notifications\EmployerPasswordResetNotification;
 use App\Notifications\EmailVerificationJa;
 
