@@ -57,6 +57,7 @@
                     <div class="form-group e-image-register-area">
                         <div class="e-image-register-item">
                             <p class="e-image-wrap"> 
+                            
                                 <img src="@if(Session::has('data.file.image.main')) {{Session::get('data.file.image.main')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo1" id="photo1">
                             </p>
                             <p class="text-center">
@@ -290,11 +291,14 @@
 
 @section('js')
 <script>
-$(function() {
-    $("#start_specified_date, #end_specified_date").datepicker({
-        dateFormat: 'yy-mm-dd',
+    $(function() {
+        $("#start_specified_date, #end_specified_date").datepicker({
+            dateFormat: 'yy-mm-dd',
+        });
+
+
+        
     });
-});
 
 </script>
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>

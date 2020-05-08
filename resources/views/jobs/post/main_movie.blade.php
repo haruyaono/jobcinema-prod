@@ -48,23 +48,23 @@
                         </div>
                         @if($job == '' && Session::has('data.file.movie.main'))
                         <p>現在登録されている動画</p>
-                        <p  oncontextmenu="return false;" class="pre-main-movie">
+                        <p oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{Session::get('data.file.movie.main')}}"/></iframe>
+                                <source src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{Session::get('data.file.movie.main')}}@else{{Session::get('data.file.movie.main')}}@endif"/></iframe>
                             </video>
                         </p>
                         @elseif($job != '' && Session::has('data.file.edit_movie.main') && Session::get('data.file.edit_movie.main') != '')
                         <p>現在登録されている動画</p>
-                        <p  oncontextmenu="return false;" class="pre-main-movie">
+                        <p oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{Session::get('data.file.edit_movie.main')}}"/></iframe>
+                                <source src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{Session::get('data.file.edit_movie.main')}}@else{{Session::get('data.file.edit_movie.main')}}@endif"/></iframe>
                             </video>
                         </p>
                         @elseif($job != '' && Session::has('data.file.edit_movie.main') == false && $job->job_mov != null)
                         <p>現在登録されている動画</p>
-                        <p  oncontextmenu="return false;" class="pre-main-movie">
+                        <p oncontextmenu="return false;" class="pre-main-movie">
                             <video controls controlsList="nodownload" preload="none" playsinline>
-                                <source src="{{$job->job_mov}}"/></iframe>
+                                <source src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_mov}}@else{{$job->job_mov}}@endif"/></iframe>
                             </video>
                         </p>
                         @endif

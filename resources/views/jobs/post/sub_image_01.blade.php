@@ -49,13 +49,13 @@
                         </div>
                         @if($job == '' && Session::has('data.file.image.sub1'))
                         <p>現在登録されている画像</p>
-                        <p class="pre-main-image"><img src="{{Session::get('data.file.image.sub1')}}" alt="写真を登録してください"></p>
+                        <p class="pre-main-image"><img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{Session::get('data.file.image.sub1')}}@else{{Session::get('data.file.image.sub1')}}@endif" alt="写真を登録してください"></p>
                         @elseif($job != '' && Session::has('data.file.edit_image.sub1') && Session::get('data.file.edit_image.sub1') != '')
                         <p>現在登録されている画像</p>
-                        <p class="pre-main-image"><img src="{{Session::get('data.file.edit_image.sub1')}}" alt="写真を登録してください"></p>
+                        <p class="pre-main-image"><img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{Session::get('data.file.edit_image.sub1')}}@else{{Session::get('data.file.edit_image.sub1')}}@endif" alt="写真を登録してください"></p>
                         @elseif($job != '' && Session::has('data.file.edit_image.sub1') == false && $job->job_img2 != null)
                         <p>現在登録されている画像</p>
-                        <p class="pre-main-image"><img src="{{$job->job_img2}}" alt="写真を登録してください"></p>
+                        <p class="pre-main-image"><img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img2}}@else{{$job->job_img2}}@endif" alt="写真を登録してください"></p>
                         @endif
                         <ul class="list-unstyled">
                             <li>画像はjpg/gif/png形式に対応しています。</li>

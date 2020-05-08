@@ -45,19 +45,21 @@ $(function() {
     var job = @json($job),
         suffix = @json($suffix);
 
+    data1 = $().setBaseImageUrlAndSetEnvName();
+
 
     if(job != '') {
       if(suffix == 'sub1') {
-        window.opener.$("#photo2").attr('src', "{{Session::get('data.file.edit_image.sub1')}}");
+        window.opener.$("#photo2").attr('src', data1['base_image_url'] + "{{Session::get('data.file.edit_image.sub1')}}");
       } else if(suffix == 'sub2') {
-        window.opener.$("#photo3").attr('src', "{{Session::get('data.file.edit_image.sub2')}}");
+        window.opener.$("#photo3").attr('src', data1['base_image_url'] + "{{Session::get('data.file.edit_image.sub2')}}");
       }
         
     } else {
       if(suffix == 'sub1') {
-        window.opener.$("#photo2").attr('src', "{{Session::get('data.file.image.sub1')}}");
+        window.opener.$("#photo2").attr('src', data1['base_image_url'] + "{{Session::get('data.file.image.sub1')}}");
       } else if(suffix == 'sub2') {
-        window.opener.$("#photo3").attr('src', "{{Session::get('data.file.image.sub2')}}");
+        window.opener.$("#photo3").attr('src', data1['base_image_url'] + "{{Session::get('data.file.image.sub2')}}");
       }
     }
    

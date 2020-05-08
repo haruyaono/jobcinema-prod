@@ -1,70 +1,69 @@
 'use strict';
+$(function() {
+  
+    if($('#start_specified_date').length && $('#end_specified_date').length) {
 
-if(document.getElementById("start_specified_date") && document.getElementById("end_specified_date")) {
+        var start_specified_date = $('#start_specified_date'),
+            end_specified_date = $('#end_specified_date');
 
-    var start_specified_date = document.getElementById("start_specified_date"),
-        end_specified_date = document.getElementById("end_specified_date")
-
-    if(start_specified_date.value == false) {
-        start_specified_date.disabled = true;
-    } else {
-        start_specified_date.disabled = false;
-    }
-    if(end_specified_date.value == false) {
-        end_specified_date.disabled = true;
-    } else {
-        end_specified_date.disabled = false;
-    }
-
-    function pubstartflg0(ischecked){
-        if(ischecked == true){
-            start_specified_date.disabled = true;
-            start_specified_date.value = "";
+        if(start_specified_date.val() == false) {
+            start_specified_date.prop('disabled', true);
         } else {
-            start_specified_date.disabled = false;
+            start_specified_date.prop('disabled', false);
         }
-    }
-
-    function pubstartflg1(ischecked){
-        if(ischecked == true){
-            start_specified_date.disabled = false;
+        if(end_specified_date.val() == false) {
+            end_specified_date.prop('disabled', true);
         } else {
-            start_specified_date.disabled = true;
+            end_specified_date.prop('disabled', false);
         }
-    }
 
-    function pubendflg0(ischecked){
-        if(ischecked == true){
-            end_specified_date.disabled = true;
-            end_specified_date.value = "";
-        } else {
-            end_specified_date.disabled = false;
-        }
-    }
+        $('#shortest').click(function(){
+            if ($("#shortest").prop("checked") == true) {
+                start_specified_date.prop('disabled', true);
+                start_specified_date.val('');
+            } else {
+                start_specified_date.prop('disabled', false);
+            }
+        });
 
-    function pubendflg1(ischecked){
-        if(ischecked == true){
-            end_specified_date.disabled = false;
-        } else {
-            end_specified_date.disabled = true;
-        }
-    }
-}
+        $('#start_specified').click(function(){
+            if ($("#start_specified").prop("checked") == true) {
+                start_specified_date.prop('disabled', false);
+            } else {
+                start_specified_date.prop('disabled', true);
+            }
+        });
 
+        $('#not_specified').click(function(){
+            if ($("#not_specified").prop("checked") == true) {
+                end_specified_date.prop('disabled', true);
+                end_specified_date.val('');
+            } else {
+                end_specified_date.prop('disabled', false);
+            }
+        });
 
-window.onpageshow = function(event) {
-    if (event.persisted) {
-            window.location.reload();
+        $('#end_specified').click(function(){
+            if ($("#end_specified").prop("checked") == true) {
+                end_specified_date.prop('disabled', false);
+            } else {
+                end_specified_date.prop('disabled', true);
+            }
+        });
     }
-};
+});
+
+   
+
+    
 
 const app = new Vue({
     el: '#app',
     data: {
-        typedText1: '',
-        typedText2: '',
-        typedText3: '',
-        typedText4: '',
+        typedText1: document.getElementById('job_title').value,
+        typedText2: document.getElementById('job_intro').value,
+        typedText3: document.getElementById('job_desc').value,
+        typedText4: document.getElementById('remarks').value,
     },
     computed: {
         charaCount1: function() {
@@ -79,7 +78,7 @@ const app = new Vue({
         charaCount4: function() {
             return this.typedText4.length;
         },
-    }
+    },
 });
 
 

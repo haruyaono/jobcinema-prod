@@ -44,11 +44,13 @@
 $(function() {
     var job = @json($job);
 
+    data1 = $().setBaseImageUrlAndSetEnvName();
+
 
     if(job != '') {
-        window.opener.$("#film1").attr('src', "{{Session::get('data.file.edit_movie.main')}}");
+        window.opener.$("#film1").attr('src', data1['base_image_url'] + "{{Session::get('data.file.edit_movie.main')}}");
     } else {
-        window.opener.$("#film1").attr('src', "{{Session::get('data.file.movie.main')}}");
+        window.opener.$("#film1").attr('src', data1['base_image_url'] + "{{Session::get('data.file.movie.main')}}");
     }
 
 

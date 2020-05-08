@@ -20,31 +20,31 @@
                     <tr>
                         <th>雇用形態</th>
                         <td>
-                            <p>@if($job->status_cat_id){{App\models\StatusCat::find($job->status_cat_id)->name}}@endif</p>
+                            <p>@if($job->status_cat_id){{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>募集職種</th>
                         <td>
-                            <p>@if($job->type_cat_id){{App\models\TypeCat::find($job->type_cat_id)->name}}@endif</p>
+                            <p>@if($job->type_cat_id){{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>勤務地エリア</th>
                         <td>
-                            <p>@if($job->area_cat_id){{App\models\AreaCat::find($job->area_cat_id)->name}}@endif</p>
+                            <p>@if($job->area_cat_id){{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>最低時給</th>
                         <td>
-                            <p>@if($job->hourly_salary_cat_id){{App\models\HourlySalaryCat::find($job->hourly_salary_cat_id)->name}}@endif</p>
+                            <p>@if($job->hourly_salary_cat_id){{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                     <tr>
                         <th>最低勤務日数</th>
                         <td>
-                            <p>@if($job->date_cat_id){{App\models\DateCat::find($job->date_cat_id)->name}}@endif</p>
+                            <p>@if($job->date_cat_id){{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</p>
                         </td>
                     </tr>
                 </table>
@@ -55,13 +55,13 @@
             <div class="card-body">
                 <div class="form-group admin-job-image-area">
                     <div class="admin-job-image-item">
-                        <p class="admin-image-wrap"><img src="@if($job->job_img) {{$job->job_img}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
+                        <p class="admin-image-wrap"><img src="@if(config('app.env') == 'production' && $job->job_img){{config('app.s3_url')}}{{$job->job_img}}@elseif($job->job_img) {{$job->job_img}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                     </div>
                     <div class="admin-job-image-item">
-                        <p class="admin-image-wrap"><img src="@if($job->job_img2) {{$job->job_img2}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
+                        <p class="admin-image-wrap"><img src="@if(config('app.env') == 'production' && $job->job_img2){{config('app.s3_url')}}{{$job->job_img2}}@elseif($job->job_img2){{$job->job_img2}}@else{{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                     </div>
                     <div class="admin-job-image-item">
-                        <p class="admin-image-wrap"><img src="@if($job->job_img3) {{$job->job_img3}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
+                        <p class="admin-image-wrap"><img src="@if(config('app.env') == 'production' && $job->job_img3){{config('app.s3_url')}}{{$job->job_img3}}@elseif($job->job_img3){{$job->job_img3}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                     </div>
                 
                 </div>
@@ -74,21 +74,21 @@
                     <div class="admin-job-image-item">
                         <p class="admin-image-wrap">
                             <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                <source src="@if($job->job_mov) {{$job->job_mov}}@endif"/></iframe>
+                                <source src="@if(config('app.env') == 'production' && $job->job_mov){{config('app.s3_url')}}{{$job->job_mov}}@elseif($job->job_mov){{$job->job_mov}}@endif"/></iframe>
                             </video>
                         </p>
                     </div>
                     <div class="admin-job-image-item">
                         <p class="admin-image-wrap">
                             <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                <source src="@if($job->job_mov2) {{$job->job_mov2}}@endif"/></iframe>
+                                <source src="@if(config('app.env') == 'production' && $job->job_mov2){{config('app.s3_url')}}{{$job->job_mov2}}@elseif($job->job_mov2){{$job->job_mov2}}@endif"/></iframe>
                             </video>
                         </p>
                     </div>
                     <div class="admin-job-image-item">
                         <p class="admin-image-wrap">
                             <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                <source src="@if($job->job_mov3) {{$job->job_mov3}}@endif"/></iframe>
+                                <source src="@if(config('app.env') == 'production' && $job->job_mov3){{config('app.s3_url')}}{{$job->job_mov3}}@elseif($job->job_mov3){{$job->job_mov3}}@endif"/></iframe>
                             </video>
                         </p>
                     </div>
