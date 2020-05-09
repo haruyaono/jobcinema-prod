@@ -216,8 +216,10 @@
                         <div class="col-md-5">
                             @if(empty(Auth::guard('employer')->user()->company->logo))
                             <img class="company-logo-image" src="{{ asset('uploads/images/no-image.gif') }}" alt="">
+                            @elseif(App::environment('production'))
+                            <img class="company-logo-image" src="https://s3.job-cinema.com/{{ Auth::guard('employer')->user()->company->logo }}" 
                             @else
-                            <img class="company-logo-image" src="{{ asset('/')}}/{{ Auth::guard('employer')->user()->company->logo }}" alt="">
+                            <img class="company-logo-image" src="{{ asset('/')}}{{ Auth::guard('employer')->user()->company->logo }}" alt="">
                             @endif
                             {!! Form::open(['url' => '/company/logo/delete', 'method' => 'post', 'class' => 'text-right']) !!}
                             {{ method_field('DELETE') }}
