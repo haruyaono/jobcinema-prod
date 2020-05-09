@@ -11,6 +11,7 @@ class JobAppliedEmployer extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $title = [];
     public $appUser = [];
     public $jobId = [];
     public $jobAppData = [];
