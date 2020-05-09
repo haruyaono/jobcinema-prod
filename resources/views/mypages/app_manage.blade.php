@@ -67,11 +67,11 @@
                             この企業に採用されるとお祝い金 <span>{{$job->oiwaikin}}円！</span>
                             </div>
                         @endif
-                    </div>
+                    </div> 
                     <div class="jobapp-item-middle">
                         <div class="jobapp-item-img only-pc">
                             @if($job->job_img)
-                            <img src="{{$job->job_img}}" alt="{{$job->company->cname}}">
+                            <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt="{{$job->company->cname}}">
                             @else
                             <img src="{{asset('uploads/images/no-image.gif')}}">
                             @endif
@@ -113,7 +113,7 @@
                             </table>
                         </div>
                         <div class="jobapp-item-btn">
-                            <p><a href="{{route('jobs.show', [$job->id, $job->slug])}}" class="btn">詳細を見る</a></p>
+                            <p><a href="{{route('jobs.show', [$job->id])}}" class="btn">詳細を見る</a></p>
                             @if($appjob->pivot->s_status == 0 )
                                 <p><a href="{{route('mypage.jobapp.report', [$job->id])}}" class="btn btn-yellow">結果を報告</a></p>
                                 <p><a href="{{route('appjob.decline', [$job->id])}}" class="btn btn-secondary jobapp-cancel-btn" onclick="return window.confirm('「辞退」するとお祝い金の受け取りやご応募がキャンセルされます。お間違いありませんか？');">選考を辞退</a></p>

@@ -36,5 +36,5 @@
 <p>＜ 運営情報 ＞</p>
 <p>JOBCiNEMA</p>
 <p>お問い合わせ：customer@jobcinema.com</p>
-<a href="https://job-cinema.com/">https://job-cinema.com/</a>
+<a href="{{url('/')}}">{{url('/')}}</a>
 

@@ -42,7 +42,7 @@
             @foreach($applicants as $applicant)
                 <div class="card mt-3">
                     <div class="card-header">
-                        求人番号：{{$applicant->id}} <a href="{{ route('jobs.show', [$applicant->id, $applicant->slug])}}">詳細</a>      
+                        求人番号：{{$applicant->id}} <a href="{{ route('jobs.show', [$applicant->id])}}">詳細</a>      
                     </div>
                     
                     <div class="card-body table-responsive">

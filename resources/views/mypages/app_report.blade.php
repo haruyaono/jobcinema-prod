@@ -57,7 +57,7 @@
             <div class="jobapp-item-middle">
                 <div class="jobapp-item-img only-pc">
                     @if($job->job_img)
-                    <img src="{{$job->job_img}}" alt="{{$job->company->cname}}">
+                    <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt="{{$job->company->cname}}">
                     @else
                     <img src="{{asset('uploads/images/no-image.gif')}}">
                     @endif

@@ -25,7 +25,8 @@ JOBCiNEMAへの会員仮登録が完了しましたので<br>
 <br>
 ■企業用ログインページ<br>
 -------------------------------------<br>
-<a href="http://jobcinema/employer/login">http://jobcinema/employer/login</a><br>
+<a href="{{url('/employer/login')}}">{{url('/employer/login')}}</a><br>
+
 -------------------------------------<br>
 ※本登録が終わるまでログインできません。<br>
 <br>
@@ -38,7 +39,7 @@ JOBCiNEMAへの会員仮登録が完了しましたので<br>
 <br>
 【運営会社】<br>
 ------------------------------------<br>
-JOBCiNEMA：http://jobcinema/<br>
+JOBCiNEMA：{{url('/')}}<br>
 〒000-0000<br>
 〇〇市〇〇　〇-〇-〇〇　〇〇ビル〇階<br>
 メールアドレス：：<br>
