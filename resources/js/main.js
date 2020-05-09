@@ -5,10 +5,10 @@ $(function() {
   //スクロールしてページトップから100に達したらボタンを表示
   $(window).scroll(function () {
       if ($(this).scrollTop() > 500) {
-　　　　　　　//フェードインで表示
+        //フェードインで表示
           topBtn.fadeIn();
       } else {
-　　　　　　　//フェードアウトで非表示
+      //フェードアウトで非表示
           topBtn.fadeOut();
       }
   });

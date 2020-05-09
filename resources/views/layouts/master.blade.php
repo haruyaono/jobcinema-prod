@@ -28,6 +28,8 @@
 @yield('header')
 @yield('contents')
 @yield('footer')
+<input type="hidden" id="env_input" name="env" value="{{config('app.env')}}">
+<input type="hidden" id="s3_url_input" name="s3_url" value="{{config('app.s3_url')}}">
 </div><!-- contents -->
 </div> <!-- wrap -->
 @yield('js')

@@ -43,8 +43,8 @@
                     pauseOnFocus: true,
                     
                 },
-                env: process.env.MIX_APP_ENV,
-                baseurl: process.env.MIX_S3_URL,
+                env: document.getElementById('env_input').value,
+                baseurl: document.getElementById('s3_url_input').value,
             };
         },
         methods: {

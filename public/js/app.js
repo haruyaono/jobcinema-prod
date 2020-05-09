@@ -1815,8 +1815,8 @@ __webpack_require__.r(__webpack_exports__);
       loading: true,
       items: [],
       itemflag: false,
-      env: "local",
-      baseurl: "https://s3.job-cinema.com"
+      env: document.getElementById('env_input').value,
+      baseurl: document.getElementById('s3_url_input').value
     };
   },
   mounted: function mounted() {
@@ -1928,8 +1928,8 @@ Vue.config.devtools = true; // vue-slickをインポート
           }
         }]
       },
-      env: "local",
-      baseurl: "https://s3.job-cinema.com"
+      env: document.getElementById('env_input').value,
+      baseurl: document.getElementById('s3_url_input').value
     };
   },
   methods: {
@@ -2086,8 +2086,8 @@ __webpack_require__.r(__webpack_exports__);
         accessibility: true,
         pauseOnFocus: true
       },
-      env: "local",
-      baseurl: "https://s3.job-cinema.com"
+      env: document.getElementById('env_input').value,
+      baseurl: document.getElementById('s3_url_input').value
     };
   },
   methods: {
