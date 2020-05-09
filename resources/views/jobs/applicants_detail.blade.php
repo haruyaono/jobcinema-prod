@@ -121,8 +121,8 @@
                     <div class="item-row">
                         <div class="row-label">履歴書</div>
                         <div class="row-text">
-                            @if($applicantUser->profile->resume)
-                                <a href="{{ Storage::url($applicantUser->profile->resume) }}" target="_blank">履歴書</a>
+                            @if($applicantUser->profile->resume && $resumePath != '') 
+                                <a href="{{ $resumePath }}" target="_blank">履歴書</a>
                             @else 
                                 <span>未登録</span>
                             @endif
