@@ -13,7 +13,7 @@
 <p>【勤務先】：{{$jobId['job_office']}}</p>
 <p>【職種】：{{$jobId['job_type']}}</p>
 <p>【住所】：{{$jobId['job_office_address']}}</p>
-<p>【求人ページ】： <a href="{{route('jobs.show', ['id' => $jobId->id, 'job' => $jobId->slug])}}">{{route('jobs.show', ['id' => $jobId->id, 'job' => $jobId->slug])}}</a></p>
+<p>【求人ページ】： <a href="{{route('jobs.show', ['id' => $jobId->id])}}">{{route('jobs.show', ['id' => $jobId->id])}}</a></p>
 <br>
 
 <p>■応募者</p>
@@ -41,5 +41,5 @@
 <p>＜ 運営情報 ＞</p>
 <p>JOBCiNEMA</p>
 <p>お問い合わせ：customer@jobcinema.com</p>
-<a href="https://job-cinema.com/">https://job-cinema.com/</a>
+<a href="{{url('/')}}">{{url('/')}}</a>
 

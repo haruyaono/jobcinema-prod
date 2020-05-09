@@ -35,7 +35,7 @@
         @if ($result_count > 0 )
             @foreach ($jobs as $job)
             <div class="job-item">
-						<a href="{{ route('jobs.show', [$job->id, $job->slug])}}" class="job-item-link">
+						<a href="{{ route('jobs.show', [$job->id])}}" class="job-item-link">
               <div class="job-item-heading only-pc">
 								<!-- カテゴリ -->
                  <span class="cat-item org">{{ optional($job->type_cat_get)->name}}</span>
