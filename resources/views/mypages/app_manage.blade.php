@@ -113,7 +113,7 @@
                             </table>
                         </div>
                         <div class="jobapp-item-btn">
-                            <p><a href="{{route('jobs.show', [$job->id])}}" class="btn">詳細を見る</a></p>
+                            <p><a href="{{route('jobs.show', [$job->id])}}" class="btn txt-blue-link">詳細を見る</a></p>
                             @if($appjob->pivot->s_status == 0 )
                                 <p><a href="{{route('mypage.jobapp.report', [$job->id])}}" class="btn btn-yellow">結果を報告</a></p>
                                 <p><a href="{{route('appjob.decline', [$job->id])}}" class="btn btn-secondary jobapp-cancel-btn" onclick="return window.confirm('「辞退」するとお祝い金の受け取りやご応募がキャンセルされます。お間違いありませんか？');">選考を辞退</a></p>

@@ -32,14 +32,12 @@ html, body {
   height: 100%;
 }
 body {
-  line-height: 1.7;
-  font-family: "游ゴシック体","Yu Gothic",YuGotShic,sans-serif;
+  line-height: $line-height-base;
+  font-family: $font-family-base;
   font-weight: 500;
-  color: #333;
-  letter-spacing: 0.03em;
+  color: $txt-color-base;
   position: relative;
-  font-size: 14px;
-  letter-spacing: 1px;
+  font-size: $font-size-base;
 }
 
 * {
@@ -67,20 +65,31 @@ content:'';
 content:none;
 }
 a {
-margin:0;
-padding:0;
-font-size:100%;
-vertical-align:baseline;
-background:transparent;
-
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 a:hover{
+  opacity: 0.7;
+  color: inherit;
   text-decoration: none;
-  cursor: pointer;
+}
+
+a.txt-blue-link {
+  color: $lightblue;
+
+  &:hover {
+    color: $lightblue;
+
+  }
 }
 
 .non-link {
   pointer-events: none;
+}
+ol, ul {
+  list-style: none;
 }
 
 /* change colours to suit your needs */
@@ -169,16 +178,39 @@ select:hover{
   display: block;
 }
 .box-wrap .wrap-items {
-  float: left;
+  widows: 100%;
   display: block;
-  margin-right: 2.84259%;
-  width: 17.72593%;
+  @include mq(medium) {
+    float: left;
+    margin-right: 2.84259%;
+    width: 17.72593%;
+  }
+
+  a {
+    display: flex;
+    @include mq(medium) {
+      display: block;
+    }
+  }
 }
 .box-wrap .wrap-items .wrap-img {
-  margin-bottom: 15px;
+  width: 30%;
+  margin-right: 4%;
+  @include mq(medium) {
+    width: 100%;
+    margin-bottom: 15px;
+    margin-right: 0;
+
+  }
 }
 .box-wrap .wrap-items .wrap-img img {
   width: 100%;
+}
+.box-wrap .wrap-items .wrap-text {
+  width: 66%;
+  @include mq(medium) {
+    width: 100%;
+  }
 }
 .nav-link {
   padding-bottom: 0;
@@ -216,15 +248,17 @@ select:hover{
   min-height: 100%;
   min-height: 100vh;
   z-index: -100;
-  background: url(../img/back-retro.jpg) no-repeat;
+  // background: url(../img/back-retro.jpg) no-repeat;
   background-position: center center;
   background-size: cover;
 }
 
-/* .contents {
-  position: relative;
-  z-index:1;
-} */
+.floatL, .searchModalKodawariCheck li {
+  float: left;
+}
+.overflowH {
+  overflow: hidden;
+}
 
 .inner {
   max-width: 1060px;
@@ -237,6 +271,7 @@ section {
     width: 100%;
     margin-top: 3em;
     margin-bottom: 3em;
+    background: #fff;
   }
 
   .thead-lignt th {
@@ -368,9 +403,11 @@ section {
   
   
   /* 絞り込み検索 */
+  .search-section {
+    margin-top: 1em;
+  }
   #composite-form {
-    background: #EEEEEE;
-    padding: 10px;
+    padding: 20px 10px;
     clear: both;
   }
   .composite {
@@ -710,6 +747,7 @@ section {
     font-size: 12px;
     padding: 5px;
     color: #888;
+    display: inline-block;
   }
   .bread li:first-child a {
     color: #de9610;

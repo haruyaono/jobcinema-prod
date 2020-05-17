@@ -19,7 +19,7 @@
         <section class="apply-after-job-info">
           <h2>応募先：{{$job->job_office}}</h2>
           <div class="apply-after-sub">
-            <p>MYページは<a href="{{route('mypages.index')}}">こちら</a>です。</p>
+            <p>MYページは<a href="{{route('mypages.index')}}" class="txt-blue-link">こちら</a>です。</p>
             <p>「応募後の流れ」は応募管理からも確認できます。</p>
           </div>
           <table>
@@ -49,7 +49,7 @@
             <tr>
               <th>求人ページ</th>
               <td>
-                <a href="{{route('jobs.show', ['id' => $job->id])}}">{{route('jobs.show', ['id' => $job->id, 'job' => $job->slug])}}</a>
+                <a href="{{route('jobs.show', ['id' => $job->id])}}" class="txt-blue-link">{{route('jobs.show', ['id' => $job->id, 'job' => $job->slug])}}</a>
               </td>
             </tr>
           </table>

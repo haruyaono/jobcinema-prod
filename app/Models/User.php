@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Models\Company;
 use App\Job\JobItems\JobItem;
 use App\Notifications\EmailVerificationJa;
+use Illuminate\Support\Facades\Auth;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
@@ -80,6 +81,23 @@ class User extends Authenticatable
     public function getLastNameNullAttribute()
     {
         return ($this->last_name) ? $this : '';
+    }
+
+
+    public static function checkFavCount()
+    {
+            if(Auth::check()) {
+                $loginUser = auth()->user();
+                $favedJobItems = $loginUser->favourites();
+                if(!$favedJobItems) {
+                    return 0;
+                } else {
+                    return $favedJobItems->count();
+                }
+
+            } else {
+                return false;
+            }
     }
 
 }

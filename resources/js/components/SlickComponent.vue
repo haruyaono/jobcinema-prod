@@ -30,21 +30,11 @@ Vue.config.devtools = true;
                 // slickの設定
                 slickOptions: {
                     arrows: false,
-                    autoplay: true,
-                    autoplaySpeed: 0,
-                    cssEase: 'linear',
-                    speed: 5000,
-                    infinite: true,
-                    slidesToShow: 2,
+                    dots:true,
+                    speed:200,
                     slidesToScroll: 1,
+                    accessibility: true,
                     responsive: [
-                        {
-                            breakpoint: 992,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 1,
-                            }
-                        },
                         {
                             breakpoint: 768,
                             settings: {

@@ -150,7 +150,7 @@
                             <td>
                                 @if(!empty(Auth::user()->profile->resume) && $resumePath != '')
                                     <p>
-                                        <a class="d-inline-block" href="{{ $resumePath }}" target="_blank">
+                                        <a class="d-inline-block txt-blue-link" href="{{ $resumePath }}" target="_blank">
                                             履歴書
                                         </a>
                                         {!! Form::open(['url' => '/mypage/resume/delete', 'method' => 'post']) !!}

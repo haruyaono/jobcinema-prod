@@ -27,11 +27,11 @@
           </div>
           <div class="text-center mt-5">
               <p class="text-danger">※もし仮登録完了メールが届かない場合は下記から再送してください</p>
-              <a class="" href="{{ url('/employer/verify/resend') }}">本登録用メールを再送する</a>
+              <a class="txt-blue-link" href="{{ url('/employer/verify/resend') }}">本登録用メールを再送する</a>
           </div>
 
-          <div class="text-center my-5 only-pc"><a href="{{route('employer.login')}}">ログインページ</a></div>
-          <div class="text-center my-4 only-sp"><a href="{{route('employer.login')}}">ログインページ</a></div>
+          <div class="text-center my-5 only-pc txt-blue-link"><a href="{{route('employer.login')}}">ログインページ</a></div>
+          <div class="text-center my-4 only-sp txt-blue-link"><a href="{{route('employer.login')}}">ログインページ</a></div>
         </div> 
         <ul class="emp-form-pagetop-list mb-1 mt-2">
             <li><i class="far fa-arrow-alt-circle-right mr-1"></i><a href="/">HOME</a></li>

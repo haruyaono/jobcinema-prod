@@ -29,8 +29,7 @@
 	<!-- 絞り込み・検索エリア -->
 	@include('jobs.searchform')
 
-	<!-- カスタム投稿の新着案件 10件 -->
-	<section class="main-section job-entry-section">
+	<section class="main-section job-entry">
 		<div class="inner">
 			<div class="pad">
 				<h1 class="txt-h1">検索された求人</h1>
@@ -53,7 +52,7 @@
 							<div class="title-img-wrap">
               <div class="job-left only-sp">
 								@if(($job->job_img) ==! null)
-									<img src="{{$job->job_img}}" alt=""/>
+									<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt=""/>
 									@endif
 								</div>
 								<h2 class="txt-h2">

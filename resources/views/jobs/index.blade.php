@@ -27,8 +27,6 @@
 @include('jobs.searchform')
 </div>
   
-
-	<!-- カスタム投稿の新着案件 10件 -->
 	<section class="main-section">
 		<div class="inner">
 			<div class="pad">
@@ -40,17 +38,19 @@
 						@forelse ($topLimitJobs as $job)
 							<div class="newjob-item">
 								<a href="{{ route('jobs.show', [$job->id])}}" class="newjob-item-link">
-									<p class="title-img-wrap">
-										@if(($job->job_img) ==! null)
+									<p class="img-wrap">
+										@if(($job->job_img) !== null)
 											<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{asset($job->job_img)}}@endif" style="width:100%;" alt=""/>
 										@else
 											<img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
 										@endif
 									</p>
-									<h3 class="txt-h3">
-										{{$job->company->cname}}
-									</h3>
-									<p>{{$job->job_type}}</p>
+									<div class="txt-wrap">
+										<h3 class="txt-h3">
+											{{$job->company->cname}}
+										</h3>
+										<p>{{$job->job_type}}</p>
+									</div>
 								</a>
 							</div> <!-- newjob-item -->
 							<!-- △ ループ終了 △ -->

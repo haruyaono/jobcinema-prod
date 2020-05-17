@@ -293,7 +293,25 @@
 @endsection
 
 @section('js')
+<!-- <script>
+  $(function() {
+    let is_playing = false;
 
+    videoController () {
+      if (!is_playing) {
+        this.play();
+        is_playing = true;
+      } else {
+        this.pause();
+        is_playing = false;
+      }
+    });
+    }
+
+    
+  });
+  
+</script> -->
 
 @endsection
 

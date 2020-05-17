@@ -69,8 +69,8 @@
                             </ul>
                         </div>
                     </div>
-                    <p class="mypage-pagetop-btn"><a class="btn-gray" href="/">トップページに戻る</a></p>
-                    <p class="text-right mt-5"><a class="" href="{{route('mypage.delete')}}" onclick="return window.confirm('お祝い金申請中の場合、受け取りができなくなります。よろしいですか？');">退会する</a></p>
+                    <p class="mypage-pagetop-btn"><a class="txt-blue-link" href="/">トップページに戻る</a></p>
+                    <p class="text-right mt-5"><a class="txt-blue-link" href="{{route('mypage.delete')}}" onclick="return window.confirm('お祝い金申請中の場合、受け取りができなくなります。よろしいですか？');">退会する</a></p>
                 </div>
 
 </div>

@@ -1,0 +1,496 @@
+.header {
+    width: 100%;
+    height: 160px;
+    text-align: center;
+    background: #c93a40;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+  }
+  .header-top .logo {
+    margin-top: 20px;
+    width: 30%;
+    display: inline-block;
+    font-size: 1em;
+  }
+  .header .logo a {
+    display: block;
+  }
+  .header .logo img {
+   width: 100%;
+  }
+  
+  .header-top .header-widget {
+    width: 65%;
+    display: inline-block;
+    text-align: right;
+    padding-right: 40px;
+    margin-top: 60px;
+  }
+  .header-top .header-widget li {
+    display: inline-block;
+    list-style: none;
+    padding: 5px 10px;
+  }
+  .header-top .header-widget li a {
+    display: block;
+    color: #fff;
+  }
+  .header-top .header-widget li a:hover {
+    opacity: .8;
+  }
+  /* g-nav */
+  .gnav {
+    margin: 1.8em 0 0;
+    width: 100%;
+  }
+  
+  .gnav ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+  }
+  .gnav ul li{
+    display: inline-block;
+    width: 25%;
+    border-right: 1px solid #D16D6D;
+  }
+  .gnav ul li:first-child{
+    border-left: 1px solid #D16D6D;
+  }
+  .gnav ul li a {
+    display: block;
+    color: #fff;
+    font-size: 1em;
+    padding: 0 .8em;
+    white-space: nowrap;
+  }
+  .gnav ul li a:hover {
+    opacity: .8;;
+  }
+
+  /* spログイン非表示 */
+  .header-sp-login {
+    display: none;
+   }
+   /* spキープリスト非表示 */
+   .header-sp-keep {
+    display: none;
+   }
+  /* spハンバーガー非表示 */
+  .fullHeaderMenu {
+    display: none;
+  }
+  .hamburgerLogoutlayer {
+    display: none;
+  }
+
+
+  .p-favorite-fixed-nav {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 10px 10px 5px 10px;
+    background-color: #C93B40;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    transform: translateY(-100%);
+    transition: .5s;
+    z-index: 99;
+}
+.p-favorite-fixed-nav.is-nav-show {
+  transform: translate(0);
+}
+.p-favorite-fixed-nav em {
+  font-size: 16px;
+}
+.p-favorite-fixed-nav img {
+  display: inline-block;
+ float: left;
+  width: 20px;
+  height: auto;
+  margin-right: 5px;
+  margin-top: -3px;
+}
+.p-favorite-fixed-nav:hover{
+  color: #fff;
+}
+
+@media (max-width:768px) {
+  .header {
+    height: auto;
+    padding: 5px 10px;
+  }
+
+  .header .inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5px;
+    height: 50px;
+  }
+  .header-sp-right {
+    display: flex;
+    height: 18px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 5px;
+
+    .star {
+      margin-right: 4px;
+      width: 19px;
+      height: 18px;
+      color: #fff;
+    }
+    .saveWrap {
+      margin-right: 20px;
+      position: relative;
+      line-height: 1;
+    }
+    .saveWrap .save {
+      font-size: 14px;
+      line-height: 1.2;
+      color: #fff;
+    } 
+    .saveWrap .saveCount {
+      position: absolute;
+      display: block;
+      background: $yellow;
+      height: 17px;
+      width: 17px;
+      border-radius: 50px;
+      color: #fff;
+      font-size: .615rem;
+      line-height: 1.308rem;
+      text-align: center;
+      left: 30px;
+      top: -7px;
+    }
+
+  }
+  .header .logo {
+    line-height: unset;
+    margin-top: 0;
+  }
+  .header .logo img {
+    vertical-align: middle;
+    width: 180px;
+  }
+  .gnav {
+    display: none;
+  }
+  .header-top .header-widget {
+      display: none!important;
+  }
+
+  /* spログイン */
+  .header-sp-login {
+    display: block;
+    margin-left: auto;
+    margin-right: 20px
+  }
+  .header-sp-login-link {
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+  .header-sp-login-link:hover {
+    color: #fff;
+  }
+  
+  /* spキープ */
+  .header-sp-keep {
+    display: block;
+    margin-right: 10px
+  }
+  .header-sp-keep-link {
+    display: block;
+  }
+  .header-sp-keep-icon {
+    width: 22px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* ハンバーガーメニュー */
+  .fullHeaderMenu {
+    display: block;
+    cursor: pointer;
+    position: relative;
+    height: 18px;
+    width: 22px;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    span {
+      position: absolute;
+      left: 0;
+      height: 2px;
+      width: 22px;
+      background-color: #fff;
+      border-radius: 1px;
+      display: inline-block;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+
+      &:nth-of-type(1) {
+        top: 0;
+      }
+      &:nth-of-type(2) {
+        top: 8px;
+      }
+      &:nth-of-type(3) {
+        bottom: 0;
+      }
+
+    }
+
+  }
+  .hamburgerLogoutlayer {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0,0,0,0.7);
+    overflow: hidden;
+    overflow-y: auto;
+    line-height: 1.3;
+  }
+  .hamburgerLogoutlayer ::-webkit-scrollbar {
+    width: 17px;
+  } 
+  
+  .hamburgerLogout .on {
+    display: block;
+  }
+  .hamburgerLogoutInner {
+    max-width: 337px;
+    width: calc(100% - 38px);
+    height: 100%;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    right: -17px;
+    z-index: 99999;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    .hamburgerLogoutHeader {
+      height: 50px;
+      position: relative;
+    }
+  
+    .hamburgerLogoutBtn {
+      color: #fff;
+      font-size: 18px;
+      padding: 16px 0;
+      background: $red;
+      text-align: center;
+      display: block;
+    }
+    .hamburgerLogoutloginBtnPc {
+      color: #fff;
+      font-size: 18px;
+      padding: 16px 0;
+      background: $red;
+      text-align: center;
+      display: block;
+    }
+    .hamburgerLogoutBtnList {
+      border-right: 1px solid #fff;
+      width: calc( 50% - 0.5px);  
+    }
+    .hamburgerLogoutloginBtnPcList {
+      width: calc(50% - 0.5px);
+    }
+    .hamburgerLogoutMyMenuAreaWrap {
+      font-size: 16px;
+    }
+    .hamburgerLogoutMenuSubheading {
+      background: #f5f5f5;
+      font-size: 14px;
+      padding: 11px 14px 10px 20px;
+      margin-bottom: 16px;
+    }
+    .hamburgerLogoutMyMenuLinkList {
+      margin: 0 20px 8px;
+    }
+    .hamburgerLogoutMyMenuLinkList li:first-child {
+      position: relative;
+    }
+    .hamburgerLogoutOsiraseWrap {
+      background: #fff0e5;
+      border-radius: 8px;
+      padding: 14px 8px 15px;
+      display: block;
+    }
+    .hamburgerLogoutMenuCount {
+      position: absolute;
+      top: 13px;
+      right: 9px;
+      color: #fff;
+      background-color: $yellow;
+      border: 1px solid $yellow;
+      line-height: 10px;
+      border-radius: 50px;
+      text-align: center;
+      font-size: .846rem;
+      padding: 3px 7px 4px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .hamburgerLogoutClipJobCount {
+      position: absolute;
+      top: 15px;
+      right: 9px;
+      color: #fff;
+      background-color: $yellow;
+      border: 1px solid $yellow;
+      line-height: 10px;
+      border-radius: 50px;
+      text-align: center;
+      font-size: .846rem;
+      padding: 3px 7px 4px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    
+    .hamburgerLogoutJobSubheading {
+      background: #f5f5f5;
+      font-size: 1.077rem;
+      padding: 11px 14px 10px 20px;
+    }
+    .hamburgerLogoutJobInner {
+      margin: 0 20px;
+      .hamburgerLogoutJobItem {
+        font-size: 16px;
+        border-bottom: 1px solid #d8d8d8;
+
+        a {
+          padding: 15px 0 8px;
+        }
+      }
+      .hamburgerLogoutJobItemlower {
+        margin-bottom: 16px;
+      }
+    }
+    .hamburgerLogoutWatchRecentJobBorderBPc {
+      position: relative;
+    }
+    .hamburgerLogoutClipJob {
+      padding: 16px 0 16px 8px;
+      display: block;
+    }
+    .hamburgerLogoutInclude7Wrap {
+      margin-bottom: 16px;
+    }
+    .menuInfoWrap {
+      margin: 0 20px 16px;
+    }
+    .Include7Help {
+      padding-bottom: 16px;
+      text-decoration: underline;
+    }
+    .Include7Sitemap {
+      text-decoration: underline;
+      display: inline-block;
+    }
+
+   
+ 
+  }
+
+  /* 閉じるボタン */
+  .hamburgerLogoutHeaderClossMenuWrap {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+
+    .hamburgerLogoutHeaderClossInner {
+      cursor: pointer;
+      position: relative;
+      height: 18px;
+      width: 22px;
+      display: inline-block;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .hamburgerLogoutHeaderClossInner div {
+      position: absolute;
+      left: 0;
+      height: 2px;
+      width: 22px;
+      background-color: #000;
+      border-radius: 1px;
+      display: inline-block;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .hamburgerLogoutHeaderClossInner div:nth-of-type(1) {
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      top: 9px;
+    }
+    .hamburgerLogoutHeaderClossInner div:nth-of-type(2) {
+      display: none;
+    }
+    .hamburgerLogoutHeaderClossInner div:nth-of-type(3) {
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      bottom: 7px;
+    }
+  }
+
+  /* apply header */
+  .header_apply {
+    height: auto;
+  }
+  .header_apply .header-top {
+    display: block;
+  }
+  .header_apply .header-top .logo {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 568px) {
+  /* ヘッダー */
+  .header .logo img {
+    width: 120px;
+  }
+
+  .header-sp-login {
+    margin-right: 10px;
+  }
+  .header-sp-login-link {
+    font-size: 12px;
+    letter-spacing: -1px;
+  }
+  #nav-open {
+    width: 25px;
+    height: 20px;
+  }
+  #nav-open span, #nav-open span:before, #nav-open span:after {
+    height: 1px;
+  }
+  #nav-open span:before {
+    bottom: -7px;
+  }
+  #nav-open span:after {
+    bottom: -15px;
+  }
+}
