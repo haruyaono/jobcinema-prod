@@ -1730,6 +1730,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_processing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/processing */ "./resources/js/mixins/processing.js");
 //
 //
 //
@@ -1737,11 +1738,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_processing__WEBPACK_IMPORTED_MODULE_0__["default"]],
   props: ['jobid', 'favourited'],
   data: function data() {
     return {
-      show: true
+      show: true,
+      count: [document.getElementById('saveCount-pc').innerHTML, document.getElementById('saveCount-sp').innerHTML, document.getElementById('hamburgerLogoutClipJobCount').innerHTML],
+      countElm: [document.getElementById('saveCount-pc'), document.getElementById('saveCount-sp'), document.getElementById('hamburgerLogoutClipJobCount')]
     };
   },
   mounted: function mounted() {
@@ -1756,16 +1761,60 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var _this = this;
 
+      this.startProcessing();
       axios.post('/save/' + this.jobid).then(function (response) {
-        return _this.show = true;
+        if (response.data.fav_save_status == 1) {
+          _this.show = true;
+
+          for (var i in _this.count) {
+            _this.count[i]++;
+          }
+
+          document.getElementById('saveCount-pc').innerHTML = _this.count[0];
+          document.getElementById('saveCount-sp').innerHTML = _this.count[1];
+          document.getElementById('hamburgerLogoutClipJobCount').innerHTML = _this.count[2];
+          alert('お仕事情報を保存しました。');
+        } else {
+          console.log('アイテムがすでに存在');
+        }
       })["catch"](function (error) {
-        return alert('お気に入りに追加できませんでした');
+        return alert('お仕事情報の保存に失敗しました');
+      })["finally"](function () {
+        return _this.endProcessing();
       });
     },
     unsave: function unsave() {
-      axios.post('/unsave/' + this.jobid)["catch"](function (error) {
-        return alert('お気に入りから削除できませんでした');
-      });
+      var _this2 = this;
+
+      if (confirm('選択した求人情報を削除しますか？')) {
+        this.startProcessing();
+        axios.post('/unsave/' + this.jobid).then(function (response) {
+          if (response.data.fav_del_status == 1) {
+            _this2.show = false;
+
+            if (_this2.count[0] > 0 && _this2.count[1] > 0) {
+              for (var i in _this2.count) {
+                _this2.count[i]--;
+              }
+
+              ;
+              document.getElementById('saveCount-pc').innerHTML = _this2.count[0];
+              document.getElementById('saveCount-sp').innerHTML = _this2.count[1];
+              document.getElementById('hamburgerLogoutClipJobCount').innerHTML = _this2.count[1];
+            }
+
+            alert('削除しました。');
+          } else {
+            console.log('削除するアイテムなし');
+          }
+        })["catch"](function (error) {
+          return alert('お仕事情報の削除に失敗しました');
+        })["finally"](function () {
+          return _this2.endProcessing();
+        });
+      } else {
+        return;
+      }
     }
   }
 });
@@ -1907,20 +1956,11 @@ Vue.config.devtools = true; // vue-slickをインポート
       // slickの設定
       slickOptions: {
         arrows: false,
-        autoplay: true,
-        autoplaySpeed: 0,
-        cssEase: 'linear',
-        speed: 5000,
-        infinite: true,
-        slidesToShow: 2,
+        dots: true,
+        speed: 200,
         slidesToScroll: 1,
+        accessibility: true,
         responsive: [{
-          breakpoint: 992,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-        }, {
           breakpoint: 768,
           settings: {
             slidesToShow: 2,
@@ -2060,9 +2100,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 // vue-slickをインポート
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  // コンポーネント使用の宣言
+  components: {
+    Slick: vue_slick__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   // bladeから受け取るデータを指定
   props: {
     jobjson: {
@@ -2070,16 +2117,10 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
-  // コンポーネント使用の宣言
-  components: {
-    Slick: vue_slick__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
   data: function data() {
     return {
       // slickの設定
       slickOptions: {
-        autoplay: true,
-        autoplaySpeed: 6000,
         speed: 200,
         arrows: false,
         dots: true,
@@ -2087,22 +2128,88 @@ __webpack_require__.r(__webpack_exports__);
         pauseOnFocus: true
       },
       env: document.getElementById('env_input').value,
-      baseurl: document.getElementById('s3_url_input').value
+      baseurl: document.getElementById('s3_url_input').value,
+      is_playing: {
+        mvideo_1: true,
+        mvideo_2: false,
+        mvideo_3: false
+      }
     };
   },
+  mounted: function mounted() {
+    var targetElement = this.$el;
+  },
   methods: {
-    next: function next() {
-      this.$refs.slick.next();
-    },
-    prev: function prev() {
-      this.$refs.slick.prev();
-    },
     reInit: function reInit() {
       var _this = this;
 
       this.$nextTick(function () {
         _this.$refs.slick.reSlick();
       });
+    },
+    videoFnc: function videoFnc(e) {
+      var currentVideo = e.currentTarget,
+          currentVideoId = currentVideo.getAttribute('id');
+
+      if (this.is_playing[currentVideoId] == false) {
+        currentVideo.play();
+        this.is_playing[currentVideoId] = true;
+      } else {
+        currentVideo.pause();
+        this.is_playing[currentVideoId] = false;
+      }
+    },
+    handleAfterChange: function handleAfterChange(event, slick, currentSlide) {
+      var vIndex = currentSlide + 1;
+      var video = document.getElementById("mvideo_" + vIndex);
+
+      if (video) {
+        var playPromise = video.play();
+        this.is_playing['mvideo_' + vIndex] = true;
+
+        if (playPromise !== undefined) {
+          playPromise.then(function (_) {})["catch"](function (error) {
+            video.pause();
+            throw error;
+          });
+        } else {
+          console.log('playPromise undefined');
+        }
+      } else {
+        console.log('playPromise undefined or none video');
+      }
+    },
+    handleBeforeChange: function handleBeforeChange(event, slick, currentSlide, nextSlide) {
+      var vBeforeIndex = currentSlide + 1,
+          videoBefore = document.getElementById("mvideo_" + vBeforeIndex);
+      var playPromise = videoBefore.pause();
+      this.is_playing['mvideo_' + vBeforeIndex] = false;
+    },
+    handleSwipe: function handleSwipe(event, slick, direction) {
+      var vIndex = slick.currentSlide + 1,
+          currentVideo = document.getElementById("mvideo_" + vIndex);
+
+      if (direction == 'left') {
+        if (vIndex == 1) {
+          var beforeVideoIndex = 3;
+        } else {
+          var beforeVideoIndex = vIndex - 1;
+        }
+
+        var beforeVideo = document.getElementById("mvideo_" + beforeVideoIndex);
+        beforeVideo.pause();
+        this.is_playing['mvideo_' + beforeVideoIndex] = false;
+      } else {
+        if (vIndex == 3) {
+          var beforeVideoIndex = 1;
+        } else {
+          var beforeVideoIndex = vIndex + 1;
+        }
+
+        var beforeVideo = document.getElementById("mvideo_" + beforeVideoIndex);
+        beforeVideo.pause();
+        this.is_playing['mvideo_' + beforeVideoIndex] = false;
+      }
     }
   }
 });
@@ -37742,7 +37849,7 @@ var render = function() {
           "button",
           {
             staticClass: "entry-btn favourite-btn",
-            attrs: { type: "submit" },
+            attrs: { type: "submit", disabled: _vm.isProcessing() },
             on: {
               click: function($event) {
                 $event.preventDefault()
@@ -37756,7 +37863,7 @@ var render = function() {
           "button",
           {
             staticClass: "entry-btn favourite-btn",
-            attrs: { type: "submit" },
+            attrs: { type: "submit", disabled: _vm.isProcessing() },
             on: {
               click: function($event) {
                 $event.preventDefault()
@@ -37970,70 +38077,90 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("slick", { ref: "slick", attrs: { options: _vm.slickOptions } }, [
-    _c(
-      "video",
-      {
-        staticClass: "slide-video slide-media",
-        attrs: { autoplay: "", loop: "", muted: "", preload: "metadata" },
-        domProps: { muted: true }
-      },
-      [
-        _vm.env == "local"
-          ? _c("source", {
-              attrs: { src: _vm.jobjson.job_mov, type: "video/mp4" }
-            })
-          : _c("source", {
-              attrs: {
-                src: _vm.baseurl + _vm.jobjson.job_mov,
-                type: "video/mp4"
-              }
-            })
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "video",
-      {
-        staticClass: "slide-video slide-media",
-        attrs: { autoplay: "", loop: "", muted: "", preload: "metadata" },
-        domProps: { muted: true }
-      },
-      [
-        _vm.env == "local"
-          ? _c("source", {
-              attrs: { src: _vm.jobjson.job_mov2, type: "video/mp4" }
-            })
-          : _c("source", {
-              attrs: {
-                src: _vm.baseurl + _vm.jobjson.job_mov2,
-                type: "video/mp4"
-              }
-            })
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "video",
-      {
-        staticClass: "slide-video slide-media",
-        attrs: { autoplay: "", loop: "", muted: "", preload: "metadata" },
-        domProps: { muted: true }
-      },
-      [
-        _vm.env == "local"
-          ? _c("source", {
-              attrs: { src: _vm.jobjson.job_mov3, type: "video/mp4" }
-            })
-          : _c("source", {
-              attrs: {
-                src: _vm.baseurl + _vm.jobjson.job_mov3,
-                type: "video/mp4"
-              }
-            })
-      ]
-    )
-  ])
+  return _c(
+    "slick",
+    {
+      ref: "slick",
+      attrs: { options: _vm.slickOptions },
+      on: {
+        afterChange: _vm.handleAfterChange,
+        beforeChange: _vm.handleBeforeChange,
+        swipe: _vm.handleSwipe
+      }
+    },
+    [
+      _c(
+        "video",
+        {
+          staticClass: "slide-video slide-media",
+          attrs: {
+            id: "mvideo_1",
+            muted: "",
+            autoplay: "",
+            preload: "metadata"
+          },
+          domProps: { muted: true },
+          on: { click: _vm.videoFnc }
+        },
+        [
+          _vm.env == "local"
+            ? _c("source", {
+                attrs: { src: _vm.jobjson.job_mov, type: "video/mp4" }
+              })
+            : _c("source", {
+                attrs: {
+                  src: _vm.baseurl + _vm.jobjson.job_mov,
+                  type: "video/mp4"
+                }
+              })
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "video",
+        {
+          staticClass: "slide-video slide-media",
+          attrs: { id: "mvideo_2", muted: "", preload: "metadata" },
+          domProps: { muted: true },
+          on: { click: _vm.videoFnc }
+        },
+        [
+          _vm.env == "local"
+            ? _c("source", {
+                attrs: { src: _vm.jobjson.job_mov2, type: "video/mp4" }
+              })
+            : _c("source", {
+                attrs: {
+                  src: _vm.baseurl + _vm.jobjson.job_mov2,
+                  type: "video/mp4"
+                }
+              })
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "video",
+        {
+          staticClass: "slide-video slide-media",
+          attrs: { id: "mvideo_3", muted: "", preload: "metadata" },
+          domProps: { muted: true },
+          on: { click: _vm.videoFnc }
+        },
+        [
+          _vm.env == "local"
+            ? _c("source", {
+                attrs: { src: _vm.jobjson.job_mov3, type: "video/mp4" }
+              })
+            : _c("source", {
+                attrs: {
+                  src: _vm.baseurl + _vm.jobjson.job_mov3,
+                  type: "video/mp4"
+                }
+              })
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -54009,7 +54136,89 @@ __webpack_require__.r(__webpack_exports__);
     }
   });
 });
+
+(function ($, window, undefined) {
+  'use strict';
+
+  jQuery(function ($) {
+    $('.fullHeaderMenu, .prefectureTopHeaderMenu, .fullHeaderNoShadowMenu').click(function (t) {
+      if ($('.hamburgerLogin').length) {
+        $('.hamburgerLoginlayer').addClass('on');
+      } else if ($('.hamburgerLogout').length) {
+        $('.hamburgerLogoutlayer').addClass('on');
+      } else if ($('.hamburgerUnknow').length) {
+        $('.hamburgerUnknowlayer').addClass('on');
+      }
+
+      $('.hamburgerLoginlayer, .hamburgerLogoutlayer, .hamburgerUnknowlayer').css("height", $(document).height());
+      $('.hamburgerLoginWrap, .hamburgerLogoutWrap, .hamburgerUnknowWrap').css("top", $(document).scrollTop());
+    });
+    $('.hamburgerLoginHeaderClossInner').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLoginlayer').removeClass('on');
+    });
+    $('.hamburgerLogoutHeaderClossInner').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLogoutlayer').removeClass('on');
+    });
+    $('.hamburgerUnknowHeaderClossInner').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerUnknowlayer').removeClass('on');
+    });
+    $('.hamburgerLoginlayer').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLoginlayer').removeClass('on');
+    });
+    $('.hamburgerLoginInner').click(function (t) {
+      t.stopPropagation();
+    });
+    $('.hamburgerLogoutlayer').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLogoutlayer').removeClass('on');
+    });
+    $('.hamburgerLogoutInner').click(function (t) {
+      t.stopPropagation();
+    });
+    $('.hamburgerUnknowlayer').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerUnknowlayer').removeClass('on');
+    });
+    $('.hamburgerUnknowInner').click(function (t) {
+      t.stopPropagation();
+    });
+  });
+})(jQuery, window);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
+
+/***/ }),
+
+/***/ "./resources/js/mixins/processing.js":
+/*!*******************************************!*\
+  !*** ./resources/js/mixins/processing.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      processing: false
+    };
+  },
+  methods: {
+    startProcessing: function startProcessing() {
+      this.processing = true;
+    },
+    endProcessing: function endProcessing() {
+      this.processing = false;
+    },
+    isProcessing: function isProcessing() {
+      return this.processing;
+    }
+  }
+});
 
 /***/ }),
 

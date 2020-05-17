@@ -1,6 +1,5 @@
-'use strict';
 $(function() {
-  
+    'use strict';
     if($('#start_specified_date').length && $('#end_specified_date').length) {
 
         var start_specified_date = $('#start_specified_date'),

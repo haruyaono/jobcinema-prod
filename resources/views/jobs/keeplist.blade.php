@@ -26,10 +26,10 @@
 </div>
 
 <div class="main-wrap">
-<section class="main-section job-entry-section">
+<section class="main-section job-entry">
 <div class="inner">
 <div class="pad">
-    <h1 class="txt-h2 mb-3">キープリスト(最大20件)</h1>
+    <h1 class="txt-h2 mb-3">保存したお仕事(最大20件)</h1>
     @if( Auth::check() )
         <div class="job-list">
         @if ($result_count > 0 )
@@ -44,7 +44,7 @@
 							<div class="title-img-wrap">
               <div class="job-left only-sp">
 								@if(($job->job_img) ==! null)
-									<img src="{{$job->job_img}}" alt=""/>
+									<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt=""/>
 									@endif
 								</div>
 								<h2 class="txt-h2">

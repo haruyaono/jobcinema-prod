@@ -21,7 +21,7 @@ class FavouriteController extends Controller
                 }
             }
     
-            $jobs = Auth::user()->favourites()->where('favourites.created_at','>',$before1month)->limit(3)->orderBy('favourites.created_at', 'desc')->get();
+            $jobs = Auth::user()->favourites()->where('favourites.created_at','>',$before1month)->limit(20)->orderBy('favourites.created_at', 'desc')->get();
 
             $result_count = $jobs->count();
         
@@ -33,14 +33,32 @@ class FavouriteController extends Controller
     public function saveJob($id)
     {
         $jobid = JobItem::find($id);
-        $jobid->favourites()->attach(auth()->user()->id);
-        return redirect()->back();
+        $user = Auth::user();
+        if($jobid->favourites()->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'fav_save_status' => '0'
+            ]);
+        } else {
+            $jobid->favourites()->attach($user->id);
+            return response()->json([
+                'fav_save_status' => '1'
+            ]);
+        }
     }
 
     public function unSaveJob($id)
     {
         $jobid = JobItem::find($id);
-        $jobid->favourites()->detach(auth()->user()->id);
-        return redirect()->back();
+        $user = Auth::user();
+        if($jobid->favourites()->where('user_id', $user->id)->exists()) {
+            $jobid->favourites()->detach($user->id);
+            return response()->json([
+                'fav_del_status' => '1'
+            ]);
+        } else {
+            return response()->json([
+                'fav_del_status' => '0'
+            ]);
+        }
     }
 }
