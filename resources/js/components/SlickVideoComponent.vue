@@ -5,15 +5,15 @@
     @afterChange="handleAfterChange"
     @beforeChange="handleBeforeChange"
     @swipe="handleSwipe">
-       <video id="mvideo_1" class="slide-video slide-media" muted autoplay v-on:click="videoFnc" preload="metadata">
-            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov" type="video/mp4" />
+       <video id="mvideo_1" class="slide-video slide-media" muted autoplay v-on:click="videoFnc" preload="metadata" v-bind:poster="jobMovieList.mov1">
+            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov" type="video/mp4"/>
             <source v-else v-bind:src="baseurl + jobjson.job_mov" type="video/mp4" />
         </video>
-        <video id="mvideo_2" class="slide-video slide-media" muted v-on:click="videoFnc" preload="metadata">
-            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov2" type="video/mp4" />
+        <video id="mvideo_2" class="slide-video slide-media" muted v-on:click="videoFnc" preload="metadata" v-bind:poster="jobMovieList.mov2">
+            <source v-if="env == 'local'" v-bind:src="jobjson.job_mov2" type="video/mp4"/>
             <source v-else v-bind:src="baseurl + jobjson.job_mov2" type="video/mp4" />
         </video>
-        <video id="mvideo_3" class="slide-video slide-media" muted v-on:click="videoFnc" preload="metadata">
+        <video id="mvideo_3" class="slide-video slide-media" muted v-on:click="videoFnc" preload="metadata" v-bind:poster="jobMovieList.mov3">
             <source v-if="env == 'local'" v-bind:src="jobjson.job_mov3" type="video/mp4" />
             <source v-else v-bind:src="baseurl + jobjson.job_mov3" type="video/mp4" />
         </video>
@@ -52,10 +52,25 @@
                     mvideo_2: false,
                     mvideo_3: false,
                 },
+                jobMovies: {
+                    mov1: this.jobjson.job_mov,
+                    mov2: this.jobjson.job_mov2,
+                    mov3: this.jobjson.job_mov3
+                } 
             };
         },
         mounted() {
             const targetElement = this.$el;
+        },
+        computed: {
+            jobMovieList: function() {
+                for (var key in this.jobMovies) {
+                    if(this.jobMovies[key] == null) {
+                        this.jobMovies[key] = '/uploads/images/no-image.gif';
+                    }
+                }
+                return this.jobMovies;
+            }
         },
         methods: {
             reInit() {
@@ -66,24 +81,31 @@
             videoFnc: function(e) {
                 
                     let currentVideo = e.currentTarget,
-                        currentVideoId = currentVideo.getAttribute('id');
+                        currentVideoId = currentVideo.getAttribute('id'),
+                        videoSource = currentVideo.children[0].getAttribute('src');
 
-                    if (this.is_playing[currentVideoId] == false) { 
-                        currentVideo.play();
-                        this.is_playing[currentVideoId] = true;
+                    if(videoSource != null) {
+                        if (this.is_playing[currentVideoId] == false) { 
+                            currentVideo.play();
+                            this.is_playing[currentVideoId] = true;
+                        } else {
+                            currentVideo.pause();
+                            this.is_playing[currentVideoId] = false;
+
+                        }
                     } else {
-                        currentVideo.pause();
-                        this.is_playing[currentVideoId] = false;
-
+                        console.log('no video');
                     }
+                    
             
             },
             handleAfterChange(event, slick, currentSlide) {
 
                 var vIndex = currentSlide + 1;
                 var video = document.getElementById("mvideo_" + vIndex);
+                var videoSource = video.children[0].getAttribute('src');
 
-                if(video) {
+                if(video && videoSource != null) {
                     var playPromise = video.play();
                     this.is_playing['mvideo_' + vIndex] = true;
 

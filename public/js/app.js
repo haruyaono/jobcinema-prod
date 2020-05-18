@@ -1969,8 +1969,24 @@ Vue.config.devtools = true; // vue-slickをインポート
         }]
       },
       env: document.getElementById('env_input').value,
-      baseurl: document.getElementById('s3_url_input').value
+      baseurl: document.getElementById('s3_url_input').value,
+      jobImages: {
+        img1: this.jobjson.job_img,
+        img2: this.jobjson.job_img2,
+        img3: this.jobjson.job_img3
+      }
     };
+  },
+  computed: {
+    jobImageList: function jobImageList() {
+      for (var key in this.jobImages) {
+        if (this.jobImages[key] == null) {
+          this.jobImages[key] = '/uploads/images/no-image.gif';
+        }
+      }
+
+      return this.jobImages;
+    }
   },
   methods: {
     next: function next() {
@@ -2133,11 +2149,27 @@ __webpack_require__.r(__webpack_exports__);
         mvideo_1: true,
         mvideo_2: false,
         mvideo_3: false
+      },
+      jobMovies: {
+        mov1: this.jobjson.job_mov,
+        mov2: this.jobjson.job_mov2,
+        mov3: this.jobjson.job_mov3
       }
     };
   },
   mounted: function mounted() {
     var targetElement = this.$el;
+  },
+  computed: {
+    jobMovieList: function jobMovieList() {
+      for (var key in this.jobMovies) {
+        if (this.jobMovies[key] == null) {
+          this.jobMovies[key] = '/uploads/images/no-image.gif';
+        }
+      }
+
+      return this.jobMovies;
+    }
   },
   methods: {
     reInit: function reInit() {
@@ -2149,21 +2181,27 @@ __webpack_require__.r(__webpack_exports__);
     },
     videoFnc: function videoFnc(e) {
       var currentVideo = e.currentTarget,
-          currentVideoId = currentVideo.getAttribute('id');
+          currentVideoId = currentVideo.getAttribute('id'),
+          videoSource = currentVideo.children[0].getAttribute('src');
 
-      if (this.is_playing[currentVideoId] == false) {
-        currentVideo.play();
-        this.is_playing[currentVideoId] = true;
+      if (videoSource != null) {
+        if (this.is_playing[currentVideoId] == false) {
+          currentVideo.play();
+          this.is_playing[currentVideoId] = true;
+        } else {
+          currentVideo.pause();
+          this.is_playing[currentVideoId] = false;
+        }
       } else {
-        currentVideo.pause();
-        this.is_playing[currentVideoId] = false;
+        console.log('no video');
       }
     },
     handleAfterChange: function handleAfterChange(event, slick, currentSlide) {
       var vIndex = currentSlide + 1;
       var video = document.getElementById("mvideo_" + vIndex);
+      var videoSource = video.children[0].getAttribute('src');
 
-      if (video) {
+      if (video && videoSource != null) {
         var playPromise = video.play();
         this.is_playing['mvideo_' + vIndex] = true;
 
@@ -37992,16 +38030,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("slick", { ref: "slick", attrs: { options: _vm.slickOptions } }, [
     _vm.env == "local"
-      ? _c("img", { attrs: { src: _vm.jobjson.job_img } })
-      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobjson.job_img } }),
+      ? _c("img", { attrs: { src: _vm.jobImageList.img1 } })
+      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobImageList.img1 } }),
     _vm._v(" "),
     _vm.env == "local"
-      ? _c("img", { attrs: { src: _vm.jobjson.job_img2 } })
-      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobjson.job_img2 } }),
+      ? _c("img", { attrs: { src: _vm.jobImageList.img2 } })
+      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobImageList.img2 } }),
     _vm._v(" "),
     _vm.env == "local"
-      ? _c("img", { attrs: { src: _vm.jobjson.job_img3 } })
-      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobjson.job_img3 } })
+      ? _c("img", { attrs: { src: _vm.jobImageList.img3 } })
+      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobImageList.img3 } })
   ])
 }
 var staticRenderFns = []
@@ -38097,7 +38135,8 @@ var render = function() {
             id: "mvideo_1",
             muted: "",
             autoplay: "",
-            preload: "metadata"
+            preload: "metadata",
+            poster: _vm.jobMovieList.mov1
           },
           domProps: { muted: true },
           on: { click: _vm.videoFnc }
@@ -38120,7 +38159,12 @@ var render = function() {
         "video",
         {
           staticClass: "slide-video slide-media",
-          attrs: { id: "mvideo_2", muted: "", preload: "metadata" },
+          attrs: {
+            id: "mvideo_2",
+            muted: "",
+            preload: "metadata",
+            poster: _vm.jobMovieList.mov2
+          },
           domProps: { muted: true },
           on: { click: _vm.videoFnc }
         },
@@ -38142,7 +38186,12 @@ var render = function() {
         "video",
         {
           staticClass: "slide-video slide-media",
-          attrs: { id: "mvideo_3", muted: "", preload: "metadata" },
+          attrs: {
+            id: "mvideo_3",
+            muted: "",
+            preload: "metadata",
+            poster: _vm.jobMovieList.mov3
+          },
           domProps: { muted: true },
           on: { click: _vm.videoFnc }
         },

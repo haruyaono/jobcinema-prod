@@ -2,12 +2,12 @@
     <slick
     ref="slick"
     :options="slickOptions">
-        <img v-if="env == 'local'" v-bind:src="jobjson.job_img">
-        <img v-else v-bind:src="baseurl + jobjson.job_img">
-        <img v-if="env == 'local'" v-bind:src="jobjson.job_img2">
-        <img v-else v-bind:src="baseurl + jobjson.job_img2">
-        <img v-if="env == 'local'" v-bind:src="jobjson.job_img3">
-        <img v-else v-bind:src="baseurl + jobjson.job_img3">
+        <img v-if="env == 'local'" v-bind:src="jobImageList.img1">
+        <img v-else v-bind:src="baseurl + jobImageList.img1">
+        <img v-if="env == 'local'" v-bind:src="jobImageList.img2">
+        <img v-else v-bind:src="baseurl + jobImageList.img2">
+        <img v-if="env == 'local'" v-bind:src="jobImageList.img3">
+        <img v-else v-bind:src="baseurl + jobImageList.img3">
     </slick>
 </template>
  
@@ -46,8 +46,23 @@ Vue.config.devtools = true;
                 },
                 env: document.getElementById('env_input').value,
                 baseurl: document.getElementById('s3_url_input').value,
+                jobImages: {
+                    img1: this.jobjson.job_img,
+                    img2: this.jobjson.job_img2,
+                    img3: this.jobjson.job_img3
+                } 
                
             };
+        },
+        computed: {
+            jobImageList: function() {
+                for (var key in this.jobImages) {
+                    if(this.jobImages[key] == null) {
+                        this.jobImages[key] = '/uploads/images/no-image.gif';
+                    }
+                }
+                return this.jobImages;
+            }
         },
         methods: {
             next() {
