@@ -1,3 +1,8 @@
+<?php 
+  $getUrl = url()->full();
+
+  var_dump($getUrl);
+?>
 @extends('layouts.master')
 
 @section('title', '釧路の求人情報 | JOB CiNEMA')
@@ -36,6 +41,10 @@
          <div class="d-flex mb-3">
            <p class="search-count"><span class=" mr-1">{{ $jobs->count() }}</span>求人 <span>{{ $jobs->firstItem() }}件 〜 {{ $jobs->lastItem() }}件を表示</span></p>
          </div>
+         <ul class="p-works-sort-conditions">
+         <span>並び替え：</span>
+          <li><span></span></li>
+         </ul>
 
 
 				<div class="job-list">

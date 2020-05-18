@@ -6,7 +6,7 @@
       <ul class="top-category-list">
       @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
         <li class="top-category-list-item">
-          <a href="{{route('area.cat.get', [$areaCategory->id])}}" class="h-100 feature-item">
+          <a href="{{url('jobs/search/all?area_cat_id=' . $areaCategory->id)}}" class="h-100 feature-item">
            {{$areaCategory->name}}
           </a>
         </li>

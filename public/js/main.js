@@ -153,10 +153,9 @@ $(function() {
             function (data) {
                 $('#job-count').text(data);
             },
-            function () {
-                alert("通信に失敗しました");
+            error => console.log("通信に失敗しました")
     
-        });
+        );
 
     });
 

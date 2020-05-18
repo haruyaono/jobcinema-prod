@@ -38,7 +38,7 @@
                 <div class="c-box clearfix">
                     <ul class="c-list">
                     @foreach($typeCats as $typeCat)
-                        <li><i class="far fa-caret-square-right"></i><a href="{{route('type.cat.get', [$typeCat->id])}}">{{$typeCat->name}}</a></li>
+                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?type_cat_id=' . $typeCat->id)}}">{{$typeCat->name}}</a></li>
                     @endforeach
                     </ul>
                 </div>
@@ -47,7 +47,7 @@
                 <div class="c-box clearfix">
                     <ul class="c-list">
                     @foreach($areaCats as $areaCat)
-                        <li><i class="far fa-caret-square-right"></i><a href="{{route('area.cat.get', [$areaCat->id])}}">{{$areaCat->name}}</a></li>
+                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?area_cat_id=' . $areaCat->id)}}">{{$areaCat->name}}</a></li>
                     @endforeach
                     </ul>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="c-box clearfix">
                     <ul class="c-list">
                     @foreach($hourlySalaryCats as $hourlySalaryCat)
-                        <li><i class="far fa-caret-square-right"></i><a href="{{route('hourly.salary.cat.get', [$hourlySalaryCat->id])}}">{{$hourlySalaryCat->name}}</a></li>
+                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?hourly_salary_cat_id=' . $hourlySalaryCat->id)}}">{{$hourlySalaryCat->name}}</a></li>
                     @endforeach
                     </ul>
                 </div>

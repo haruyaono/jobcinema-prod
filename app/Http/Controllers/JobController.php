@@ -1784,11 +1784,8 @@ class JobController extends Controller
       $hourlySaraly = $request->get('hourly_salary_cat_id');
       $date = $request->get('date_cat_id');
 
-      $typeCatArchive = '';
-      $areaCatArchive = '';
-
       // 検索QUERY
-      $query = JobItem::query();
+      $query = JobItem::query(); 
 
       //結合
 

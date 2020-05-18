@@ -16,10 +16,6 @@ use Illuminate\Http\Request;
 
 // job
 Route::get('/', 'JobController@index');
-
-Route::get('/type/{id}/jobs', 'CategoryController@getTypeCat')->name('type.cat.get');
-Route::get('/area/{id}/jobs', 'CategoryController@getAreaCat')->name('area.cat.get');
-Route::get('/hourly_salary/{id}/jobs', 'CategoryController@getHourlySalaryCat')->name('hourly.salary.cat.get');
 Route::get('/job_cats/{url}', 'CategoryController@getAllCat')->name('allcat');
 
 Route::get('/jobs/create/top', 'JobController@createTop')->name('job.create.top');

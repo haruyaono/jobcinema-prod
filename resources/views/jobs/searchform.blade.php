@@ -28,7 +28,7 @@
                 <select id="search-type" class="selectbox" name="type_cat_id" data-toggle="select">
                 <option value="">-選択-</option>
                 @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
-                <option  value="{{ $typeCategory->id }}" @if(old('type_cat_id') == $typeCategory->id)selected @elseif(!old('type_cat_id') && isset($typeCatArchive) && $typeCategory->id == $typeCatArchive->id)selected @elseif(!old('type_cat_id') && !isset($typeCatArchive) && isset($type) && $type == $typeCategory->id) selected @endif>{{ $typeCategory->name }}</option>
+                <option  value="{{ $typeCategory->id }}" {{ ( old('type_cat_id') == $typeCategory->id ) ? 'selected' : '' }} @if(isset($type) && $type == $typeCategory->id) selected @endif>{{ $typeCategory->name }}</option>
                 @endforeach
                 </select>
             </div>
@@ -44,7 +44,7 @@
                 <select id="search-area" class="selectbox" name="area_cat_id" data-toggle="select">
                 <option value="">-選択-</option>
                 @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
-                <option  value="{{ $areaCategory->id }}" @if(old('area_cat_id') == $areaCategory->id)selected @elseif(!old('area_cat_id') && isset($areaCatArchive) && $areaCategory->id == $areaCatArchive->id)selected @elseif(!old('area_cat_id') && !isset($areaCatArchive) && isset($area) && $area == $areaCategory->id) selected @endif>{{ $areaCategory->name }}</option>
+                <option  value="{{ $areaCategory->id }}" {{ ( old('area_cat_id') == $areaCategory->id ) ? 'selected' : '' }} @if(isset($area) && $area == $areaCategory->id) selected @endif>{{ $areaCategory->name }}</option>
                 @endforeach
                 </select> 
             </div>
@@ -60,7 +60,7 @@
                 <select id="search-hourly-salary" class="selectbox" name="hourly_salary_cat_id" data-toggle="select">
                 <option value="">-選択-</option>
                 @foreach(App\Job\Categories\HourlySalaryCategory::all() as $hourlySalaryCategory)
-                <option  value="{{ $hourlySalaryCategory->id }}" @if(old('hourly_salary_cat_id') == $hourlySalaryCategory->id)selected @elseif(!old('hourly_salary_cat_id') && isset($hourlySalaryCatArchive) && $hourlySalaryCategory->id == $hourlySalaryCatArchive->id)selected @endif>{{ $hourlySalaryCategory->name }}</option>
+                <option  value="{{ $hourlySalaryCategory->id }}"  {{ ( old('hourly_salary_cat_id') == $hourlySalaryCategory->id ) ? 'selected' : '' }} @if(isset($hourlySaraly) && $hourlySaraly == $hourlySalaryCategory->id) selected @endif>{{ $hourlySalaryCategory->name }}</option>
                 @endforeach
                 </select>
             </div>
@@ -76,7 +76,7 @@
                 <select id="search-date" class="selectbox" name="date_cat_id" data-toggle="select">
                 <option value="">-選択-</option>
                 @foreach(App\Job\Categories\DateCategory::all() as $dateCategory)
-                <option  value="{{ $dateCategory->id }}" {{ ( old('date_cat_id') == $dateCategory->id ) ? 'selected' : '' }}>{{ $dateCategory->name }}</option>
+                <option  value="{{ $dateCategory->id }}" {{ ( old('date_cat_id') == $dateCategory->id ) ? 'selected' : '' }} @if(isset($date) && $date == $dateCategory->id) selected @endif>{{ $dateCategory->name }}</option>
                 @endforeach
                 </select>
             </div>

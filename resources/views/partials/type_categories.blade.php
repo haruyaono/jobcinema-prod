@@ -6,7 +6,7 @@
       <ul class="top-category-list">
       @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
         <li class="top-category-list-item">
-          <a href="{{route('type.cat.get', [$typeCategory->id])}}" class="h-100 feature-item">
+          <a href="{{url('jobs/search/all?type_cat_id=' . $typeCategory->id)}}" class="h-100 feature-item">
            {{$typeCategory->name}}
           </a>
         </li>
