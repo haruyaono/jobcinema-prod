@@ -25,11 +25,20 @@ class JobItemRepository implements JobItemRepositoryInterface
     public function __construct(JobItem $jobItem)
     {
         $this->model = $jobItem;
-        // $this->disk = Storage::disk('s3');
     }
 
-
-
+    /**
+     * List all the jobitems
+     *
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @return Collection
+     */
+    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
+    {
+        return $this->all($columns, $order, $sort);
+    }
 
     /**
      * @param string $imageFlag
@@ -360,9 +369,25 @@ class JobItemRepository implements JobItemRepositoryInterface
             session()->put('data.file.edit_movie', $edit_movie_path_list);
 
         }
-        
-    
     }
+
+      /**
+         * @param void
+         *
+         * @return $jobImageBaseUrl
+         */
+        public function getJobImageBaseUrl() : string
+        {
+            $jobImageBaseUrl = '';
+            if(config('app.env') == 'production') {
+                $jobImageBaseUrl = config('app.s3_url');
+            } else {
+                $jobImageBaseUrl = '';
+            }
+
+            return $jobImageBaseUrl;
+        }
+
 
 
    

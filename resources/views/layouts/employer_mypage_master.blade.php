@@ -41,18 +41,6 @@ $(function() {
     $('#close_button').click(function() {
         window.close();
     });
-    
-    if($('#env_name').length) {
-        var env_name = $('#env_name').attr('value');
-        if(env_name == 'local') {
-            var base_image_url = 'https://s3.job-cinema.com';
-        } 
-    } else {
-        var env_name = '';
-    }
-
-
-    
 });
     
 

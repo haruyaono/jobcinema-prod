@@ -163,7 +163,7 @@
                     <table class="job-create-table">
                         <tr>
                             <th>掲載開始日</th>
-                            <td>
+                            <td> 
                                 <input id="shortest" type="radio" name="pub_start" value="最短で掲載" checked {{ old('pub_start') == '最短で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == '最短で掲載' ? 'checked' : ''}}@elseif(Session::has('data.form.text.pub_start')==false && !old('pub_start')){{$job->pub_start == '最短で掲載' ? 'checked' : ''}}@else @endif>
                                 <label for="shortest">最短で掲載</label><br>
                                 <input id="start_specified"  type="radio"  name="pub_start" value="start_specified" {{ old('pub_start') == 'start_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == 'start_specified' ? 'checked' : ''}}@elseif(Session::has('data.form.text.pub_start')==false && !old('pub_start')){{$job->pub_start != '最短で掲載' ? 'checked' : ''}}@endif>
