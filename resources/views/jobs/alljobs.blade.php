@@ -1,7 +1,22 @@
 <?php 
-  $getUrl = url()->full();
+  $jobUrlString = '';
+  $jobCreateUrl = '';
+  $getJobUrlPrmList = [];
 
-  var_dump($getUrl);
+  $getJobUrlPrmList = $_GET;
+
+  if($getJobUrlPrmList !== []) {
+    foreach($getJobUrlPrmList as $key => $value) {
+      if($value === '' || $key === 'page' || $key === 'ks') {
+        unset($getJobUrlPrmList[$key]);
+        continue;
+      } 
+      $jobUrlString .= '&' .$key . '=' . $value;
+    }
+    $jobCreateUrl = url('/jobs/search/all?') . $jobUrlString;
+  } else {
+    $jobCreateUrl = url('/jobs/search/all?');
+  }
 ?>
 @extends('layouts.master')
 
@@ -39,11 +54,15 @@
 			<div class="pad">
 				<h1 class="txt-h1">検索された求人</h1>
          <div class="d-flex mb-3">
-           <p class="search-count"><span class=" mr-1">{{ $jobs->count() }}</span>求人 <span>{{ $jobs->firstItem() }}件 〜 {{ $jobs->lastItem() }}件を表示</span></p>
+           <p class="search-count"><span class=" mr-1">{{ $jobCount }}</span>求人 <span>{{ $jobs->firstItem() }}件 〜 {{ $jobs->lastItem() }}件を表示</span></p>
          </div>
          <ul class="p-works-sort-conditions">
          <span>並び替え：</span>
-          <li><span></span></li>
+  
+          <li><a href="{{$jobCreateUrl}}">新着順</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks=1'}}">高収入</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks=2'}}">勤務日数が少ない</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks=3'}}">お祝い金額</a></li>
          </ul>
 
 
@@ -134,4 +153,43 @@
 
 @section('js')
   <script src="{{ asset('js/main.js') }}"></script>
+  <script>
+    
+    
+
+    $(function() {
+
+      function getParam(name, url) {
+          if (!url) url = window.location.href;
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+              results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+
+      var jobsortItem = $('.p-works-sort-conditions li');
+      var sortByKeyValue = getParam('ks');
+
+      if(sortByKeyValue != null) {
+        jobsortItem.each(function(index, element) {
+          if(sortByKeyValue == index) {
+            $(element).addClass('on');
+            $(element).children().replaceWith(function() {
+              $(this).replaceWith("<span>"+$(this).text()+"</span>")
+            });
+          } 
+        });
+      } else {
+        $(jobsortItem[0]).addClass('on');
+        $(jobsortItem[0]).children().replaceWith(function() {
+          $(this).replaceWith("<span>"+$(this).text()+"</span>")
+        });
+      }
+    
+    });
+  
+  </script>
+ 
 @endsection

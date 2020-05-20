@@ -10871,6 +10871,7 @@ input,
 select {
   vertical-align: middle;
   outline: none;
+  border: 1px solid #ddd;
 }
 
 button,
@@ -13785,11 +13786,26 @@ input[size="28"] {
   }
 }
 
-/* 案件一覧 */
+.p-works-sort-conditions {
+  margin-bottom: 25px;
+}
 
-/* .job-list {
-    margin: 2em 0;
-  } */
+.p-works-sort-conditions > li {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 .7em;
+}
+
+.p-works-sort-conditions > li a {
+  color: #457ab5;
+}
+
+.p-works-sort-conditions > li + li {
+  border-left: 1px solid #333;
+}
+
+/* 案件一覧 */
 
 .job-entry .job-item {
   width: 100%;

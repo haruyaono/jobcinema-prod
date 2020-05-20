@@ -4,6 +4,7 @@ namespace App\Job\JobItems\Repositories;
 
 use App\Job\JobItemImages\JobItemImage;
 use App\Job\JobItems\JobItem;
+use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -14,7 +15,7 @@ use Image;
 use Storage;
 use File;
 
-class JobItemRepository implements JobItemRepositoryInterface
+class JobItemRepository extends BaseRepository implements JobItemRepositoryInterface
 {
 
     // private $disk;
@@ -24,6 +25,7 @@ class JobItemRepository implements JobItemRepositoryInterface
      */
     public function __construct(JobItem $jobItem)
     {
+        parent::__construct($jobItem);
         $this->model = $jobItem;
     }
 
@@ -38,6 +40,86 @@ class JobItemRepository implements JobItemRepositoryInterface
     public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
     {
         return $this->all($columns, $order, $sort);
+    }
+
+    public function listJobitemCount() : int
+    {
+        return $this->model->ActiveJobitem()->count();
+    }
+
+    /**
+     * base search the jobitems
+     *
+     * @param string $searchParam
+     * @return $query
+     */
+    public function baseSearchJobItems(array $searchParam = [])
+    {
+
+        $query = $this->model::query();
+
+         // ステータス・掲載期限
+        $today = date("Y-m-d");
+        $query->where('status', 2)
+            ->where(function($query) use ($today){
+            $query->orWhere('pub_end', '>', $today)
+                    ->orWhere('pub_end','無期限で掲載');
+            })->where(function($query) use ($today){
+            $query->orWhere('pub_start', '<', $today)
+                    ->orWhere('pub_start','最短で掲載');
+        });
+        //結合
+        if(array_key_exists('title', $searchParam) && !empty($searchParam['title'] )) {
+            $query->where(function($query) use ($searchParam) {
+                $query->where('job_title','like','%'.$searchParam['title'].'%')
+                    ->orWhere('job_type', 'like','%'.$searchParam['title'].'%')
+                    ->orWhere('job_hourly_salary', 'like','%'.$searchParam['title'].'%')
+                    ->orWhere('job_target', 'like','%'.$searchParam['title'].'%')
+                    ->orWhere('job_treatment', 'like','%'.$searchParam['title'].'%')
+                    ->orWhere('job_office_address', 'like','%'.$searchParam['title'].'%');
+            });
+        };
+        $query->whereHas('status_cat_get', function ($query) use($searchParam){
+            if(array_key_exists('status_cat_id', $searchParam) && !empty($searchParam['status_cat_id'])){
+                $query->where('status_categories.id', $searchParam['status_cat_id']);
+            }
+        });
+        $query->whereHas('type_cat_get', function ($query) use($searchParam){
+            if(array_key_exists('type_cat_id', $searchParam) && !empty($searchParam['type_cat_id'] )){
+                $query->where('type_categories.id', $searchParam['type_cat_id']);
+            }
+        });
+        $query->whereHas('area_cat_get', function ($query) use($searchParam){
+            if(array_key_exists('area_cat_id', $searchParam) && !empty($searchParam['area_cat_id'] )){
+                $query->where('area_categories.id', $searchParam['area_cat_id']);
+            }
+        });
+        $query->whereHas('hourly_salary_cat_get', function ($query) use($searchParam){
+            if(array_key_exists('hourly_salary_cat_id', $searchParam) && !empty($searchParam['hourly_salary_cat_id'] )){
+                $query->where('hourly_salary_categories.id', $searchParam['hourly_salary_cat_id']);
+            }
+        });
+        $query->whereHas('date_cat_get', function ($query) use($searchParam){
+            if(array_key_exists('date_cat_id', $searchParam) && !empty($searchParam['date_cat_id'] )){
+                $query->where('date_categories.id', $searchParam['date_cat_id']);
+            }
+        });
+
+        return $query;
+    }
+
+
+     /**
+     * search query jobitems
+     *
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @return $query
+     */
+    public function getSortJobItems($query, string $order = 'id', string $sort = 'desc', array $columns = ['*'])
+    {
+        return $query->orderBy($order, $sort);
     }
 
     /**
@@ -388,6 +470,7 @@ class JobItemRepository implements JobItemRepositoryInterface
             return $jobImageBaseUrl;
         }
 
+ 
 
 
    

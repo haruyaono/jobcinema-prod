@@ -1,10 +1,12 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Redis;
 use App\Models\User;
 use App\Job\JobItems\JobItem;
 use App\Models\Profile;
@@ -25,8 +27,10 @@ use File;
 use Storage;
 use Auth;
 use DB;
+use Log;
 
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 
 
 class JobController extends Controller
@@ -35,34 +39,37 @@ class JobController extends Controller
 
     /**
      * @var CategoryRepositoryInterface
+     * @var JobItemRepositoryInterface
      */
     private $categoryRepo;
+    private $JobItemRepo;
     private $job_form_session = 'count';
     
   
-
      /**
      * JobController constructor.
      * @param JobItem $JobItem
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param JobItemRepositoryInterface $jobItemRepository
      */
-    public function __construct(JobItem $JobItem, CategoryRepositoryInterface $categoryRepository)
+    public function __construct(
+      JobItem $JobItem, 
+      CategoryRepositoryInterface $categoryRepository,
+      JobItemRepositoryInterface $jobItemRepository)
     {
       $this->middleware(['employer'], ['except'=>array('index','show', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;
       $this->categoryRepo = $categoryRepository;
+      $this->JobItemRepo = $jobItemRepository;
     }
 
     public function index()
     {
-      $jobs_models = $this->JobItem->activeJobitem();
-      $jobs = $jobs_models->get();
-      // $allCategory = $this->categoryRepo->allCategories();
-      // dd($allCategory[0]->get());
-      $topLimitJobs = $jobs_models->latest()->limit(3)->get();
+      $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
+      $jobCount = $this->JobItemRepo->listJobitemCount();
 
-      return view('jobs.index', compact('jobs','topLimitJobs'));
+      return view('jobs.index', compact('topNewJobs', 'jobCount'));
     }
 
     public function show($id)
@@ -72,6 +79,18 @@ class JobController extends Controller
       
 
       $job = JobItem::find($id);
+
+      if(Auth::check()) {
+        $loginUserId = Auth::id();
+        Redis::command('LREM', ['Viewer:Item:'.$id, 0, $loginUserId]);
+        Redis::command('RPUSH', ['Viewer:Item:'.$id, $loginUserId]);
+        Redis::command('LTRIM', ['Viewer:Item:'.$id, 0, 999]);
+      }
+     
+
+      
+
+      
 
       if(session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
         
@@ -448,7 +467,9 @@ class JobController extends Controller
         session()->forget('data.file.edit_image');
         session()->forget('data.file.edit_movie');
 
-        return view('jobs.post.create_step2', compact('jobItem'));
+        $jobImageBaseUrl = $this->JobItemRepo->getJobImageBaseUrl();
+
+        return view('jobs.post.create_step2', compact('jobItem', 'jobImageBaseUrl'));
 
       } else {
 
@@ -493,7 +514,7 @@ class JobController extends Controller
 
           if ( JobItem::where('id',$id)->exists() == false ) {
             if(session()->has('data.file.image.main')==false){
-              return redirect()->back()->with('message','メイン画像を登録してください');
+              return back()->with('message','メイン画像を登録してください');
             };
             $this->storeStep2($request);
             return redirect()->to('/jobs/create/confirm');
@@ -1081,8 +1102,9 @@ class JobController extends Controller
         }
         session()->forget('count');
         session()->put('count', 3);
+        $jobImageBaseUrl = $this->JobItemRepo->getJobImageBaseUrl();
 
-        return view('jobs.post.confirm', compact('job'));
+        return view('jobs.post.confirm', compact('job', 'jobImageBaseUrl'));
       } else {
         return redirect()->to('/jobs/create/step1');
       }
@@ -1777,67 +1799,64 @@ class JobController extends Controller
 
     public function allJobs(Request $request)
     {
-      $keyword = $request->get('title');
-      $status = $request->get('status_cat_id');
-      $type = $request->get('type_cat_id');
-      $area = $request->get('area_cat_id');
-      $hourlySaraly = $request->get('hourly_salary_cat_id');
-      $date = $request->get('date_cat_id');
+   
+      $searchParam = $request->all();
+      
+      $query = $this->JobItemRepo->baseSearchJobItems($searchParam);
 
-      // 検索QUERY
-      $query = JobItem::query(); 
+      if(array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
 
-      //結合
-
-        if(!empty($keyword)){
-          $query->where('job_title','like','%'.$keyword.'%')
-                ->orWhere('job_type', 'like','%'.$keyword.'%')
-                ->orWhere('job_hourly_salary', 'like','%'.$keyword.'%')
-                ->orWhere('job_target', 'like','%'.$keyword.'%')
-                ->orWhere('job_treatment', 'like','%'.$keyword.'%')
-                ->orWhere('job_office_address', 'like','%'.$keyword.'%');
-
+        switch ($searchParam['ks']) {
+          case '1':
+            $query = $this->JobItemRepo->getSortJobItems($query, 'hourly_salary_cat_id');
+            break;
+          case '2':
+            $query = $this->JobItemRepo->getSortJobItems($query, 'date_cat_id' , 'asc');
+            break;
+          case '3':
+            $query = $this->JobItemRepo->getSortJobItems($query, 'oiwaikin');
+            break;
+          default:
+            break;
         }
 
-        $query->whereHas('status_cat_get', function ($query) use($status){
-          if(!empty($status)){
-            $query->where('status_categories.id', $status);
-          }
-        });
-        $query->whereHas('type_cat_get', function ($query) use($type){
-          if(!empty($type)){
-            $query->where('type_categories.id', $type);
-          }
-        });
-        $query->whereHas('area_cat_get', function ($query) use($area){
-          if(!empty($area)){
-            $query->where('area_categories.id', $area);
-          }
-        });
-        $query->whereHas('hourly_salary_cat_get', function ($query) use($hourlySaraly){
-          if(!empty($hourlySaraly)){
-            $query->where('hourly_salary_categories.id', $hourlySaraly);
-          }
-        });
-        $query->whereHas('date_cat_get', function ($query) use($date){
-          if(!empty($date)){
-            $query->where('date_categories.id', $date);
-          }
-        });
+      }
+      
+      // $job_ids = $query->get(['id'])->toArray();
+      // $job_ids = array_flatten($job_ids);
 
+      // foreach ($job_ids as $job_id1) {
+      //   $base = Redis::command('lRange', ['Viewer:Item:' . $job_id1, 0, 999]);
 
-      // ページネーション
+      //   if (count($base) === 0) {
+      //       continue;
+      //   }
+        
+      //   foreach ($job_ids as $job_id2) {
+      //     // var_dump($job_id1 === $job_id2);
+      //       if ($job_id1 === $job_id2) {
+      //           continue;
+      //       }
+     
+      //       $target = Redis::command('lRange', ['Viewer:Item:' . $job_id2, 0, 999]);
+      //       if (count($target) === 0) {
+      //           continue;
+      //       }
 
-      $today = date("Y-m-d");
-
-      $jobs = $query->where('status', 2)
-                ->where(function($query) use ($today){
-                  $query->orWhere('pub_end', '>', $today)
-                        ->orWhere('pub_end','無期限で掲載');
-                })->where(function($query) use ($today){
-                  $query->orWhere('pub_start', '<', $today)
-                        ->orWhere('pub_start','最短で掲載');
-                })->latest()->paginate(5);
+      //       # ジャッカード指数を計算
+      //       $join = floatval(count(array_unique(array_merge($base, $target))));
+      //       $intersect = floatval(count(array_intersect($base, $target)));
+      //       if ($intersect == 0 || $join == 0) {
+      //           continue;
+      //       }
+      //       $jaccard = $intersect / $join;
+    
+      //       Redis::command('zAdd', ['Jaccard:Item:' . $job_id1, $jaccard, $job_id2]);
+      //   }
+      // }
+      
+      $totalJobItem = $query->count();
+      $jobs = $query->latest()->paginate(2);
 
       //件数表示の例外処理
       if( Input::get('page') > $jobs->LastPage()) {
@@ -1845,59 +1864,28 @@ class JobController extends Controller
       }
 
       $hash = array(
-          'keyword' => $keyword,
-          'status' => $status,
-          'type' => $type,
-          'area' => $area,
-          'hourlySaraly' => $hourlySaraly,
+          'keyword' => array_key_exists( 'title', $searchParam ) ? $searchParam['title'] : '',
+          'status' => array_key_exists( 'status_cat_id', $searchParam ) ? $searchParam['status_cat_id'] : '',
+          'type' => array_key_exists( 'type_cat_id', $searchParam ) ? $searchParam['type_cat_id'] : '',
+          'area' => array_key_exists( 'area_cat_id', $searchParam ) ? $searchParam['area_cat_id'] : '',
+          'hourlySaraly' => array_key_exists( 'hourly_salary_cat_id', $searchParam ) ? $searchParam['hourly_salary_cat_id'] : '',
+          'date' => array_key_exists( 'date_cat_id', $searchParam ) ? $searchParam['date_cat_id'] : '',
           'jobs' => $jobs,
-          'date' => $date,
+          'jobCount' => $totalJobItem 
           );
 
        return view('jobs.alljobs')->with($hash);
 
     }
 
-    public function realSearchJob($statusVal, $typeVal, $areaVal, $hourlySalaryVal, $dateVal, $textVal = '')
+    public function realSearchJob(Request $request)
     {
-      $today = date("Y-m-d");
 
-      $searchJobs = JobItem::where('status', 2)
-        ->where(function($query) use ($today){
-          $query->orWhere('pub_end', '>', $today)
-                ->orWhere('pub_end','無期限で掲載');
-        })->where(function($query) use ($today){
-          $query->orWhere('pub_start', '<', $today)
-                ->orWhere('pub_start','最短で掲載');
-        });
+      $searchParam = $request->all(); 
+      $query = $this->JobItemRepo->baseSearchJobItems($searchParam);
 
-        if($textVal != ''){
-          $searchJobs->where('job_title','like','%'.$textVal.'%')
-                ->orWhere('job_type', 'like','%'.$textVal.'%')
-                ->orWhere('job_hourly_salary', 'like','%'.$textVal.'%')
-                ->orWhere('job_target', 'like','%'.$textVal.'%')
-                ->orWhere('job_treatment', 'like','%'.$textVal.'%')
-                ->orWhere('job_office_address', 'like','%'.$textVal.'%');
-        }
-        $jobCount = $searchJobs
-                  ->when($statusVal != 0, function($query) use($statusVal){
-                    return $query->where('status_cat_id', $statusVal);
-                  })
-                  ->when($typeVal != 0, function($query) use($typeVal){
-                    return $query->where('type_cat_id', $typeVal);
-                  })
-                  ->when($areaVal != 0, function($query) use($areaVal){
-                    return $query->where('area_cat_id', $areaVal);
-                  })
-                  ->when($hourlySalaryVal != 0, function($query) use($hourlySalaryVal){
-                    return $query->where('hourly_salary_cat_id', $hourlySalaryVal);
-                  })
-                  ->when($dateVal != 0, function($query) use($dateVal){
-                    return $query->where('date_cat_id', $dateVal);
-                  })
+      $jobCount = $query->count();
 
-                  ->count();
-
-        return response()->json($jobCount);
+      return response()->json($jobCount);
     }
 }

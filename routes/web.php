@@ -22,7 +22,6 @@ Route::get('/jobs/create/top', 'JobController@createTop')->name('job.create.top'
 Route::get('/jobs/create/step1', 'JobController@createStep1')->name('job.create.step1');
 Route::post('/jobs/create/step1', 'JobController@storeStep1')->name('job.store.step1');
 Route::get('/jobs/create/step2', 'JobController@createStep2')->name('job.create.step2');
-Route::get('/status/{statusVal}/type/{typeVal}/area/{areaVal}/hourly_salary/{hourlySalaryVal}/date/{dateVal}/text/{textVal?}', 'JobController@realSearchJob');
 
 Route::post('/jobs/create/draftOrStep2/{id?}', 'JobController@draftOrStep2')->name('job.draftOrStep2');
 Route::get('/jobs/create/confirm/{id?}', 'JobController@createConfirm')->name('job.create.confirm');
@@ -85,6 +84,7 @@ Route::get('/apply_complete/{id}', 'JobController@completeJobApply')->name('comp
 
 Route::get('/jobs/{id}', 'JobController@show')->name('jobs.show');
 Route::get('/jobs/search/all', 'JobController@allJobs')->name('alljobs');
+Route::post('/search/SearchJobItemAjaxAction','JobController@realSearchJob');
 
 Route::get('/lp', 'PageController@getLp');
 Route::get('/beginners', 'PageController@getBeginner');

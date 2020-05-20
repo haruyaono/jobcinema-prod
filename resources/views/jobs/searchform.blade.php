@@ -41,7 +41,7 @@
 
           <div class="composite-right">
             <div class="select-wrap">
-                <select id="search-area" class="selectbox" name="area_cat_id" data-toggle="select">
+                <select id="search-area" class="selectbox areaSelect" name="area_cat_id" data-toggle="select">
                 <option value="">-選択-</option>
                 @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
                 <option  value="{{ $areaCategory->id }}" {{ ( old('area_cat_id') == $areaCategory->id ) ? 'selected' : '' }} @if(isset($area) && $area == $areaCategory->id) selected @endif>{{ $areaCategory->name }}</option>
@@ -92,7 +92,7 @@
           </div>
         </div>
 
-        <p class="job-count">検索結果 <span id="job-count">{{$jobs->count()}}</span>件</p>
+        <p class="job-count">検索結果 <span id="job-count">{{isset($jobCount) ? $jobCount : 0}}</span>件</p>
 
         <button type="submit" id="filter-search"><i class="fas fa-search"></i>絞り込み検索</button>
       </form>

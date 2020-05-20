@@ -35,7 +35,7 @@
 					<div class="newjob-list-border">
 						<div class="newjob-list">
 							<!-- ▽ ループ開始 ▽ -->
-						@forelse ($topLimitJobs as $job)
+						@forelse ($topNewJobs as $job)
 							<div class="newjob-item">
 								<a href="{{ route('jobs.show', [$job->id])}}" class="newjob-item-link">
 									<p class="img-wrap">

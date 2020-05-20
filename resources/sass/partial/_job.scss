@@ -1,7 +1,22 @@
+
+.p-works-sort-conditions {
+  margin-bottom: 25px;
+  text-align: right;
+}
+.p-works-sort-conditions>li {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 .7em;
+  a {
+    color: $lightblue;
+  }
+}
+.p-works-sort-conditions>li+li {
+  border-left: 1px solid #333;
+}
+
 /* 案件一覧 */
-  /* .job-list {
-    margin: 2em 0;
-  } */
   
   .job-entry {
     .job-item {

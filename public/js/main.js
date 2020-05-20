@@ -103,59 +103,47 @@ $(function() {
     });
 
     $('#composite-form').change(function(){
+
+        var statusVal = $('#search-status').val() != '' ? Number($('#search-status').val()) : null,
+            typeVal = $('#search-type').val() != '' ? Number($('#search-type').val()) : null,
+            areaVal = $('#search-area').val() != '' ? Number($('#search-area').val()) : null,
+            hourlySalaryVal = $('#search-hourly-salary').val() != '' ? Number($('#search-hourly-salary').val()) : null,
+            dateVal = $('#search-date').val() != '' ? Number($('#search-date').val()) : null,
+            textVal = $('#search-text').val() != '' ? Number($('#search-text').val()) : null;
+
         
-        var status_val = 0,
-            type_val = 0,
-            area_val = 0,
-            hourly_salary_val = 0,
-            date_val = 0,
-            text_val = '';
-
-        if( $('#search-status').val()) {
-            status_val = $('#search-status').val();
-        } else {
-            status_val = 0;
+        var searchParam = {
+            "status_cat_id" : statusVal,
+            "type_cat_id" : typeVal,
+            "area_cat_id" : areaVal,
+            "hourly_salary_cat_id" : hourlySalaryVal,
+            "date_cat_id" : dateVal,
+            "title" : textVal
         }
-        if($('#search-type').val()) {
-            type_val = $('#search-type').val()
-        } else {
-            type_val = 0;
-        }
-        if($('#search-area').val()) {
-            area_val = $('#search-area').val()
-        } else {
-            area_val = 0;
-        }
-        if($('#search-hourly-salary').val()) {
-            hourly_salary_val = $('#search-hourly-salary').val()
-        } else {
-            hourly_salary_val = 0;
-        }
-        if($('#search-date').val()) {
-            date_val = $('#search-date').val()
-        } else {
-            date_val = 0;
-        }
-        if($('#search-text').val()) {
-            text_val = $('#search-text').val()
-        } else {
-            text_val = '';
-        }
-
-        var request = $.ajax({
-            type: 'GET',
-            url: '/status/' + status_val + '/type/' + type_val + '/area/' + area_val + '/hourly_salary/' + hourly_salary_val + '/date/' + date_val + '/text/' + text_val,
+        console.log(JSON.stringify(searchParam));
+        $.ajaxSetup({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+        });
+        $.ajax({
+            type: 'post',
+            contentType: 'application/json',
+            url: 'http://localhost/search/SearchJobItemAjaxAction',
             cache: false,
+            data: JSON.stringify(searchParam),
             dataType: 'json',
             timeout: 3000
         })
-        .then(
-            function (data) {
-                $('#job-count').text(data);
-            },
-            error => console.log("通信に失敗しました")
+        .done(function (res, textStatus,jqXHR) {
+                $('#job-count').text(res);
+                console.log(jqXHR.status);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("通信に失敗しました");
+            console.log(jqXHR.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+        }).always(function(){
+		});
     
-        );
 
     });
 
