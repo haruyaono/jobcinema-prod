@@ -6,10 +6,12 @@ use App\Job\JobItemImages\JobItemImage;
 use App\Job\JobItems\JobItem;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\Job\JobItems\Exceptions\JobItemotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Image;
 use Storage;
@@ -42,10 +44,120 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         return $this->all($columns, $order, $sort);
     }
 
+    /**
+     * count active jobitems
+     *
+     * @return integer
+     */
     public function listJobitemCount() : int
     {
         return $this->model->ActiveJobitem()->count();
     }
+
+    /**
+     * create recent jobitems id list
+     *
+     * @param array $req
+     * @param integer $id
+     * @return void
+     */
+    public function createRecentJobItemIdList($req, int $id) : void
+    {
+        if(session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
+      
+            $historyLimit = '';
+            $jobitem_id_list = array(
+                'limit_list' => [],
+                'all_list' => []
+            );
+
+            $jobitem_id_list['limit_list'] = session()->get('recent_jobs.limit_list');
+            $jobitem_id_list['all_list'] = session()->get('recent_jobs.all_list');
+    
+            $deviceFrag = $this->model->isMobile($req);
+            switch ($deviceFrag) {
+                case 'pc':
+                    $historyLimit = 5;
+                    break;
+                case 'mobile':
+                    $historyLimit = 3;
+                    break;
+                default:
+                    $historyLimit = '';
+                    break;
+            }
+
+            foreach($jobitem_id_list as $listKey => $idList) {
+                if($listKey === 'limit_list') {
+                    if(in_array($id, $idList) == false ) {
+                        if(count($idList) >= $historyLimit) {
+                            array_shift($idList);
+                        } 
+                        array_push($idList, $id);
+                    } else {
+                        while(($index = array_search($id, $idList)) !== false) {
+                            unset( $idList[$index] );
+                        };
+                        array_push($idList, $id);
+                    }
+        
+                    session()->put('recent_jobs.limit_list', $idList);
+                } else {
+                    if(in_array($id, $idList) == false ) {
+                        session()->push('recent_jobs.all_list', $id);
+                    } else {
+                        while(($index = array_search($id, $idList)) !== false) {
+                            unset( $idList[$index] );
+                        };
+                        array_push($idList, $id);
+                        session()->put('recent_jobs.all_list', $idList);
+                    }
+                }
+            }
+    
+        } else {
+            session()->push('recent_jobs.limit_list', $id);
+            session()->push('recent_jobs.all_list', $id);
+        }
+    }
+    
+     /**
+     *  list recent jobitems id
+     *
+     * @return LengthAwarePaginator|Collection|array
+     */
+    public function listRecentJobItemId(int $historyFlag = 0)
+    {
+        $jobitem_id_list = [];
+        switch ($historyFlag) {
+            case 0:
+                if(session()->has('recent_jobs.limit_list') && is_array(session()->get('recent_jobs.limit_list'))) {
+                    $jobitem_id_list = session()->get('recent_jobs.limit_list');
+                }
+                break;
+            case 1:
+                if(session()->has('recent_jobs.all_list') && is_array(session()->get('recent_jobs.all_list'))) {
+                    $jobitem_id_list = session()->get('recent_jobs.all_list');
+                }
+                break;
+        }
+
+        if($jobitem_id_list !== []) {
+            $jobitem_id_rv_list = array_reverse($jobitem_id_list);
+            $placeholder = '';
+            foreach ($jobitem_id_rv_list as $key => $value) {
+                $placeholder .= ($key == 0) ? '?' : ',?';
+            }
+    
+            if($historyFlag === 0) {
+                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)",$jobitem_id_rv_list)->get();
+            } elseif($historyFlag === 1) {
+                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)",$jobitem_id_rv_list)->paginate(20);
+            }
+        } else {
+            return $jobitem_id_list;
+        }
+    } 
 
     /**
      * base search the jobitems
@@ -120,6 +232,22 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function getSortJobItems($query, string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
         return $query->orderBy($order, $sort);
+    }
+
+
+    /**
+     * Find the jobitem by ID
+     *
+     * @return Collection|JobItem
+     * @throws JobItemNotFoundException
+     */
+    public function findJobItemById($id)
+    {
+        try {
+            return $this->model->findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            throw new JobItemNotFoundException($e);
+        }
     }
 
     /**

@@ -58,7 +58,6 @@ return [
             // ],
 
             'database' => env('DB_DATABASE', 'forge'),
-            // 'database' => 'test_db',
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),

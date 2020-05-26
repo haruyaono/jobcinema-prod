@@ -32,9 +32,7 @@ use Log;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 
-
 class JobController extends Controller
-
 {
 
     /**
@@ -44,6 +42,7 @@ class JobController extends Controller
     private $categoryRepo;
     private $JobItemRepo;
     private $job_form_session = 'count';
+    private $JobItem;
     
   
      /**
@@ -57,14 +56,14 @@ class JobController extends Controller
       CategoryRepositoryInterface $categoryRepository,
       JobItemRepositoryInterface $jobItemRepository)
     {
-      $this->middleware(['employer'], ['except'=>array('index','show', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
+      $this->middleware(['employer'], ['except'=>array('index','show', 'getJobHistory', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;
       $this->categoryRepo = $categoryRepository;
       $this->JobItemRepo = $jobItemRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
       $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
       $jobCount = $this->JobItemRepo->listJobitemCount();
@@ -72,12 +71,11 @@ class JobController extends Controller
       return view('jobs.index', compact('topNewJobs', 'jobCount'));
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
       session()->forget('jobapp_count');
       session()->forget('jobapp_data');
-      
-
+ 
       $job = JobItem::find($id);
 
       if(Auth::check()) {
@@ -86,24 +84,10 @@ class JobController extends Controller
         Redis::command('RPUSH', ['Viewer:Item:'.$id, $loginUserId]);
         Redis::command('LTRIM', ['Viewer:Item:'.$id, 0, 999]);
       }
-     
 
-      
+      // 最近見た求人リストの配列を操作
+      $this->JobItemRepo->createRecentJobItemIdList($request, $id);
 
-      
-
-      if(session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
-        
-        $jobitem_id_list = session()->get('recent_jobs');
-        
-        if(in_array($id, $jobitem_id_list) == false ) {
-          session()->push('recent_jobs', $id);
-        } 
-        
-      } else {
-        session()->push('recent_jobs', $id);
-      }
-    
       if($job->status == 2) {
         $title = $job->company->cname;
 
@@ -121,24 +105,29 @@ class JobController extends Controller
         } 
       }
 
-      
-
       return redirect()->to('/');
 
-
     }
 
-    // 最近見た求人
-    public function postJobHistory(Request $request) {
-      if($request->session()->has('recent_jobs') && is_array($request->session()->get('recent_jobs'))) {
-        $jobitem_id_list = $request->session()->get('recent_jobs');
-      } else {
-        $jobitem_id_list = [];
-      }
-      $recent_jobitems = JobItem::find($jobitem_id_list);
-      return response()->json($recent_jobitems);
-    }
+     // 最近見た求人リスト
+     public function getJobHistory() 
+     {
 
+      // session()->forget('recent_jobs');
+      $jobs = $this->JobItemRepo->listRecentJobItemId(1);
+      // var_dump($jobs);
+   
+      return view('jobs.history', compact('jobs'));
+     }
+
+    // 最近見た求人のリストを返す
+    public function postJobHistory(Request $request) 
+    {
+      $jobs = $this->JobItemRepo->listRecentJobItemId(0);
+      
+
+      return response()->json($jobs);
+    }
 
     public function applicant()
     {
@@ -444,6 +433,8 @@ class JobController extends Controller
       
       session()->forget('data');
       session()->forget('count');
+
+      var_dump(session()->all());
 
       return view('jobs.post.top_create');
 
@@ -1856,7 +1847,7 @@ class JobController extends Controller
       // }
       
       $totalJobItem = $query->count();
-      $jobs = $query->latest()->paginate(2);
+      $jobs = $query->latest()->paginate(20);
 
       //件数表示の例外処理
       if( Input::get('page') > $jobs->LastPage()) {

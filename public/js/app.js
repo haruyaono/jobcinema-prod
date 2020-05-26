@@ -1830,6 +1830,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var ismobilejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ismobilejs */ "./node_modules/ismobilejs/esm/index.js");
 //
 //
 //
@@ -1856,16 +1857,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['job'],
+  headers: {
+    "X-CSRF-TOKEN": document.getElementsByName("csrf-token")[0].content
+  },
+  props: ["job"],
   data: function data() {
     return {
       show: false,
       loading: true,
       items: [],
       itemflag: false,
-      env: document.getElementById('env_input').value,
-      baseurl: document.getElementById('s3_url_input').value
+      isSmartPhone: ismobilejs__WEBPACK_IMPORTED_MODULE_0__["default"].phone,
+      env: document.getElementById("env_input").value,
+      baseurl: document.getElementById("s3_url_input").value
     };
   },
   mounted: function mounted() {
@@ -1874,8 +1881,8 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     load: function load() {
       var self = this;
-      axios.post('/jobs/ajax_history_sheet_list').then(function (res) {
-        if (res.data != '') {
+      axios.post("/jobs/ajax_history_sheet_list").then(function (res) {
+        if (res.data != "") {
           self.items = res.data;
           self.show = true;
           self.loading = false;
@@ -1894,13 +1901,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     limitCount: function limitCount() {
-      return this.items.slice(0, 4);
+      if (this.isSmartPhone) {
+        return this.items.slice(0, 3);
+      } else {
+        return this.items.slice(0, 5);
+      }
     }
   },
   filters: {
     truncate: function truncate(value, length, omission) {
       var length = length ? parseInt(length, 10) : 20;
-      var ommision = omission ? omission.toString() : '';
+      var ommision = omission ? omission.toString() : "";
 
       if (value.length <= length) {
         return value;
@@ -6718,6 +6729,162 @@ module.exports = function isBuffer (obj) {
     typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/ismobilejs/esm/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/ismobilejs/esm/index.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _isMobile__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isMobile */ "./node_modules/ismobilejs/esm/isMobile.js");
+/* empty/unused harmony star reexport *//* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _isMobile__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ismobilejs/esm/isMobile.js":
+/*!*************************************************!*\
+  !*** ./node_modules/ismobilejs/esm/isMobile.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return isMobile; });
+var appleIphone = /iPhone/i;
+var appleIpod = /iPod/i;
+var appleTablet = /iPad/i;
+var appleUniversal = /\biOS-universal(?:.+)Mac\b/i;
+var androidPhone = /\bAndroid(?:.+)Mobile\b/i;
+var androidTablet = /Android/i;
+var amazonPhone = /(?:SD4930UR|\bSilk(?:.+)Mobile\b)/i;
+var amazonTablet = /Silk/i;
+var windowsPhone = /Windows Phone/i;
+var windowsTablet = /\bWindows(?:.+)ARM\b/i;
+var otherBlackBerry = /BlackBerry/i;
+var otherBlackBerry10 = /BB10/i;
+var otherOpera = /Opera Mini/i;
+var otherChrome = /\b(CriOS|Chrome)(?:.+)Mobile/i;
+var otherFirefox = /Mobile(?:.+)Firefox\b/i;
+var isAppleTabletOnIos13 = function (navigator) {
+    return (typeof navigator !== 'undefined' &&
+        navigator.platform === 'MacIntel' &&
+        typeof navigator.maxTouchPoints === 'number' &&
+        navigator.maxTouchPoints > 1 &&
+        typeof MSStream === 'undefined');
+};
+function createMatch(userAgent) {
+    return function (regex) { return regex.test(userAgent); };
+}
+function isMobile(param) {
+    var nav = {
+        userAgent: '',
+        platform: '',
+        maxTouchPoints: 0
+    };
+    if (!param && typeof navigator !== 'undefined') {
+        nav = {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            maxTouchPoints: navigator.maxTouchPoints || 0
+        };
+    }
+    else if (typeof param === 'string') {
+        nav.userAgent = param;
+    }
+    else if (param && param.userAgent) {
+        nav = {
+            userAgent: param.userAgent,
+            platform: param.platform,
+            maxTouchPoints: param.maxTouchPoints || 0
+        };
+    }
+    var userAgent = nav.userAgent;
+    var tmp = userAgent.split('[FBAN');
+    if (typeof tmp[1] !== 'undefined') {
+        userAgent = tmp[0];
+    }
+    tmp = userAgent.split('Twitter');
+    if (typeof tmp[1] !== 'undefined') {
+        userAgent = tmp[0];
+    }
+    var match = createMatch(userAgent);
+    var result = {
+        apple: {
+            phone: match(appleIphone) && !match(windowsPhone),
+            ipod: match(appleIpod),
+            tablet: !match(appleIphone) &&
+                (match(appleTablet) || isAppleTabletOnIos13(nav)) &&
+                !match(windowsPhone),
+            universal: match(appleUniversal),
+            device: (match(appleIphone) ||
+                match(appleIpod) ||
+                match(appleTablet) ||
+                match(appleUniversal) ||
+                isAppleTabletOnIos13(nav)) &&
+                !match(windowsPhone)
+        },
+        amazon: {
+            phone: match(amazonPhone),
+            tablet: !match(amazonPhone) && match(amazonTablet),
+            device: match(amazonPhone) || match(amazonTablet)
+        },
+        android: {
+            phone: (!match(windowsPhone) && match(amazonPhone)) ||
+                (!match(windowsPhone) && match(androidPhone)),
+            tablet: !match(windowsPhone) &&
+                !match(amazonPhone) &&
+                !match(androidPhone) &&
+                (match(amazonTablet) || match(androidTablet)),
+            device: (!match(windowsPhone) &&
+                (match(amazonPhone) ||
+                    match(amazonTablet) ||
+                    match(androidPhone) ||
+                    match(androidTablet))) ||
+                match(/\bokhttp\b/i)
+        },
+        windows: {
+            phone: match(windowsPhone),
+            tablet: match(windowsTablet),
+            device: match(windowsPhone) || match(windowsTablet)
+        },
+        other: {
+            blackberry: match(otherBlackBerry),
+            blackberry10: match(otherBlackBerry10),
+            opera: match(otherOpera),
+            firefox: match(otherFirefox),
+            chrome: match(otherChrome),
+            device: match(otherBlackBerry) ||
+                match(otherBlackBerry10) ||
+                match(otherOpera) ||
+                match(otherFirefox) ||
+                match(otherChrome)
+        },
+        any: false,
+        phone: false,
+        tablet: false
+    };
+    result.any =
+        result.apple.device ||
+            result.android.device ||
+            result.windows.device ||
+            result.other.device;
+    result.phone =
+        result.apple.phone || result.android.phone || result.windows.phone;
+    result.tablet =
+        result.apple.tablet || result.android.tablet || result.windows.tablet;
+    return result;
+}
+//# sourceMappingURL=isMobile.js.map
 
 /***/ }),
 
@@ -37939,7 +38106,7 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _vm.loading
-      ? _c("div", { staticClass: "loader" }, [_vm._v("Loading ")])
+      ? _c("div", { staticClass: "loader" }, [_vm._v("Loading")])
       : _vm._e(),
     _vm._v(" "),
     _vm.show
@@ -38002,7 +38169,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "box-title" }, [
       _c("h3", [
         _c("i", { staticClass: "far fa-clock font-yellow mr-2 h4" }),
-        _vm._v("最近見た求人")
+        _vm._v("最近見た求人\n    ")
       ])
     ])
   }

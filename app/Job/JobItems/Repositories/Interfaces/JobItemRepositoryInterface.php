@@ -6,6 +6,7 @@ use Jsdecena\Baserepo\BaseRepositoryInterface;
 use App\Job\JobItems\JobItem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface JobItemRepositoryInterface extends BaseRepositoryInterface
 { 
@@ -14,9 +15,15 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function listJobitemCount() : int;
 
-    public function baseSearchJobItems(array $searchParam = []);
+    public function listRecentJobItemId(int $historyFlag = 0);
+
+    public function createRecentJobItemIdList($req, int $id) : void;
+
+    public function baseSearchJobItems(array $searchParam = []); 
 
     public function getSortJobItems($query, string $order = 'id', string $sort = 'desc', array $columns = ['*']);
+
+    public function findJobItemById($id);
 
     public function existJobItemImageAndDeleteOnPost(string $imageFlag, int $editFlag = 0);
 
@@ -32,7 +39,6 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function getJobImageBaseUrl() : string;
 
-    // public function listJobItems(string $order= 'id', string $sort = 'desc', array $columns = ['*']) : Collection;
 
  
  

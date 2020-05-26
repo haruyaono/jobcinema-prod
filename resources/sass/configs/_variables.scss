@@ -14,3 +14,13 @@ $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
 $deepblue: #1359CA;
+
+$grid-breakpoints: (
+  xxs: 0,
+  xs: 320px,
+  sm: 375px,
+  md: 768px,
+  lg: 1080px,
+  xl: 1280px,
+  xxl: 1440px
+);

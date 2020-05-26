@@ -49,8 +49,13 @@
 										<h3 class="txt-h3">
 											{{$job->company->cname}}
 										</h3>
-										<p>{{$job->job_type}}</p>
+										<div class="job-desc-list">
+											<p><span class="occupation"><span>{{ str_limit($job->job_type, $limit = 40, $end = '...')}}</p>
+											<p><span class="money"><span>{{ str_limit($job->job_hourly_salary, $limit = 40, $end = '...')}}</p>
+											<p><span class="place"><span>{{ str_limit($job->job_office_address, $limit = 40, $end = '...')}}</p>
+										</div>
 									</div>
+										
 								</a>
 							</div> <!-- newjob-item -->
 							<!-- △ ループ終了 △ -->
@@ -66,7 +71,8 @@
 
 				@include('partials.type_categories')
 				@include('partials.area_categories')
-
+				
+				@if(!Auth::check())
 				<div class="main-section-item top-subsection-item only-sp" sty>
 					<div class="top-sp-auth-btn-wrap">
 						<p><a class="btn btn-yellow w-100 mb-3"  href="/members/register">会員登録</a></p>
@@ -74,6 +80,7 @@
 					</div>
 					
 				</div>
+				@endif
 
 				<recent-component></recent-component>
 				

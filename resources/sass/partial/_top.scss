@@ -107,18 +107,22 @@
   }
   .newjob-item {
     width:100%;
+    padding: 15px 0;
+    border-top: 1px solid #E8E8E8;
     @include mq(medium) {
       width: 32%;
+      padding: 2em 0;
+      border-top: 0;
     }
   
     .img-wrap {
-      margin-bottom: 10px;
       width: 30%;
       margin-right: 4%;
       @include mq(medium) {
         display: block;
         width: 100%;
         margin-right: 0;
+        margin-bottom: 10px;
       }
     }
     .img-wrap {
@@ -139,14 +143,41 @@
       }
 
       h3 {
-        width: 65%;
-        margin-right: 2%;
-        font-size: 18px;
+        font-size: 12px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        @include mq(medium) {
+          font-size: 16px;
+        }
       }
       h3 p {
         margin-bottom: 0;
       }
 
+      .job-desc-list {
+        margin-top: 4px;
+
+        p {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          line-height: 1.2;
+          @include mq(medium) {
+            line-height: 1.5;
+          }
+        }
+
+        p span::before {
+          font-size: 12px;
+          @include mq(medium) {
+            font-size: 16px;
+          }
+        }
+    
+      }
+      
       
     }
     .newjob-item:last-child {
@@ -154,16 +185,19 @@
     }
     .newjob-item-link {
       display: flex;
-      padding: 2em 0;
+      padding: 0;
       @include mq(medium) {
         display: block;
       }
     }
   }
   .newjob-list-border {
-    border: 2px solid #ececec;
-    border-left: 0;
-    border-right: 0;
+    border: 0;
+    @include mq(medium) {
+
+      border-top: 2px solid #ececec;
+     
+    }
   } 
   
 }

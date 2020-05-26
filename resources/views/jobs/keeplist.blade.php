@@ -29,7 +29,7 @@
 <section class="main-section job-entry">
 <div class="inner">
 <div class="pad">
-    <h1 class="txt-h2 mb-3">保存したお仕事(最大20件)</h1>
+    <h1 class="txt-h2">保存したお仕事(最大20件)</h1>
     @if( Auth::check() )
         <div class="job-list">
         @if ($result_count > 0 )
@@ -96,7 +96,7 @@
             <!-- △ ループ終了 △ -->
             @endforeach
         @else
-            <p>現在「キープリスト」に保存された情報はありません。</p>
+            <p class="no-jobitem-txt">現在「キープリスト」に保存された情報はありません。</p>
         @endif
                 
         </div>

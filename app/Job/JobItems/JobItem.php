@@ -8,9 +8,12 @@ use Carbon\Carbon;
 use App\Models\Company;
 use App\Models\Employer;
 use App\Models\User;
+use App\Traits\IsMobile;
 
 class JobItem extends Model
 {
+    use IsMobile; 
+
     protected $guarded  = [];
 
 

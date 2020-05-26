@@ -22,6 +22,7 @@
     .job-item {
       width: 100%;
       border: 2px solid #ececec;
+      border-top: 4px solid #C93A3F;
       display: table;
       position: relative;
     }
@@ -32,7 +33,6 @@
       display: block;
       padding:  1em 1.5em;
       color: #333;
-      border-top: 4px solid #C93A3F;
     }
     .job-item-link:hover {
       color: inherit;
@@ -87,35 +87,6 @@
       width: 20%;
     }
     
-    .job-table th span {
-      color: #555;
-      font-weight: normal;
-    }
-    .job-table th span::before {
-      color: #555;
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      padding-right :10px;/*文字との隙間*/
-    }
-    .job-table th span.money::before {
-      content: '\f53a';
-    }
-    .job-table th span.occupation::before {
-      content: '\f2b5';
-    }
-    .job-table th span.place::before {
-      content: '\f1d8';
-    }
-    .job-table th span.time::before  {
-      content: '\f017';
-    }
-    .job-table th span.date::before  {
-      content: '\f073';
-    }
-    .job-table th span.work::before  {
-      content: '\f684';
-    }
-    
     .job-table th, .job-table td {
       border: solid 1px #ececec;
       padding: 8px 16px;
@@ -124,6 +95,43 @@
     .job-table td  {
       width: 80%;
     }
+  }
+
+  // 共通
+  .job-table th span, .job-desc-list span {
+    color: #555;
+    font-weight: normal;
+  }
+  .job-table th span::before,
+  .job-desc-list span::before {
+    color: #555;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    padding-right :10px;/*文字との隙間*/
+  }
+  .job-table th span.money::before,
+  .job-desc-list span.money::before {
+    content: '\f157';
+  }
+  .job-table th span.occupation::before,
+  .job-desc-list span.occupation::before {
+    content: '\f007';
+  }
+  .job-table th span.place::before,
+  .job-desc-list span.place::before {
+    content: '\f3c5';
+  }
+  .job-table th span.time::before,
+  .job-desc-list span.time::before {
+    content: '\f017';
+  }
+  .job-table th span.date::before,
+  .job-desc-list span.date::before {
+    content: '\f073';
+  }
+  .job-table th span.work::before,
+  .job-desc-list span.work::before {
+    content: '\f684';
   }
   
   
@@ -199,6 +207,7 @@
     text-align: center;
     padding-top: 7px;
     padding-bottom: 7px;
+    margin-top: 15px;
   }
   .full-wide-slider .slick-dots li, .image3-area .slick-dots li{
     display: inline-block;

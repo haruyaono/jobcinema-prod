@@ -26,11 +26,20 @@ font-size:100%;
 vertical-align:baseline;
 background:transparent;
 }
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
+html {
+  min-width: map-get($grid-breakpoints, xs);
+
+  @include mq(medium) {
+    min-width: map-get($grid-breakpoints, xl);
+  }
+}
+
 body {
   line-height: $line-height-base;
   font-family: $font-family-base;
@@ -166,6 +175,14 @@ h3 {
   font-weight: bold;
 }
 
+.txt-h1 {
+  font-weight: bold;
+}
+.txt-h2 {
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
 select:hover{
 	cursor: pointer;
 }
@@ -179,12 +196,18 @@ select:hover{
   display: block;
 }
 .box-wrap .wrap-items {
-  widows: 100%;
+  width: 100%;
   display: block;
+  margin-bottom: 20px;
   @include mq(medium) {
     float: left;
     margin-right: 2.84259%;
     width: 17.72593%;
+    margin-bottom: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 
   a {
@@ -192,6 +215,11 @@ select:hover{
     @include mq(medium) {
       display: block;
     }
+  }
+}
+.box-wrap li.wrap-items:last-child {
+  @include mq(medium) {
+    margin-right: 0;
   }
 }
 .box-wrap .wrap-items .wrap-img {
@@ -591,6 +619,20 @@ section {
     font-weight: 500;
   }
   
+  .no-jobitem-txt {
+    text-align: center;
+    line-height: 16px;
+    padding: 80px 0;
+    font-size: 16px;
+    letter-spacing: 0.89px;
+
+    @include mq(medium) {
+      padding: 221px 0;
+      line-height: 18px;
+    }
+
+   
+  }
   
   /* 新着案件の一覧 */
   
