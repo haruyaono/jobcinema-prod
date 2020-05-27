@@ -16259,11 +16259,24 @@ input[size="28"] {
   text-align: center;
 }
 
+.entrybtn-field .apply-btn:focus {
+  outline: 0;
+}
+
 .entrybtn-field .favourite-btn {
   background: #f2f2f2;
   color: #333;
+  border: 1px solid #E8E8E8;
   width: 80%;
   margin-left: auto;
+}
+
+.entrybtn-field .favourite-btn:focus {
+  outline: 0;
+}
+
+.entrybtn-field .favourite-btn:hover {
+  opacity: .8;
 }
 
 .entrybtn-field .apply-btn::before {

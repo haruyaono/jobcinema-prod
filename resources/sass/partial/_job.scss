@@ -425,12 +425,23 @@
     color: #fff;
     width: 90%;
     text-align: center;
+
+    &:focus {
+      outline: 0;
+    }
   }
   .entrybtn-field .favourite-btn {
     background: #f2f2f2;
     color: #333;
+    border: 1px solid #E8E8E8;
     width: 80%;
     margin-left: auto;
+    &:focus {
+      outline: 0;
+    }
+    &:hover {
+      opacity: .8;
+    }
   }
   .entrybtn-field .apply-btn::before {
     content: '\f0a4';

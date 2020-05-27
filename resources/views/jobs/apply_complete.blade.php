@@ -49,7 +49,7 @@
             <tr>
               <th>求人ページ</th>
               <td>
-                <a href="{{route('jobs.show', ['id' => $job->id])}}" class="txt-blue-link">{{route('jobs.show', ['id' => $job->id, 'job' => $job->slug])}}</a>
+                <a href="{{route('jobs.show', ['id' => $job->id])}}" class="txt-blue-link">{{route('jobs.show', ['id' => $job->id])}}</a>
               </td>
             </tr>
           </table>
