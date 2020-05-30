@@ -79,7 +79,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Job\Users\User::class,
         ],
         'employers' => [ //追加
             'driver' => 'eloquent', //追加

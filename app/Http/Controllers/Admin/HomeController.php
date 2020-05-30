@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Job\Users\User;
 use Auth;
 use App\Job\JobItems\JobItem;
 

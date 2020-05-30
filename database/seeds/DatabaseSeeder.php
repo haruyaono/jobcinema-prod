@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Job\Users\User;
 use App\Models\Employer;
 use App\Job\JobItems\JobItem;
 use App\Models\Company;
@@ -21,7 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // DB::table('users')->truncate();
+        DB::table('users')->truncate();
         // DB::table('admins')->truncate();
         DB::table('employers')->truncate();
         DB::table('companies')->truncate();
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
         DB::table('favourites')->truncate();
         
 
-        // factory('App\Models\User', 20)->create();
+        factory(User::class, 20)->create();
         // factory('App\Models\Admin', 1)->create();
         factory(Employer::class)->create();
         factory(Company::class)->create();

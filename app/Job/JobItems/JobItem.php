@@ -7,7 +7,7 @@ use DB;
 use Carbon\Carbon;
 use App\Models\Company;
 use App\Models\Employer;
-use App\Models\User;
+use App\Job\Users\User;
 use App\Traits\IsMobile;
 
 class JobItem extends Model
@@ -59,7 +59,7 @@ class JobItem extends Model
 
     public function users()
     {
-            return $this->belongsToMany(\App\Models\User::class)
+            return $this->belongsToMany(User::class)
             ->withPivot('id','user_id','last_name','first_name','postcode','prefecture','city','gender','age','phone1','phone2','phone3','occupation','final_education','work_start_date','job_msg','job_q1','job_q2','job_q3','s_status','e_status', 'oiwaikin', 'first_attendance', 'no_first_attendance', 'created_at')
             ->withTimeStamps();
     }

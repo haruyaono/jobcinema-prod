@@ -1,6 +1,6 @@
 <?php 
   if(Auth::check() ) {
-    $jobFavCount = \App\Models\User::checkFavCount();
+    $jobFavCount = \App\Job\Users\User::checkFavCount();
   } else {
     $jobFavCount = 0;
   }

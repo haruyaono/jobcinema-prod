@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
-use App\Models\User;
+use App\Job\Users\User;
 use App\Job\JobItems\JobItem;
 use App\Models\Profile;
 use App\Models\PostalCode;
@@ -41,6 +41,7 @@ class JobController extends Controller
      */
     private $categoryRepo;
     private $JobItemRepo;
+
     private $job_form_session = 'count';
     private $JobItem;
     
@@ -54,8 +55,8 @@ class JobController extends Controller
     public function __construct(
       JobItem $JobItem, 
       CategoryRepositoryInterface $categoryRepository,
-      JobItemRepositoryInterface $jobItemRepository)
-    {
+      JobItemRepositoryInterface $jobItemRepository
+    ) {
       $this->middleware(['employer'], ['except'=>array('index','show', 'getJobHistory', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;

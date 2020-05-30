@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Job\JobItems\JobItem;
-use App\Models\User;
+use App\Job\Users\User;
 use App\Models\Company;
 use App\Models\Employer;
 use App\Job\Categories\StatusCategory;

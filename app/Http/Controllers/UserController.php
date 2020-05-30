@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Library\CustomValidator;
 use App\Models\Profile;
-use App\Models\User;
+use App\Job\Users\User;
+use App\Job\Users\Repositories\UserRepository;
+use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 use App\Job\JobItems\JobItem;
+use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\Job\Users\Requests\UpdateUserPasswordRequest;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Storage;
 use Hash;
@@ -14,18 +19,51 @@ use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
+
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepo;
+
+    /**
+     * @var JobItemRepositoryInterface
+     */
+    private $jobItemRepo;
+
+    /**
+     * UserController constructor.
+     * @param UserRepositoryInterface $userRepository
+     */
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        JobItemRepositoryInterface $jobItemRepository
+    ) {
         $this->middleware('auth');
+        $this->userRepo = $userRepository;
+        $this->jobItemRepo = $jobItemRepository;
+    }
+
+    public function index() 
+    {
+        return view('mypages.index');
     }
 
     //mypage password change
-    public function getChangePasswordForm() {
+    public function getChangePasswordForm()
+    {
         return view('auth.passwords.changepassword');
     }
-    public function postChangePassword(Request $request) {
+
+    public function postChangePassword(UpdateUserPasswordRequest $request) 
+    {
+
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $update = new userRepository($user);
+
+        $msgData = [];
+
         //現在のパスワードが正しいかを調べる
-        if(!(Hash::check($request->get('current-password'), auth()->user()->password))) {
+        if(!(Hash::check($request->get('current-password'), $user->password))) {
             return redirect()->back()->with('change_password_error', '現在のパスワードが間違っています。');
         }
 
@@ -34,55 +72,74 @@ class UserController extends Controller
             return redirect()->back()->with('change_password_error', '新しいパスワードが現在のパスワードと同じです。違うパスワードを設定してください。');
         }
 
-        //パスワードのバリデーション。新しいパスワードは6文字以上、new-password_confirmationフィールドの値と一致しているかどうか。
-        $validated_data = $request->validate([
-            'current-password' => 'required',
-            'new-password' => 'required|string|min:6|confirmed',
-        ]);
+        $passData = [
+            'password' => bcrypt($request->get('new-password')),
+        ];
+        
+        $updated = $update->updateUser($passData);
 
-        //パスワードを変更
-        $user = auth()->user();
-        $user->password = bcrypt($request->get('new-password'));
-        $user->save();
+        if($updated) {
+            $msgData = [
+                'change_password_success' => 'パスワードを変更しました。',
+            ];
+        } else {
+            $msgData = [
+                'change_password_error' => 'パスワードの変更に失敗しました。',
+            ];
+        }
 
-        return redirect()->back()->with('change_password_success', 'パスワードを変更しました。');
+        return redirect()->back()->with($msgData);
+        
     }
 
     //mypage email change
-    public function getChangeEmail() {
+    public function getChangeEmail()
+    {
         return view('auth.passwords.change_email');
     }
-    public function postChangeEmail(Request $request) {
+
+    public function postChangeEmail(Request $request) 
+    {
+
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $update = new userRepository($user);
+
         $validated_data = $request->validate([
             'email' => 'required|email|string|max:191|unique:employers|unique:users',
         ]);
 
-        $user = auth()->user();
-        $user->email = $request->get('email');
-        $user->save();
+        $passData = [
+            'email' => $request->get('email'),
+        ];
+        
+        $updated = $update->updateUser($passData);
 
-        return redirect()->back()->with('change_email_success', 'メールアドレスを変更しました。');
-    }
+        if($updated) {
+            $msgData = [
+                'change_email_success' => 'メールアドレスを変更しました。',
+            ];
+        } else {
+            $msgData = [
+                'change_email_error' => 'メールアドレスの変更に失敗しました。',
+            ];
+        }
 
-    public function index() 
-    {
-        return view('mypages.index');
+        return redirect()->back()->with($msgData);
+
     }
 
     public function create() 
     {
-        $user = auth()->user();
-        $user_id = $user->id;
-        $profile = Profile::where('user_id',$user_id)->first();
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $profile = $user->profile;
 
-        $postcode = $profile['postcode'];
-        $postcode = str_replace("-", "", $postcode);
+        $postcode = str_replace("-", "", $profile['postcode']);
         $postcode1 = substr($postcode,0,3);
         $postcode2 = substr($postcode,3);
 
-        $exists = Storage::disk('s3')->exists('resume/'.$user->profile->resume);
+        $exists = Storage::disk('s3')->exists('resume/' . $profile->resume);
         if($exists) {
-            $resumePath =  Storage::disk('s3')->url('resume/'.$user->profile->resume);
+            $resumePath =  Storage::disk('s3')->url('resume/'.$profile->resume);
             if(config('app.env') == 'production') {
                 $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
             } 
@@ -198,16 +255,24 @@ class UserController extends Controller
 
     public function jobAppManage() 
     {
-
         $jobs = JobItem::all();
        
         return view('mypages.app_manage', compact('jobs'));
     }
+    
     public function getJobAppReport($id) 
     {
         $job = JobItem::findOrFail($id);
-        $appjob = $job->users()->where('user_id', auth()->user()->id)->first();
+
+        if($job->users()->where('user_id', auth()->user()->id)->exists()) {
+            $appjob = $job->users()->where('user_id', auth()->user()->id)->first();
+        } else {
+            return redirect()->back();
+        }
+
         return view('mypages.app_report', compact('job','appjob'));
+        
+        
     }
 
     // public function saveJob($id)

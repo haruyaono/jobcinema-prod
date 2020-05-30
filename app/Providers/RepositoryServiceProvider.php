@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Job\Categories\Repositories\CategoryRepository;
+use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
+use App\Job\Users\Repositories\UserRepository;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Job\Categories\Repositories\CategoryRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Repositories\JobItemRepository;
 
@@ -17,6 +19,11 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
+        );
+
         $this->app->bind(
             CategoryRepositoryInterface::class,
             CategoryRepository::class

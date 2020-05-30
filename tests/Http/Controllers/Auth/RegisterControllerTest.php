@@ -3,7 +3,7 @@
 namespace Tests\Http\Controllers\Auth;
 
 use Tests\TestCase;
-use App\Models\User;
+use App\Job\Users\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Auth;
@@ -11,33 +11,39 @@ use Auth;
 class UserRegister extends TestCase
 {
 
-    use RefreshDatabase;
-
     /** @test */
-    public function user_can_view_register()
+    public function it_can_show_the_registration_page()
     {
-        $response = $this->get('/members/register');
-        $response->assertStatus(200);
+        $this->get(route('register'))
+            ->assertStatus(200)
+            ->assertSee('無料新規会員登録')
+            ->assertSee('メールアドレス')
+            ->assertSee('パスワード')
+            ->assertSee('確認用パスワード');
     }
 
     /** @test */
-    public function user_can_register()
+    public function it_can_register_the_user()
     {
-        $response = $this->from('members/register')->post('members/register', [
-            'email' => 'test@test.com',
-            'password' => 'test1111',
-            'password_confirmation' => 'test1111'
-        ]);
-        $this->assertDatabaseHas('users', [
-            'email' => 'test@test.com'
-        ]);
+        $data = [
+            'email' => $this->faker->email,
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ];
 
-        $this->assertTrue(Auth::check());
-        
+        $response = $this->post(route('user.register.post'), $data);
         $response->assertStatus(302);
-        $response->assertRedirect('members/register_complete');
-
+        $this->assertDatabaseHas('users', ['email' => $data['email']]);
+        $this->assertTrue(Auth::check());
+        $response->assertRedirect(route('home'));
     }
 
+     /** @test */
+     public function it_throws_validation_error_during_registration()
+     {
+         $this->post(route('user.register.post'), [])
+            ->assertStatus(302)
+            ->assertSessionHasErrors();
+     }
 
 }

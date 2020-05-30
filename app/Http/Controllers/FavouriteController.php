@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Job\JobItems\JobItem;
-use App\Models\User;
+use App\Job\Users\User;
 use Auth;
 
 class FavouriteController extends Controller

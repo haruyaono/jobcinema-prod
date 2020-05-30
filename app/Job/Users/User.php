@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Job\Users;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use DB;
+use Carbon\Carbon;
+use App\Job\JobItems\JobItem;
 use App\Models\Profile;
 use App\Models\Company;
-use App\Job\JobItems\JobItem;
 use App\Notifications\EmailVerificationJa;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,7 +25,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-         'email', 'password',
+        'last_name',
+        'first_name',
+        'email', 
+        'password',
     ];
 
     /**
@@ -31,9 +37,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+         'remember_token',
     ];
 
+    protected $dates= ['deleted_at'];
     /**
      * The attributes that should be cast to native types.
      *
@@ -59,7 +67,7 @@ class User extends Authenticatable
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('id')->withTimeStamps();
+        return $this->belongsToMany(JobItem::class)->withPivot('id')->withTimeStamps()->using(GroupUser::class);
     }
 
     public function favourites()

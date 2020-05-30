@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Job\JobItems\JobItem;
+use App\Job\Users\User;
 use App\Models\Company;
 use App\Job\Categories\StatusCategory;
 use App\Job\Categories\TypeCategory;
@@ -20,6 +21,7 @@ abstract class TestCase extends BaseTestCase
 
     protected $faker;
     protected $jobitem;
+    protected $user;
     protected $statusCategory;
     protected $typeCategory;
     protected $areaCategory;
@@ -57,6 +59,8 @@ abstract class TestCase extends BaseTestCase
             'hourly_salary_cat_id' => $this->hourlysalaryCategory->id,
             'date_cat_id' => $this->dateCategory->id,
         ];
+
+        $this->user = factory(User::class)->create();
     }
 
     public function tearDown()

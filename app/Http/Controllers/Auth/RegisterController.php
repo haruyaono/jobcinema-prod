@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
+use App\Job\Users\User;
 use App\Models\Profile;
 use App\Http\Controllers\Controller;
+use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisteredMail;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -33,14 +35,17 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/members/register_complete';
 
+    private $userRepo;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepositoryInterface $UserRepositoryInterface)
     {
         $this->middleware('guest');
+        $this->userRepo = $UserRepositoryInterface;
     }
 
     /**
@@ -66,17 +71,11 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            // 'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
+        $user = $this->userRepo->createUser($data);
         Profile::create([
             'user_id' => $user->id,
         ]);
 
-        // 追加
         //メールを非同期に送信するため、send から queueに変更
         Mail::to($user)->queue(new RegisteredMail($user));
 

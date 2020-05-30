@@ -14,7 +14,7 @@
 <ol>
   <li>
     <a href="/mypage/index">
-     　マイページ
+     マイページ
     </a>
   </li>
   <li>
@@ -83,7 +83,7 @@
 
                 
 
-<p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="/mypage/index">前に戻る</a></p>
+<p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="/mypage/index" class="txt-blue-link">前に戻る</a></p>
 
 </div>
 </div>  

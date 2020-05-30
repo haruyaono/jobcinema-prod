@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
+use App\Job\Users\User;
 use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -62,7 +62,7 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\Models\User
+     * @return \App\Job\Users\User
      */
     protected function create(array $data)
     {
