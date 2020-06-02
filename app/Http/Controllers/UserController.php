@@ -10,7 +10,10 @@ use App\Job\Users\Repositories\UserRepository;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\Job\Applies\Apply;
+use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
 use App\Job\Users\Requests\UpdateUserPasswordRequest;
+use App\Job\Users\Requests\UpdateUserProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Storage;
@@ -30,17 +33,26 @@ class UserController extends Controller
      */
     private $jobItemRepo;
 
+     /**
+     * @var ApplyRepositoryInterface
+     */
+    private $applyRepo;
+
     /**
      * UserController constructor.
      * @param UserRepositoryInterface $userRepository
+     * @param JobItemRepositoryInterface $jobItemRepository
+     * @param ApplyRepositoryInterface $applyRepository
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
-        JobItemRepositoryInterface $jobItemRepository
+        JobItemRepositoryInterface $jobItemRepository,
+        ApplyRepositoryInterface $applyRepository
     ) {
         $this->middleware('auth');
         $this->userRepo = $userRepository;
         $this->jobItemRepo = $jobItemRepository;
+        $this->applyRepo = $applyRepository;
     }
 
     public function index() 
@@ -156,52 +168,51 @@ class UserController extends Controller
         return view('mypages.career_edit');
     }
 
-    public function store(Request $request)
+    public function store(UpdateUserProfileRequest $request)
     {
-        $this->validate($request,[
-            'last_name' => 'required | max:191 | kana',
-            'first_name' => 'required | max:191 | kana' ,
-            'phone1' => 'required|numeric|digits_between:2,5',
-            'phone2' => 'required|numeric|digits_between:1,4',
-            'phone3' => 'required|numeric|digits_between:3,4',
-            'age' => 'nullable|numeric|between:15,99',
-            'zip31' => 'nullable|numeric|digits:3',
-            'zip32' => 'nullable|numeric|digits:4',
-            'pref31' => 'nullable|string|max:191',
-            'addr31' => 'nullable|string|max:191',
-        ]);
 
-        $user_id = auth()->user()->id;
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+
         if($request->zip31 && $request->zip32) {
             $postal_code = $request->zip31."-".$request->zip32;
         } else {
             $postal_code  = '';
         }
+
+        DB::beginTransaction();
+
+        try {
+            Profile::where('user_id', $user->id)->update([
+
+                'phone1' => request('phone1'),
+                'phone2' => request('phone2'),
+                'phone3' => request('phone3'),
+                'age' => request('age'),
+                'gender' => request('gender'),
+                'postcode' => $postal_code,
+                'prefecture' => $request->pref31,
+                'city' => $request->addr31,
+            ]);
+            DB::table('users')->where('id', $user->id)->update([
+                'last_name' => request('last_name'),
+                'first_name' => request('first_name'),
+            ]);
+
+            DB::commit();
+
+        } catch (\PDOException $e){
+            DB::rollBack();
+            return false;
+        }
         
-
-        Profile::where('user_id',$user_id)->update([
-
-            'phone1' => request('phone1'),
-            'phone2' => request('phone2'),
-            'phone3' => request('phone3'),
-            'age' => request('age'),
-            'gender' => request('gender'),
-            'postcode' => $postal_code,
-            'prefecture' => $request->pref31,
-            'city' => $request->addr31,
-        ]);
-        DB::table('users')->where('id', $user_id)->update([
-            'last_name' => request('last_name'),
-            'first_name' => request('first_name'),
-        ]);
         return redirect()->back()->with('message','会員情報を更新しました');
     }
 
     public function careerStore(Request $request)
     {
-        $user_id = auth()->user()->id;
-        Profile::where('user_id',$user_id)->update([
+        $user = $this->userRepo->findUserById(auth()->user()->id);
 
+        Profile::where('user_id',$user->id)->update([
             'occupation' => request('occupation'),
             'final_education' => request('final_education'),
             'work_start_date' => request('work_start_date'),
@@ -216,7 +227,7 @@ class UserController extends Controller
             'resume' => 'required | max:20000' ,
         ]);
 
-        $user = auth()->user();
+        $user = $this->userRepo->findUserById(auth()->user()->id);
         $user_id = $user->id;
 
         if($user->profile->resume) {
@@ -238,7 +249,7 @@ class UserController extends Controller
 
     public function resumeDelete(Request $request)
     {
-        $user = auth()->user();
+        $user = $this->userRepo->findUserById(auth()->user()->id);
         $user_id = $user->id;
         if (is_null($user->profile->resume)) {
             return redirect()->back()->with('error', '削除する履歴書ファイルがありません');
@@ -255,49 +266,64 @@ class UserController extends Controller
 
     public function jobAppManage() 
     {
-        $jobs = JobItem::all();
-       
-        return view('mypages.app_manage', compact('jobs'));
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $appliedJobitems = $this->userRepo->listAppliedJobItem($user);
+    
+        return view('mypages.app_manage', compact('appliedJobitems'));
     }
     
-    public function getJobAppReport($id) 
+    public function getJobAppReport($applyId) 
     {
-        $job = JobItem::findOrFail($id);
 
-        if($job->users()->where('user_id', auth()->user()->id)->exists()) {
-            $appjob = $job->users()->where('user_id', auth()->user()->id)->first();
-        } else {
+        $appliedJobitem = [];
+        $apply = [];
+
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $apply = $user->applies()->where('id', $applyId)->first();
+
+        if($apply !== null) {
+            $appliedJobitem = $this->applyRepo->findJobItems($apply)->first();
+        }
+        
+        if($appliedJobitem === []) {
+            return redirect()->route('mypage.jobapp.manage');
+        }
+
+        return view('mypages.app_report', compact('appliedJobitem'));
+        
+    }
+
+    public function getAppFesMoney($applyJobItemId)
+    {
+
+        $applyJobItem = DB::table('apply_job_item')->where('id', $applyJobItemId)->first();
+
+        if($applyJobItem === null) {
+            return redirect()->route('mypage.jobapp.manage');
+        }
+        
+        $jobitem = $this->jobItemRepo->findJobItemById($applyJobItem->job_item_id);
+
+       
+
+        return view('mypages.app_fes_money', compact('applyJobItem', 'jobitem'));
+
+    }
+
+    public function postAppFesMoney(Request $request, $applyJobItemId)
+    {
+        
+        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
+        $applyJobItem = $applyJobItemQuery->first();
+
+        if($applyJobItem === null) {
             return redirect()->back();
         }
 
-        return view('mypages.app_report', compact('job','appjob'));
-        
-        
-    }
-
-    // public function saveJob($id)
-    // {
-    //     $jobid = JobItem::find($id);
-    //     $jobid->favourites()->attach(auth()->user()->id);
-    //     return redirect()->back();
-    // }
-
-    public function getAppFesMoney($id)
-    {
-        $job = JobItem::findOrFail($id);
-        $appjob = $job->users()->where('user_id', auth()->user()->id)->first();
-        return view('mypages.app_fes_money', compact('job','appjob'));
-    }
-    public function postAppFesMoney(Request $request, $id)
-    {
-        
-        $jobid = JobItem::findOrFail($id);
-        $appjobItem = $jobid->users()->where('user_id', auth()->user()->id)->first();
-
-        if($appjobItem->pivot->s_status != 1){
+        if($applyJobItem->s_status !== 1){
 
             if (Input::get('adopt_submit1')){
-
+                
                 $this->validate($request,[
                     'year' => 'numeric|digits:4',
                     'month' => 'numeric|digits:2',
@@ -306,16 +332,11 @@ class UserController extends Controller
                 ]);
                 $firstAttendance = $request->year."-".$request->month."-".$request->date;
             
-                $appJob = DB::table('job_item_user')
-                    ->where('user_id', auth()->user()->id)
-                    ->where('job_item_id', $jobid->id)
-                    ->update([
-                        's_status' => 1,
-                        'first_attendance' => $firstAttendance,
-                        'oiwaikin' => $request->oiwaikin,
-                    ]);
-                    session()->flash('flash_message_success', 'ご報告ありがとうございました！');
-                return redirect()->route('mypage.jobapp.manage');
+                $applyJobItemQuery->update([
+                    's_status' => 1,
+                    'first_attendance' => $firstAttendance,
+                    'oiwaikin' => $request->oiwaikin,
+                ]);
                 
             } elseif (Input::get('adopt_submit2')){
                 $this->validate($request,[
@@ -323,102 +344,113 @@ class UserController extends Controller
                     'oiwaikin' => 'nullable',
                 ]);
             
-                
-                $appJob = DB::table('job_item_user')
-                    ->where('user_id', auth()->user()->id)
-                    ->where('job_item_id', $jobid->id)
-                    ->update([
-                        's_status' => 1,
-                        'no_first_attendance' => $request->app_oiwai_text,
-                        'oiwaikin' => $request->oiwaikin,
-                    ]);
-                    session()->flash('flash_message_success', 'ご報告ありがとうございました！');
-                return redirect()->route('mypage.jobapp.manage');
+                $applyJobItemQuery->update([
+                    's_status' => 1,
+                    'no_first_attendance' => $request->app_oiwai_text,
+                    'oiwaikin' => $request->oiwaikin,
+                ]);
             }
-        } elseif($appjobItem->pivot->s_status == 1 && $appjobItem->pivot->first_attendance == null){
+
+            session()->flash('flash_message_success', 'ご報告ありがとうございました！');
+            return redirect()->route('mypage.jobapp.manage');
+
+        } elseif($applyJobItem->s_status === 1 && $applyJobItem->first_attendance === null){
             if (Input::get('adopt_submit1')){
 
                 $this->validate($request,[
                     'year' => 'numeric|digits:4',
                     'month' => 'numeric|digits:2',
                     'date' => 'numeric|digits:2',
-                    'oiwaikin' => 'nullable',
                 ]);
                 $firstAttendance = $request->year."-".$request->month."-".$request->date;
             
-                $appJob = DB::table('job_item_user')
-                    ->where('user_id', auth()->user()->id)
-                    ->where('job_item_id', $jobid->id)
-                    ->update([
-                        's_status' => 1,
-                        'first_attendance' => $firstAttendance,
-                        'oiwaikin' => $request->oiwaikin,
-                    ]);
-                    session()->flash('flash_message_success', 'ご報告ありがとうございました！');
-                return redirect()->route('mypage.jobapp.manage');
-            } else {
-                session()->flash('flash_message_danger', '不正なリクエストです');
-                return redirect()->route('mypage.jobapp.manage');
+                $applyJobItemQuery->update([
+                    'first_attendance' => $firstAttendance,
+                ]);
+
+            } elseif (Input::get('adopt_submit2')) {
+
+                $this->validate($request,[
+                    'app_oiwai_text' => 'string|max:1000',
+                ]);
+            
+                $applyJobItemQuery->update([
+                    'no_first_attendance' => $request->app_oiwai_text,
+                ]);
             }
+
+            session()->flash('flash_message_success', 'ご報告ありがとうございました！');
+            return redirect()->route('mypage.jobapp.manage');
         } else {
-            session()->flash('flash_message_danger', '不正なリクエストです');
+            session()->flash('flash_message_danger', 'すでにご報告済みです');
             return redirect()->route('mypage.jobapp.manage');
         }
     }
 
-    public function unAdoptJob($id)
+    public function unAdoptJob($applyJobItemId)
     {
-        $jobid = JobItem::findOrFail($id);
-        $appJob = DB::table('job_item_user')
-            ->where('user_id', auth()->user()->id)
-            ->where('job_item_id', $jobid->id)
-            ->update([
-                's_status' => 2,
-            ]);
-        return redirect()->to('mypage/application')->with('flash_message_success', 'ご報告ありがとうございました！');
+
+        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
+        $applyJobItemQuery->update([
+            's_status' => 2,
+        ]);
+
+        return redirect()->route('mypage.jobapp.manage')->with('flash_message_success', 'ご報告ありがとうございました！');
     }
 
-    public function adoptCancelJob($id)
+    public function adoptCancelJob($applyJobItemId)
     {
-        $jobid = JobItem::findOrFail($id);
-        $appJob = DB::table('job_item_user')
-            ->where('user_id', auth()->user()->id)
-            ->where('job_item_id', $jobid->id)
-            ->update([
-                's_status' => 0,
-            ]);
+        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
+        $applyJobItemQuery->update([
+            's_status' => 0,
+        ]);
 
-        return redirect()->to('mypage/application')->with('flash_message_success', '報告を取り消しました。');
+        return redirect()->route('mypage.jobapp.manage')->with('flash_message_success', '報告を取り消しました。');
 
     }
 
-    public function jobDecline($id)
+    public function jobDecline($applyJobItemId)
     {
-        $jobid = JobItem::findOrFail($id);
-        $appJob = DB::table('job_item_user')
-            ->where('user_id', auth()->user()->id)
-            ->where('job_item_id', $jobid->id)
-            ->delete();
+        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
+        $applyId = $applyJobItemQuery->first()->apply_id;
 
-        return redirect()->to('mypage/application')->with('flash_message_success', '応募を辞退しました');
+        $apply = $this->applyRepo->findApplyById($applyId);
+
+        DB::beginTransaction();
+        try {
+
+            $applyJobItemQuery->delete();
+            $apply->delete();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
+
+        
+
+        return redirect()->route('mypage.jobapp.manage')->with('flash_message_success', '応募を辞退しました');
     }
 
     public function userDelete()
     {
-        $user = auth()->user();
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $userRepo = new UserRepository($user);
+        // $applies = $this->userRepo->findApplies($user);
+        // $appliedJobItems = $this->userRepo->listAppliedJobItem($user);
 
         DB::beginTransaction();
         try {
             if ($user->profile->resume) {
                 Storage::disk('public')->delete($user->profile->resume);
+                Storage::disk('s3')->delete('resume/'.$user->profile->resume);
                 Profile::where('user_id', $user->id)->update([
                     'resume' => null,
                 ]);
             }
             
             Profile::where('user_id', $user->id)->delete();
-            DB::table('job_item_user')->where('user_id', $user->id)->delete();
-            User::find($user->id)->delete();
+            $userRepo->deleteUser();
 
             DB::commit();
         } catch (\Exception $e) {

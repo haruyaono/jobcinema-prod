@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 
 /*
@@ -81,12 +83,20 @@ Route::get('/applications/adopt/{id}/{user_id}', 'JobController@empAdoptJob')->n
 Route::get('/applications/unadopt/{id}/{user_id}', 'JobController@empUnAdoptJob')->name('emp.applicant.unadopt');
 Route::get('/applications/adopt_cancel/{id}/{user_id}', 'JobController@empAdoptCancelJob')->name('emp.applicant.adopt.cancel');
 
-//求人応募
-Route::get('/apply_step1/{id}', 'JobController@getApplyStep1')->name('apply.step1.get');
-Route::post('/apply_step1/{id}', 'JobController@postApplyStep1')->name('apply.step1.post');
-Route::get('/apply_step2/{id}', 'JobController@getApplyStep2')->name('apply.step2.get');
-Route::post('/apply_step2/{id}', 'JobController@postApplyStep2')->name('apply.step2.post');
-Route::get('/apply_complete/{id}', 'JobController@completeJobApply')->name('complete.job.apply');
+
+Route::namespace('Front')->group(function () {
+  //求人応募
+  Route::get('/apply_step1/{id}', 'ApplyController@getApplyStep1')->name('apply.step1.get');
+  Route::post('/apply_step1/{id}', 'ApplyController@postApplyStep1')->name('apply.step1.post');
+  Route::get('/apply_step2/{id}', 'ApplyController@getApplyStep2')->name('apply.step2.get');
+  Route::post('/apply_step2/{id}', 'ApplyController@postApplyStep2')->name('apply.step2.post');
+  Route::get('/apply_complete/{id}', 'ApplyController@completeJobApply')->name('complete.job.apply');
+});
+
+
+
+
+
 
 Route::get('/jobs/{id}', 'JobController@show')->name('jobs.show');
 Route::get('/jobs/search/all', 'JobController@allJobs')->name('alljobs');
@@ -133,7 +143,7 @@ Route::post('/mypage/resume', 'UserController@Resume')->name('resume');
 Route::delete('/mypage/resume/delete', 'UserController@resumeDelete')->name('resume.delete');
 
 Route::get('/mypage/application', 'UserController@jobAppManage')->name('mypage.jobapp.manage');
-Route::get('/mypage/result_report/{id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report');
+Route::get('/mypage/result_report/{apply_id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report'); 
 Route::get('/mypage/apply_festive_money/{id}', 'UserController@getAppFesMoney')->name('app.fesmoney.get');
 Route::post('/mypage/apply_festive_money/{id}', 'UserController@postAppFesMoney')->name('app.fesmoney.post');
 Route::get('/mypage/unadopt/{id}', 'UserController@unAdoptJob')->name('appjob.unadopt');

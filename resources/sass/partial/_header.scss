@@ -120,6 +120,42 @@
   color: #fff;
 }
 
+body.jobApplyPage {
+  .header {
+    height: 65px;
+
+    .inner {
+      justify-content: center;
+
+      @include mq(medium) {
+        justify-content: space-between;
+      }
+    }
+
+    @include mq(medium) {
+      height: 100px;
+    }
+
+    .header-top .logo {
+      margin-left: auto;
+      margin-right: auto;
+      width: auto;
+
+      @include mq(medium) {
+        width: 30%;
+      }
+
+      img {
+        width: 180px;
+        @include mq(medium) {
+          width: 100%;
+        }
+        
+      }
+    }
+  }
+} 
+
 @media (max-width:768px) {
   .header {
     height: auto;

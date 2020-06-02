@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use App\Job\JobItems\JobItem;
+use App\Job\Applies\Apply;
 use App\Models\Profile;
 use App\Models\Company;
 use App\Notifications\EmailVerificationJa;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    // use SoftDeletes; 
+    use Notifiable, SoftDeletes; 
 
     /**
      * The attributes that are mass assignable.
@@ -65,9 +65,13 @@ class User extends Authenticatable
         return $this->hasMany(JobItem::class);
     }
 
-    public function users()
+    // public function users()
+    // {
+    //     return $this->belongsToMany(JobItem::class)->withPivot('id')->withTimeStamps()->using(GroupUser::class);
+    // }
+    public function applies()
     {
-        return $this->belongsToMany(JobItem::class)->withPivot('id')->withTimeStamps()->using(GroupUser::class);
+        return $this->hasMany(Apply::class);
     }
 
     public function favourites()

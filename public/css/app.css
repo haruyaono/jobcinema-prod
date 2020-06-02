@@ -12925,6 +12925,24 @@ select:hover {
   margin: 0 auto;
 }
 
+.noteIcon {
+  color: #c93a40;
+}
+
+.userErrorFieldTxt em {
+  color: #c93a40;
+}
+
+.userErrorField {
+  text-align: center;
+  padding: 60px 40px;
+  background-color: rgba(200, 57, 64, 0.1);
+}
+
+.userErrorField p + p {
+  margin-top: .5em;
+}
+
 section {
   width: 100%;
   margin-top: 3em;
@@ -14132,6 +14150,48 @@ input {
 
 .p-favorite-fixed-nav:hover {
   color: #fff;
+}
+
+body.jobApplyPage .header {
+  height: 65px;
+}
+
+body.jobApplyPage .header .inner {
+  justify-content: center;
+}
+
+@media screen and (min-width: 768px) {
+  body.jobApplyPage .header .inner {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  body.jobApplyPage .header {
+    height: 100px;
+  }
+}
+
+body.jobApplyPage .header .header-top .logo {
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+}
+
+@media screen and (min-width: 768px) {
+  body.jobApplyPage .header .header-top .logo {
+    width: 30%;
+  }
+}
+
+body.jobApplyPage .header .header-top .logo img {
+  width: 180px;
+}
+
+@media screen and (min-width: 768px) {
+  body.jobApplyPage .header .header-top .logo img {
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {

@@ -60,6 +60,21 @@ class JobItemUnitTest extends TestCase
         $this->assertEmpty($results);
       }
 
+      /** @test */
+      public function it_can_find_the_jobitem()
+      {
+        $jobitem = new JobItemRepository(new JobItem);
+        $found = $jobitem->findJobItemById($this->jobitem->id);
+
+        $this->assertInstanceOf(JobItem::class, $found);
+        $this->assertEquals($this->jobitem->job_title, $found->job_title);
+        $this->assertEquals($this->jobitem->job_type, $found->job_type);
+        $this->assertEquals($this->jobitem->job_hourly_salary, $found->job_hourly_salary);
+        $this->assertEquals($this->jobitem->job_office, $found->job_office);
+        $this->assertEquals($this->jobitem->job_office_address, $found->job_office_address);
+
+      }
+
        /** @test */
        public function it_can_query_base_search_jobitems()
        {

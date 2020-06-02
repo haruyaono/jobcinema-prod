@@ -6,7 +6,7 @@
   
   @include('../partials.head')
 </head>
-<body>
+<body class="jobApplyPage">
     <div class="wrap apply-wrap" id="app">
         <div class="contents">
             

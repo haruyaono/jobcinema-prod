@@ -6,7 +6,7 @@ use App\Job\JobItemImages\JobItemImage;
 use App\Job\JobItems\JobItem;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
-use App\Job\JobItems\Exceptions\JobItemotFoundException;
+use App\Job\JobItems\Exceptions\JobItemNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
@@ -41,7 +41,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      */
     public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
     {
-        return $this->all($columns, $order, $sort);
+        return $this->model->ActiveJobitem()->orderBy($order, $sort)->get($columns);
     }
 
     /**
@@ -168,18 +168,8 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function baseSearchJobItems(array $searchParam = [])
     {
 
-        $query = $this->model::query();
+        $query = $this->model::query()->ActiveJobitem();
 
-         // ステータス・掲載期限
-        $today = date("Y-m-d");
-        $query->where('status', 2)
-            ->where(function($query) use ($today){
-            $query->orWhere('pub_end', '>', $today)
-                    ->orWhere('pub_end','無期限で掲載');
-            })->where(function($query) use ($today){
-            $query->orWhere('pub_start', '<', $today)
-                    ->orWhere('pub_start','最短で掲載');
-        });
         //結合
         if(array_key_exists('title', $searchParam) && !empty($searchParam['title'] )) {
             $query->where(function($query) use ($searchParam) {
@@ -244,8 +234,8 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function findJobItemById($id)
     {
         try {
-            return $this->model->findOrFail($id);
-        } catch (ModelNotFoundException $e) {
+            return $this->model->ActiveJobitem()->findOrFail($id);
+        } catch (ModelNotFoundException $e) { 
             throw new JobItemNotFoundException($e);
         }
     }

@@ -9,6 +9,8 @@ use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\Categories\Repositories\CategoryRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Repositories\JobItemRepository;
+use App\Job\Applies\Repositories\ApplyRepository;
+use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,11 @@ class RepositoryServiceProvider extends ServiceProvider
             JobItemRepositoryInterface::class,
             JobItemRepository::class
         );
+        $this->app->bind(
+            ApplyRepositoryInterface::class,
+            ApplyRepository::class
+        );
+        
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Job\Users\User;
 
 class JobItemServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,7 @@ class JobItemServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('JobItem', JobItem::class);
+        $this->app->bind('user', User::class);
     }
 
     /**

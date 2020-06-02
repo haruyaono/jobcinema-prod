@@ -251,7 +251,7 @@
         @if(Auth::guard()->check())
           <favourite-component :jobid={{$job->id}} :favourited={{$job->checkSaved()?'true':'false'}}></favourite-component>
           <div class="entrybtn-item">
-          @if(!$job->checkApplication())
+          @if(!$existsApplied)
               <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$job->id])}}">応募する</a>
           @else
             <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>

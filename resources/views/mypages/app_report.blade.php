@@ -43,21 +43,21 @@
         <div class="seeker-jobapp-item">
             <div class="jobapp-item-header">
                 <div class="header-status">
-                    {{config("const.JOB_STATUS.{$appjob->pivot->s_status}", "未定義")}}
+                    {{config("const.JOB_STATUS.{$appliedJobitem->pivot->s_status}", "未定義")}}
                 </div>
                 <div class="header-date">
-                応募日：{{$appjob->pivot->created_at->format('Y-m-d')}}
+                応募日：{{$appliedJobitem->pivot->created_at->format('Y-m-d')}}
                 </div>
-                @if($job->oiwaikin) 
+                @if($appliedJobitem->oiwaikin) 
                 <div class="header-money">
-                この企業に採用されるとお祝い金<span>{{$job->oiwaikin}}円<span>
+                この企業に採用されるとお祝い金<span>{{$appliedJobitem->oiwaikin}}円<span>
                 </div>
                 @endif
             </div>
             <div class="jobapp-item-middle">
                 <div class="jobapp-item-img only-pc">
-                    @if($job->job_img)
-                    <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt="{{$job->company->cname}}">
+                    @if($appliedJobitem->job_img)
+                    <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$appliedJobitem->job_img}}@else{{$appliedJobitem->job_img}}@endif" alt="{{$appliedJobitem->company->cname}}">
                     @else
                     <img src="{{asset('uploads/images/no-image.gif')}}">
                     @endif
@@ -66,27 +66,27 @@
                     <table>
                         <tr>
                             <th>応募企業</th>
-                            <td>{{$job->company->cname}}</td>
+                            <td>{{$appliedJobitem->company->cname}}</td>
                         </tr>
                         <tr>
                             <th>勤務先</th>
-                            <td>{{$job->job_office}}</td>
+                            <td>{{$appliedJobitem->job_office}}</td>
                         </tr>
                         <tr>
                             <th>雇用形態</th>
-                            <td>{{$job->status_cat_get->name}}</td>
+                            <td>{{$appliedJobitem->status_cat_get->name}}</td>
                         </tr>
                         <tr>
                             <th>職種</th>
-                            <td>{{$job->job_type}}</td>
+                            <td>{{$appliedJobitem->job_type}}</td>
                         </tr>   
                     </table>
                 </div>
             </div>
         </div>
         <div class="seeker-jobapp-result-btn">
-            <a href="{{route('app.fesmoney.get', [$job->id])}}" class="btn btn-yellow"><i class="far fa-circle mr-2"></i>採用</a>
-            <a class="btn btn-secondary" href="{{route('appjob.unadopt', [$job->id])}}" onclick="return window.confirm('「不採用」で間違いありませんか？');"><i class="fas fa-times mr-2"></i>不採用</a>
+            <a href="{{route('app.fesmoney.get', [$appliedJobitem->pivot->apply_id])}}" class="btn btn-yellow"><i class="far fa-circle mr-2"></i>採用</a>
+            <a class="btn btn-secondary" href="{{route('appjob.unadopt', [$appliedJobitem->pivot->id])}}" onclick="return window.confirm('「不採用」で間違いありませんか？');"><i class="fas fa-times mr-2"></i>不採用</a>
         </div>
     </div>
     

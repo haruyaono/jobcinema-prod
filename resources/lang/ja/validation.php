@@ -121,6 +121,10 @@ return [
         'gender' => '「性別」',
         'age' => '「年齢」',
         'resume' => '「履歴書ファイル」',
+        'work_start_date' => '勤務開始可能日',
+        'occupation' => '現在の職業',
+        'final_education' => '最終学歴',
+        'job_msg' => '志望動機・メッセージ',
 
         //employer
         'e_last_name' => '「ご担当者様名」',

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
 use App\Job\Users\User;
+use App\Job\Users\Repositories\UserRepository;
 use App\Job\JobItems\JobItem;
 use App\Models\Profile;
 use App\Models\PostalCode;
@@ -31,6 +32,7 @@ use Log;
 
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 
 class JobController extends Controller
 {
@@ -38,9 +40,11 @@ class JobController extends Controller
     /**
      * @var CategoryRepositoryInterface
      * @var JobItemRepositoryInterface
+    *  @var UserRepositoryInterface
      */
     private $categoryRepo;
-    private $JobItemRepo;
+    private $jobItemRepo;
+    private $userRepo;
 
     private $job_form_session = 'count';
     private $JobItem;
@@ -51,43 +55,50 @@ class JobController extends Controller
      * @param JobItem $JobItem
      * @param CategoryRepositoryInterface $categoryRepository
      * @param JobItemRepositoryInterface $jobItemRepository
+     * @param UserRepositoryInterface $userRepository
      */
     public function __construct(
       JobItem $JobItem, 
       CategoryRepositoryInterface $categoryRepository,
-      JobItemRepositoryInterface $jobItemRepository
+      JobItemRepositoryInterface $jobItemRepository,
+      UserRepositoryInterface $userRepository
     ) {
       $this->middleware(['employer'], ['except'=>array('index','show', 'getJobHistory', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;
       $this->categoryRepo = $categoryRepository;
-      $this->JobItemRepo = $jobItemRepository;
+      $this->jobItemRepo = $jobItemRepository;
+      $this->userRepo = $userRepository;
     }
 
     public function index(Request $request)
     {
       $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
-      $jobCount = $this->JobItemRepo->listJobitemCount();
+      $jobCount = $this->jobItemRepo->listJobitemCount();
 
       return view('jobs.index', compact('topNewJobs', 'jobCount'));
     }
 
     public function show(Request $request, $id)
     {
-      session()->forget('jobapp_count');
+
       session()->forget('jobapp_data');
  
-      $job = JobItem::find($id);
+      $job = $this->jobItemRepo->findJobItemById($id);
 
       if(Auth::check()) {
-        $loginUserId = Auth::id();
-        Redis::command('LREM', ['Viewer:Item:'.$id, 0, $loginUserId]);
-        Redis::command('RPUSH', ['Viewer:Item:'.$id, $loginUserId]);
+        $user = $this->userRepo->findUserById(auth()->user()->id);
+
+        Redis::command('LREM', ['Viewer:Item:'.$id, 0, $user->id]);
+        Redis::command('RPUSH', ['Viewer:Item:'.$id, $user->id]);
         Redis::command('LTRIM', ['Viewer:Item:'.$id, 0, 999]);
+
+        $existsApplied = $this->userRepo->existsAppliedJobItem($user, $id);
+      
       }
 
       // 最近見た求人リストの配列を操作
-      $this->JobItemRepo->createRecentJobItemIdList($request, $id);
+      $this->jobItemRepo->createRecentJobItemIdList($request, $id);
 
       if($job->status == 2) {
         $title = $job->company->cname;
@@ -98,7 +109,7 @@ class JobController extends Controller
           $jobImageBaseUrl = '';
         }
 
-        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl'));
+        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied'));
       } else {
         if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
           $index = array_search( $id, $jobitem_id_list, true );
@@ -114,9 +125,7 @@ class JobController extends Controller
      public function getJobHistory() 
      {
 
-      // session()->forget('recent_jobs');
-      $jobs = $this->JobItemRepo->listRecentJobItemId(1);
-      // var_dump($jobs);
+      $jobs = $this->jobItemRepo->listRecentJobItemId(1);
    
       return view('jobs.history', compact('jobs'));
      }
@@ -124,9 +133,8 @@ class JobController extends Controller
     // 最近見た求人のリストを返す
     public function postJobHistory(Request $request) 
     {
-      $jobs = $this->JobItemRepo->listRecentJobItemId(0);
+      $jobs = $this->jobItemRepo->listRecentJobItemId(0);
       
-
       return response()->json($jobs);
     }
 
@@ -459,7 +467,7 @@ class JobController extends Controller
         session()->forget('data.file.edit_image');
         session()->forget('data.file.edit_movie');
 
-        $jobImageBaseUrl = $this->JobItemRepo->getJobImageBaseUrl();
+        $jobImageBaseUrl = $this->jobItemRepo->getJobImageBaseUrl();
 
         return view('jobs.post.create_step2', compact('jobItem', 'jobImageBaseUrl'));
 
@@ -1094,7 +1102,7 @@ class JobController extends Controller
         }
         session()->forget('count');
         session()->put('count', 3);
-        $jobImageBaseUrl = $this->JobItemRepo->getJobImageBaseUrl();
+        $jobImageBaseUrl = $this->jobItemRepo->getJobImageBaseUrl();
 
         return view('jobs.post.confirm', compact('job', 'jobImageBaseUrl'));
       } else {
@@ -1644,23 +1652,6 @@ class JobController extends Controller
     }
 
 
-    public function getApplyStep1($id)
-    {
-      $job = JobItem::findOrFail($id);
-      if(Auth::user()) {
-        $user = auth()->user();
-        $user_id = $user->id;
-        $profile = Profile::where('user_id',$user_id)->first();
-        $postcode = $profile['postcode'];
-        $postcode = str_replace("-", "", $postcode);
-        $postcode1 = substr($postcode,0,3);
-        $postcode2 = substr($postcode,3);
-      }
-      session()->forget('jobapp_count');
-      session()->put('jobapp_count', 1);
-
-      return view('jobs.apply_step1', compact('user','job', 'postcode1', 'postcode2'));
-    }
     public function postApplyStep1(Request $request, $id)
     {
 
@@ -1794,19 +1785,19 @@ class JobController extends Controller
    
       $searchParam = $request->all();
       
-      $query = $this->JobItemRepo->baseSearchJobItems($searchParam);
+      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
 
       if(array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
 
         switch ($searchParam['ks']) {
           case '1':
-            $query = $this->JobItemRepo->getSortJobItems($query, 'hourly_salary_cat_id');
+            $query = $this->jobItemRepo->getSortJobItems($query, 'hourly_salary_cat_id');
             break;
           case '2':
-            $query = $this->JobItemRepo->getSortJobItems($query, 'date_cat_id' , 'asc');
+            $query = $this->jobItemRepo->getSortJobItems($query, 'date_cat_id' , 'asc');
             break;
           case '3':
-            $query = $this->JobItemRepo->getSortJobItems($query, 'oiwaikin');
+            $query = $this->jobItemRepo->getSortJobItems($query, 'oiwaikin');
             break;
           default:
             break;
@@ -1874,7 +1865,7 @@ class JobController extends Controller
     {
 
       $searchParam = $request->all(); 
-      $query = $this->JobItemRepo->baseSearchJobItems($searchParam);
+      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
 
       $jobCount = $query->count();
 

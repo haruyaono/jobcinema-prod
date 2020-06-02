@@ -8,11 +8,14 @@ use Carbon\Carbon;
 use App\Models\Company;
 use App\Models\Employer;
 use App\Job\Users\User;
+use App\Job\Applies\Apply;
 use App\Traits\IsMobile;
 
 class JobItem extends Model
 {
     use IsMobile; 
+
+    protected $table = 'job_items';
 
     protected $guarded  = [];
 
@@ -64,6 +67,21 @@ class JobItem extends Model
             ->withTimeStamps();
     }
 
+    public function applies()
+    {
+        return $this->belongsToMany(Apply::class, 'apply_job_item')
+                    ->withPivot([
+                        'id',
+                        'job_item_id',
+                        's_status',
+                        'e_status',
+                        'oiwaikin',
+                        'oiwaikin_status',
+                        'first_attendance',
+                        'no_first_attendance'
+                    ])->withTimeStamps();
+    }
+
     public function getAppJobList(int $num_per_page = 10, array $condition = [])
     {
         // パラメータの取得
@@ -113,10 +131,14 @@ class JobItem extends Model
         return $month_list;
     }
 
-    public function checkApplication()
-    {
-            return \DB::table('job_item_user')->where('user_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
-    }
+    // public function checkApplication()
+    // {
+     
+    //     // $this->jobitems->get;
+
+    //     var_dump( $this->jobitems->);
+    //         return \DB::table('apply_job_item')->where('apply_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
+    // }
 
     public function favourites()
     {
