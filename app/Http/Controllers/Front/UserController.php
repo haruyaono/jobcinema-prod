@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Library\CustomValidator;
-use App\Models\Profile;
 use App\Job\Users\User;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
@@ -13,11 +13,10 @@ use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Applies\Apply;
 use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
 use App\Job\Users\Requests\UpdateUserPasswordRequest;
-use App\Job\Users\Requests\UpdateUserProfileRequest;
 use Illuminate\Support\Facades\Auth;
-use DB;
-use Storage;
-use Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
@@ -138,130 +137,6 @@ class UserController extends Controller
 
         return redirect()->back()->with($msgData);
 
-    }
-
-    public function create() 
-    {
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-        $profile = $user->profile;
-
-        $postcode = str_replace("-", "", $profile['postcode']);
-        $postcode1 = substr($postcode,0,3);
-        $postcode2 = substr($postcode,3);
-
-        $exists = Storage::disk('s3')->exists('resume/' . $profile->resume);
-        if($exists) {
-            $resumePath =  Storage::disk('s3')->url('resume/'.$profile->resume);
-            if(config('app.env') == 'production') {
-                $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
-            } 
-            
-        } else {
-            $resumePath = '';
-        }
-
-        return view('mypages.edit', compact('postcode1', 'postcode2', 'resumePath'));
-    }
-
-    public function careerCreate() 
-    {
-        return view('mypages.career_edit');
-    }
-
-    public function store(UpdateUserProfileRequest $request)
-    {
-
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-
-        if($request->zip31 && $request->zip32) {
-            $postal_code = $request->zip31."-".$request->zip32;
-        } else {
-            $postal_code  = '';
-        }
-
-        DB::beginTransaction();
-
-        try {
-            Profile::where('user_id', $user->id)->update([
-
-                'phone1' => request('phone1'),
-                'phone2' => request('phone2'),
-                'phone3' => request('phone3'),
-                'age' => request('age'),
-                'gender' => request('gender'),
-                'postcode' => $postal_code,
-                'prefecture' => $request->pref31,
-                'city' => $request->addr31,
-            ]);
-            DB::table('users')->where('id', $user->id)->update([
-                'last_name' => request('last_name'),
-                'first_name' => request('first_name'),
-            ]);
-
-            DB::commit();
-
-        } catch (\PDOException $e){
-            DB::rollBack();
-            return false;
-        }
-        
-        return redirect()->back()->with('message','会員情報を更新しました');
-    }
-
-    public function careerStore(Request $request)
-    {
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-
-        Profile::where('user_id',$user->id)->update([
-            'occupation' => request('occupation'),
-            'final_education' => request('final_education'),
-            'work_start_date' => request('work_start_date'),
-        ]);
-
-        return redirect()->back()->with('message','現在の状況・希望を更新しました');
-    }
-
-    public function resume(Request $request)
-    {
-        $this->validate($request,[
-            'resume' => 'required | max:20000' ,
-        ]);
-
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-        $user_id = $user->id;
-
-        if($user->profile->resume) {
-            Storage::disk('public')->delete($user->profile->resume);
-            Storage::disk('s3')->delete('resume/'.$user->profile->resume);;
-        }
-
-        $filename = $request->file('resume')->hashName();
-        $path = $request->file('resume')->storeAs('public/files/'.$user_id, $filename);
-       
-        $contents = Storage::get('public/files/'.$user_id.'/'.$filename);
-
-        Storage::disk('s3')->put('resume/files/'.$user_id.'/'.$filename, $contents, 'public');
-        Profile::where('user_id', $user_id)->update([
-            'resume' => 'files/'.$user_id.'/'.$filename,
-        ]);
-        return redirect()->back()->with('message','履歴書を更新しました');
-    }
-
-    public function resumeDelete(Request $request)
-    {
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-        $user_id = $user->id;
-        if (is_null($user->profile->resume)) {
-            return redirect()->back()->with('error', '削除する履歴書ファイルがありません');
-        }
-
-        Storage::disk('public')->delete($user->profile->resume);
-
-        Storage::disk('s3')->delete('resume/'.$user->profile->resume);
-        Profile::where('user_id', $user_id)->update([
-            'resume' => null,
-        ]);
-        return redirect()->back()->with('message', '履歴書ファイルを削除しました');
     }
 
     public function jobAppManage() 

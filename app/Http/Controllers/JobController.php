@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Job\Users\User;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\JobItems\JobItem;
-use App\Models\Profile;
+use App\Job\Profiles\Profile;
 use App\Models\PostalCode;
 use App\Models\Company;
 use App\Job\Categories\StatusCategory;

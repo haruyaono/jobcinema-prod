@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Job\Users\User;
-use App\Models\Profile;
-use App\Http\Controllers\Controller;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
+use App\Job\Profiles\Repositories\Interfaces\ProfileRepositoryInterface;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -36,16 +36,20 @@ class RegisterController extends Controller
     protected $redirectTo = '/members/register_complete';
 
     private $userRepo;
+    private $profileRepo;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(UserRepositoryInterface $UserRepositoryInterface)
-    {
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        ProfileRepositoryInterface $profileRepository
+    ) {
         $this->middleware('guest');
-        $this->userRepo = $UserRepositoryInterface;
+        $this->userRepo = $userRepository;
+        $this->profileRepo = $profileRepository;
     }
 
     /**
@@ -57,7 +61,6 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            // 'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:191', 'unique:users','unique:employers'],
             'password' => ['required', 'string', 'min:6', 'max:191', 'confirmed'],
         ]);
@@ -66,15 +69,13 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\Models\User
+     * @param  array $data
+     * @return User
      */
     protected function create(array $data)
     {
         $user = $this->userRepo->createUser($data);
-        Profile::create([
-            'user_id' => $user->id,
-        ]);
+        $this->profileRepo->createProfile(['user_id' => $user->id]);
 
         //メールを非同期に送信するため、send から queueに変更
         Mail::to($user)->queue(new RegisteredMail($user));

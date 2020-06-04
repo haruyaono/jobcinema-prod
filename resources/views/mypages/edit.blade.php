@@ -47,7 +47,7 @@
             <div class="card mypage-card">
                 <div class="card-header">会員情報編集</div>
 
-                <form action="{{ route('mypages.create') }}" method="POST">
+                <form action="{{ route('user.profile.post') }}" method="POST">
                 @csrf
 
                 <div class="card-body text-left">
@@ -167,7 +167,7 @@
                 </div>
             </div>
 
-            <form class="file-upload-form" action="{{ route('resume') }}" method="POST" enctype="multipart/form-data">
+            <form class="file-upload-form" action="{{ route('user.resume.post') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card mt-3 mypage-card">
                     <div class="card-header">履歴書</div>

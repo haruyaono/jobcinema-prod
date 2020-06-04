@@ -34,7 +34,7 @@ $factory->define(Company::class, function (Faker $faker) {
         'phone2' => '1111',
         'phone3' => '2222',
         'industry' => $faker->jobTitle,
-        'logo' => $file->store('companies', ['disk' => 'public']),
+        'logo' => $file->store('test/companies', ['disk' => 'public']),
         'description' => $faker->sentence,
         'foundation' =>  $faker->date,
         'ceo' => $faker->name,
