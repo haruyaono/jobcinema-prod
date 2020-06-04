@@ -91,12 +91,32 @@ Route::namespace('Front')->group(function () {
   Route::get('/apply_step2/{id}', 'ApplyController@getApplyStep2')->name('apply.step2.get');
   Route::post('/apply_step2/{id}', 'ApplyController@postApplyStep2')->name('apply.step2.post');
   Route::get('/apply_complete/{id}', 'ApplyController@completeJobApply')->name('complete.job.apply');
+
+  Route::group(['middleware' => ['auth:user']], function() {
+    //求職者
+    Route::get('/mypage/index', 'UserController@index')->name('mypages.index');
+    Route::get('/mypage/profile_edit', 'UserProfileController@edit')->name('user.profile.get');
+    Route::post('/mypage/profile_create', 'UserProfileController@update')->name('user.profile.post');
+    Route::get('/mypage/career_edit', 'UserProfileController@editCareer')->name('user.career.get');
+    Route::post('/mypage/career_create', 'UserProfileController@updateCareer')->name('user.career.post');
+    Route::post('/mypage/resume', 'UserProfileController@Resume')->name('user.resume.post');
+    Route::delete('/mypage/resume/delete', 'UserProfileController@resumeDelete')->name('resume.delete');
+
+    Route::get('/mypage/application', 'UserController@jobAppManage')->name('mypage.jobapp.manage');
+    Route::get('/mypage/result_report/{apply_id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report'); 
+    Route::get('/mypage/apply_festive_money/{id}', 'UserController@getAppFesMoney')->name('app.fesmoney.get');
+    Route::post('/mypage/apply_festive_money/{id}', 'UserController@postAppFesMoney')->name('app.fesmoney.post');
+    Route::get('/mypage/unadopt/{id}', 'UserController@unAdoptJob')->name('appjob.unadopt');
+    Route::get('/mypage/adopt_cancel/{id}', 'UserController@adoptCancelJob')->name('appjob.cancel');
+    Route::get('/mypage/adopt_decline/{id}', 'UserController@jobDecline')->name('appjob.decline');
+    Route::get('/mypage/changepassword', 'UserController@getChangePasswordForm')->name('mypage.changepassword.get');
+    Route::post('/mypage/changepassword', 'UserController@postChangePassword')->name('mypage.changepassword.post');
+    Route::get('/mypage/change_email', 'UserController@getChangeEmail')->name('mypage.changeemail.get');
+    Route::post('/mypage/change_email', 'UserController@postChangeEmail')->name('mypage.changeemail.post');
+
+    Route::get('/mypage/delete', 'UserController@userDelete')->name('mypage.delete');
+  });
 });
-
-
-
-
-
 
 Route::get('/jobs/{id}', 'JobController@show')->name('jobs.show');
 Route::get('/jobs/search/all', 'JobController@allJobs')->name('alljobs');
@@ -133,28 +153,7 @@ Route::get('contact_e', 'ContactsController@getContactEmployer')->name('contact.
 Route::post('contact_s/complete', 'ContactsController@postContactSeeker')->name('contact.seeker.post');
 Route::post('contact_e/complete', 'ContactsController@postContactEmployer')->name('contact.employer.post');
 
-//求職者
-Route::get('/mypage/index', 'UserController@index')->name('mypages.index');
-Route::get('/mypage/profile_edit', 'UserController@create');
-Route::post('/mypage/profile_create', 'UserController@store')->name('mypages.create');
-Route::get('/mypage/career_edit', 'UserController@careerCreate');
-Route::post('/mypage/career_create', 'UserController@careerStore')->name('mypages.career.create');
-Route::post('/mypage/resume', 'UserController@Resume')->name('resume');
-Route::delete('/mypage/resume/delete', 'UserController@resumeDelete')->name('resume.delete');
 
-Route::get('/mypage/application', 'UserController@jobAppManage')->name('mypage.jobapp.manage');
-Route::get('/mypage/result_report/{apply_id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report'); 
-Route::get('/mypage/apply_festive_money/{id}', 'UserController@getAppFesMoney')->name('app.fesmoney.get');
-Route::post('/mypage/apply_festive_money/{id}', 'UserController@postAppFesMoney')->name('app.fesmoney.post');
-Route::get('/mypage/unadopt/{id}', 'UserController@unAdoptJob')->name('appjob.unadopt');
-Route::get('/mypage/adopt_cancel/{id}', 'UserController@adoptCancelJob')->name('appjob.cancel');
-Route::get('/mypage/adopt_decline/{id}', 'UserController@jobDecline')->name('appjob.decline');
-Route::get('/mypage/changepassword', 'UserController@getChangePasswordForm')->name('mypage.changepassword.get');
-Route::post('/mypage/changepassword', 'UserController@postChangePassword')->name('mypage.changepassword.post');
-Route::get('/mypage/change_email', 'UserController@getChangeEmail')->name('mypage.changeemail.get');
-Route::post('/mypage/change_email', 'UserController@postChangeEmail')->name('mypage.changeemail.post');
-
-Route::get('/mypage/delete', 'UserController@userDelete')->name('mypage.delete');
 
 Auth::routes(['verify' => true]);
 

@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Job\Users\User;
 use App\Job\Users\Repositories\UserRepository;
-use App\Models\Profile;
+use App\Job\Profiles\Profile;
 use App\Job\JobItems\JobItem;
 use App\Job\Applies\Apply;
 use App\Mail\JobAppliedSeeker;

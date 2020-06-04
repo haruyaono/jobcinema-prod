@@ -38,12 +38,12 @@
                                     <a class="btn-gray" href="{{route('mypage.jobapp.manage')}}">応募管理</a>
                                 </li>
                                 <li>
-                                    <a class="btn-gray" href="/mypage/profile_edit">会員情報編集</a>
+                                    <a class="btn-gray" href="{{route('user.profile.get')}}">会員情報編集</a>
                                 </li>
                             </ul>
                             <ul class="mypage-btn-list-inner">
                                 <li>
-                                    <a class="btn-gray" href="/mypage/career_edit">現在の状況・希望編集</a>
+                                    <a class="btn-gray" href="{{route('user.career.get')}}">現在の状況・希望編集</a>
                                 </li>
                                 <li>
                                     <a class="btn-gray" href="{{route('mypage.changepassword.get')}}">パスワード変更</a>

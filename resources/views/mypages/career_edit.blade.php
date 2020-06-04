@@ -14,7 +14,7 @@
 <ol>
   <li>
     <a href="/mypage/index">
-     　マイページ
+     マイページ
     </a>
   </li>
   <li>
@@ -38,7 +38,7 @@
             <div class="card mypage-card">
                 <div class="card-header">現在の状況・希望編集</div>
 
-                <form action="{{ route('mypages.career.create') }}" method="POST">
+                <form action="{{ route('user.career.post') }}" method="POST">
                 @csrf
 
                 <div class="card-body text-left">

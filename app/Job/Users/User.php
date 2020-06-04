@@ -9,7 +9,7 @@ use DB;
 use Carbon\Carbon;
 use App\Job\JobItems\JobItem;
 use App\Job\Applies\Apply;
-use App\Models\Profile;
+use App\Job\Profiles\Profile;
 use App\Models\Company;
 use App\Notifications\EmailVerificationJa;
 use Illuminate\Support\Facades\Auth;
