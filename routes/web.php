@@ -190,50 +190,45 @@ Route::group(['middleware' => 'auth:user'], function() {
 | 3) 採用担当 認証不要
 |--------------------------------------------------------------------------
 */
-// Route::get('/company/register/complete', 'Employer\LoginController@verifyAfter');
-Route::group(['prefix' => 'employer'], function() {
-  // Route::get('home',  'Employer\HomeController@index')->name('employer.home');
-  Route::get('login',     'Employer\LoginController@showLoginForm')->name('employer.login');
-  Route::post('login',    'Employer\LoginController@login')->name('employer.login.post')->middleware('confirm');
-
-  //企業 仮登録
-  # 入力画面
-  Route::get('getpage', [
-      'uses' => 'Employer\RegisterController@index',
+Route::namespace('Employer')->group(function () {
+  Route::group(['prefix' => 'employer'], function() {
+    # ログイン
+    Route::get('login',     'LoginController@showLoginForm')->name('employer.login');
+    Route::post('login',    'LoginController@login')->name('employer.login.post');
+    # 入力画面
+    Route::get('getpage', [
+      'uses' => 'RegisterController@index',
       'as' => 'employer.register.index'
-  ]);
+    ]);
+    # 企業仮登録 確認画面
+    Route::post('confirm', [
+      'uses' => 'RegisterController@confirm',
+      'as' => 'employer.confirm'
+    ]);
+    # 企業仮登録 完了
+    Route::post('register', 'RegisterController@register')->name('employer.register');
+    # 企業 本登録
+    Route::get('register/verify/{token}', 'RegisterController@showForm');
+    Route::post('register/main_confirm', 'RegisterController@mainConfirm')->name('employer.main.confirm');
+    Route::post('register/main_register', 'RegisterController@mainRegister')->name('employer.main.register');
+    # 企業 仮登録メール再送
+    Route::get('verify/resend', 'RegisterController@getVerifyResend');
+    Route::post('verify/resend', 'RegisterController@postVerifyResend');
+    # 企業 パスワード リセット
+    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('employer.password.email');
+    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('employer.password.request');
+    Route::post('password/reset', 'ResetPasswordController@reset')->name('employer.password.update');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('employer.password.reset');
+    Route::get('redirect/passreset', 'ResetPasswordController@redirectPassReset');
 
-  # 企業仮登録 確認画面
-  Route::post(' onfirm', [
-    'uses' => 'Employer\RegisterController@confirm',
-    'as' => 'employer.confirm'
-  ]);
-
-  // 企業仮登録 完了
-  Route::post('register', 'Employer\RegisterController@register')->name('employer.register');
-
-  //  企業 本登録
-  Route::get('register/verify/{token}', 'Employer\RegisterController@showForm');
-  Route::post('register/main_confirm', 'Employer\RegisterController@mainConfirm')->name('employer.main.confirm');
-  Route::post('register/main_register', 'Employer\RegisterController@mainRegister')->name('employer.main.register');
-
-  //企業 仮登録メール再送
-  Route::get('verify/resend', 'Employer\RegisterController@getVerifyResend');
-  Route::post('verify/resend', 'Employer\RegisterController@postVerifyResend');
-
-  // 企業 パスワード リセット
-  Route::post('password/email', 'Employer\ForgotPasswordController@sendResetLinkEmail')->name('employer.password.email');
-  Route::get('password/reset', 'Employer\ForgotPasswordController@showLinkRequestForm')->name('employer.password.request');
-  Route::post('password/reset', 'Employer\ResetPasswordController@reset')->name('employer.password.update');
-  Route::get('password/reset/{token}', 'Employer\ResetPasswordController@showResetForm')->name('employer.password.reset');
-  Route::get('redirect/passreset', 'Employer\ResetPasswordController@redirectPassReset');
-
-   //企業マイページからのパスワード ・メールアドレス 変更
-  Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('employer.changepassword.get');
-  Route::post('changepassword', 'CompanyController@postChangePassword')->name('employer.changepassword.post');
-  Route::get('change_email', 'CompanyController@getChangeEmail')->name('employer.changeemail.get');
-  Route::post('change_email', 'CompanyController@postChangeEmail')->name('employer.changeemail.post');
+  });
 });
+
+//企業マイページからのパスワード ・メールアドレス 変更
+Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('employer.changepassword.get');
+Route::post('changepassword', 'CompanyController@postChangePassword')->name('employer.changepassword.post');
+Route::get('change_email', 'CompanyController@getChangeEmail')->name('employer.changeemail.get');
+Route::post('change_email', 'CompanyController@postChangeEmail')->name('employer.changeemail.post');
 
 /*
 |--------------------------------------------------------------------------

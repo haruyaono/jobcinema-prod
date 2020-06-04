@@ -52,7 +52,6 @@
                                 <th scope="row">パスワード</th>
                                 <td>
                                 {{$password_mask}}
-                                <!-- <input size="45" id="password" type="password"  name="password" disabled="disabled" value="{{$password}}"> -->
                                 </td>
                                 </tr>
                                 <tr>

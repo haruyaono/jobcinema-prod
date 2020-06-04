@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Job\Users\User;
 use App\Job\Profiles\Profile;
-use App\Models\Employer;
+use App\Job\Employers\Employer;
 use App\Job\JobItems\JobItem;
 use App\Models\Company;
 use App\Job\Categories\StatusCategory;

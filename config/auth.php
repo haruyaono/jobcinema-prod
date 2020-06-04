@@ -83,7 +83,7 @@ return [
         ],
         'employers' => [ //追加
             'driver' => 'eloquent', //追加
-            'model' => App\Models\Employer::class, //追加
+            'model' => App\Job\Employers\Employer::class, //追加
         ],
         'admins' => [
             'driver' => 'eloquent',

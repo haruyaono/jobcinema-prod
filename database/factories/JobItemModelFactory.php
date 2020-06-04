@@ -13,7 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\Job\JobItems\JobItem;
-use App\Models\Employer;
+use App\Job\Employers\Employer;
 use App\Models\Company;
 use Illuminate\Http\UploadedFile;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Job\Employers;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -8,11 +8,14 @@ use App\Models\Company;
 use App\Job\JobItems\JobItem;
 use App\Notifications\EmployerPasswordResetNotification;
 use App\Notifications\EmailVerificationJa;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employer extends Authenticatable
 {
-    use Notifiable;
-    
+    use Notifiable, SoftDeletes; 
 
     /**
      * The attributes that are mass assignable.
@@ -20,9 +23,9 @@ class Employer extends Authenticatable
      * @var array
      */
     protected $fillable = [
-         'last_name','first_name','last_name_kana','first_name_kana', 'status',
-         'phone1','phone2','phone3','email', 'password', 'email_verified', 'email_verify_token',
-    ];
+        'last_name','first_name','last_name_kana','first_name_kana', 'status',
+        'phone1','phone2','phone3','email', 'password', 'email_verified', 'email_verify_token',
+   ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -30,14 +33,12 @@ class Employer extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    protected $dates= ['deleted_at'];
+    
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -59,7 +60,7 @@ class Employer extends Authenticatable
     public function isMainRegistered() { 
         return  $this->status == 1 || $this->status == 8;
     }
-
-
+    
+     
 
 }
