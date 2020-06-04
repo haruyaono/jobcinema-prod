@@ -61,6 +61,18 @@ class ProfileUnitTest extends TestCase
 
      }
 
+     /** @test */
+     public function it_can_soft_delete_the_profile()
+     {
+        $created = factory(Profile::class)->create();
+
+        $profile = new ProfileRepository($created);
+        $profile->deleteProfile();
+
+        $this->assertDatabaseHas('profiles', ['id' => $created->id]);
+
+     }
+
       /** @test */
     public function it_can_create_the_profile()
     {

@@ -8,6 +8,7 @@ use App\Library\CustomValidator;
 use App\Job\Users\User;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
+use App\Job\Profiles\Repositories\ProfileRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Applies\Apply;
@@ -311,6 +312,8 @@ class UserController extends Controller
     {
         $user = $this->userRepo->findUserById(auth()->user()->id);
         $userRepo = new UserRepository($user);
+        $profile = new ProfileRepository($user->profile);
+
         // $applies = $this->userRepo->findApplies($user);
         // $appliedJobItems = $this->userRepo->listAppliedJobItem($user);
 
@@ -319,12 +322,10 @@ class UserController extends Controller
             if ($user->profile->resume) {
                 Storage::disk('public')->delete($user->profile->resume);
                 Storage::disk('s3')->delete('resume/'.$user->profile->resume);
-                Profile::where('user_id', $user->id)->update([
-                    'resume' => null,
-                ]);
+                $profile->updateProfile(['resume' => null]);
             }
             
-            Profile::where('user_id', $user->id)->delete();
+            $profile->deleteProfile();
             $userRepo->deleteUser();
 
             DB::commit();

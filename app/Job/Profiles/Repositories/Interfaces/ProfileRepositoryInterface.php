@@ -14,5 +14,7 @@ interface ProfileRepositoryInterface extends BaseRepositoryInterface
 
     public function updateProfile(array $data): bool;
 
+    public function deleteProfile() : bool;
+
     public function findProfileById(int $id) : Profile;
 }

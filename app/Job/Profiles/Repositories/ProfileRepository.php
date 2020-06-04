@@ -51,6 +51,17 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
     }
 
     /**
+     * Soft delete the profile
+     * 
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteProfile() : bool
+    {
+        return $this->delete();
+    }
+
+    /**
      * Return the profile
      * 
      * @param int $id
