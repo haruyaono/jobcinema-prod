@@ -24,11 +24,10 @@ use App\Http\Requests\JobCreateTmpSaveRequest;
 use App\Mail\JobAppliedSeeker;
 use App\Mail\JobAppliedEmployer;
 use Illuminate\Support\Facades\Mail;
-use File;
-use Storage;
-use Auth;
-use DB;
-use Log;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
@@ -49,7 +48,6 @@ class JobController extends Controller
     private $job_form_session = 'count';
     private $JobItem;
     
-  
      /**
      * JobController constructor.
      * @param JobItem $JobItem
@@ -63,79 +61,11 @@ class JobController extends Controller
       JobItemRepositoryInterface $jobItemRepository,
       UserRepositoryInterface $userRepository
     ) {
-      $this->middleware(['employer'], ['except'=>array('index','show', 'getJobHistory', 'postJobHistory', 'getApplyStep1','postApplyStep1','getApplyStep2','postApplyStep2', 'completeJobApply', 'allJobs', 'realSearchJob')]);
 
       $this->JobItem = $JobItem;
       $this->categoryRepo = $categoryRepository;
       $this->jobItemRepo = $jobItemRepository;
       $this->userRepo = $userRepository;
-    }
-
-    public function index(Request $request)
-    {
-      $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
-      $jobCount = $this->jobItemRepo->listJobitemCount();
-
-      return view('jobs.index', compact('topNewJobs', 'jobCount'));
-    }
-
-    public function show(Request $request, $id)
-    {
-
-      session()->forget('jobapp_data');
- 
-      $job = $this->jobItemRepo->findJobItemById($id);
-
-      if(Auth::check()) {
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-
-        Redis::command('LREM', ['Viewer:Item:'.$id, 0, $user->id]);
-        Redis::command('RPUSH', ['Viewer:Item:'.$id, $user->id]);
-        Redis::command('LTRIM', ['Viewer:Item:'.$id, 0, 999]);
-
-        $existsApplied = $this->userRepo->existsAppliedJobItem($user, $id);
-      
-      }
-
-      // 最近見た求人リストの配列を操作
-      $this->jobItemRepo->createRecentJobItemIdList($request, $id);
-
-      if($job->status == 2) {
-        $title = $job->company->cname;
-
-        if(config('app.env') == 'production') {
-          $jobImageBaseUrl = config('app.s3_url');
-        } else {
-          $jobImageBaseUrl = '';
-        }
-
-        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied'));
-      } else {
-        if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
-          $index = array_search( $id, $jobitem_id_list, true );
-          session()->forget("recent_jobs.$index");
-        } 
-      }
-
-      return redirect()->to('/');
-
-    }
-
-     // 最近見た求人リスト
-     public function getJobHistory() 
-     {
-
-      $jobs = $this->jobItemRepo->listRecentJobItemId(1);
-   
-      return view('jobs.history', compact('jobs'));
-     }
-
-    // 最近見た求人のリストを返す
-    public function postJobHistory(Request $request) 
-    {
-      $jobs = $this->jobItemRepo->listRecentJobItemId(0);
-      
-      return response()->json($jobs);
     }
 
     public function applicant()
@@ -1651,224 +1581,4 @@ class JobController extends Controller
       return redirect()->route('job.edit', ['id' => $job->id])->with('message_success','申請を取り消しました');
     }
 
-
-    public function postApplyStep1(Request $request, $id)
-    {
-
-      $this->validate($request,[
-            'last_name' => 'required|string|max:191|kana',
-            'first_name' => 'required|string|max:191|kana',
-            'phone1' => 'required|numeric|digits_between:2,5',
-            'phone2' => 'required|numeric|digits_between:1,4',
-            'phone3' => 'required|numeric|digits_between:3,4',
-            'gender' => 'required',
-            'age' => 'required|numeric|between:15,99',
-            'zip31' => 'required|numeric|digits:3',
-            'zip32' => 'required|numeric|digits:4',
-            'pref31' => 'required|string|max:191',
-            'addr31' => 'required|string|max:191',
-            'occupation' => 'required|not_in',
-            'final_education' => 'required|not_in',
-            'work_start_date' => 'required',
-            'job_msg' => 'max:1000',
-            'job_q1' => 'max:1000',
-            'job_q2' => 'max:1000',
-            'job_q3' => 'max:1000',
-      ]);
-
-      if($request->session()->has('jobapp_count') == 1) {
-
-        $request->session()->put('jobapp_data', $request->all());
-        $request->session()->forget('jobapp_count');
-        $request->session()->put('jobapp_count', 2);
-        return redirect()->action('JobController@getApplyStep2', ['id' => $id]);
-      }
-
-      $request->session()->forget('jobapp_count');
-      $request->session()->forget('jobapp_data');
-      return redirect()->to('/');
-    }
-
-    public function getApplyStep2($id)
-    {
-
-      if(session()->has('jobapp_count') == 2) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.apply_step2', compact('job'));
-      }
-
-      session()->forget('jobapp_count');
-      session()->forget('jobapp_data');
-
-      return redirect()->to('/');
-
-
-    }
-
-    public function postApplyStep2(Request $request, $id)
-    {
-      if(session()->has('jobapp_count') == 2) {
-
-        $jobId = JobItem::findOrFail($id);
-        $appUser = $jobId->users()->where('user_id', auth()->user()->id)->first();
-        $company = $jobId->company;
-        $employer = $jobId->employer;
-
-
-        $postal_code = $request->session()->get('jobapp_data.zip31') . "-" . $request->session()->get('jobapp_data.zip32');
-
-        $jobAppData = $request->session()->get('jobapp_data');
-        $jobId->users()->attach(Auth::user()->id,[
-          'employer_id' => $employer->id,
-          's_status' => 0,
-          'e_status' => 0,
-          'last_name' => $request->session()->get('jobapp_data.last_name'),
-          'first_name' => $request->session()->get('jobapp_data.first_name'),
-          'postcode' => $postal_code,
-          'prefecture' => $request->session()->get('jobapp_data.pref31'),
-          'city' => $request->session()->get('jobapp_data.addr31'),
-          'gender' => $request->session()->get('jobapp_data.gender'),
-          'age' => $request->session()->get('jobapp_data.age'),
-          'phone1' => $request->session()->get('jobapp_data.phone1'),
-          'phone2' => $request->session()->get('jobapp_data.phone2'),
-          'phone3' => $request->session()->get('jobapp_data.phone3'),
-          'occupation' => $request->session()->get('jobapp_data.occupation'),
-          'final_education' => $request->session()->get('jobapp_data.final_education'),
-          'work_start_date' => $request->session()->get('jobapp_data.work_start_date'),
-          'phone3' => $request->session()->get('jobapp_data.phone3'),
-          'job_msg' => $request->session()->get('jobapp_data.job_msg'),
-          'job_q1' => $request->session()->get('jobapp_data.job_q1'),
-          'job_q2' => $request->session()->get('jobapp_data.job_q2'),
-          'job_q3' => $request->session()->get('jobapp_data.job_q3'),
-        ]);
-
-
-        Mail::to(auth()->user()->email)->queue(new JobAppliedSeeker($jobId, $jobAppData, $company, $employer));
-        Mail::to($employer->email)->queue(new JobAppliedEmployer($appUser, $jobId, $jobAppData, $company, $employer));
-
-        session()->forget('jobapp_count');
-        session()->put('jobapp_count', 3);
-        return redirect()->action('JobController@completeJobApply', ['id' => $id]);
-
-      }
-
-      $request->session()->forget('jobapp_count');
-      $request->session()->forget('jobapp_data');
-      return redirect()->to('/');
-    }
-
-    public function completeJobApply($id)
-    {
-      if(session()->has('jobapp_count') == 3) {
-
-        $job = JobItem::findOrFail($id);
-        session()->forget('jobapp_count');
-        session()->forget('jobapp_data');
-        return view('jobs.apply_complete', compact('job'));
-      }
-      session()->forget('jobapp_count');
-      session()->forget('jobapp_data');
-      return redirect()->to('/');
-
-    }
-
-    public function getFavoriteJobs()
-    {
-      $jobs = Auth::user()->favourites;
-
-      return view('jobs.fovourites', compact('jobs'));
-
-    }
-
-    public function allJobs(Request $request)
-    {
-   
-      $searchParam = $request->all();
-      
-      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
-
-      if(array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
-
-        switch ($searchParam['ks']) {
-          case '1':
-            $query = $this->jobItemRepo->getSortJobItems($query, 'hourly_salary_cat_id');
-            break;
-          case '2':
-            $query = $this->jobItemRepo->getSortJobItems($query, 'date_cat_id' , 'asc');
-            break;
-          case '3':
-            $query = $this->jobItemRepo->getSortJobItems($query, 'oiwaikin');
-            break;
-          default:
-            break;
-        }
-
-      }
-      
-      // $job_ids = $query->get(['id'])->toArray();
-      // $job_ids = array_flatten($job_ids);
-
-      // foreach ($job_ids as $job_id1) {
-      //   $base = Redis::command('lRange', ['Viewer:Item:' . $job_id1, 0, 999]);
-
-      //   if (count($base) === 0) {
-      //       continue;
-      //   }
-        
-      //   foreach ($job_ids as $job_id2) {
-      //     // var_dump($job_id1 === $job_id2);
-      //       if ($job_id1 === $job_id2) {
-      //           continue;
-      //       }
-     
-      //       $target = Redis::command('lRange', ['Viewer:Item:' . $job_id2, 0, 999]);
-      //       if (count($target) === 0) {
-      //           continue;
-      //       }
-
-      //       # ジャッカード指数を計算
-      //       $join = floatval(count(array_unique(array_merge($base, $target))));
-      //       $intersect = floatval(count(array_intersect($base, $target)));
-      //       if ($intersect == 0 || $join == 0) {
-      //           continue;
-      //       }
-      //       $jaccard = $intersect / $join;
-    
-      //       Redis::command('zAdd', ['Jaccard:Item:' . $job_id1, $jaccard, $job_id2]);
-      //   }
-      // }
-      
-      $totalJobItem = $query->count();
-      $jobs = $query->latest()->paginate(20);
-
-      //件数表示の例外処理
-      if( Input::get('page') > $jobs->LastPage()) {
-        abort(404);
-      }
-
-      $hash = array(
-          'keyword' => array_key_exists( 'title', $searchParam ) ? $searchParam['title'] : '',
-          'status' => array_key_exists( 'status_cat_id', $searchParam ) ? $searchParam['status_cat_id'] : '',
-          'type' => array_key_exists( 'type_cat_id', $searchParam ) ? $searchParam['type_cat_id'] : '',
-          'area' => array_key_exists( 'area_cat_id', $searchParam ) ? $searchParam['area_cat_id'] : '',
-          'hourlySaraly' => array_key_exists( 'hourly_salary_cat_id', $searchParam ) ? $searchParam['hourly_salary_cat_id'] : '',
-          'date' => array_key_exists( 'date_cat_id', $searchParam ) ? $searchParam['date_cat_id'] : '',
-          'jobs' => $jobs,
-          'jobCount' => $totalJobItem 
-          );
-
-       return view('jobs.alljobs')->with($hash);
-
-    }
-
-    public function realSearchJob(Request $request)
-    {
-
-      $searchParam = $request->all(); 
-      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
-
-      $jobCount = $query->count();
-
-      return response()->json($jobCount);
-    }
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Http\Requests\ContactRequestForSeeker;
 use App\Http\Requests\ContactRequestForEmployer;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class ContactsController extends Controller
 {

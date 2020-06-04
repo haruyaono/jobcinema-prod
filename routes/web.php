@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 // 求人
-Route::get('/', 'JobController@index')->name('top.get');
 Route::get('/job_cats/{url}', 'CategoryController@getAllCat')->name('allcat');
 
 Route::get('/jobs/create/top', 'JobController@createTop')->name('job.create.top');
@@ -56,16 +55,12 @@ Route::get('/jobs/sub/movie02/delete/{id?}', 'MediaController@movieDelete')->nam
 Route::get('/jobs/sub/movie02/{id?}', 'MediaController@getSubMovie2')->name('sub.movie2.get');
 Route::post('/jobs/sub/movie02/{id?}', 'MediaController@postMovie')->name('sub.movie2.post');
 
-// 最近見た求人
-Route::post('/jobs/ajax_history_sheet_list', 'JobController@postJobHistory');
 
 Route::get('/jobs/{id}/edit', 'JobController@edit')->name('job.edit');
 Route::post('/jobs/{id}/edit', 'JobController@update')->name('job.update');
 Route::get('/jobs/edit/category/{id}/{category}', 'JobController@catEdit')->name('job.category.edit');
 Route::post('/jobs/edit/category/{id}/update', 'JobController@catUpdate')->name('job.category.update');
 
-// 閲覧履歴
-Route::get('/jobs/history', 'JobController@getJobHistory')->name('history.get');
 
 // お知らせ
 Route::get('/jobs/info')->name('info.get');
@@ -85,12 +80,37 @@ Route::get('/applications/adopt_cancel/{id}/{user_id}', 'JobController@empAdoptC
 
 
 Route::namespace('Front')->group(function () {
-  //求人応募
-  Route::get('/apply_step1/{id}', 'ApplyController@getApplyStep1')->name('apply.step1.get');
-  Route::post('/apply_step1/{id}', 'ApplyController@postApplyStep1')->name('apply.step1.post');
-  Route::get('/apply_step2/{id}', 'ApplyController@getApplyStep2')->name('apply.step2.get');
-  Route::post('/apply_step2/{id}', 'ApplyController@postApplyStep2')->name('apply.step2.post');
-  Route::get('/apply_complete/{id}', 'ApplyController@completeJobApply')->name('complete.job.apply');
+  # 求人
+  Route::get('/', 'JobController@index')->name('top.get');
+  Route::group(['prefix' => 'jobs'], function() {
+    Route::get('{id}', 'JobController@show')->name('jobs.show');
+    Route::get('search/all', 'JobController@allJobs')->name('alljobs');
+    Route::post('ajax_history_sheet_list', 'JobController@postJobHistory');
+  });
+  Route::get('history/jobs', 'JobController@getJobHistory')->name('history.get');
+  Route::post('search/SearchJobItemAjaxAction','JobController@realSearchJob');
+  # 求人応募
+  Route::get('apply_step1/{id}', 'ApplyController@getApplyStep1')->name('apply.step1.get');
+  Route::post('apply_step1/{id}', 'ApplyController@postApplyStep1')->name('apply.step1.post');
+  Route::get('apply_step2/{id}', 'ApplyController@getApplyStep2')->name('apply.step2.get');
+  Route::post('apply_step2/{id}', 'ApplyController@postApplyStep2')->name('apply.step2.post');
+  Route::get('apply_complete/{id}', 'ApplyController@completeJobApply')->name('complete.job.apply');
+  //求人キープ機能
+  Route::get('keeplist', 'FavouriteController@index')->name('keeplist');
+  Route::post('save/{id}', 'FavouriteController@saveJob');
+  Route::post('unsave/{id}', 'FavouriteController@unSaveJob');
+  //お問い合わせ
+  Route::get('contact_s', 'ContactsController@getContactSeeker')->name('contact.s.get');
+  Route::get('contact_e', 'ContactsController@getContactEmployer')->name('contact.e.get');
+  Route::post('contact_s/complete', 'ContactsController@postContactSeeker')->name('contact.seeker.post');
+  Route::post('contact_e/complete', 'ContactsController@postContactEmployer')->name('contact.employer.post');
+  // LP・固定ページ
+  Route::get('lp', 'PageController@getLp')->name('lp.get');
+  Route::get('beginners', 'PageController@getBeginner');
+  Route::get('terms_service', 'PageController@getTermsService');
+  Route::get('terms_service_e', 'PageController@getTermsServiceE');
+  Route::get('ceo', 'PageController@getCeo');
+  Route::get('manage_about', 'PageController@getManageAbout');
 
   Route::group(['middleware' => ['auth:user']], function() {
     //求職者
@@ -118,18 +138,6 @@ Route::namespace('Front')->group(function () {
   });
 });
 
-Route::get('/jobs/{id}', 'JobController@show')->name('jobs.show');
-Route::get('/jobs/search/all', 'JobController@allJobs')->name('alljobs');
-Route::post('/search/SearchJobItemAjaxAction','JobController@realSearchJob');
-
-// LP・固定ページ
-Route::get('/lp', 'PageController@getLp')->name('lp.get');
-Route::get('/beginners', 'PageController@getBeginner');
-Route::get('/terms_service', 'PageController@getTermsService');
-Route::get('/terms_service_e', 'PageController@getTermsServiceE');
-Route::get('/ceo', 'PageController@getCeo');
-Route::get('/manage_about', 'PageController@getManageAbout');
-
 //会社・企業
 Route::get('/company/mypage', 'CompanyController@mypageIndex')->name('company.mypage');
 Route::get('company/create', 'CompanyController@create')->name('companies.view');
@@ -142,59 +150,32 @@ Route::delete('/company/logo/delete', 'CompanyController@companyLogoDelete')->na
 Route::get('company/delete', 'CompanyController@companyDeleteApp')->name('companies.delete');
 Route::get('company/delete_cancel', 'CompanyController@companyDeleteAppCancel')->name('companies.delete.cancel');
 
-//求人キープ機能
-Route::get('/keeplist', 'FavouriteController@index')->name('keeplist');
-Route::post('/save/{id}', 'FavouriteController@saveJob');
-Route::post('/unsave/{id}', 'FavouriteController@unSaveJob');
-
-//お問い合わせ
-Route::get('contact_s', 'ContactsController@getContactSeeker')->name('contact.s.get');
-Route::get('contact_e', 'ContactsController@getContactEmployer')->name('contact.e.get');
-Route::post('contact_s/complete', 'ContactsController@postContactSeeker')->name('contact.seeker.post');
-Route::post('contact_e/complete', 'ContactsController@postContactEmployer')->name('contact.employer.post');
-
-
-
 Auth::routes(['verify' => true]);
 
-/*
-|--------------------------------------------------------------------------
-| 1) 求職者 認証不要
-|--------------------------------------------------------------------------
-*/
-  Route::get('members/login', 'Auth\LoginController@showLoginForm')->name('login');
-  Route::post('members/login', 'Auth\LoginController@login')->name('login.post');
-  Route::get('members/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-  Route::post('members/register', 'Auth\RegisterController@register')->name('user.register.post');
+Route::namespace('Auth')->group(function () {
+  Route::group(['prefix' => 'members'], function() {
+    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login')->name('login.post');
+    Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'RegisterController@register')->name('user.register.post');
+    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+    Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
+    Route::view('logout', 'auth.logout')->name('user.logout.cpl');
 
-  Route::get('members/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-  Route::post('members/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-  Route::get('members/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-  Route::post('members/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
-
-  Route::view('members/logout', 'auth.logout')->name('user.logout.cpl');
-
-/*
-|--------------------------------------------------------------------------
-| 2) 求職者 ログイン後
-|--------------------------------------------------------------------------
-*/
-Route::group(['middleware' => 'auth:user'], function() {
-
-  Route::get('/members/register_complete', 'HomeController@index')->name('home');
-  Route::post('members/logout', 'Auth\LoginController@logout')->name('logout');
+    Route::group(['middleware' => 'auth:user'], function() {
+      Route::get('register_complete', 'HomeController@index')->name('home');
+      Route::post('logout', 'LoginController@logout')->name('logout');
+    });
+  });
 });
 
-/*
-|--------------------------------------------------------------------------
-| 3) 採用担当 認証不要
-|--------------------------------------------------------------------------
-*/
 Route::namespace('Employer')->group(function () {
   Route::group(['prefix' => 'employer'], function() {
     # ログイン
-    Route::get('login',     'LoginController@showLoginForm')->name('employer.login');
-    Route::post('login',    'LoginController@login')->name('employer.login.post');
+    Route::get('login', 'LoginController@showLoginForm')->name('employer.login');
+    Route::post('login', 'LoginController@login')->name('employer.login.post');
     # 入力画面
     Route::get('getpage', [
       'uses' => 'RegisterController@index',
@@ -221,7 +202,11 @@ Route::namespace('Employer')->group(function () {
     Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('employer.password.reset');
     Route::get('redirect/passreset', 'ResetPasswordController@redirectPassReset');
 
+    Route::group(['middleware' => ['auth:employer']], function() {
+      Route::post('logout',   'LoginController@logout')->name('employer.logout');
+    });
   });
+
 });
 
 //企業マイページからのパスワード ・メールアドレス 変更
@@ -229,16 +214,6 @@ Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('e
 Route::post('changepassword', 'CompanyController@postChangePassword')->name('employer.changepassword.post');
 Route::get('change_email', 'CompanyController@getChangeEmail')->name('employer.changeemail.get');
 Route::post('change_email', 'CompanyController@postChangeEmail')->name('employer.changeemail.post');
-
-/*
-|--------------------------------------------------------------------------
-| 4) 採用担当 ログイン後
-|--------------------------------------------------------------------------
-*/
-Route::group(['prefix' => 'employer', 'middleware' => 'auth:employer'], function() {
-  Route::post('logout',   'Employer\LoginController@logout')->name('employer.logout');
-});
-
 
 // 管理者
 Route::group(['prefix' => 'dashboard'], function(){
