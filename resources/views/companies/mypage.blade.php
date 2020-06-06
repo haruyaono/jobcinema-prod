@@ -261,7 +261,7 @@
                             <a href="{{route('applicants.view')}}"><i class="fas fa-address-card mr-3"></i>応募者を見る<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('companies.view')}}"><i class="fas fa-building mr-3"></i>企業データの編集<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{route('companies.edit')}}"><i class="fas fa-building mr-3"></i>企業データの編集<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
                             <a href="{{route('employer.changeemail.get')}}"><i class="fas fa-envelope mr-3"></i>メールアドレス変更<i class="fas fa-angle-double-right"></i></a>
@@ -286,9 +286,9 @@
                         </div> -->
                         <div class="mt-4 text-center">
                         @if(Auth::guard('employer')->user()->status == 8)
-                            <a href="{{route('companies.delete.cancel')}}">アカウント削除申請を取り消す</a>
+                            <a href="{{route('companies.delete.cancel')}}" class="txt-blue-link">アカウント削除申請を取り消す</a>
                         @else
-                            <a href="{{route('companies.delete')}}">アカウント削除申請</a>
+                            <a href="{{route('companies.delete')}}" class="txt-blue-link">アカウント削除申請</a>
                         @endif
                             
                         </div>

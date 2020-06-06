@@ -5,7 +5,7 @@ namespace App\Job\JobItems;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use App\Models\Employer;
 use App\Job\Users\User;
 use App\Job\Applies\Apply;
@@ -52,7 +52,7 @@ class JobItem extends Model
 
     public function company()
     {
-        return $this->belongsTo(\App\Models\Company::class);
+        return $this->belongsTo(\App\Job\Companies\Company::class);
     }
 
     public function employer()

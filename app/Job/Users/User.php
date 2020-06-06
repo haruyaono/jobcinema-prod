@@ -5,12 +5,11 @@ namespace App\Job\Users;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Job\JobItems\JobItem;
 use App\Job\Applies\Apply;
 use App\Job\Profiles\Profile;
-use App\Models\Company;
 use App\Notifications\EmailVerificationJa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -56,19 +55,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    // public function company()
-    // {
-    //     return $this->hasOne(Company::class);
-    // }
     public function jobs()
     {
         return $this->hasMany(JobItem::class);
     }
 
-    // public function users()
-    // {
-    //     return $this->belongsToMany(JobItem::class)->withPivot('id')->withTimeStamps()->using(GroupUser::class);
-    // }
     public function applies()
     {
         return $this->hasMany(Apply::class);

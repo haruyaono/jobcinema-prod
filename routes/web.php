@@ -138,18 +138,6 @@ Route::namespace('Front')->group(function () {
   });
 });
 
-//会社・企業
-Route::get('/company/mypage', 'CompanyController@mypageIndex')->name('company.mypage');
-Route::get('company/create', 'CompanyController@create')->name('companies.view');
-Route::post('company/create', 'CompanyController@mypageStore')->name('companies.store');
-Route::get('company/logo', function(){
-  return redirect('/company/create');
-});
-Route::post('company/logo', 'CompanyController@companyLogo')->name('companies.logo');
-Route::delete('/company/logo/delete', 'CompanyController@companyLogoDelete')->name('logo.delete');
-Route::get('company/delete', 'CompanyController@companyDeleteApp')->name('companies.delete');
-Route::get('company/delete_cancel', 'CompanyController@companyDeleteAppCancel')->name('companies.delete.cancel');
-
 Auth::routes(['verify' => true]);
 
 Route::namespace('Auth')->group(function () {
@@ -206,8 +194,22 @@ Route::namespace('Employer')->group(function () {
       Route::post('logout',   'LoginController@logout')->name('employer.logout');
     });
   });
-
 });
+
+Route::group(['prefix' => 'company'], function() {
+  #会社・企業
+  Route::get('mypage', 'CompanyController@mypageIndex')->name('company.mypage');
+  Route::get('edit', 'CompanyController@edit')->name('companies.edit');
+  Route::post('edit', 'CompanyController@update')->name('companies.update');
+  Route::get('logo', function(){
+    return redirect('/company/create');
+  });
+  Route::post('logo', 'CompanyController@companyLogo')->name('companies.logo');
+  Route::delete('logo/delete', 'CompanyController@companyLogoDelete')->name('logo.delete');
+  Route::get('delete', 'CompanyController@companyDeleteApp')->name('companies.delete');
+  Route::get('delete_cancel', 'CompanyController@companyDeleteAppCancel')->name('companies.delete.cancel');
+});
+
 
 //企業マイページからのパスワード ・メールアドレス 変更
 Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('employer.changepassword.get');

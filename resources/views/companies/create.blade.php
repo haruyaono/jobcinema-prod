@@ -45,7 +45,7 @@
         </div>
     @endif
     <div class="row justify-content-center">
-        <form action="{{ route('companies.store') }}" method="POST" class="text-left col-md-12 p-0">
+        <form action="{{ route('companies.update') }}" method="POST" class="text-left col-md-12 p-0 file-apload-form">
         @csrf
         <div class="col-md-12">
             <div class="card">
@@ -221,13 +221,13 @@
                             @else
                             <img class="company-logo-image" src="{{ asset('/')}}{{ Auth::guard('employer')->user()->company->logo }}" alt="">
                             @endif
-                            {!! Form::open(['url' => '/company/logo/delete', 'method' => 'post', 'class' => 'text-right']) !!}
+                            {!! Form::open(['url' => '/company/logo/delete', 'method' => 'post', 'class' => 'text-right file-apload-form']) !!}
                             {{ method_field('DELETE') }}
                                 <button class="mt-1">削除</button>
                             {!! Form::close() !!}   
                         </div>
                         <div class="col-md-7 mt-3">
-                            <form action="{{route('companies.logo')}}" method="post" enctype="multipart/form-data" class="mt-3">
+                            <form action="{{route('companies.logo')}}" method="post" enctype="multipart/form-data" class="mt-3 file-apload-form">
                             @csrf
                                 <input type="file" class="form-control" name="logo" accept="image/*">
                                 <button class="btn btn-success mt-3" type="submit">更新</button>

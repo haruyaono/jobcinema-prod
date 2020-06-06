@@ -6,7 +6,7 @@ use App\Job\Users\User;
 use App\Job\Profiles\Profile;
 use App\Job\Employers\Employer;
 use App\Job\JobItems\JobItem;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use App\Job\Categories\StatusCategory;
 use App\Job\Categories\TypeCategory;
 use App\Job\Categories\HourlySalaryCategory;

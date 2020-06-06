@@ -14,7 +14,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\Job\JobItems\JobItem;
 use App\Job\Employers\Employer;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use Illuminate\Http\UploadedFile;
 
 $factory->define(JobItem::class, function (Faker\Generator $faker) {

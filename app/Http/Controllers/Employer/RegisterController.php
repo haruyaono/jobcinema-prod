@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Employer;
 use App\Job\Employers\Employer;
 use App\Job\Employers\Repositories\EmployerRepository;
 use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;

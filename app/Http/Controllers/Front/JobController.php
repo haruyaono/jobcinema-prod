@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Job\Users\User;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\JobItems\JobItem;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use Illuminate\Support\Facades\Auth;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;

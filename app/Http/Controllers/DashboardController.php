@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Job\JobItems\JobItem;
 use App\Job\Users\User;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use App\Models\Employer;
 use App\Job\Categories\StatusCategory;
 use App\Job\Categories\TypeCategory;

@@ -3,28 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Company;
+use App\Job\Companies\Company;
+use App\Job\Companies\Repositories\CompanyRepository;
+use App\Job\Companies\Repositories\Interfaces\CompanyRepositoryInterface;
+use App\Job\Companies\Requests\UpdateCompanyRequest;
 use App\Job\JobItems\JobItem; 
 use App\Models\Employer; 
-use Storage;
-use File; 
-use Hash;
-use Log;
+use App\Job\Employers\Repositories\EmployerRepository;
+use Illuminate\Support\Facades\Storage;
+use File;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
 
 class CompanyController extends Controller
 {
-    public function __construct()
-    {
-      $this->middleware(['employer'], ['except'=>array('index')]);
+     /**
+    *  @var CompanyRepositoryInterface
+     */
+    private $companyRepo;
+
+    /**
+     * JobController constructor.
+     * @param CompanyRepositoryInterface $companyRepository
+     */
+    public function __construct(
+        CompanyRepositoryInterface $companyRepository
+    ){
+        $this->companyRepo = $companyRepository;
     }
 
     //mypage password change
-    public function getChangePasswordForm() {
+    public function getChangePasswordForm() 
+    {
         return view('employer.passwords.changepassword');
     }
-    public function postChangePassword(Request $request) {
+
+    public function postChangePassword(Request $request) 
+    {
+        $employer = auth('employer')->user();
+        $employerRepo = new EmployerRepository($employer);
+
         //現在のパスワードが正しいかを調べる
-        if(!(Hash::check($request->get('current-password'), auth('employer')->user()->password))) {
+        if(!(Hash::check($request->get('current-password'), $employer->password))) {
             return redirect()->back()->with('change_password_error', '現在のパスワードが間違っています。');
         }
 
@@ -40,9 +60,10 @@ class CompanyController extends Controller
         ]);
 
         //パスワードを変更
-        $employer = auth('employer')->user();
-        $employer->password = bcrypt($request->get('new-password'));
-        $employer->save();
+        $data = [
+            'password' => bcrypt($request->get('new-password'))
+        ];
+        $employerRepo->updateEmployer($data);
 
         return redirect()->back()->with('change_password_success', 'パスワードを変更しました。');
     }
@@ -57,40 +78,29 @@ class CompanyController extends Controller
         ]);
 
         $employer = auth('employer')->user();
-        $employer->email = $request->get('email');
-        $employer->save();
+        $employerRepo = new EmployerRepository($employer);
+
+        $data = [
+            'email' => $request->get('email')
+        ];
+        $employerRepo->updateEmployer($data);
 
         return redirect()->back()->with('change_email_success', 'メールアドレスを変更しました。');
     }
 
-    // public function index($id, Company $company)
-    // {
-    //     return view('companies.index', compact('company'));
-    // }
-
     public function mypageIndex()
     {
-
         return view('companies.mypage');
     }
 
-    public function create()
+    public function edit()
     {
 
-        $industries = [
-            'IT・通信','インターネット・広告・メディア','メーカー（機械・電気','メーカー（素材・化学・食品・化粧品・その他）',
-            '商社','医薬品・医療機器・ライフサイエンス・医療系サービス','金融','建設・プラント・不動産',
-            'コンサルティング・専門事務所・監査法人・税理士法人・リサーチ','人材サービス・アウトソーシング・コールセンター','小売','外食',
-            '運輸・物流','エネルギー（電力・ガス・石油・新エネルギー）','旅行・宿泊・レジャー','警備・清掃','理容・美容・エステ',
-            '教育', '農林水産・鉱業', '公社・官公庁・学校・研究施設', '公社・官公庁・学校・研究施設', 'その他', 
-        ];
-        $employeeNumbers= [
-            '1〜10人','11〜50人','51〜100人','101〜300人','301〜500人','501〜1000人','1001〜5000人','5001〜10000人','10001以上',
-        ];
+        $industries = config('const.INDUSTORIES');
+        $employeeNumbers = config('const.EMPLOYEE_NUMBERS');
 
-        $employer_id = auth('employer')->user()->id;
-        $company = Company::where('employer_id',$employer_id)->first();
-        
+        $employer = auth('employer')->user();
+        $company = $employer->company;
 
         $postcode = $company['postcode'];
         $postcode = str_replace("-", "", $postcode);
@@ -102,56 +112,37 @@ class CompanyController extends Controller
         $foundation1 = substr($foundation,0,4);
         $foundation2 = substr($foundation,4);
 
-
         return view('companies.create', compact('industries', 'employeeNumbers', 'postcode1', 'postcode2', 'foundation1', 'foundation2'));
     }
 
-    public function mypageStore(Request $request)
+    public function update(UpdateCompanyRequest $request)
     {
-        $this->validate($request,[
-            'cname' => 'required|string|max:191',
-            'cname_katakana' => 'required|string|max:191|katakana',
-            'zip31' => 'required|numeric|digits:3',
-            'zip32' => 'required|numeric|digits:4',
-            'pref31' => 'required|string|max:191',
-            'addr31' => 'required|string|max:191',
-            'ceo' => 'max:191',
-            'f_year' => 'required|numeric|digits:4',
-            'f_month' => 'required',
-            'capital' => 'max:191',
-            'industry' => 'required',
-            'description' => 'required|string|max:400',
-            'employee_number' => 'required',
-            'website' => 'max:191',
-            'c_phone1' => 'required|numeric|digits_between:2,5',
-            'c_phone2' => 'required|numeric|digits_between:1,4',
-            'c_phone3' => 'required|numeric|digits_between:3,4',
-        ]);
-
-        $postal_code = $request->zip31."-".$request->zip32;
-        $foundation = $request->f_year." 年 ".$request->f_month." 月";
         
-        $employer_id = auth('employer')->user()->id;
-        Company::where('employer_id',$employer_id)->update([
+        $employer = auth('employer')->user();
+        $company = $employer->company;
 
-            'cname' => request('cname'),
-            'slug' => $employer_id,
-            'cname_katakana' => request('cname_katakana'),
-            'postcode' => $postal_code,
-            'prefecture' => request('pref31'),
-            'address' => request('addr31'),
-            'ceo' => request('ceo'),
-            'foundation' => $foundation,
-            'capital' => request('capital'),
-            'industry' => request('industry'),
-            'description' => request('description'),
-            'employee_number' => request('employee_number'),
-            'website' => request('website'),
-            'phone1' => request('c_phone1'),
-            'phone2' => request('c_phone2'),
-            'phone3' => request('c_phone3'),
-            
-        ]);
+        $companyRepo = new CompanyRepository($company);
+
+        $data = [
+            'cname' => $request->cname,
+            'cname_katakana' => $request->cname_katakana,
+            'postcode' => $request->zip31."-".$request->zip32,
+            'prefecture' => $request->pref31,
+            'address' => $request->addr31,
+            'ceo' => $request->ceo,
+            'foundation' => $request->f_year." 年 ".$request->f_month." 月",
+            'capital' => $request->capital,
+            'industry' => $request->industry,
+            'description' => $request->description,
+            'employee_number' => $request->employee_number,
+            'website' => $request->website,
+            'phone1' => $request->c_phone1,
+            'phone2' => $request->c_phone2,
+            'phone3' => $request->c_phone3,
+        ];
+
+        $companyRepo->updateCompany($data);
+
         return redirect()->back()->with('message_success','企業データを更新しました');
     }
 
@@ -159,22 +150,31 @@ class CompanyController extends Controller
      {
         $this->validate($request,[
             'logo' => 'required | max:20000',
-
         ]);
-        $employer_id = auth('employer')->user()->id;
+
+        $employer = auth('employer')->user();
+        $company = $employer->company;
+        $companyRepo = new CompanyRepository($company);
+
+        if(!is_null($company->logo)) {
+            Storage::disk('s3')->delete($company->logo);
+            File::delete(public_path().'/'.$company->logo);
+        }
+
         if($request->hasfile('logo')) {
             $file = $request->file('logo');
             $ext = $file->getClientOriginalExtension(); 
             $filename = time(). '.' .$ext;
-            
-            $file->move('upload/c_logo/'.$employer_id .'/', $filename);
-            $contents = File::get(public_path().'/upload/c_logo/'.$employer_id.'/'.$filename);
 
-            Storage::disk('s3')->put('upload/c_logo/'.$employer_id.'/'.$filename, $contents, 'public');
+            $filePath = 'upload/c_logo/'.$company->id .'/';
+            
+            $file->move($filePath, $filename);
+
+            $contents = File::get(public_path().'/' . $filePath . $filename);
+            Storage::disk('s3')->put($filePath . $filename, $contents, 'public');
                
-            Company::where('employer_id', $employer_id)->update([
-                'logo' => 'upload/c_logo/'.$employer_id.'/'.$filename,
-            ]);
+            $companyRepo->updateCompany(['logo' => $filePath . $filename]);
+        
             return redirect()->back()->with('message_success','企業ロゴを登録しました');
         } else {
             return redirect()->back()->with('message_danger','画像を選択してください');
@@ -183,38 +183,43 @@ class CompanyController extends Controller
 
      public function companyLogoDelete(Request $request)
     {
-        $employer = Employer::find(auth('employer')->user()->id);
-        $employer_id = auth('employer')->user()->id;
-        if (is_null($employer->company->logo)) {
+        $employer = auth('employer')->user();
+        $company = $employer->company;
+        $companyRepo = new CompanyRepository($company);
+
+        if (is_null($company->logo)) {
             return redirect()->back()->with('message_danger', '削除するロゴがありません');
         }
-        Storage::disk('s3')->delete($employer->company->logo);
-        File::delete(public_path().'/'.$employer->company->logo);
-        Company::where('employer_id', $employer_id)->update([
-            'logo' => null,
-        ]);
+
+        Storage::disk('s3')->delete($company->logo);
+        File::delete(public_path().'/'.$company->logo);
+
+        $companyRepo->updateCompany(['logo' => null]);
+    
         return redirect()->back()->with('message_success', 'ロゴを削除しました');
     }
 
     public function companyDeleteApp()
     {
-        $employer = Employer::find(auth('employer')->user()->id);
-        $employer->update([
-            'status' => 8,
+        $employer = auth('employer')->user();
+        $employerRepo = new EmployerRepository($employer);
+
+        $employerRepo->updateEmployer([
+            'status' => 8
         ]);
 
         return redirect()->back()->with('message_success', 'アカウント削除申請をしました');
- 
     }
 
     public function companyDeleteAppCancel()
     {
-        $employer = Employer::find(auth('employer')->user()->id);
-        $employer->update([
-            'status' => 1,
+        $employer = auth('employer')->user();
+        $employerRepo = new EmployerRepository($employer);
+        
+        $employerRepo->updateEmployer([
+            'status' => 1
         ]);
 
         return redirect()->back()->with('message_success', 'アカウント削除申請を取り消しました');
- 
     }
 }

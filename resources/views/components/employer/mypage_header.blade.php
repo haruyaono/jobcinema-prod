@@ -26,7 +26,7 @@
                                         <a class="dropdown-item" href="{{ route('applicants.view') }}">
                                             {{ __('応募者を見る') }}
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('companies.view') }}">
+                                        <a class="dropdown-item" href="{{ route('companies.edit') }}">
                                             {{ __('企業データの編集') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('employer.logout') }}"
