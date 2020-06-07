@@ -18,7 +18,6 @@ use Tests\TestCase;
 class UserUnitTest extends TestCase
 {
 
-
      /** @test */
      public function it_errors_updating_the_user_email_with_null_value()
      {

@@ -36,7 +36,7 @@
 
 @elseif($content['c_flag'] == 'employer')
 <p>
-    {{$content['e_name']}} 様
+    {{$content['name']}} 様
 </p>
 <p>
 ……………………………………………………………………………<br>
@@ -58,11 +58,11 @@
 </p>
 <p>
 【担当者名】<br>
- {{$content['e_name']}}
+ {{$content['name']}}
 </p>
 <p>
 【担当者名(フリガナ)】<br>
- {{$content['e_name_ruby']}}
+ {{$content['name_ruby']}}
 </p>
 <p>
 【返信先メールアドレス】<br>

@@ -4,7 +4,7 @@ namespace Tests;
 
 use App\Job\JobItems\JobItem;
 use App\Job\Users\User;
-use App\Models\Company;
+use App\Job\Companies\Company;
 use App\Job\Categories\StatusCategory;
 use App\Job\Categories\TypeCategory;
 use App\Job\Categories\AreaCategory;

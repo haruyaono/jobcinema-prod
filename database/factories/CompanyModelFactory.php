@@ -25,7 +25,6 @@ $factory->define(Company::class, function (Faker $faker) {
         'employer_id' => $employer->id,
         'cname' => $name = $faker->company,
         'cname_katakana' => 'カブシキカイシャ〇〇',
-        'slug' => str_slug($name),
         'website' => $faker->domainName,
         'postcode' => $faker->postcode,
         'prefecture' => $faker->prefecture,

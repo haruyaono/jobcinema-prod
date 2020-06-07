@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Job\Contacts\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ContactRequestForSeeker extends FormRequest
+class ContactRequestForEmployer extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,11 @@ class ContactRequestForSeeker extends FormRequest
     {
         return [
             'category' => 'required',
+            'c_name' => 'required|max:100',
+            'c_name_ruby' => 'nullable|max:100|Katakana',
             'name' => 'required|max:100',
-            'name_ruby' => 'required|max:100|kana',
-            'email' => 'required|email',
+            'name_ruby' => 'nullable|max:100|kana',
+            'email' => 'required|email|max:100',
             'phone' => 'nullable',
             'content' => 'required|max:1000'
         ];

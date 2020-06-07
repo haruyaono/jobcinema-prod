@@ -8,7 +8,7 @@ use App\Job\Companies\Repositories\CompanyRepository;
 use App\Job\Companies\Repositories\Interfaces\CompanyRepositoryInterface;
 use App\Job\Companies\Requests\UpdateCompanyRequest;
 use App\Job\JobItems\JobItem; 
-use App\Models\Employer; 
+use App\Job\Employers\Employer; 
 use App\Job\Employers\Repositories\EmployerRepository;
 use Illuminate\Support\Facades\Storage;
 use File;
@@ -23,7 +23,7 @@ class CompanyController extends Controller
     private $companyRepo;
 
     /**
-     * JobController constructor.
+     * CompanyController constructor.
      * @param CompanyRepositoryInterface $companyRepository
      */
     public function __construct(

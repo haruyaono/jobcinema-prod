@@ -52,11 +52,11 @@
 </p>
 <p>
 【担当者名】<br>
- {{$content['e_name']}}
+ {{$content['name']}}
 </p>
 <p>
 【担当者名(フリガナ)】<br>
- {{$content['e_name_ruby']}}
+ {{$content['name_ruby']}}
 </p>
 <p>
 【返信先メールアドレス】<br>

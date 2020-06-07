@@ -17,6 +17,8 @@ use App\Job\Employers\Repositories\EmployerRepository;
 use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
 use App\Job\Companies\Repositories\CompanyRepository;
 use App\Job\Companies\Repositories\Interfaces\CompanyRepositoryInterface;
+use App\Job\Contacts\Repositories\ContactRepository;
+use App\Job\Contacts\Repositories\Interfaces\ContactRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -56,6 +58,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             CompanyRepositoryInterface::class,
             CompanyRepository::class
+        );
+        $this->app->bind(
+            ContactRepositoryInterface::class,
+            ContactRepository::class
         );
     }
 

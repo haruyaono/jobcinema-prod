@@ -18,7 +18,6 @@ class CreateCompaniesTable extends Migration
             $table->unsignedInteger('employer_id');
             $table->string('cname')->comment('会社名');
             $table->string('cname_katakana')->comment('会社名（フリガナ）')->nullable();
-            $table->string('slug');
             $table->string('website')->nullable();
             $table->string('logo')->nullable();
             $table->string('postcode')->comment('郵便番号')->nullable();
@@ -27,8 +26,6 @@ class CreateCompaniesTable extends Migration
             $table->string('phone1')->nullable();
             $table->string('phone2')->nullable();
             $table->string('phone3')->nullable();
-            $table->string('cover_photo')->nullable();
-            $table->text('slogan')->nullable();
             $table->string('industry')->comment('業種')->nullable();
             $table->text('description')->comment('事業内容')->nullable();
             $table->string('foundation')->comment('設立')->nullable();

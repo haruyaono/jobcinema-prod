@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class Contact extends Mailable
+class SendContactMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,7 +17,7 @@ class Contact extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param 
      */
     public function __construct($content, $viewStr = 'to')
     {
