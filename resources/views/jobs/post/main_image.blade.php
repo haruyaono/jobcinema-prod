@@ -95,9 +95,9 @@ $(function() {
         if(window.confirm('登録されているメイン写真を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/main/image/delete/' + job.id　+ '?imageflag=main';
+                window.location.href = '/company/job/create/main/image/delete/' + job.id + '?imageflag=main';
             } else {
-                window.location.href = '/jobs/main/image/delete?imageflag=main';
+                window.location.href = '/company/job/create/main/image/delete?imageflag=main';
             }
 
             window.opener.$("#photo1").attr('src', '/uploads/images/no-image.gif');

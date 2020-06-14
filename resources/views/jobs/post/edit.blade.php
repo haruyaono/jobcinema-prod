@@ -56,7 +56,7 @@
                 {{ Session::get('message_success') }}
             </div>
         @endif
-        <form id="jobsheet-create-form" action="{{route('job.draftOrStep2', [$job->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+        <form id="jobsheet-create-form" action="" class="job-create jobSaveForm" method="POST" enctype="multipart/form-data">@csrf
             <div class="card">
                 <div class="card-header">募集カテゴリを選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
@@ -64,27 +64,27 @@
                         <tr>
                             <th>雇用形態</th>
                             <td>@if(Session::has('data.form.edit_category.status')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</td>
-                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'status'])}}">変更する</a></td>
+                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'status'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>職種</th>
                             <td>@if(Session::has('data.form.edit_category.type')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</td>
-                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'type'])}}">変更する</a></td>
+                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'type'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>勤務地エリア</th>
                             <td>@if(Session::has('data.form.edit_category.area')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</td>
-                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'area'])}}">変更する</a></td>
+                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'area'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>最低時給</th>
                             <td>@if(Session::has('data.form.edit_category.hourly_salary')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</td>
-                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'hourly_salary'])}}">変更する</a></td>
+                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'hourly_salary'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>最低勤務日数</th>
                             <td>@if(Session::has('data.form.edit_category.date')){{App\Job\Categories\DateCategory::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</td>
-                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'date'])}}">変更する</a></td>
+                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'date'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                     </table>
                 </div>
@@ -98,21 +98,18 @@
                             <p class="e-image-wrap"><img src="@if($job->job_img != null && Session::has('data.file.edit_image.main') == false ){{$jobImageBaseUrl.$job->job_img}}@elseif(Session::get('data.file.edit_image.main') != $job->job_img && Session::get('data.file.edit_image.main') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.main')}}@elseif(Session::get('data.file.edit_image.main')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo1" id="photo1"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('main.image.get', [$job->id])}}" target="_blank">メイン写真を登録</a>
-                                <input type="hidden" name="data[File][isExist1]" value="0" id="FileIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap"><img src="@if($job->job_img2 != null && Session::has('data.file.edit_image.sub1') == false ) {{$jobImageBaseUrl.$job->job_img2}}@elseif(Session::get('data.file.edit_image.sub1') != $job->job_img2 && Session::get('data.file.edit_image.sub1') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.sub1')}}@elseif(Session::get('data.file.edit_image.sub1')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo2" id="photo2"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image1.get', [$job->id])}}" target="_blank">サブ写真を登録</a>
-                                <input type="hidden" name="data[File][isExist2]" value="0" id="FileIsExist2" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap"><img src="@if($job->job_img3 != null && Session::has('data.file.edit_image.sub2') == false ) {{$jobImageBaseUrl.$job->job_img3}}@elseif(Session::get('data.file.edit_image.sub2') != $job->job_img2 && Session::get('data.file.edit_image.sub2') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.sub2')}}@elseif(Session::get('data.file.edit_image.sub2')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo3" id="photo3"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image2.get', [$job->id])}}" target="_blank">サブ写真を登録</a>
-                                <input type="hidden" name="data[File][isExist3]" value="0" id="FileIsExist3" class="">
                             </p>
                         </div>
                     
@@ -130,7 +127,6 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('main.movie.get', [$job->id])}}" target="_blank">メイン動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist1]" value="0" id="FileMovieIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
@@ -140,7 +136,6 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('sub.movie1.get', [$job->id])}}" target="_blank">サブ動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist2]" value="0" id="FileMovieIsExist2" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
@@ -150,7 +145,6 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('sub.movie2.get', [$job->id])}}" target="_blank">サブ動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist2]" value="0" id="FileMovieIsExist3" class="">
                             </p>
                         </div>
                     
@@ -301,8 +295,8 @@
                 </div>
         </div> <!-- card --> 
         <div class="form-group text-center">
-            <input type="submit" class="btn btn-dark" name="storestep2" value="確認画面へ進む">
-            <input type="submit" class="btn btn-outline-secondary" name="draft" value="一時保存する">
+            <button type="button" onclick="submitAction('/company/job/store/step2/{{$job->id}}')" class="btn btn-dark" name="storestep2">確認画面へ進む</button>
+            <button type="button" onclick="submitAction('/company/job/store/draft/{{$job->id}}')" class="btn btn-outline-secondary">一時保存する</button>
                 
         </div>
         <div class="form-group text-center">

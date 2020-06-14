@@ -15,6 +15,10 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function listJobitemCount() : int;
 
+    public function updateJobItem(array $data): bool;
+
+    public function updateAppliedJobItem(int $applyId,  array $data) : bool;
+
     public function listRecentJobItemId(int $historyFlag = 0);
 
     public function createRecentJobItemIdList($req, int $id) : void;

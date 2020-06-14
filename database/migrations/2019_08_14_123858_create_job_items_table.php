@@ -18,6 +18,7 @@ class CreateJobItemsTable extends Migration
             $table->unsignedInteger('company_id');
             $table->unsignedInteger('employer_id');
             $table->unsignedInteger('status')->nullable();
+            $table->string('slug');
             $table->string('oiwaikin')->nullable();
             $table->string('job_title')->nullable();
             $table->string('job_img')->nullable();

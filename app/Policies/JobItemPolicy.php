@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Job\Users\User;
+use App\Job\Employers\Employer;
 use App\Job\JobItems\JobItem;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,5 +30,9 @@ class JobItemPolicy
         return $user->whereHas('users', function(Builder $query) use ($jobitem) {
             $query->where('job_item_id', $jobitem->id);
         });
+    }
+
+    public function view(Employer $employer, JobItem $jobitem) {
+        return $employer->id === $jobitem->employer_id;
     }
 }

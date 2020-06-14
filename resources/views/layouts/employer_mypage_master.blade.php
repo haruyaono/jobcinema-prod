@@ -30,10 +30,12 @@
             $('.emp-header-right .dropdown-menu').slideToggle();
             return false;
         });
-
-        
-
     });
+
+    function submitAction(url) {
+        $('.jobSaveForm').attr('action', url);
+        $('.jobSaveForm').submit();
+    };
 </script>
 <script language="JavaScript">
 $(function() {

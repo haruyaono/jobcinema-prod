@@ -6,6 +6,6 @@ class UserNotFoundException extends \Exception
 {
     public function render() 
     {
-        abort(404);
+        return view('errors.employer.custom')->with('error_name', 'NotApplicatUser');
     }
 }

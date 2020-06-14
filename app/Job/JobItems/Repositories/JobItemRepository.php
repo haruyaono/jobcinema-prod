@@ -7,6 +7,7 @@ use App\Job\JobItems\JobItem;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
+use App\Job\JobItems\Exceptions\AppliedJobItemNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
@@ -52,6 +53,45 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function listJobitemCount() : int
     {
         return $this->model->ActiveJobitem()->count();
+    }
+
+     /**
+     * Create the jobitem
+     *
+     * @param array $data
+     *
+     * @return JobItem
+     * @throws JobItemCreateErrorException
+     */
+    public function createJobItem(array $data) : JobItem
+    {
+        try {
+            return $this->create($data);
+        } catch (QueryException $e) {
+            throw new JobItemCreateErrorException($e);
+        }
+    }
+
+   /**
+     * @param array $data
+     * @return bool
+     */
+    public function updateJobItem(array $data): bool
+    {
+        return $this->update($data);
+    }
+
+    /**
+     * @param int $applyId
+     * @param array $data
+     * @return bool
+     */
+    public function updateAppliedJobItem(int $applyId,  array $data) : bool
+    {
+
+     return $this->model->applies()
+                            ->updateExistingPivot($applyId, $data);
+
     }
 
     /**
@@ -226,7 +266,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
 
     /**
-     * Find the jobitem by ID
+     * Find the active jobitem by ID
      *
      * @return Collection|JobItem
      * @throws JobItemNotFoundException
@@ -234,10 +274,56 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function findJobItemById($id)
     {
         try {
+            // return $this->model->ActiveJobitem()->findOrFail($id);
             return $this->model->ActiveJobitem()->findOrFail($id);
         } catch (ModelNotFoundException $e) { 
             throw new JobItemNotFoundException($e);
         }
+    }
+
+    /**
+     * Find the jobitem by ID
+     *
+     * @return Collection|JobItem
+     * @throws JobItemNotFoundException
+     */
+    public function findAllJobItemById($id)
+    {
+        try {
+            // return $this->model->ActiveJobitem()->findOrFail($id);
+            return $this->model->findOrFail($id);
+        } catch (ModelNotFoundException $e) { 
+            throw new JobItemNotFoundException($e);
+        }
+    }
+
+    /**
+     * @param JobItem $jobitem
+     * @return array
+     */
+    public function savedDbFilePath(JobItem $jobitem) : array
+    {
+        $savedFilePath = [];
+        $fileSessionKeys = config('const.FILE_SLUG');
+
+        foreach($fileSessionKeys as $fileSessionKey) {
+          switch($fileSessionKey) {
+            case 'main':
+                $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img;
+                $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov;
+                break;
+            case 'sub1':
+                $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img2;
+                $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov2;
+              break;
+            case 'sub2':
+                $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img3;
+                $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov3;
+              break;
+          }
+        }
+
+        return $savedFilePath;
     }
 
     /**

@@ -20,7 +20,7 @@
         <p class="text-danger h3 mb-3">まだ求人票の登録は完了していません！</p>
         下記の内容で間違いがなければ、登録ボタンを押してください。
     </div>
-        <form  action="@if($job){{ route('job.store.complete', [$job->id]) }}@else{{ route('job.store.complete') }}@endif" class="job-create" method="POST" enctype="multipart/form-data">
+        <form  action="@if($job){{ route('job.store.complete', [$job->id]) }}@else{{ route('job.store.complete') }}@endif" class="job-create file-apload-form" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="status" value="1">
         <div class="card">

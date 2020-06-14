@@ -72,10 +72,10 @@ if( ! function_exists('is_route'))
             </ul>
         </div>
         @endif
-        <form  action="{{route('job.category.update', [$job->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">
+        <form  action="{{route('job.category.update', [$jobItem->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="cat_flag" value="{{$category}}">
-        @if(is_route(['job.category.edit', $job->id,'category'=>'status']))
+        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'status']))
             <div class="card">
             
                 <div class="card-header">雇用形態を選んでください<span class="text-danger">＊</span></div>
@@ -83,7 +83,7 @@ if( ! function_exists('is_route'))
                     <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform01">
                         @foreach(App\Job\Categories\StatusCategory::all() as $statusCategory)
-                        <input id="status_cat_id_{{$statusCategory->id}}" type="radio" name="status_cat_id" @if(Session::has('data.form.edit_category.status')) {{Session::get('data.form.edit_category.status') == $statusCategory->id ? 'checked' : ''}}@else {{$job->status_cat_id == $statusCategory->id ? 'checked' : ''}} @endif value="{{ $statusCategory->id }}">
+                        <input id="status_cat_id_{{$statusCategory->id}}" type="radio" name="status_cat_id" @if(Session::has('data.form.edit_category.status')) {{Session::get('data.form.edit_category.status') == $statusCategory->id ? 'checked' : ''}}@else {{$jobItem->status_cat_id == $statusCategory->id ? 'checked' : ''}} @endif value="{{ $statusCategory->id }}">
                         <label for="status_cat_id_{{$statusCategory->id}}">{{ $statusCategory->name }}</label><br>
                         <br>
                         @endforeach
@@ -91,7 +91,7 @@ if( ! function_exists('is_route'))
                 </div>
             </div> <!-- card --> 
         @endif
-        @if(is_route(['job.category.edit', $job->id,'category'=>'type']))
+        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'type']))
            
             <div class="card">
                 <div class="card-header">募集職種を選んでください<span class="text-danger">＊</span></div>
@@ -100,7 +100,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
                         <div class="e-radio-item02">
-                            <input id="type_cat_id_{{$typeCategory->id}}" class="" type="radio" name="type_cat_id" @if(Session::has('data.form.edit_category.type')) {{Session::get('data.form.edit_category.type') == $typeCategory->id ? 'checked' : ''}}@else {{$job->type_cat_id == $typeCategory->id ? 'checked' : ''}} @endif value="{{ $typeCategory->id }}">
+                            <input id="type_cat_id_{{$typeCategory->id}}" class="" type="radio" name="type_cat_id" @if(Session::has('data.form.edit_category.type')) {{Session::get('data.form.edit_category.type') == $typeCategory->id ? 'checked' : ''}}@else {{$jobItem->type_cat_id == $typeCategory->id ? 'checked' : ''}} @endif value="{{ $typeCategory->id }}">
                             <label for="type_cat_id_{{$typeCategory->id}}">{{ $typeCategory->name }}</label>
                         </div>
                         @endforeach
@@ -108,7 +108,7 @@ if( ! function_exists('is_route'))
                 </div>
             </div> <!-- card --> 
         @endif
-        @if(is_route(['job.category.edit', $job->id,'category'=>'area']))
+        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'area']))
             <div class="card">
                 <div class="card-header">勤務地エリアを選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
@@ -116,7 +116,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
                         <div class="e-radio-item02">
-                            <input id="area_cat_id_{{$areaCategory->id}}" class="" type="radio" name="area_cat_id" @if(Session::has('data.form.edit_category.area')) {{Session::get('data.form.edit_category.area') == $areaCategory->id ? 'checked' : ''}}@else {{$job->area_cat_id == $areaCategory->id ? 'checked' : ''}} @endif value="{{ $areaCategory->id }}">
+                            <input id="area_cat_id_{{$areaCategory->id}}" class="" type="radio" name="area_cat_id" @if(Session::has('data.form.edit_category.area')) {{Session::get('data.form.edit_category.area') == $areaCategory->id ? 'checked' : ''}}@else {{$jobItem->area_cat_id == $areaCategory->id ? 'checked' : ''}} @endif value="{{ $areaCategory->id }}">
                             <label for="area_cat_id_{{$areaCategory->id}}">{{ $areaCategory->name }}</label>
                         </div>
                         @endforeach
@@ -124,7 +124,7 @@ if( ! function_exists('is_route'))
                 </div>
             </div> <!-- card --> 
         @endif
-        @if(is_route(['job.category.edit', $job->id,'category'=>'hourly_salary']))
+        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'hourly_salary']))
             <div class="card">
                 <div class="card-header">最低時給を選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
@@ -132,7 +132,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Job\Categories\HourlySalaryCategory::all() as $hourlySalaryCategory)
                         <div class="e-radio-item02">
-                            <input id="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(Session::has('data.form.edit_category.hourly_salary')) {{Session::get('data.form.edit_category.hourly_salary') == $hourlySalaryCategory->id ? 'checked' : ''}}@else {{$job->hourly_salary_cat_id == $hourlySalaryCategory->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCategory->id }}">
+                            <input id="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(Session::has('data.form.edit_category.hourly_salary')) {{Session::get('data.form.edit_category.hourly_salary') == $hourlySalaryCategory->id ? 'checked' : ''}}@else {{$jobItem->hourly_salary_cat_id == $hourlySalaryCategory->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCategory->id }}">
                             <label for="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}">{{ $hourlySalaryCategory->name }}</label>
                         </div>
                         @endforeach
@@ -140,7 +140,7 @@ if( ! function_exists('is_route'))
                 </div>
             </div> <!-- card --> 
         @endif
-        @if(is_route(['job.category.edit', $job->id,'category'=>'date']))
+        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'date']))
     
             <div class="card">
                 <div class="card-header">最低勤務日数を選んでください<span class="text-danger">＊</span></div>
@@ -149,7 +149,7 @@ if( ! function_exists('is_route'))
                     <div class="form-group e-radioform e-radioform02">
                         @foreach(App\Job\Categories\DateCategory::all() as $dateCategory)
                         <div class="e-radio-item02">
-                            <input id="date_cat_id_{{$dateCategory->id}}" class="" type="radio" name="date_cat_id" @if(Session::has('data.form.edit_category.date')) {{Session::get('data.form.edit_category.date') == $dateCategory->id ? 'checked' : ''}}@else {{$job->date_cat_id == $dateCategory->id ? 'checked' : ''}} @endif value="{{ $dateCategory->id }}">
+                            <input id="date_cat_id_{{$dateCategory->id}}" class="" type="radio" name="date_cat_id" @if(Session::has('data.form.edit_category.date')) {{Session::get('data.form.edit_category.date') == $dateCategory->id ? 'checked' : ''}}@else {{$jobItem->date_cat_id == $dateCategory->id ? 'checked' : ''}} @endif value="{{ $dateCategory->id }}">
                             <label for="date_cat_id_{{$dateCategory->id}}">{{ $dateCategory->name }}</label>
                         </div>
                         @endforeach

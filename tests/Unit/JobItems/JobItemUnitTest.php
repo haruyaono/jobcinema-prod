@@ -2,8 +2,12 @@
 
 namespace Tests\Unit\JobItems;
 
+use App\Job\Employers\Employer;
+use App\Job\Applies\Apply;
+use App\Job\Applies\Repositories\ApplyRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
+use App\Job\JobItems\Exceptions\AppliedJobItemNotFoundException;
 use App\Job\JobItems\Repositories\JobItemRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -30,6 +34,36 @@ class JobItemUnitTest extends TestCase
 
         $this->assertGreaterThan(0, $jobitemCount);
      }
+
+      /** @test  */
+    public function it_can_find_an_applied_jobitem() 
+    {
+
+      $employer = factory(Employer::class)->create();
+      $apply = factory(Apply::class)->create();
+      $jobitem = factory(JobItem::class)->create();
+
+      $applyRepo = new ApplyRepository($apply);
+      $applyRepo->associateJobItem($jobitem);
+
+      $param = [
+        'job_item_id' => $jobitem->id
+      ];
+
+      $jobitemRepo = new JobItemRepository($jobitem);
+      $result = $jobitemRepo->findAppliedJobItem($param);
+
+      $this->assertIsObject($result);
+    }
+
+    /** @test */
+    public function it_fails_when_the_applied_jobitem_is_not_found()
+    {
+        $this->expectException(AppliedJobItemNotFoundException::class);
+
+        $jobitemRepo = new JobItemRepository(new JobItem);
+        $jobitemRepo->findAppliedJobItem(['id' => 999]);
+    }
 
       /** @test */
       public function it_can_create_recent_jobitem_id_list()

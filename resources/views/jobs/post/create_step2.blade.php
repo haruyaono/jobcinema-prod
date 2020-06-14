@@ -50,7 +50,7 @@
             </ul>
         </div>
         @endif
-        <form id="jobsheet-create-form" action="{{route('job.draftOrStep2')}}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+        <form id="jobsheet-create-form" action="" class="job-create jobSaveForm file-apload-form" method="POST" enctype="multipart/form-data">@csrf
             <div class="card">
                 <div class="card-header">写真/画像（メイン写真は必ず登録してください）<span class="text-danger">＊</span></div>
                 <div class="card-body">
@@ -62,14 +62,12 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('main.image.get')}}" target="_blank">メイン写真を登録</a>
-                                <input type="hidden" name="data[File][isExist1]" value="0" id="FileIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap"><img src="@if(Session::has('data.file.image.sub1')) {{$jobImageBaseUrl.Session::get('data.file.image.sub1')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo2" id="photo2"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image1.get')}}" target="_blank">サブ写真を登録</a>
-                                <input type="hidden" name="data[File][isExist2]" value="0" id="FileIsExist2" class="">
                             </p>
                             </p>
                         </div>
@@ -77,7 +75,6 @@
                             <p class="e-image-wrap"><img src="@if(Session::has('data.file.image.sub2')) {{$jobImageBaseUrl.Session::get('data.file.image.sub2')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo3" id="photo3"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image2.get')}}" target="_blank">サブ写真を登録</a>
-                                <input type="hidden" name="data[File][isExist3]" value="0" id="FileIsExist3" class="">
                             </p>
                             </p>
                         </div>
@@ -96,7 +93,6 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('main.movie.get')}}" target="_blank">メイン動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist1]" value="0" id="FileMovieIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
@@ -106,7 +102,6 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('sub.movie1.get')}}" target="_blank">サブ動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist2]" value="0" id="FileMovieIsExist2" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
@@ -116,7 +111,6 @@
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('sub.movie2.get')}}" target="_blank">サブ動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist3]" value="0" id="FileMovieIsExist3" class="">
                             </p>
                         </div>
                     
@@ -268,8 +262,8 @@
                 </div>
             </div> <!-- card --> 
             <div class="form-group text-center">
-                <input type="submit" class="btn btn-dark" name="storestep2" value="確認画面へ進む">
-                <input type="submit" class="btn btn-outline-secondary" name="draft" value="一時保存する">
+                <button type="button" onclick="submitAction('/company/job/store/step2')" class="btn btn-dark" name="storestep2">確認画面へ進む</button>
+                <button type="button" onclick="submitAction('/company/job/store/draft')" class="btn btn-outline-secondary">一時保存する</button>
                     
             </div>
             <div class="form-group text-center">
@@ -294,7 +288,8 @@
     $(function() {
         $("#start_specified_date, #end_specified_date").datepicker({
             dateFormat: 'yy-mm-dd',
-        });      
+        });    
+
     });
 
 </script>

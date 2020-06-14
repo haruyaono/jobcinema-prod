@@ -18,66 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 // 求人
 Route::get('/job_cats/{url}', 'CategoryController@getAllCat')->name('allcat');
-
-Route::get('/jobs/create/top', 'JobController@createTop')->name('job.create.top');
-Route::get('/jobs/create/step1', 'JobController@createStep1')->name('job.create.step1');
-Route::post('/jobs/create/step1', 'JobController@storeStep1')->name('job.store.step1');
-Route::get('/jobs/create/step2', 'JobController@createStep2')->name('job.create.step2');
-
-Route::post('/jobs/create/draftOrStep2/{id?}', 'JobController@draftOrStep2')->name('job.draftOrStep2');
-Route::get('/jobs/create/confirm/{id?}', 'JobController@createConfirm')->name('job.create.confirm');
-Route::post('/jobs/create/complete/{id?}', 'JobController@storeComplete')->name('job.store.complete');
-
-//メイン画像
-Route::get('/jobs/main/image/delete/{id?}', 'MediaController@imageDelete')->name('main.image.delete');
-Route::get('/jobs/main/image/{id?}', 'MediaController@getMainImage')->name('main.image.get');
-Route::post('/jobs/main/image/{id?}', 'MediaController@postImage')->name('main.image.post');
-
-//サブ画像１
-Route::get('/jobs/sub/image01/delete/{id?}', 'MediaController@imageDelete')->name('sub.image1.delete');
-Route::get('/jobs/sub/image01/{id?}', 'MediaController@getSubImage1')->name('sub.image1.get');
-Route::post('/jobs/sub/image01/{id?}', 'MediaController@postImage')->name('sub.image1.post');
-//サブ画像２
-Route::get('/jobs/sub/image02/delete/{id?}', 'MediaController@imageDelete')->name('sub.image2.delete');
-Route::get('/jobs/sub/image02/{id?}', 'MediaController@getSubImage2')->name('sub.image2.get');
-Route::post('/jobs/sub/image02/{id?}', 'MediaController@postImage')->name('sub.image2.post');
-
-//メイン動画
-Route::get('/jobs/main/movie/delete/{id?}', 'MediaController@movieDelete')->name('main.movie.delete');
-Route::get('/jobs/main/movie/{id?}', 'MediaController@getMainMovie')->name('main.movie.get');
-Route::post('/jobs/main/movie/{id?}', 'MediaController@postMovie')->name('main.movie.post');
-//サブ動画１
-Route::get('/jobs/sub/movie01/delete/{id?}', 'MediaController@movieDelete')->name('sub.movie1.delete');
-Route::get('/jobs/sub/movie01/{id?}', 'MediaController@getSubMovie1')->name('sub.movie1.get');
-Route::post('/jobs/sub/movie01/{id?}', 'MediaController@postMovie')->name('sub.movie1.post');
-//サブ動画２
-Route::get('/jobs/sub/movie02/delete/{id?}', 'MediaController@movieDelete')->name('sub.movie2.delete');
-Route::get('/jobs/sub/movie02/{id?}', 'MediaController@getSubMovie2')->name('sub.movie2.get');
-Route::post('/jobs/sub/movie02/{id?}', 'MediaController@postMovie')->name('sub.movie2.post');
-
-
-Route::get('/jobs/{id}/edit', 'JobController@edit')->name('job.edit');
-Route::post('/jobs/{id}/edit', 'JobController@update')->name('job.update');
-Route::get('/jobs/edit/category/{id}/{category}', 'JobController@catEdit')->name('job.category.edit');
-Route::post('/jobs/edit/category/{id}/update', 'JobController@catUpdate')->name('job.category.update');
-
-
 // お知らせ
 Route::get('/jobs/info')->name('info.get');
-
-Route::get('/jobs/myjob', 'JobController@myJob')->name('my.job');
-Route::get('/jobs/{id}/myjob-app-delete', 'JobController@getMyjobAppDelete')->name('myjob.app.delete');
-Route::get('/jobs/{id}/myjob-app-delete-cancel', 'JobController@getMyjobAppDeleteCancel')->name('myjob.app.delete.cancel');
-Route::get('/jobs/{id}/myjob-app-stop', 'JobController@getMyjobAppStop')->name('myjob.app.stop');
-Route::get('/jobs/{id}/myjob-app-cancel', 'JobController@getMyjobAppCancel')->name('myjob.app.cancel.get');
-Route::post('/jobs/{id}/myjob-app-cancel', 'JobController@postMyjobAppCancel')->name('myjob.app.cancel.post');
-Route::get('/jobs/{id}/form-show', 'JobController@jobFormShow')->name('job.form.show');
-Route::get('/jobs/applications', 'JobController@applicant')->name('applicants.view');
-Route::get('/applications/{id}/{user_id}', 'JobController@applicantDetail')->name('applicants.detail');
-Route::get('/applications/adopt/{id}/{user_id}', 'JobController@empAdoptJob')->name('emp.applicant.adopt');
-Route::get('/applications/unadopt/{id}/{user_id}', 'JobController@empUnAdoptJob')->name('emp.applicant.unadopt');
-Route::get('/applications/adopt_cancel/{id}/{user_id}', 'JobController@empAdoptCancelJob')->name('emp.applicant.adopt.cancel');
-
 
 Route::namespace('Front')->group(function () {
   # 求人
@@ -196,26 +138,88 @@ Route::namespace('Employer')->group(function () {
   });
 });
 
-Route::group(['prefix' => 'company'], function() {
-  #会社・企業
-  Route::get('mypage', 'CompanyController@mypageIndex')->name('company.mypage');
-  Route::get('edit', 'CompanyController@edit')->name('companies.edit');
-  Route::post('edit', 'CompanyController@update')->name('companies.update');
-  Route::get('logo', function(){
-    return redirect('/company/create');
+Route::group(['middleware' => ['auth:employer']], function() {
+  Route::get('company/job/create/top', 'JobController@createTop')->name('job.create.top');
+  Route::get('company/job/create/step1', 'JobController@createStep1')->name('job.create.step1');
+  Route::post('company/job/create/step1', 'JobController@storeStep1')->name('job.store.step1');
+  Route::get('company/job/create/step2', 'JobController@createStep2')->name('job.create.step2');
+
+  Route::post('company/job/store/draft/{id?}', 'JobController@storeDraft')->name('job.store.draft');
+  Route::post('company/job/store/step2/{id?}', 'JobController@storeStep2')->name('job.store.Step2');
+  Route::get('company/job/create/confirm/{id?}', 'JobController@createConfirm')->name('job.create.confirm');
+  Route::post('company/job/create/complete/{id?}', 'JobController@storeComplete')->name('job.store.complete');
+
+  //メイン画像
+  Route::get('company/job/create/main/image/delete/{id?}', 'MediaController@imageDelete')->name('main.image.delete');
+  Route::get('company/job/create/main/image/{id?}', 'MediaController@getMainImage')->name('main.image.get');
+  Route::post('company/job/create/main/image/{id?}', 'MediaController@postImage')->name('main.image.post');
+
+  //サブ画像１
+  Route::get('company/job/create/sub/image01/delete/{id?}', 'MediaController@imageDelete')->name('sub.image1.delete');
+  Route::get('company/job/create/sub/image01/{id?}', 'MediaController@getSubImage1')->name('sub.image1.get');
+  Route::post('company/job/create/sub/image01/{id?}', 'MediaController@postImage')->name('sub.image1.post');
+  //サブ画像２
+  Route::get('company/job/create/sub/image02/delete/{id?}', 'MediaController@imageDelete')->name('sub.image2.delete');
+  Route::get('company/job/create/sub/image02/{id?}', 'MediaController@getSubImage2')->name('sub.image2.get');
+  Route::post('company/job/create/sub/image02/{id?}', 'MediaController@postImage')->name('sub.image2.post');
+
+  //メイン動画
+  Route::get('company/job/create/main/movie/delete/{id?}', 'MediaController@movieDelete')->name('main.movie.delete');
+  Route::get('company/job/create/main/movie/{id?}', 'MediaController@getMainMovie')->name('main.movie.get');
+  Route::post('company/job/create/main/movie/{id?}', 'MediaController@postMovie')->name('main.movie.post');
+  //サブ動画１
+  Route::get('company/job/create/sub/movie01/delete/{id?}', 'MediaController@movieDelete')->name('sub.movie1.delete');
+  Route::get('company/job/create/sub/movie01/{id?}', 'MediaController@getSubMovie1')->name('sub.movie1.get');
+  Route::post('company/job/create/sub/movie01/{id?}', 'MediaController@postMovie')->name('sub.movie1.post');
+  //サブ動画２
+  Route::get('company/job/create/sub/movie02/delete/{id?}', 'MediaController@movieDelete')->name('sub.movie2.delete');
+  Route::get('company/job/create/sub/movie02/{id?}', 'MediaController@getSubMovie2')->name('sub.movie2.get');
+  Route::post('company/job/create/sub/movie02/{id?}', 'MediaController@postMovie')->name('sub.movie2.post');
+
+
+  Route::get('company/joblist/{jobItem}/edit', 'JobController@edit')->name('job.edit');
+  Route::post('company/joblist/{id}/edit', 'JobController@update')->name('job.update');
+  Route::get('company/joblist/{jobItem}/category/{category}', 'JobController@catEdit')->name('job.category.edit');
+  Route::post('company/joblist/{jobItem}/edit/category/update', 'JobController@catUpdate')->name('job.category.update');
+
+
+
+  Route::get('company/joblist', 'JobController@index')->name('my.job');
+  Route::get('company/joblist/{jobitem}/myjob-app-delete', 'JobController@getMyjobAppDelete')->name('myjob.app.delete');
+  Route::get('company/joblist/{jobitem}/myjob-app-delete-cancel', 'JobController@getMyjobAppDeleteCancel')->name('myjob.app.delete.cancel');
+  Route::get('company/joblist/{jobitem}/myjob-app-stop', 'JobController@getMyjobAppStop')->name('myjob.app.stop');
+  Route::get('company/joblist/{jobitem}/myjob-app-cancel', 'JobController@getMyjobAppCancel')->name('myjob.app.cancel.get');
+  Route::post('company/joblist/{jobitem}/myjob-app-cancel', 'JobController@postMyjobAppCancel')->name('myjob.app.cancel.post');
+  Route::get('company/joblist/{jobitem}/show', 'JobController@jobFormShow')->name('job.form.show');
+  Route::get('applylist/index', 'JobController@applicant')->name('applicants.view');
+  Route::get('applylist/detail/{jobitem_id}/{apply_id}', 'JobController@applicantDetail')->name('applicants.detail');
+  Route::get('applylist/detail/adopt/{jobitem_id}/{apply_id}', 'JobController@empAdoptJob')->name('emp.applicant.adopt');
+  Route::get('applylist/detail/unadopt/{jobitem_id}/{apply_id}', 'JobController@empUnAdoptJob')->name('emp.applicant.unadopt');
+  Route::get('applylist/detail/adopt_cancel/{jobitem_id}/{apply_id}', 'JobController@empAdoptCancelJob')->name('emp.applicant.adopt.cancel');
+
+  Route::group(['prefix' => 'company'], function() {
+    #会社・企業
+    Route::get('mypage', 'CompanyController@mypageIndex')->name('company.mypage');
+    Route::get('edit', 'CompanyController@edit')->name('companies.edit');
+    Route::post('edit', 'CompanyController@update')->name('companies.update');
+    Route::get('logo', function(){
+      return redirect('/company/create');
+    });
+    Route::post('logo', 'CompanyController@companyLogo')->name('companies.logo');
+    Route::delete('logo/delete', 'CompanyController@companyLogoDelete')->name('logo.delete');
+    Route::get('delete', 'CompanyController@companyDeleteApp')->name('companies.delete');
+    Route::get('delete_cancel', 'CompanyController@companyDeleteAppCancel')->name('companies.delete.cancel');
   });
-  Route::post('logo', 'CompanyController@companyLogo')->name('companies.logo');
-  Route::delete('logo/delete', 'CompanyController@companyLogoDelete')->name('logo.delete');
-  Route::get('delete', 'CompanyController@companyDeleteApp')->name('companies.delete');
-  Route::get('delete_cancel', 'CompanyController@companyDeleteAppCancel')->name('companies.delete.cancel');
+  
+  
+  //企業マイページからのパスワード ・メールアドレス 変更
+  Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('employer.changepassword.get');
+  Route::post('changepassword', 'CompanyController@postChangePassword')->name('employer.changepassword.post');
+  Route::get('change_email', 'CompanyController@getChangeEmail')->name('employer.changeemail.get');
+  Route::post('change_email', 'CompanyController@postChangeEmail')->name('employer.changeemail.post');
 });
 
 
-//企業マイページからのパスワード ・メールアドレス 変更
-Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('employer.changepassword.get');
-Route::post('changepassword', 'CompanyController@postChangePassword')->name('employer.changepassword.post');
-Route::get('change_email', 'CompanyController@getChangeEmail')->name('employer.changeemail.get');
-Route::post('change_email', 'CompanyController@postChangeEmail')->name('employer.changeemail.post');
 
 // 管理者
 Route::group(['prefix' => 'dashboard'], function(){

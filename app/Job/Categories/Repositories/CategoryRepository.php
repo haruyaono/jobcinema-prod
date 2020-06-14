@@ -66,7 +66,7 @@ class CategoryRepository implements CategoryRepositoryInterface
       */
       public function allCategories()
       {
-          return $this->model;;
+          return $this->model;
       }
 
 

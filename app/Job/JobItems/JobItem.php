@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use App\Job\Companies\Company;
-use App\Models\Employer;
+use App\Job\Employers\Employer;
 use App\Job\Users\User;
 use App\Job\Applies\Apply;
 use App\Traits\IsMobile;
@@ -52,12 +52,12 @@ class JobItem extends Model
 
     public function company()
     {
-        return $this->belongsTo(\App\Job\Companies\Company::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function employer()
     {
-        return $this->belongsTo(\App\Models\Employer::class);
+        return $this->belongsTo(Employer::class);
     }
 
     public function users()
@@ -72,6 +72,7 @@ class JobItem extends Model
         return $this->belongsToMany(Apply::class, 'apply_job_item')
                     ->withPivot([
                         'id',
+                        'apply_id',
                         'job_item_id',
                         's_status',
                         'e_status',

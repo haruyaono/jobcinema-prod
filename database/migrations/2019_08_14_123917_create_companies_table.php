@@ -19,6 +19,9 @@ class CreateCompaniesTable extends Migration
             $table->string('cname')->comment('会社名');
             $table->string('cname_katakana')->comment('会社名（フリガナ）')->nullable();
             $table->string('website')->nullable();
+            $table->string('slug');
+            $table->string('cover_photo')->nullable();
+            $table->text('slogan')->nullable();
             $table->string('logo')->nullable();
             $table->string('postcode')->comment('郵便番号')->nullable();
             $table->string('prefecture')->comment('都道府県')->nullable();

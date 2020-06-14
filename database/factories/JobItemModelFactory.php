@@ -31,7 +31,6 @@ $factory->define(JobItem::class, function (Faker\Generator $faker) {
         'company_id' => $company->id,
         'job_title' => $jobitem,
         'oiwaikin' => '2000円',
-        'slug' => str_slug($jobitem),
         'status' => 2,
         'job_img' => $file->store('test/jobitems', ['disk' => 'public']),
         'job_img2' =>  $file->store('test/jobitems', ['disk' => 'public']),

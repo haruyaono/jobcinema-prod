@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Job\JobItems\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -38,6 +38,9 @@ class JobCreateStep2Request extends FormRequest
             'job_time' => 'required|max:400',
             'job_treatment' => 'required|max:400',
             'remarks' => 'max:1300',
+            'job_q1' => 'max:191',
+            'job_q2' => 'max:191',
+            'job_q3' => 'max:191',
         ];
     }
 }

@@ -130,7 +130,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
 
         return $appliedJobitems->count() > 0 ? true : false;
-
     }
 
     /**
