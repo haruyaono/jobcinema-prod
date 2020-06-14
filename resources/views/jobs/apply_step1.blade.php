@@ -281,6 +281,7 @@
                       <div class="card-body login-card-body">
                           <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                           {{ csrf_field() }}
+                          <input type="hidden" name="redirect_to" value="<?php echo $_SERVER['REQUEST_URI']?>">
 
                               <div class="form-group row">
                                   <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('メールアドレス') }}</label>

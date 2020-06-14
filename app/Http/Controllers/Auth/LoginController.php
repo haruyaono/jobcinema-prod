@@ -60,10 +60,18 @@ class LoginController extends Controller
     }
 
     protected function sendFailedLoginResponse(Request $request)
-{
-    throw ValidationException::withMessages([
-        $this->username() => [trans('認証に失敗しました。')],
-    ]);
-}
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('認証に失敗しました。')],
+        ]);
+    }
+
+    protected function authenticated(\Illuminate\Http\Request $request, $user)
+    {
+        if ($request->input('redirect_to')){
+            return redirect($request->input('redirect_to'));
+        }
+        return redirect()->intended($this->redirectPath());
+    }
     
 }
