@@ -56,15 +56,6 @@ class JobItemUnitTest extends TestCase
       $this->assertIsObject($result);
     }
 
-    /** @test */
-    public function it_fails_when_the_applied_jobitem_is_not_found()
-    {
-        $this->expectException(AppliedJobItemNotFoundException::class);
-
-        $jobitemRepo = new JobItemRepository(new JobItem);
-        $jobitemRepo->findAppliedJobItem(['id' => 999]);
-    }
-
       /** @test */
       public function it_can_create_recent_jobitem_id_list()
       {
@@ -150,9 +141,4 @@ class JobItemUnitTest extends TestCase
 
             $this->assertEmpty($baseUrl);
         }
-
-
-      
-
-
 }

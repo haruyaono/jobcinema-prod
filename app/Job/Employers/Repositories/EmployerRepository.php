@@ -25,6 +25,20 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
         $this->model = $employer;
     }
 
+     /**
+     * List all the employers
+     *
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @param string $active
+     * @return Collection
+     */
+    public function listEmployers(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
+    {
+            return $this->all($columns, $order, $sort);
+    }
+
     /**
      * Create the employer
      *
@@ -119,7 +133,17 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
         return $employer->jobs;
     }
 
-     
-
+        /**
+     * @param array $data
+     * @return mixed
+     */
+    public function searchEmployer(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection
+    {
+        if ($data !== []) {
+            return $this->queryBy($this->model::query(), $data)->orderBy($orderBy, $sortBy)->get($columns);
+        } else {
+            return $this->listEmployers('created_at');
+        }
+    }
    
 }

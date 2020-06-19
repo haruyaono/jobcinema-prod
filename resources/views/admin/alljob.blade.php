@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">求人一覧</h1>
-<span><a href="/dashboard/home" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin.home')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
@@ -19,18 +19,25 @@
 <div class="col-md-12">
 	<div class="card">
 		<div class="card-body">
-        <form name="sort" action="{{route('alljob.sort')}}" method="get">
-            <select id="job_status" name="job_status">
-                <option value="createLate" {{$sortBy1=='createLate'?'selected':''}}>新しい順</option>
-                <option value="createOld" {{$sortBy1=='createOld'?'selected':''}}>古い順</option>
-                <option value="status_1" {{$sortBy1=='status_1'?'selected':''}}>承認待ち</option>
-                <option value="status_5" {{$sortBy1=='status_5'?'selected':''}}>削除申請</option>
-                <option value="status_6" {{$sortBy1=='status_6'?'selected':''}}>完全非公開</option>
+        <form name="sort" action="{{route('alljob.get')}}" method="get">
+            <select id="job_status01" name="created_at" >
+                <option value="desc" @if(isset($param['created_at']) && $param['created_at']=='desc') selected @endif>新しい順</option>
+                <option value="asc" @if(isset($param['created_at']) && $param['created_at']=='asc') selected @endif>古い順</option> 
             </select>
-            <select id="oiwaikin_status" name="oiwaikin_status">
+            <select id="job_status02" name="status">
                 <option value="">---</option>
-                <option value="oiwaikin_true" {{$sortBy2=='oiwaikin_true'?'selected':''}}>お祝い金対象</option>
-                <option value="oiwaikin_false" {{$sortBy2=='oiwaikin_false'?'selected':''}}>お祝い金非対象</option>
+                <option value="0" @if(isset($param['status']) && $param['status']=='0') selected @endif>一時保存中</option>
+                <option value="1" @if(isset($param['status']) && $param['status']=='1') selected @endif>承認待ち</option>
+                <option value="2" @if(isset($param['status']) && $param['status']=='2') selected @endif> 掲載中</option>
+                <option value="3" @if(isset($param['status']) && $param['status']=='3') selected @endif>非承認</option>
+                <option value="4" @if(isset($param['status']) && $param['status']=='4') selected @endif>公開停止中</option>
+                <option value="5" @if(isset($param['status']) && $param['status']=='5') selected @endif>削除申請中</option>
+                <option value="6" @if(isset($param['status']) && $param['status']=='6') selected @endif>完全非公開</option>
+            </select>
+            <select id="oiwaikin_status" name="oiwaikin">
+                <option value="">---</option>
+                <option value="3000" @if(isset($param['oiwaikin']) && $param['oiwaikin']==3000) selected @endif>お祝い金対象</option>
+                <option value="not" @if(isset($param['oiwaikin']) && $param['oiwaikin']=='not') selected @endif>お祝い金非対象</option>
             </select>
 
             <button type="submit">検索</button>
@@ -82,41 +89,21 @@
                 <a href="{{route('admin.job.oiwaikin.change', [$job->id])}}" @if(!$job->oiwaikin) onclick="return window.confirm('「お祝い金」を設定しますか？');" @else onclick="return window.confirm('「お祝い金」を解除しますか？');" @endif>変更</a>
             </td>
             <td class="text-right">
-                @if($job->status=='0')
-                    <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                    <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                    <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                @elseif($job->status=='1')
-                    <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                    <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                    <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                @elseif($job->status=='2')
-                    <a href="{{route('job.non.approve',[$job->id])}}" class="label label-default"> 非承認</a>
-                    <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                    <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                @elseif($job->status=='3')
-                    <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                    <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                    <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                @elseif($job->status=='4')
-                <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                @elseif($job->status=='5')
-                <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                @elseif($job->status=='6')
-                <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-        
+                @if($job->status != '2' || $job->status !='5')
+                    <a href="{{route('job.status.change',[$job->id, 'status_approve'])}}" class="label label-info"> 公開</a>
                 @endif
+                @if($job->status != '6')
+                    <a href="{{route('job.status.change',[$job->id, 'status_non_public'])}}" class="label label-default"> 非公開</a>
+                @endif
+                @if($job->status == '2')
+                    <a href="{{route('job.status.change',[$job->id, 'status_non_approve'])}}" class="label label-default"> 非承認</a>
+                @endif
+                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
             </td>
             </tr>
             @endforeach
-
         </tbody>
         </table>
-
         @else
         <p>データがありません</p>
         @endif

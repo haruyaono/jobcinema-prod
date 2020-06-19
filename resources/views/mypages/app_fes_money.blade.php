@@ -106,7 +106,7 @@
                         <form action="{{route('app.fesmoney.post', [$applyJobItem->id])}}" method="POST">
                         @csrf
                         @if($applyJobItem->oiwaikin) 
-                        <input type="hidden" name="oiwaikin" value="{{$jobItem->oiwaikin}}">
+                        <input type="hidden" name="oiwaikin" value="{{$jobitem->oiwaikin}}">
                         @endif
                             <div class="form-label">初出社日</div>
 
@@ -128,7 +128,7 @@
                         <form action="{{route('app.fesmoney.post', [$applyJobItem->id])}}" method="POST">
                         @csrf
                         @if($applyJobItem->oiwaikin) 
-                        <input type="hidden" name="oiwaikin" value="{{$jobItem->oiwaikin}}">
+                        <input type="hidden" name="oiwaikin" value="{{$jobitem->oiwaikin}}">
                         @endif
                             <textarea name="app_oiwai_text" placeholder="例）初出社日の連絡待ちです。○月上旬頃出社予定です。" class="" rows="6" required></textarea>
                             <input type="submit" name="adopt_submit2" class="btn btn-yellow" value="報告する">

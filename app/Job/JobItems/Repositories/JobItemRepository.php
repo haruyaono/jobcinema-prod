@@ -8,6 +8,7 @@ use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
 use App\Job\JobItems\Exceptions\AppliedJobItemNotFoundException;
+use App\Job\JobItems\Exceptions\JobItemCreateErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
@@ -38,11 +39,16 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      * @param string $order
      * @param string $sort
      * @param array $columns
+     * @param string $active
      * @return Collection
      */
-    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
+    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*'], string $active = 'on') : Collection
     {
-        return $this->model->ActiveJobitem()->orderBy($order, $sort)->get($columns);
+        if($active === 'on') {
+            return $this->model->ActiveJobitem()->orderBy($order, $sort)->get($columns);
+        } elseif($active === 'off') {
+            return $this->model->orderBy($order, $sort)->get($columns);
+        }
     }
 
     /**
@@ -91,7 +97,19 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
      return $this->model->applies()
                             ->updateExistingPivot($applyId, $data);
+    }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function searchJobItem(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection
+    {
+        if ($data !== []) {
+            return $this->queryBy($this->model::query(), $data)->orderBy($orderBy, $sortBy)->get($columns);
+        } else {
+            return $this->listJobItems($orderBy, $sortBy, ['*'], 'off');
+        }
     }
 
     /**

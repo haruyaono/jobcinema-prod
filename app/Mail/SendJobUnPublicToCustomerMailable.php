@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class JobAdopt extends Mailable
+class SendJobUnPublicToCustomerMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,9 +19,9 @@ class JobAdopt extends Mailable
      *
      * @return void
      */
-    public function __construct($employer, $job)
+    public function __construct($job)
     {
-        $this->employer = $employer;
+        $this->employer = $job->employer;
         $this->job = $job;
     }
 
@@ -32,8 +32,8 @@ class JobAdopt extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.employer.job_adopt')
+        return $this->view('emails.employer.job_unpublic')
             ->replyTo('official@job-cinema.com')
-            ->subject('【JOBCiNEMA】求人票申請が承認されました');
+            ->subject('【JOBCiNEMA】求人票が非公開になりました');
     }
 }

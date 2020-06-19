@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Job\JobItems\JobItem;
+use App\Job\JobItems\Repositories\JobItemRepository;
 use App\Job\Users\User;
 use App\Job\Companies\Company;
 use App\Models\Employer;
+use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
+use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
+use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
+use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
+use App\Job\Admins\Repositories\Interfaces\AdminRepositoryInterface;
+use App\Job\Companies\Repositories\Interfaces\CompanyRepositoryInterface;
 use App\Job\Categories\StatusCategory;
 use App\Job\Categories\TypeCategory;
 use App\Job\Categories\HourlySalaryCategory;
@@ -16,230 +24,265 @@ use App\Job\Categories\DateCategory;
 use App\Http\Requests\bellingParameter;
 use App\Http\Requests\AdminRequest;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\JobAdopt;
-use App\Mail\JobUnAdopt;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use File; 
 
 class DashboardController extends Controller
 {
 
-
-    protected $jobitem;
+     /**
+     * @var CategoryRepositoryInterface
+     * @var JobItemRepositoryInterface
+     * @var UserRepositoryInterface
+     * @var ApplyRepositoryInterface
+     * @var EmployerRepositoryInterface
+     * @var AdminRepositoryInterface
+     * @var CompanyRepositoryInterface
+     */
+    private $jobItem;
+    private $categoryRepo;
+    private $jobItemRepo;
+    private $userRepo;
+    private $applyRepo;
+    private $employerRepo;
+    private $adminRepo;
+    private $companyRepo;
 
     // 1ページ当たりの表示件数
     const NUM_PER_PAGE = 10;
 
-    function __construct(JobItem $jobitem)
-    {
-        $this->middleware(['admin']);
-        $this->jobitem = $jobitem;
+     /**
+     * DashboardController constructor.
+     * @param JobItem $jobItem
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param JobItemRepositoryInterface $jobItemRepository
+     * @param UserRepositoryInterface $userRepository
+     * @param ApplyRepositoryInterface $applyRepository
+     * @param EmployerRepositoryInterface $employerRepository
+     * @param AdminRepositoryInterface $adminRepository
+     * @param CompanyRepositoryInterface $companyRepository
+     */
+    function __construct(
+        JobItem $jobItem,
+        CategoryRepositoryInterface $categoryRepository,
+        JobItemRepositoryInterface $jobItemRepository,
+        UserRepositoryInterface $userRepository,
+        ApplyRepositoryInterface $applyRepository,
+        EmployerRepositoryInterface $employerRepository,
+        AdminRepositoryInterface $adminRepository,
+        CompanyRepositoryInterface $companyRepository
+    ) {
+        $this->jobItem = $jobItem;
+        $this->categoryRepo = $categoryRepository;
+        $this->jobItemRepo = $jobItemRepository;
+        $this->userRepo = $userRepository;
+        $this->applyRepo = $applyRepository;
+        $this->employerRepo = $employerRepository;
+        $this->adminRepo = $adminRepository;
+        $this->companyRepo = $companyRepository;
     }
 
     public function getAllJobs()
     {
-        $jobs = JobItem::latest()->paginate(10);
-        $sortBy1 = "";
-        $sortBy2 = "";
-      
-        return view('admin.alljob', compact('jobs', 'sortBy1', 'sortBy2'));
+        $data = [];
+        $param = request()->all();
+
+        if (request()->has('status') && request()->input('status') != '') {
+            $data = array_merge($data, array( 'status' => request()->input('status')));
+        } 
+        
+        if (request()->has('oiwaikin') && request()->input('oiwaikin') != '') {
+            $oiwaikin_q = request()->input('oiwaikin');
+            if($oiwaikin_q == "3000") {
+                $oiwaikin_q  = intval($oiwaikin_q);
+            } elseif($oiwaikin_q == "not"){
+                $oiwaikin_q = null;
+            }
+            $data = array_merge($data, array( 'oiwaikin' => $oiwaikin_q));
+        }
+        if (request()->has('created_at') && request()->input('created_at') != '') {
+            $list = $this->jobItemRepo->searchJobItem($data, 'created_at', request()->input('created_at'));
+        } else {
+            $list = $this->jobItemRepo->searchJobItem($data, 'created_at', 'desc');
+        }
+
+        return view('admin.alljob', [
+            'jobs' => $this->jobItemRepo->paginateArrayResults($list->all(), 10), 
+            'param' => $param
+        ]);
     }
-
-    public function jobsSort(Request $request)
-    {
-        $query = JobItem::query();
-        switch($request->job_status){
-            case 'createLate':
-                $query = $query->latest('created_at');
-                break;
-            case 'createOld':
-                $query = $query->oldest('created_at');
-                break;
-            case 'status_1':
-                $query = $query->where('status', 1)->latest();
-                break;
-            case 'status_5':
-                $query = $query->where('status', 5)->latest();
-                break;
-            case 'status_6':
-            $query = $query->where('status', 6)->latest();
-            break;
-            default:
-                $query = $query->latest('id');
-                break;
-        }
-
-        switch($request->oiwaikin_status){
-            case 'oiwaikin_true':
-                $query = $query->whereNotNull('oiwaikin')->latest();
-                break;
-            case 'oiwaikin_false':
-            $query = $query->whereNull('oiwaikin')->latest();
-                break;
-            default:
-                break;
-        }
-      
-        $query = $query->paginate(10);
-        $jobs = $query;
-
-        if( Input::get('page') > $jobs->LastPage()) {
-            abort(404);
-        }
-
-        return view('admin.alljob', compact('jobs'))
-                ->with('sortBy1', $request->job_status)
-                ->with('sortBy2', $request->oiwaikin_status);
-    }
-
-
 
     public function getJobDetail($id)
     {
-        $job = JobItem::find($id);
+        $job = $this->jobItemRepo->findAllJobItemById($id);
       
         return view('admin.job_detail', compact('job'));
     }
 
     public function oiwaikinChange($id)
     {
-        $job = JobItem::find($id);
-        if(!$job->oiwaikin) {
-            $job->oiwaikin = 2000;
+        $job = $this->jobItemRepo->findAllJobItemById($id);
+        $jobItemRepo = new JobItemRepository($job);
+
+        $data = [
+            'oiwaikin' => ''
+        ];
+        if($job->oiwaikin === null) {
+            $data['oiwaikin'] = config('const.OIWAIKIN_AMOUNT');
         } else {
-            $job->oiwaikin = null;
+            $data['oiwaikin'] = null;
         }
-        $job->save();
+        $jobItemRepo->updateJobItem($data);
 
         return redirect()->back()->with('message','お祝い金設定を変更しました');
     }
 
     public function getApprovalPendingJobs()
     {
-        $jobs = JobItem::where('status', 1)->latest()->paginate(10);
-        return view('admin.approval_pending_job', compact('jobs'));
+        $list = $this->jobItemRepo->findBy(['status' => 1])->sortByDesc('created_at');
+
+        return view('admin.approval_pending_job', [
+            'jobs' => $this->jobItemRepo->paginateArrayResults($list->all(), 10), 
+        ]);
     }
 
-    public function approeJobStatus($id)
+    public function approveJobStatus($id, $slug)
     {
-        $job = JobItem::find($id);
-        $job->status = 2;
-        $job->save();
-
+        $job = $this->jobItemRepo->findAllJobItemById($id);
         $employer = $job->employer;
 
-        $email = new JobAdopt($employer, $job);
-        Mail::to($employer->email)->queue($email);
+        $jobItemRepo = new JobItemRepository($job);
 
-        return redirect()->back()->with('message','承認しました');
-    }
-    public function nonApproeJobStatus($id)
-    {
-        $job = JobItem::find($id);
-        $job->status = 3;
-        $job->save();
-        $employer = $job->employer;
+        switch($slug) {
+            case 'status_approve':
+                $jobItemRepo->updateJobItem(['status' => 2]);
+                $message['message'] = '【求人(' . $job->id .')】を承認しました';
+                break;
+            case 'status_non_approve':
+                $jobItemRepo->updateJobItem(['status' => 3]);
+                $message['message'] = '【求人(' . $job->id .')】を非承認にしました';
+                break;
+            case 'status_non_public':
+                $jobItemRepo->updateJobItem(['status' => 6]);
+                $message['message'] = '【求人(' . $job->id .')】を完全非公開にしました';
+                break;
+        }
+        $this->adminRepo->sendEmailToEmployer($job, $slug);
 
-        $email = new JobUnAdopt($employer, $job);
-        Mail::to($employer->email)->queue($email);
-
-        return redirect()->back()->with('message','非承認にしました');
-    }
-
-    public function nonPublicJobStatus($id)
-    {
-        $job = JobItem::find($id);
-        $job->status = 6;
-        $job->save();
-
-        return redirect()->back()->with('message','完全非公開にしました');
+        return redirect()->back()->with($message);
     }
 
     public function jobDetete($id)
     {
-        $job = JobItem::find($id);
+        $disk = Storage::disk('s3');
+        $job = $this->jobItemRepo->findAllJobItemById($id);
+        
+        $dirList['image'] = \Config::get('fpath.real_img') . $job->id;
+        $dirList['movie'] = \Config::get('fpath.real_mov') . $job->id;
+
+        foreach($dirList as $dKey => $dir) {
+            File::deleteDirectory(public_path() . $dirList[$dKey]);
+            $disk->deleteDirectory($dirList[$dKey]);
+        }
 
         DB::beginTransaction();
         try {
-
-            File::delete([
-                public_path().$job->job_img, 
-                public_path().$job->job_img2, 
-                public_path().$job->job_img3,
-                public_path().$job->job_mov, 
-                public_path().$job->job_mov2, 
-                public_path().$job->job_mov3,
-            ]);
-            \File::deleteDirectory(public_path() . \Config::get('fpath.real_img') . $job->id);
-            \File::deleteDirectory(public_path() . \Config::get('fpath.real_mov') . $job->id);
-
-            if($job->users()->exists()) {
-                $job->users()->detach();
+    
+            if($job->applies()->exists()) {
+                $job->applies()->detach();
             }
-            if(DB::table('favourites')->where('job_item_id', $job->id)->exists()) {
-                DB::table('favourites')->where('job_item_id', $job->id)->delete();
+            if($job->favourites()->exists()) {
+                $job->favourites()->detach();
             }
 
             $job->delete();
 
             DB::commit();
-
         } catch (\Exception $e) {
-           
             DB::rollback();
         }
     
-        return redirect()->back()->with('message','削除しました');
+        return redirect()->back()->with('message','求人削除しました');
     }
 
     public function getAppManage()
     {
-        $app_list = DB::table('job_item_user')->latest()->paginate(10);
+        $app_list = DB::table('apply_job_item')
+                        ->select('apply_job_item.id as apply_job_item_id', 'apply_job_item.job_item_id', 'apply_job_item.apply_id', 'apply_job_item.s_status', 'apply_job_item.e_status', 'apply_job_item.created_at', 'applies.user_id', 'applies.last_name', 'applies.first_name')
+                        ->leftJoin('applies', 'apply_job_item.apply_id', 'applies.id')
+                        ->latest()
+                        ->paginate(10);
       
         return view('admin.app_list', compact('app_list'));
     }
 
     public function getOiwaikinUsers()
     {
-        $oiwaikin_users = DB::table('job_item_user')->whereNotNull('oiwaikin')->whereNotNull('first_attendance')->latest()->paginate(10);
+        $oiwaikin_users = DB::table('apply_job_item')
+                            ->whereNotNull('oiwaikin')
+                            ->whereNotNull('first_attendance')
+                            ->select('apply_job_item.id as apply_job_item_id', 'apply_job_item.job_item_id', 'apply_job_item.apply_id', 'apply_job_item.s_status', 'apply_job_item.e_status', 'apply_job_item.oiwaikin', 'apply_job_item.first_attendance','apply_job_item.created_at', 'applies.user_id', 'applies.last_name', 'applies.first_name')
+                            ->leftJoin('applies', 'apply_job_item.apply_id', 'applies.id')
+                            ->latest()
+                            ->paginate(10);
       
         return view('admin.oiwaikin_users', compact('oiwaikin_users'));
     }
     
     public function getUserDetail($id)
     {
-        $app_info = DB::table('job_item_user')->where('id', $id)->first();
-     
-        $job_info = JobItem::where('id',$app_info->job_item_id)->first();
-        $user_info = User::where('id', $app_info->user_id)->first();
-        return view('admin.user_detail', compact('app_info', 'job_info', 'user_info'));
+        $apply = $this->applyRepo->findApplyById($id);
+
+        if(!$apply->user) {
+            return view('errors.admin.custom')->with('error_name', 'NotUser');
+        }
+        foreach($apply->jobItems as $jobItem) {
+            $applyJobItem = $jobItem;
+        }
+ 
+        return view('admin.user_detail', compact('apply', 'applyJobItem'));
     }
 
     public function getBilling()
     {
-        $month_list = $this->jobitem->getMonthList();
-        $job_list = JobItem::has('users')->get();
-        $companies = [];
-        
-        foreach($job_list as $job_item) {
-            $company = Company::where('employer_id', $job_item->employer_id)->first();
-            array_push($companies, $company);
+        $month_list = $this->jobItem->getMonthList();
+        // $jobItems = $this->jobItemRepo->listJobItems('created_at', 'desc', ['*'], 'off');
+        $applyJobItemList = DB::table('apply_job_item')
+                        ->select('job_item_id', DB::raw('count(*) as tatal'))
+                        ->groupBy('job_item_id')
+                        ->get();
+
+        foreach($applyJobItemList as $applyJobItem) {
+            $jobitem = $this->jobItemRepo->findJobItemById($applyJobItem->job_item_id);
+            $employer = $jobitem->employer;
+            if($employer->company) {
+                $applyJobItem->company = $employer->company;
+            }
         }
-        return view('admin.billing_top', compact('month_list', 'companies'));
+
+        $applyJobItemList = $this->adminRepo->paginateArrayResults($applyJobItemList->all(), 10);
+
+        return view('admin.billing_top', compact('month_list', 'applyJobItemList'));
     }
 
     public function getBillingYear(bellingParameter $request)
     {
         $input = $request->input();
-        
 
-        // ブログ記事一覧を取得
-        $app_list = $this->jobitem->getAppJobList(self::NUM_PER_PAGE, $input);
-
+        $app_list = $this->jobItem->getAppJobList(self::NUM_PER_PAGE, $input);
 
         // ページネーションリンクにクエリストリングを付け加える
         $app_list->appends($input);
-        $month_list = $this->jobitem->getMonthList()->where('year', $input['year'])->where('month', $input['month'])->first();
+        $month_list = $this->jobItem->getMonthList()
+                        ->where('year', $input['year'])
+                        ->where('month', $input['month'])
+                        ->first();
+        
+        foreach($app_list as $app_item) {
+            $app_item->apply = $this->applyRepo->findApplyById($app_item->apply_id);
+            $app_item->user = $app_item->apply->user;
+        }
 
         $total = $app_list->count() * 30000;
         $total = number_format($total);
@@ -249,91 +292,79 @@ class DashboardController extends Controller
 
     public function getAllCompanies()
     {
-        $companies = Company::latest()->paginate(10);
-        $sortBy1 = "";
-      
-        return view('admin.all_company', compact('companies', 'sortBy1'));
-    }
+        $param = request()->all();
+        $list = $this->companyRepo->listCompanies('created_at');
 
-    public function companiesSort(Request $request)
-    {
-        $companies = Company::whereHas('employer', function($query) use ($request) {
-            switch($request->company_status){
-                case 'status_8':
-                    $query->where('status', 8)->latest();
-                    break;
-                default:
-                    $query->latest('companies.created_at');
-                    break;
-            }
+        if (request()->has('created_at') && request()->input('created_at') != '') {
+            $list = $this->companyRepo->listCompanies('created_at', request()->input('created_at'));
+        } 
 
-        })->paginate(10);
-
-        if( Input::get('page') > $companies->LastPage()) {
-            abort(404);
-        }
-
-        return view('admin.all_company', compact('companies'))
-                ->with('sortBy1', $request->company_status);
+        if (request()->has('c_status') && request()->input('c_status') != '') {
+            $list = $list->filter(function ($cItem, $cKey) {
+                return $cItem->employer->status === intval(request()->input('c_status'));
+            });
+        } 
+       
+        return view('admin.all_company', [
+            'companies'=> $this->companyRepo->paginateArrayResults($list->all(), 10),
+            'param' => $param
+        ]);
     }
 
     public function getCompanyDetail($id)
     {
-        $company = Company::find($id);
-        
+        $company =  $this->companyRepo->findCompanyById($id);
         $jobs =  $company->jobs;
        
         return view('admin.company_detail', compact('company', 'jobs'));
     }
 
-    public function employerDelete($id)
+    public function companyDelete($id)
     {
-        $employer = Employer::find($id);
+        $company =  $this->companyRepo->findCompanyById($id);
+        $employer = $company->employer;
+        $jobs = $employer->jobs;
+
+        $disk = Storage::disk('s3');
 
         DB::beginTransaction();
         try {
+            if(!$jobs->isEmpty()) {
 
-            if(!$employer->jobs->isEmpty()) {
-
-                $jobs = $employer->jobs->where('employer_id', $employer->id);
+                foreach($dirList as $dKey => $dir) {
+                    File::deleteDirectory(public_path() . $dirList[$dKey]);
+                    $disk->deleteDirectory($dirList[$dKey]);
+                }
 
                 foreach($jobs as $job) {
-                    File::delete([
-                        public_path().$job->job_img, 
-                        public_path().$job->job_img2, 
-                        public_path().$job->job_img3,
-                        public_path().$job->job_mov, 
-                        public_path().$job->job_mov2, 
-                        public_path().$job->job_mov3,
-                    ]);
-                    \File::deleteDirectory(public_path() . \Config::get('fpath.real_img') . $job->id);
-                    \File::deleteDirectory(public_path() . \Config::get('fpath.real_mov') . $job->id);
+                    $dirList['image'] = \Config::get('fpath.real_img') . $job->id;
+                    $dirList['movie'] = \Config::get('fpath.real_mov') . $job->id;
 
-                    if($job->users()->exists()) {
-                        $job->users()->detach();
+                    foreach($dirList as $dKey => $dir) {
+                        File::deleteDirectory(public_path() . $dirList[$dKey]);
+                        $disk->deleteDirectory($dirList[$dKey]);
                     }
-                    if(DB::table('favourites')->where('job_item_id', $job->id)->exists()) {
-                        DB::table('favourites')->where('job_item_id', $job->id)->delete();
+
+                    if($job->applies()->exists()) {
+                        $job->applies()->detach();
+                    }
+                    if($job->favourites()->exists()) {
+                        $job->favourites()->detach();
                     }
 
                     $job->delete();
-
                 }
-
             }
 
-            Company::where('employer_id', $employer->id)->delete();
+            $company->delete();
             $employer->delete();
 
             DB::commit();
-
         } catch (\Exception $e) {
-           
             DB::rollback();
         }
        
         return redirect()->back()->with('message', 'アカウントを削除しました');
-
     }
 
     public function categoryTop()
@@ -343,24 +374,30 @@ class DashboardController extends Controller
     
     public function category($url)
     {
-        if($url == 'status') {
-            $catList = StatusCategory::paginate(self::NUM_PER_PAGE);
-            $catTitle = '雇用形態';
-        } elseif($url == 'type') {
-            $catList = TypeCategory::paginate(self::NUM_PER_PAGE);
-            $catTitle = '職種';
-        } elseif($url == 'area') {
-            $catList = AreaCategory::paginate(self::NUM_PER_PAGE);
-            $catTitle = 'エリア';
-        } elseif($url == 'hourly_salary') {
-            $catList = HourlySalaryCategory::paginate(self::NUM_PER_PAGE);
-            $catTitle = '時給';
-        } elseif($url == 'date') {
-            $catList = DateCategory::paginate(self::NUM_PER_PAGE);
-            $catTitle = '勤務日数';
-        } else {
+        switch($url) {
+            case 'status':
+                $catList = StatusCategory::paginate(self::NUM_PER_PAGE);
+                $catTitle = '雇用形態';
+                break;
+            case 'type':
+                $catList = TypeCategory::paginate(self::NUM_PER_PAGE);
+                $catTitle = '職種';
+                break;
+            case 'area':
+                $catList = AreaCategory::paginate(self::NUM_PER_PAGE);
+                $catTitle = 'エリア';
+                break;
+            case 'hourly_salary':
+                $catList = HourlySalaryCategory::paginate(self::NUM_PER_PAGE);
+                $catTitle = '時給';
+                break;
+            case 'date':
+                $catList = DateCategory::paginate(self::NUM_PER_PAGE);
+                $catTitle = '勤務日数';
+                break;
+            default:
+                return view('admin.category_top');
         }
-        
         
         return view('admin.category', compact('catList','url', 'catTitle'));
     }
@@ -376,21 +413,28 @@ class DashboardController extends Controller
     {
         $input = $request->input();
         $category_id = $request->input('category_id');
-        if($flag == 'status') {
-            $category = StatusCategory::updateOrCreate(compact('id'), $input);
-        } elseif($flag == 'type') {
-            $category = TypeCategory::updateOrCreate(compact('id'), $input);
-        } elseif($flag == 'area') {
-            $category = AreaCategory::updateOrCreate(compact('id'), $input);
-        } elseif($flag == 'hourly_salary') {
-            $category = HourlySalaryCategory::updateOrCreate(compact('id'), $input);
-        } elseif($flag == 'date') {
-            $category = DateCategory::updateOrCreate(compact('id'), $input);
-        } else {
-            $category = '';
+
+        switch($flag) {
+            case 'status':
+                $category = StatusCategory::updateOrCreate(['id' => $category_id ], ['name' => $request->input('name')]);
+                break;
+            case 'type':
+                $category = TypeCategory::updateOrCreate(compact('id'), $input);
+                break;
+            case 'area':
+                $category = AreaCategory::updateOrCreate(compact('id'), $input);
+                break;
+            case 'hourly_salary':
+                $category = HourlySalaryCategory::updateOrCreate(compact('id'), $input);
+                break;
+            case 'date':
+                $category = DateCategory::updateOrCreate(compact('id'), $input);
+                break;
+            default:
+                $category = '';
+                break;
         }
 
-        // // APIなので json のレスポンスを返す
         return response()->json($category);
     }
 
@@ -403,21 +447,25 @@ class DashboardController extends Controller
     public function deleteCategory(AdminRequest $request, $flag)
     {
         $category_id = $request->input('category_id');
-        if($flag == 'status') {
-            StatusCategory::destroy($category_id);
-        } elseif($flag == 'type') {
-            TypeCategory::destroy($category_id);
-        } elseif($flag == 'area') {
-            AreaCategory::destroy($category_id);
-        } elseif($flag == 'hourly_salary') {
-            HourlySalaryCategory::destroy($category_id);
-        } elseif($flag == 'date') {
-            DateCategory::destroy($category_id);
-        } 
+        switch($flag) {
+            case 'status':
+                StatusCategory::destroy($category_id);
+                break;
+            case 'type':
+                TypeCategory::destroy($category_id);
+                break;
+            case 'area':
+                AreaCategory::destroy($category_id);
+                break;
+            case 'hourly_salary':
+                HourlySalaryCategory::destroy($category_id);
+                break;
+            case 'date':
+                DateCategory::destroy($category_id);
+                break;
+        }
 
-        // APIなので json のレスポンスを返す
         return response()->json();
     }
-
 
 }

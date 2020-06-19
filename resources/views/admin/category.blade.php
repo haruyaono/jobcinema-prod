@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">{{$catTitle}}カテゴリ</h1>
-<span><a href="/dashboard/category_top" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin_category.top')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>

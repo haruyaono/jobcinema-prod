@@ -53,7 +53,7 @@
         <div class="card">
             <div class="card-header h5">写真/画像</div>
             <div class="card-body">
-                <div class="form-group admin-job-image-area">
+                <div class="form-group admin-job-image-area cf">
                     <div class="admin-job-image-item">
                         <p class="admin-image-wrap"><img src="@if(config('app.env') == 'production' && $job->job_img){{config('app.s3_url')}}{{$job->job_img}}@elseif($job->job_img) {{$job->job_img}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                     </div>
@@ -70,7 +70,7 @@
         <div class="card">
             <div class="card-header h5">動画</div>
             <div class="card-body">
-                <div  oncontextmenu="return false;" class="form-group admin-job-image-area">
+                <div  oncontextmenu="return false;" class="form-group admin-job-image-area cf">
                     <div class="admin-job-image-item">
                         <p class="admin-image-wrap">
                             <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
@@ -298,13 +298,6 @@
 
 
 @stop
-
-<!-- 読み込ませるCSSを入力 -->
-@section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="/css/admin.css">
-@stop
-
 <!-- 読み込ませるJSを入力 -->
 @section('js')
    

@@ -25,7 +25,8 @@
         "pbmedia/laravel-ffmpeg": "3.0",
         "predis/predis": "^1.1",
         "prettus/l5-repository": "^2.6",
-        "prettus/laravel-validation": "^1.1"
+        "prettus/laravel-validation": "^1.1",
+        "nicolaslopezj/searchable": "1.*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

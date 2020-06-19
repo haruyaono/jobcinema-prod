@@ -21,7 +21,7 @@
                         <tr>
                             <th>会社名</th>
                             <td>
-                                <p>{{$company->cname }}</p>
+                                <p>{{$company->cname}}</p>
                             </td>
                         </tr>
                         @endif
@@ -29,7 +29,7 @@
                         <tr>
                             <th>設立</th>
                             <td>
-                                <p>{{$company->foundation }}</p>
+                                <p>{{$company->foundation}}</p>
                             </td>
                         </tr>
                         @endif
@@ -37,7 +37,7 @@
                         <tr>
                             <th>本社所在地</th>
                             <td>
-                                <p>{{$company->cname }}</p>
+                                <p>{{$company->cname}}</p>
                             </td>
                         </tr>
                         @endif
@@ -45,9 +45,9 @@
                         <tr>
                             <th>会社住所</th>
                             <td>
-                                <p>〒{{$company->postcode }}<br>
-                                {{$company->prefecture }}<br>
-                                {{$company->address }}<br>
+                                <p>〒{{$company->postcode}}<br>
+                                {{$company->prefecture}}<br>
+                                {{$company->address}}<br>
                                 </p>
                             </td>
                         </tr>
@@ -56,7 +56,7 @@
                         <tr>
                             <th>資本金</th>
                             <td>
-                                <p>{{$company->capital }}</p>
+                                <p>{{$company->capital}}</p>
                             </td>
                         </tr>
                         @endif
@@ -64,7 +64,7 @@
                         <tr>
                             <th>従業員数</th>
                             <td>
-                                <p>{{$company->employee_number }}</p>
+                                <p>{{$company->employee_number}}</p>
                             </td>
                         </tr>
                         @endif
@@ -98,7 +98,6 @@
                     </thead>
                     <tbody>
                         @foreach($jobs as $job)
-
                         <tr>
                         <td><a href="{{route('admin.job.detail',[$job->id])}}" target="_blank">{{ $job->id}}</a></td>
                         <td>{{$job->company->cname}}</td>
@@ -126,34 +125,16 @@
                             <a href="{{route('admin.job.oiwaikin.change', [$job->id])}}" @if(!$job->oiwaikin) onclick="return window.confirm('「お祝い金」を設定しますか？');" @else onclick="return window.confirm('「お祝い金」を解除しますか？');" @endif>変更</a>
                         </td>
                         <td class="text-right">
-                            @if($job->status=='0')
-                                <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                                <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                            @elseif($job->status=='1')
-                                <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                                <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                            @elseif($job->status=='2')
-                                <a href="{{route('job.non.approve',[$job->id])}}" class="label label-default"> 非承認</a>
-                                <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                            @elseif($job->status=='3')
-                                <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                                <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                                <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                            @elseif($job->status=='4')
-                            <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                            <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                            <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                            @elseif($job->status=='5')
-                            <a href="{{route('job.non.public',[$job->id])}}" class="label label-default"> 非公開</a>
-                            <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                            @elseif($job->status=='6')
-                            <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 公開</a>
-                            <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
-                    
+                            @if($job->status != '2' || $job->status !='5')
+                                <a href="{{route('job.status.change',[$job->id, 'status_approve'])}}" class="label label-info"> 公開</a>
                             @endif
+                            @if($job->status != '6')
+                                <a href="{{route('job.status.change',[$job->id, 'status_non_public'])}}" class="label label-default"> 非公開</a>
+                            @endif
+                            @if($job->status == '2')
+                                <a href="{{route('job.status.change',[$job->id, 'status_non_approve'])}}" class="label label-default"> 非承認</a>
+                            @endif
+                            <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
                         </td>
                         </tr>
                         @endforeach

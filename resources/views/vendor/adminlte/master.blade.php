@@ -21,6 +21,7 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/AdminLTE.min.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/admin.css') }} ">
 
     @yield('adminlte_css')
 

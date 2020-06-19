@@ -89,8 +89,7 @@ class JobItem extends Model
         $year  = array_get($condition, 'year');
         $month = array_get($condition, 'month');
 
-        $query = DB::table('job_item_user')->orderBy('created_at', 'desc');
-
+        $query = DB::table('apply_job_item')->orderBy('created_at', 'desc');
         // 期間の指定
         if ($year) {
             if ($month) {
@@ -102,21 +101,17 @@ class JobItem extends Model
                 $start_date = Carbon::createFromDate($year, 1, 1);
                 $end_date   = Carbon::createFromDate($year, 1, 1)->addYear();           // 1年後
             }
-            // Where句を追加
+
             $query->where('created_at', '>=', $start_date->format('Y-m-d'))
                   ->where('created_at', '<',  $end_date->format('Y-m-d'));
         }
 
-        // paginate メソッドを使うと、ページネーションに必要な全件数やオフセットの指定などは全部やってくれる
         return $query->paginate($num_per_page);
     }
 
     public function getMonthList()
     {
-        // selectRaw メソッドを使うと、引数にSELECT文の中身を書いてそのまま実行できる
-        // 返り値はコレクション（Illuminate\Database\Eloquent\Collection Object）
-        // コレクションとは配列データを操作するための便利なラッパーで、多種多様なメソッドが用意されている
-        $month_list = DB::table('job_item_user')
+        $month_list = DB::table('apply_job_item')
             ->selectRaw('substring(created_at, 1, 7) AS year_and_month')
             ->groupBy('year_and_month')
             ->orderBy('year_and_month', 'desc')
@@ -125,7 +120,7 @@ class JobItem extends Model
         foreach ($month_list as $value) {
             // YYYY-MM をハイフンで分解して、YYYY年MM月という表記を作る
             list($year, $month) = explode('-', $value->year_and_month);
-            $value->year  = $year;
+            $value->year = (int)$year;
             $value->month = (int)$month;
             $value->year_month = sprintf("%04d年 %02d月", $year, $month);
         }

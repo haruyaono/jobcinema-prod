@@ -18,7 +18,6 @@ use File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
@@ -516,7 +515,7 @@ class JobController extends Controller
 
         } else {
 
-          $reqData = $request->except('_token');
+          $reqData = $request->except('_token', 'start_specified_date', 'end_specified_date');
           $reqData['employer_id'] = $employer->id;
           $reqData['company_id'] = $company->id;
           $reqData['status'] = 0;
@@ -688,7 +687,6 @@ class JobController extends Controller
 
         session()->forget('count');
         session()->put('count', 3);
-
         $jobImageBaseUrl = $this->jobItemRepo->getJobImageBaseUrl();
 
         return view('jobs.post.confirm', compact('job', 'jobImageBaseUrl'));

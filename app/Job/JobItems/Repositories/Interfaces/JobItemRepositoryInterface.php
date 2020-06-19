@@ -11,9 +11,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface JobItemRepositoryInterface extends BaseRepositoryInterface
 { 
 
-    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection;
+    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*'], string $active) : Collection;
 
     public function listJobitemCount() : int;
+
+    public function createJobItem(array $data) : JobItem;
 
     public function updateJobItem(array $data): bool;
 

@@ -22,17 +22,8 @@ class JobItemPolicy
         //
     }
 
-    public function viewAppJob(User $user, JobItem $jobitem) {
-        if($jobitem === null) {
-            return false;
-        }
-
-        return $user->whereHas('users', function(Builder $query) use ($jobitem) {
-            $query->where('job_item_id', $jobitem->id);
-        });
-    }
-
     public function view(Employer $employer, JobItem $jobitem) {
         return $employer->id === $jobitem->employer_id;
     }
+
 }

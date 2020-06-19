@@ -49,16 +49,15 @@
             <tbody>
                 @forelse($app_list as $app_item)
                 <tr>
-                <?php 
-                    $day = $app_item->created_at;
-                ?>
-                <td>{{ $day}}</td>
-                <td>{{ $app_item->user_id}}
-                    @if(!App\Models\User::where('id',$app_item->user_id)->exists())
+                <td>{{ date('Y-m-d', strtotime($app_item->created_at))}}</td>
+                <td>
+                    @if($app_item->user == null)
                     (削除済み)
+                    @else
+                    {{ $app_item->user->id}}
                     @endif
                 </td>
-                <td><a href="{{route('user.detail.get', [$app_item->id])}}">{{ $app_item->last_name}} {{ $app_item->first_name}}</a></td>
+                <td><a href="{{route('user.detail.get', [$app_item->id])}}">{{ $app_item->apply->last_name}} {{ $app_item->apply->first_name}}</a></td>
                 <td>{{ $app_item->first_attendance}}</td>
                 <td>
                     @if($app_item->oiwaikin)

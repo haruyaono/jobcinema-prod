@@ -228,18 +228,16 @@ Route::group(['prefix' => 'dashboard'], function(){
   Route::post('login', 'Admin\Auth\LoginController@login')->name('admin.login');
   Route::post('logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
 
-  Route::get('jobs', 'DashboardController@getAlljobs')->name('alljob.get');
-  Route::get('jobs/sort', 'DashboardController@jobsSort')->name('alljob.sort');
-  Route::get('job/{id}/detail', 'DashboardController@getJobDetail')->name('admin.job.detail');
+  Route::get('joblist/index', 'DashboardController@getAlljobs')->name('alljob.get');
+  Route::get('joblist/sort', 'DashboardController@jobsSort')->name('alljob.sort');
+  Route::get('joblist/show/{id}', 'DashboardController@getJobDetail')->name('admin.job.detail');
 
-  Route::get('job/{id}/oiwaikin', 'DashboardController@oiwaikinChange')->name('admin.job.oiwaikin.change');
+  Route::get('joblist/{id}/oiwaikin', 'DashboardController@oiwaikinChange')->name('admin.job.oiwaikin.change');
 
-  Route::get('jobs/approval_pending', 'DashboardController@getApprovalPendingJobs');
-  Route::get('job/{id}/status_approve', 'DashboardController@approeJobStatus')->name('job.approve');
-  Route::get('job/{id}/status_non_approve', 'DashboardController@nonApproeJobStatus')->name('job.non.approve');
-  Route::get('job/{id}/status_non_public', 'DashboardController@nonPublicJobStatus')->name('job.non.public');
-  Route::get('job/{id}/delete', 'DashboardController@jobDetete')->name('job.delete');
+  Route::get('joblist/index/approval_pending', 'DashboardController@getApprovalPendingJobs');
+  Route::get('joblist/{id}/Status/{slug}', 'DashboardController@approveJobStatus')->name('job.status.change');
 
+  Route::get('joblist/delete/{id}', 'DashboardController@jobDetete')->name('job.delete');
 
   Route::get('app_manage', 'DashboardController@getAppManage')->name('admin.app.manage');
   Route::get('oiwaikin/users', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.get');
@@ -250,10 +248,9 @@ Route::group(['prefix' => 'dashboard'], function(){
   Route::get('billing/year_and_month', 'DashboardController@getBillingYear')->name('billing.year');
 
   Route::get('companies', 'DashboardController@getAllCompanies')->name('all.company.get');
-  Route::get('companies/sort', 'DashboardController@companiesSort')->name('all.company.sort');
   Route::get('company/{id}/detail', 'DashboardController@getCompanyDetail')->name('admin.company.detail');
 
-  Route::get('company/{id}/delete', 'DashboardController@employerDelete')->name('admin.company.delete');
+  Route::get('company/{id}/delete', 'DashboardController@companyDelete')->name('admin.company.delete');
 
   Route::get('category_top', 'DashboardController@categoryTop')->name('admin_category.top');
   Route::get('category/{url}', 'DashboardController@category')->name('admin_category');

@@ -24,10 +24,24 @@ class CompanyRepository extends BaseRepository implements CompanyRepositoryInter
         $this->model = $company;
     }
 
+    /**
+     * List all the companies
+     *
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @param string $active
+     * @return Collection
+     */
+    public function listCompanies(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
+    {
+            return $this->all($columns, $order, $sort);
+    }
+
       /**
      * Create the company
      *
-     * @param array $data
+     * @param array $data 
      *
      * @return Company
      * @throws CreateCompanyErrorException
@@ -81,7 +95,13 @@ class CompanyRepository extends BaseRepository implements CompanyRepositoryInter
         }
     }
 
-
-
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function searchCompany(string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection
+    {
+        return $this->orderBy($orderBy, $sortBy)->get($columns);
+    }
    
 }

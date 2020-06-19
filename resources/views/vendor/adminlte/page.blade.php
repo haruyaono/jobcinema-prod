@@ -121,7 +121,7 @@
             </section>
 
             <!-- Main content -->
-            <section class="content">
+            <section class="content admin-content">
 
                 @yield('content')
 

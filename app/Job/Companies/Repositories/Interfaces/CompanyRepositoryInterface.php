@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 
 interface CompanyRepositoryInterface extends BaseRepositoryInterface
 {  
+    public function listCompanies(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection;
 
     public function createCompany(array $data) : Company;
 
