@@ -6,6 +6,8 @@ use App\Job\Employers\Employer;
 use App\Job\Employers\Repositories\EmployerRepository;
 use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
 use App\Job\Companies\Company;
+use App\Job\Companies\Repositories\CompanyRepository;
+use App\Job\Companies\Repositories\Interfaces\CompanyRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -36,8 +38,10 @@ class RegisterController extends Controller
 
      /**
      * @var EmployerRepositoryInterface
+     * @var CompanyRepositoryInterface
      */
     private $employerRepo;
+    private $companyRepo;
 
     /**
      * Where to redirect users after registration.
@@ -52,10 +56,11 @@ class RegisterController extends Controller
      * @return void
      */
     public function __construct(
-        EmployerRepositoryInterface $employerRepository
+        EmployerRepositoryInterface $employerRepository,
+        CompanyRepositoryInterface $companyRepository
     ) {
-        $this->middleware(['guest:employer']);
         $this->employerRepo = $employerRepository;
+        $this->companyRepo = $companyRepository;
     }
 
     public function index()
@@ -79,7 +84,7 @@ class RegisterController extends Controller
         if ( !Employer::where('email',$request->email)->exists())
         {
 
-            $data = [
+            $eData = [
                 'email' => $request->email,
                 'password' => $request->password,
                 'last_name' => $request->e_last_name,
@@ -88,14 +93,15 @@ class RegisterController extends Controller
                 'phone2' => $request->e_phone2,
                 'phone3' => $request->e_phone3,
             ];
+            $employer = $this->employerRepo->createEmployer($eData);
 
-            $employer = $this->employerRepo->createEmployer($data);
-
-            Company::create([
-                'employer_id' => $employerId = $employer->id,
+            $cData = [
+                'employer_id' => $employer->id,
                 'cname' => request('cname'),
-                'slug' => str_slug($employerId),
-            ]);
+            ];
+
+            $this->companyRepo->createCompany($cData);
+
             $request->session()->forget('setdata');
     
             $email = new EmailVerification($employer);
@@ -107,7 +113,6 @@ class RegisterController extends Controller
         } else {
             return redirect()->route('employer.register.index');
         }
-        
     }
 
     public function showForm($email_token)
@@ -159,8 +164,8 @@ class RegisterController extends Controller
     $empReqData = [
         'last_name' => $request->e_last_name,
         'first_name' => $request->e_first_name,
-        'last_name_katakana' => $request->last_name_katakana,
-        'first_name_katakana' => $request->first_name_katakana,
+        'last_name_katakana' => $request->e_last_name_katakana,
+        'first_name_katakana' => $request->e_first_name_katakana,
         'status' => config('const.EMPLOYER_STATUS.REGISTER'),
         'phone1' => $request->e_phone1,
         'phone2' => $request->e_phone2,
@@ -170,45 +175,26 @@ class RegisterController extends Controller
     $employerRepo = new EmployerRepository($employer);
     $employerRepo->updateEmployer($empReqData);
 
-    // $comReqData = [
-    //     'cname_katakana' => $request->cname_katakana;
-    //     'postcode' => $request->zip31."-".$request->zip32,
-    //     'prefecture' => $request->pref31,
-    //     'address' => $request->addr31,
-    //     'foundation' => $request->f_year." 年 ".$request->f_month." 月",
-    //     'ceo' => $request->ceo,
-    //     'capital' => $request->capital,
-    //     'industry' => $request->industry,
-    //     'description' => $request->description,
-    //     'employee_number' => $request->employee_number,
-    //     'website' => $request->website,
-    //     'phone1' => $request->c_phone1,
-    //     'phone2' => $request->c_phone2,
-    //     'phone3' => $request->c_phone3,
-    // ];
+    $comReqData = [
+        'cname' => $request->cname,
+        'cname_katakana' => $request->cname_katakana,
+        'postcode' => $request->zip31."-".$request->zip32,
+        'prefecture' => $request->pref31,
+        'address' => $request->addr31,
+        'foundation' => $request->f_year." 年 ".$request->f_month." 月",
+        'ceo' => $request->ceo,
+        'capital' => $request->capital,
+        'industry' => $request->industry,
+        'description' => $request->description,
+        'employee_number' => $request->employee_number,
+        'website' => $request->website,
+        'phone1' => $request->c_phone1,
+        'phone2' => $request->c_phone2,
+        'phone3' => $request->c_phone3,
+    ];
 
-    // $companyRepo = new CompanyRepository($company);
-    // $companyRepo->updateCompany($comReqData);
-
-    $postal_code = $request->zip31."-".$request->zip32;
-    $foundation = $request->f_year." 年 ".$request->f_month." 月";
-
-    $company->cname = $request->cname;
-    $company->cname_katakana = $request->cname_katakana;
-    $company->postcode = $postal_code;
-    $company->prefecture = $request->pref31;
-    $company->address = $request->addr31;
-    $company->foundation = $foundation;
-    $company->ceo = $request->ceo;
-    $company->capital = $request->capital;
-    $company->industry = $request->industry;
-    $company->description = $request->description;
-    $company->employee_number = $request->employee_number;
-    $company->website = $request->website;
-    $company->phone1 = $request->c_phone1;
-    $company->phone2 = $request->c_phone2;
-    $company->phone3 = $request->c_phone3;
-    $employer->company()->save($company);
+    $companyRepo = new CompanyRepository($company);
+    $companyRepo->updateCompany($comReqData);
 
     return view('employer.main.registered');
   }
