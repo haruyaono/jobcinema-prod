@@ -73,7 +73,7 @@ class ProfileUnitTest extends TestCase
 
      }
 
-      /** @test */
+    /** @test */
     public function it_can_create_the_profile()
     {
         $user = factory(User::class)->create();
@@ -96,6 +96,16 @@ class ProfileUnitTest extends TestCase
         $this->assertEquals($data['final_education'], $profile->final_education);
     }
 
-   
- 
+    /** @test */
+    public function it_can_get_the_resume()
+    {
+        $profile = factory(Profile::class)->create();
+
+        $profileRepo = new ProfileRepository($profile);
+        $resume = $profileRepo->getResume();
+
+        $this->assertInstanceOf(Profile::class, $resume);
+        $this->assertEquals($resume->resumePath, '');
+    }
+
 }
