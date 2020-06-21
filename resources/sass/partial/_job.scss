@@ -2,6 +2,11 @@
 .p-works-sort-conditions {
   margin-bottom: 25px;
   text-align: right;
+  display: none;
+  
+  @include mq(medium) {
+    display: block;
+  }
 }
 .p-works-sort-conditions>li {
   display: inline-block;
@@ -15,7 +20,26 @@
 .p-works-sort-conditions>li+li {
   border-left: 1px solid #333;
 }
+#job-sort-sp {
+  display: inline-block;
+  margin-top: 24px;
+  width: 40%;
+  float: right;
+  height: 30px;
 
+  @include mq(medium) {
+    display: none;
+  }
+}
+
+.p-works-count-box {
+  width: 60%;
+  float: left;
+  @include mq(medium) {
+    float: none;
+    width: auto;
+  }
+}
 /* 案件一覧 */
   
   .job-entry {
