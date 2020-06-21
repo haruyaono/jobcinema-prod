@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
 use App\Job\Users\Repositories\UserRepository;
+use App\Job\Profiles\Repositories\ProfileRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
 use App\Job\Companies\Company;
@@ -120,17 +121,10 @@ class JobController extends Controller
       $applyInfo['apply'] = $this->applyRepo->findApplyById($applyInfo['jobAppliedInfo']->id);
       $applyInfo['applicant'] = $this->userRepo->findUserById($applyInfo['apply']->user_id);
 
-      $exists = Storage::disk('s3')->exists('resume/'.$applyInfo['applicant']->profile->resume);
-      if($exists) {
-          $resumePath =  Storage::disk('s3')->url('resume/'.$applyInfo['applicant']->profile->resume);
-          if(config('app.env') == 'production') {
-              $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
-          } 
-      } else {
-          $resumePath = '';
-      }
+      $profileRepo = new ProfileRepository($applyInfo['applicant']->profile);
+      $applyInfo['profile'] = $profileRepo->getResume();
 
-      return view('jobs.applicants_detail', compact('applyInfo', 'resumePath'));
+      return view('jobs.applicants_detail', compact('applyInfo'));
     }
 
     public function empAdoptJob($JobItemId, $applyId)
