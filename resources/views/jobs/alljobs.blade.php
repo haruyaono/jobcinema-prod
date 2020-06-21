@@ -51,20 +51,25 @@
 
 	<section class="main-section job-entry">
 		<div class="inner">
-			<div class="pad">
+			<div class="pad cf">
 				<h1 class="txt-h1">検索された求人</h1>
-         <div class="d-flex mb-3">
+         <div class="d-flex mb-3 p-works-count-box">
            <p class="search-count"><span class=" mr-1">{{ $jobCount }}</span>求人 <span>{{ $jobs->firstItem() }}件 〜 {{ $jobs->lastItem() }}件を表示</span></p>
          </div>
          <ul class="p-works-sort-conditions">
-         <span>並び替え：</span>
+          <span>並び替え：</span>
   
           <li><a href="{{$jobCreateUrl}}">新着順</a></li>
           <li><a href="{{$jobCreateUrl . '&ks=1'}}">高収入</a></li>
           <li><a href="{{$jobCreateUrl . '&ks=2'}}">勤務日数が少ない</a></li>
           <li><a href="{{$jobCreateUrl . '&ks=3'}}">お祝い金額</a></li>
          </ul>
-
+         <select name="job-sort-sp" id="job-sort-sp" data-url="{{$jobCreateUrl}}">
+          <option value="0" @if($jobCreateUrl == '') selected @endif>新着順</option>
+          <option value="1" @if($jobCreateUrl == '') selected @endif>高収入</option>
+          <option value="2">勤務日数が少ない</option>
+          <option value="3">お祝い金額</option>
+         </select>
 
 				<div class="job-list">
 					<!-- ▽ ループ開始 ▽ -->
@@ -172,6 +177,8 @@
       var jobsortItem = $('.p-works-sort-conditions li');
       var sortByKeyValue = getParam('ks');
 
+      console.log($('#job-sort-sp').data('url'));
+
       if(sortByKeyValue != null) {
         jobsortItem.each(function(index, element) {
           if(sortByKeyValue == index) {
@@ -186,6 +193,22 @@
         $(jobsortItem[0]).children().replaceWith(function() {
           $(this).replaceWith("<span>"+$(this).text()+"</span>")
         });
+      }
+
+      if($('#job-sort-sp').length) {
+        $('#job-sort-sp').change(function() {
+          var ks = $(this).val();
+          if(ks == 0) {
+            window.location.href = $('#job-sort-sp').data('url');
+          } else {
+            window.location.href = $('#job-sort-sp').data('url') + '&ks=' + ks;
+          }
+
+        });
+
+        if(sortByKeyValue != null) {
+          $('#job-sort-sp option[value=\'' + sortByKeyValue + '\']').prop('selected', true);
+        }
       }
     
     });

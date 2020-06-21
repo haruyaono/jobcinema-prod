@@ -15844,6 +15844,13 @@ input[size="28"] {
 .p-works-sort-conditions {
   margin-bottom: 25px;
   text-align: right;
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .p-works-sort-conditions {
+    display: block;
+  }
 }
 
 .p-works-sort-conditions > li {
@@ -15859,6 +15866,32 @@ input[size="28"] {
 
 .p-works-sort-conditions > li + li {
   border-left: 1px solid #333;
+}
+
+#job-sort-sp {
+  display: inline-block;
+  margin-top: 24px;
+  width: 40%;
+  float: right;
+  height: 30px;
+}
+
+@media screen and (min-width: 768px) {
+  #job-sort-sp {
+    display: none;
+  }
+}
+
+.p-works-count-box {
+  width: 60%;
+  float: left;
+}
+
+@media screen and (min-width: 768px) {
+  .p-works-count-box {
+    float: none;
+    width: auto;
+  }
 }
 
 /* 案件一覧 */
