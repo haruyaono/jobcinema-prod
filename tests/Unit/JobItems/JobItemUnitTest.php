@@ -8,6 +8,8 @@ use App\Job\Applies\Repositories\ApplyRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
 use App\Job\JobItems\Exceptions\AppliedJobItemNotFoundException;
+use App\Job\JobItems\Exceptions\JobItemCreateErrorException;
+use App\Job\JobItems\Exceptions\JobItemUpdateErrorException;
 use App\Job\JobItems\Repositories\JobItemRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -35,26 +37,76 @@ class JobItemUnitTest extends TestCase
         $this->assertGreaterThan(0, $jobitemCount);
      }
 
-      /** @test  */
-    public function it_can_find_an_applied_jobitem() 
-    {
+     /** @test */
+     public function it_errors_creating_the_job_item_when_required_fields_are_not_passed()
+     {
+       $this->expectException(JobItemCreateErrorException::class);
 
-      $employer = factory(Employer::class)->create();
-      $apply = factory(Apply::class)->create();
-      $jobitem = factory(JobItem::class)->create();
+       $jobitem = new JobItemRepository(new JobItem);
+       $jobitem->createJobItem([]);
+     }
 
-      $applyRepo = new ApplyRepository($apply);
-      $applyRepo->associateJobItem($jobitem);
+     /** @test */ 
+     public function it_can_create_a_job_item() 
+     {
+       $image = UploadedFile::fake()->image('file.png', 600, 400);
 
-      $param = [
-        'job_item_id' => $jobitem->id
-      ];
+       $params = [
+        'company_id' => 1,
+        'employer_id' => 1,
+        'status' => 0,
+        'job_title' => $this->faker->sentence,
+        'job_img' => $image,
+        'status_cat_id' => 1,
+        'type_cat_id' => 1,
+        'area_cat_id' => 1,
+        'hourly_salary_cat_id' => 1,
+        'date_cat_id' => 1
+       ];
 
-      $jobitemRepo = new JobItemRepository($jobitem);
-      $result = $jobitemRepo->findAppliedJobItem($param);
+       $jobitem = new JobItemRepository(new JobItem);
+       $created = $jobitem->createJobItem($params);
 
-      $this->assertIsObject($result);
-    }
+       $this->assertInstanceOf(JobItem::class, $created);
+       $this->assertEquals($params['company_id'], $created->company_id);
+       $this->assertEquals($params['employer_id'], $created->employer_id);
+       $this->assertEquals($params['status'], $created->status);
+       $this->assertEquals($params['job_title'], $created->job_title);
+       $this->assertEquals($params['job_img'], $created->job_img);
+       $this->assertEquals($params['status_cat_id'], $created->status_cat_id);
+       $this->assertEquals($params['type_cat_id'], $created->type_cat_id);
+       $this->assertEquals($params['area_cat_id'], $created->area_cat_id);
+       $this->assertEquals($params['hourly_salary_cat_id'], $created->hourly_salary_cat_id);
+       $this->assertEquals($params['date_cat_id'], $created->date_cat_id);
+     }
+
+      /** @test */
+      public function it_errors_updating_the_jobitem_with_required_fields_are_not_passed()
+      {
+          $this->expectException(JobItemUpdateErrorException::class);
+
+          $jobitem = new JobItemRepository($this->jobitem);
+          $jobitem->updateJobItem(['employer_id' => null]);
+      }
+
+       /** @test */
+      public function it_can_update_a_jobitem()
+      {
+          $jobitem = factory(JobItem::class)->create();
+          $jobitemTitle = 'testTitle';
+          $image = UploadedFile::fake()->image('file.png', 600, 400);
+
+          $data = [
+              'job_title' => $jobitemTitle,
+              'job_img' => $image,
+              'status' => 1
+          ];
+
+          $jobitemRepo = new JobItemRepository($jobitem);
+          $updated = $jobitemRepo->updateJobItem($data);
+
+          $this->assertTrue($updated);
+      }
 
       /** @test */
       public function it_can_create_recent_jobitem_id_list()
@@ -99,6 +151,21 @@ class JobItemUnitTest extends TestCase
         $this->assertEquals($this->jobitem->job_office_address, $found->job_office_address);
 
       }
+
+        /** @test */
+        public function it_can_find_all_jobitems()
+        {
+          $jobitem = new JobItemRepository(new JobItem);
+          $found = $jobitem->findAllJobItemById($this->jobitem->id);
+  
+          $this->assertInstanceOf(JobItem::class, $found);
+          $this->assertEquals($this->jobitem->job_title, $found->job_title);
+          $this->assertEquals($this->jobitem->job_type, $found->job_type);
+          $this->assertEquals($this->jobitem->job_hourly_salary, $found->job_hourly_salary);
+          $this->assertEquals($this->jobitem->job_office, $found->job_office);
+          $this->assertEquals($this->jobitem->job_office_address, $found->job_office_address);
+  
+        }
 
        /** @test */
        public function it_can_query_base_search_jobitems()
