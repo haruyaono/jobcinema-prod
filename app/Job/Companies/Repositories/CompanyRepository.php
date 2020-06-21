@@ -94,14 +94,5 @@ class CompanyRepository extends BaseRepository implements CompanyRepositoryInter
             throw new CompanyNotFoundException('会社情報が見つかりませんでした。');
         }
     }
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function searchCompany(string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection
-    {
-        return $this->orderBy($orderBy, $sortBy)->get($columns);
-    }
    
 }
