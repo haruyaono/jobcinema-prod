@@ -223,37 +223,41 @@ Route::group(['middleware' => ['auth:employer']], function() {
 
 // 管理者
 Route::group(['prefix' => 'dashboard'], function(){
-  Route::get('home', 'Admin\HomeController@index')->name('admin.home')->middleware('admin');
   Route::get('login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.login');
   Route::post('login', 'Admin\Auth\LoginController@login')->name('admin.login');
-  Route::post('logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
 
-  Route::get('joblist/index', 'DashboardController@getAlljobs')->name('alljob.get');
-  Route::get('joblist/sort', 'DashboardController@jobsSort')->name('alljob.sort');
-  Route::get('joblist/show/{id}', 'DashboardController@getJobDetail')->name('admin.job.detail');
-
-  Route::get('joblist/{id}/oiwaikin', 'DashboardController@oiwaikinChange')->name('admin.job.oiwaikin.change');
-
-  Route::get('joblist/index/approval_pending', 'DashboardController@getApprovalPendingJobs');
-  Route::get('joblist/{id}/Status/{slug}', 'DashboardController@approveJobStatus')->name('job.status.change');
-
-  Route::get('joblist/delete/{id}', 'DashboardController@jobDetete')->name('job.delete');
-
-  Route::get('app_manage', 'DashboardController@getAppManage')->name('admin.app.manage');
-  Route::get('oiwaikin/users', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.get');
-  // Route::get('oiwaikin/users/{id}/detail', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.detail.get');
-  Route::get('user/{id}/detail', 'DashboardController@getUserDetail')->name('user.detail.get');
-
-  Route::get('billing/top', 'DashboardController@getBilling')->name('billing.index');
-  Route::get('billing/year_and_month', 'DashboardController@getBillingYear')->name('billing.year');
-
-  Route::get('companies', 'DashboardController@getAllCompanies')->name('all.company.get');
-  Route::get('company/{id}/detail', 'DashboardController@getCompanyDetail')->name('admin.company.detail');
-
-  Route::get('company/{id}/delete', 'DashboardController@companyDelete')->name('admin.company.delete');
-
-  Route::get('category_top', 'DashboardController@categoryTop')->name('admin_category.top');
-  Route::get('category/{url}', 'DashboardController@category')->name('admin_category');
-  Route::post('category/{flag}/edit', 'DashboardController@editCategory')->name('admin_category_edit');
-  Route::post('category/{flag}/delete', 'DashboardController@deleteCategory')->name('admin_category_delete');
+  Route::group(['middleware' => ['auth:admin']], function() {
+    Route::post('logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
+    Route::get('home', 'Admin\HomeController@index')->name('admin.home')->middleware('admin');
+  
+    Route::get('joblist/index', 'DashboardController@getAlljobs')->name('alljob.get');
+    Route::get('joblist/sort', 'DashboardController@jobsSort')->name('alljob.sort');
+    Route::get('joblist/show/{id}', 'DashboardController@getJobDetail')->name('admin.job.detail');
+  
+    Route::get('joblist/{id}/oiwaikin', 'DashboardController@oiwaikinChange')->name('admin.job.oiwaikin.change');
+  
+    Route::get('joblist/index/approval_pending', 'DashboardController@getApprovalPendingJobs');
+    Route::get('joblist/{id}/Status/{slug}', 'DashboardController@approveJobStatus')->name('job.status.change');
+  
+    Route::get('joblist/delete/{id}', 'DashboardController@jobDetete')->name('job.delete');
+  
+    Route::get('app_manage', 'DashboardController@getAppManage')->name('admin.app.manage');
+    Route::get('oiwaikin/users', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.get');
+    // Route::get('oiwaikin/users/{id}/detail', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.detail.get');
+    Route::get('user/{id}/detail', 'DashboardController@getUserDetail')->name('user.detail.get');
+  
+    Route::get('billing/top', 'DashboardController@getBilling')->name('billing.index');
+    Route::get('billing/year_and_month', 'DashboardController@getBillingYear')->name('billing.year');
+  
+    Route::get('companies', 'DashboardController@getAllCompanies')->name('all.company.get');
+    Route::get('company/{id}/detail', 'DashboardController@getCompanyDetail')->name('admin.company.detail');
+  
+    Route::get('company/{id}/delete', 'DashboardController@companyDelete')->name('admin.company.delete');
+  
+    Route::get('category_top', 'DashboardController@categoryTop')->name('admin_category.top');
+    Route::get('category/{url}', 'DashboardController@category')->name('admin_category');
+    Route::post('category/{flag}/edit', 'DashboardController@editCategory')->name('admin_category_edit');
+    Route::post('category/{flag}/delete', 'DashboardController@deleteCategory')->name('admin_category_delete');
+  });
+ 
 });

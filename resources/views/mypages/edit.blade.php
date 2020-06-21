@@ -64,29 +64,29 @@
                     <div class="form-group">
                         <label for="">連絡先電話番号（必須）</label>
                         <div class="form-row">
-                            <input class="form-control form-control-sm col-3 {{ $errors->has('phone1') ? 'is-invalid' : '' }}" maxlength="5" type="text" name="phone1" value="{{old('phone1')}}@if(!old('phone1')){{ Auth::user()->profile->phone1}}@endif" required>
+                            <input class="form-control form-control-sm col-3 {{ $errors->has('phone1') ? 'is-invalid' : '' }}" maxlength="5" type="text" name="phone1" value="{{old('phone1')}}@if(!old('phone1')){{ $profile->phone1}}@endif" required>
                             &nbsp;-&nbsp;
-                            <input class="form-control form-control-sm col-3 {{ $errors->has('phone2') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="phone2" value="{{old('phone2')}}@if(!old('phone2')){{ Auth::user()->profile->phone2}}@endif" required>
+                            <input class="form-control form-control-sm col-3 {{ $errors->has('phone2') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="phone2" value="{{old('phone2')}}@if(!old('phone2')){{ $profile->phone2}}@endif" required>
                             &nbsp;-&nbsp;
-                            <input class="form-control form-control-sm col-3 {{ $errors->has('phone3') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="phone3" value="{{old('phone3')}}@if(!old('phone3')){{ Auth::user()->profile->phone3}}@endif" required>
+                            <input class="form-control form-control-sm col-3 {{ $errors->has('phone3') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="phone3" value="{{old('phone3')}}@if(!old('phone3')){{ $profile->phone3}}@endif" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="d-block" for="">年齢（必須）</label>
-                        <input type="text" class="form-control w-25 d-inline-block {{ $errors->has('age') ? 'is-invalid' : '' }}" name="age" value="{{old('age') ? old('age') : Auth::user()->profile->age}}"> <span>歳</span>
+                        <input type="text" class="form-control w-25 d-inline-block {{ $errors->has('age') ? 'is-invalid' : '' }}" name="age" value="{{old('age') ? old('age') : $profile->age}}"> <span>歳</span>
                     </div>
                     <div class="form-group">
                         <label for="">性別</label><br>
-                        <input id="1" type="radio" name="gender" value="男性" @if(Auth::user()->profile->gender == "男性") checked @endif {{ old('gender','男性') == '男性' ? 'checked' : '' }}> <label for="1">男性</label>
-                        <input id="2" type="radio" name="gender" value="女性" @if(Auth::user()->profile->gender == "女性") checked @endif {{ old('gender') == '女性' ? 'checked' : '' }}> <label for="2">女性</label>
+                        <input id="1" type="radio" name="gender" value="男性" @if($profile->gender == "男性") checked @endif {{ old('gender','男性') == '男性' ? 'checked' : '' }}> <label for="1">男性</label>
+                        <input id="2" type="radio" name="gender" value="女性" @if($profile->gender == "女性") checked @endif {{ old('gender') == '女性' ? 'checked' : '' }}> <label for="2">女性</label>
                     </div>
                     <div class="form-group">
                         <label for="">住所</label>
                         <div class="form-row m-0">
-                            <input class="form-control form-control-sm col-3 {{ $errors->has('zip31') ? 'is-invalid' : '' }}" type="text" name="zip31" maxlength="3" value="{{old('zip31') ? old('zip31') : $postcode1}}">&nbsp;-&nbsp;<input class="form-control form-control-sm col-4 {{ $errors->has('zip32') ? 'is-invalid' : '' }}" type="text" name="zip32" maxlength="4" value="{{old('zip32') ? old('zip32') : $postcode2}}" onKeyUp="AjaxZip3.zip2addr('zip31','zip32','pref31','addr31','addr31');">
+                            <input class="form-control form-control-sm col-3 {{ $errors->has('zip31') ? 'is-invalid' : '' }}" type="text" name="zip31" maxlength="3" value="{{old('zip31') ? old('zip31') : $profile->postcode1}}">&nbsp;-&nbsp;<input class="form-control form-control-sm col-4 {{ $errors->has('zip32') ? 'is-invalid' : '' }}" type="text" name="zip32" maxlength="4" value="{{old('zip32') ? old('zip32') : $profile->postcode2}}" onKeyUp="AjaxZip3.zip2addr('zip31','zip32','pref31','addr31','addr31');">
                         </div>
-                        <input class="form-control form-control-sm mt-3 col-8 {{ $errors->has('pref31') ? 'is-invalid' : '' }}" type="text" name="pref31" value="{{old('pref31') ? old('pref31') : Auth::user()->profile->prefecture}}">
-                        <input class="form-control form-control-sm mt-3 {{ $errors->has('addr31') ? 'is-invalid' : '' }}" type="text" name="addr31" value="{{old('addr31') ? old('addr31') : Auth::user()->profile->city}}">
+                        <input class="form-control form-control-sm mt-3 col-8 {{ $errors->has('pref31') ? 'is-invalid' : '' }}" type="text" name="pref31" value="{{old('pref31') ? old('pref31') : $profile->prefecture}}">
+                        <input class="form-control form-control-sm mt-3 {{ $errors->has('addr31') ? 'is-invalid' : '' }}" type="text" name="addr31" value="{{old('addr31') ? old('addr31') : $profile->city}}">
                         <div class="text-danger">※番地や建物名は不要です</div>
                     </div>
                     <div class="form-group">
@@ -98,7 +98,6 @@
                 </form>
             </div>
 
-            
         </div>
 
         <div class="col-12 col-md-5 mt-3 px-0">
@@ -116,7 +115,7 @@
                         <tr>
                             <th>電話番号&nbsp</th>
                             <td>
-                                {{ Auth::user()->profile->phone1 && Auth::user()->profile->phone2 && Auth::user()->profile->phone3 ? Auth::user()->profile->phone1 . '-' . Auth::user()->profile->phone2 .'-'. Auth::user()->profile->phone3 : '未登録'}}
+                                {{ $profile->phone1 && $profile->phone2 && $profile->phone3 ? $profile->phone1 . '-' . $profile->phone2 .'-'. $profile->phone3 : '未登録'}}
                             </td>
                         </tr>
                         <tr>
@@ -128,32 +127,32 @@
                         <tr>
                             <th>年齢&nbsp</th>
                             <td>
-                                {{ Auth::user()->profile->age ? Auth::user()->profile->age.'歳' : '未登録'}} 
+                                {{ $profile->age ? $profile->age.'歳' : '未登録'}} 
                             </td>
                         </tr>
                         <tr>
                             <th>性別&nbsp</th>
                             <td>
-                                {{ Auth::user()->profile->gender ? Auth::user()->profile->gender : '未登録'}}
+                                {{ $profile->gender ? $profile->gender : '未登録'}}
                             </td>
                         </tr>
                         <tr>
                             <th>住所&nbsp</th>
                             <td>
-                            @if(Auth::user()->profile->postcode == '' && Auth::user()->profile->prefecture == '' && Auth::user()->profile->city == '')未登録@endif
-                            {{ Auth::user()->profile->postcode ? Auth::user()->profile->postcode : ''}}<br>
-                            {{ Auth::user()->profile->prefecture ? Auth::user()->profile->prefecture : ''}}&nbsp{{ Auth::user()->profile->city ? Auth::user()->profile->city : ''}}
+                            @if($profile->postcode == '' && $profile->prefecture == '' && $profile->city == '')未登録@endif
+                            {{ $profile->postcode ? $profile->postcode : ''}}<br>
+                            {{ $profile->prefecture ? $profile->prefecture : ''}}&nbsp{{ $profile->city ? $profile->city : ''}}
                             </td>
                         </tr>
                         <tr>
                             <th>履歴書&nbsp</th>
                             <td>
-                                @if(!empty(Auth::user()->profile->resume) && $resumePath != '')
+                                @if(!is_null($profile->resume) && $profile->resumePath !== '')
                                     <p>
-                                        <a class="d-inline-block txt-blue-link" href="{{ $resumePath }}" target="_blank">
+                                        <a class="d-inline-block txt-blue-link" href="{{ $profile->resumePath }}" target="_blank">
                                             履歴書
                                         </a>
-                                        {!! Form::open(['url' => '/mypage/resume/delete', 'method' => 'post']) !!}
+                                        {!! Form::open(['url' => route('resume.delete'), 'method' => 'post']) !!}
                                         {{ method_field('DELETE') }}
                                             <button class="border mt-1">削除</button>
                                         {!! Form::close() !!}   
@@ -184,7 +183,7 @@
     </div>
 </div>
 
-<p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="/mypage/index" class="txt-blue-link">前に戻る</a></p>
+<p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="{{route('mypages.index')}}" class="txt-blue-link">前に戻る</a></p>
 
 </div>
 </div>  

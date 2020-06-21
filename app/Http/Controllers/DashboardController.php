@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
 use App\Job\Users\User;
+use App\Job\Profiles\Repositories\ProfileRepository;
 use App\Job\Companies\Company;
 use App\Models\Employer;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
@@ -240,8 +241,11 @@ class DashboardController extends Controller
         foreach($apply->jobItems as $jobItem) {
             $applyJobItem = $jobItem;
         }
+
+        $profileRepo = new ProfileRepository($apply->user->profile);
+        $profile = $profileRepo->getResume();
  
-        return view('admin.user_detail', compact('apply', 'applyJobItem'));
+        return view('admin.user_detail', compact('apply', 'applyJobItem', 'profile'));
     }
 
     public function getBilling()

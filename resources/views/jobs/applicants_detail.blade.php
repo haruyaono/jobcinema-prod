@@ -121,8 +121,8 @@
                     <div class="item-row">
                         <div class="row-label">履歴書</div>
                         <div class="row-text">
-                            @if($applyInfo['applicant']->profile->resume && $resumePath != '') 
-                                <a href="{{ $resumePath }}" class="txt-blue-link" target="_blank">履歴書</a>
+                            @if($applyInfo['profile']->resumePath != '') 
+                                <a href="{{ $applyInfo['profile']->resumePath  }}" class="txt-blue-link" target="_blank">履歴書</a>
                             @else 
                                 <span>未登録</span>
                             @endif

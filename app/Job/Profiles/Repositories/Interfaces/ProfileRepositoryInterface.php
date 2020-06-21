@@ -17,4 +17,6 @@ interface ProfileRepositoryInterface extends BaseRepositoryInterface
     public function deleteProfile() : bool;
 
     public function findProfileById(int $id) : Profile;
+
+    public function getResume() : Profile;
 }

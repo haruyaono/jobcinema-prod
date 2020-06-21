@@ -74,32 +74,23 @@ class UserProfileController extends Controller
         return redirect()->back()->with('message','会員情報を更新しました');
     }
 
-
-
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit()
     {
 
-        $profile = auth()->user()->profile()->first();
+        $profile = auth()->user()->profile;
 
-        $postcode = str_replace("-", "", $profile['postcode']);
-        $postcode1 = substr($postcode,0,3);
-        $postcode2 = substr($postcode,3);
+        $postCodeList = $profile->getPostCode();
 
-        $exists = Storage::disk('s3')->exists('resume/' . $profile->resume);
-        if($exists) {
-            $resumePath =  Storage::disk('s3')->url('resume/'.$profile->resume);
-            if(config('app.env') == 'production') {
-                $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
-            } 
-            
-        } else {
-            $resumePath = '';
-        }
+        $profile['postcode1'] = $postCodeList[0];
+        $profile['postcode2'] = $postCodeList[1];
 
-        return view('mypages.edit', compact('postcode1', 'postcode2', 'resumePath'));
+        $profileRepo = new ProfileRepository($profile);
+        $profile = $profileRepo->getResume();
+
+        return view('mypages.edit', compact('profile'));
     }
 
     /**
@@ -110,7 +101,7 @@ class UserProfileController extends Controller
     public function update(UpdateUserProfileRequest $request)
     {
         $user = auth()->user();
-        $profile = $user->profile()->first();
+        $profile = $user->profile;
 
         $profileData = [
             'phone1' => $request->phone1,
@@ -137,14 +128,13 @@ class UserProfileController extends Controller
             $userRepo->updateUser($userData);
 
             DB::commit();
-
         } catch (\PDOException $e){
+
             DB::rollBack();
             return false;
         }
         
         return redirect()->back()->with('message','会員情報を更新しました');
-
     }
 
     /**
@@ -166,7 +156,7 @@ class UserProfileController extends Controller
         $request = $request->except('_method', '_token');
 
         $user = auth()->user();
-        $profile = $user->profile()->first();
+        $profile = $user->profile;
 
         $profileRepo = new ProfileRepository($profile);
         $profileRepo->updateProfile($request);
@@ -186,7 +176,7 @@ class UserProfileController extends Controller
         ]);
 
         $user = auth()->user();
-        $profile = $user->profile()->first();
+        $profile = $user->profile;
 
         $profileRepo = new ProfileRepository($profile);
 
@@ -215,7 +205,7 @@ class UserProfileController extends Controller
     public function resumeDelete(Request $request)
     {
         $user = auth()->user();
-        $profile = $user->profile()->first();
+        $profile = $user->profile;
 
         $profileRepo = new ProfileRepository($profile);
 
