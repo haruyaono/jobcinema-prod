@@ -9,6 +9,7 @@ use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
 use App\Job\JobItems\Exceptions\AppliedJobItemNotFoundException;
 use App\Job\JobItems\Exceptions\JobItemCreateErrorException;
+use App\Job\JobItems\Exceptions\JobItemUpdateErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
@@ -81,10 +82,16 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
    /**
      * @param array $data
      * @return bool
+     * 
+     * @throws JobItemUpdateErrorException
      */
     public function updateJobItem(array $data): bool
     {
-        return $this->update($data);
+        try {
+            return $this->model->where('id', $this->model->id)->update($data);
+        } catch (QueryException $e) {
+            throw new JobItemUpdateErrorException($e);
+        }
     }
 
     /**
@@ -94,9 +101,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      */
     public function updateAppliedJobItem(int $applyId,  array $data) : bool
     {
-
-     return $this->model->applies()
-                            ->updateExistingPivot($applyId, $data);
+     return $this->model->applies()->updateExistingPivot($applyId, $data);
     }
 
     /**
@@ -268,7 +273,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         return $query;
     }
 
-
      /**
      * search query jobitems
      *
@@ -281,7 +285,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     {
         return $query->orderBy($order, $sort);
     }
-
 
     /**
      * Find the active jobitem by ID
@@ -395,11 +398,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
             } 
     
             return $edit_image_path_list;
-    
         }
-
-       
-       
     }
 
     /**
@@ -432,7 +431,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
         return $image_path;
     }
-
 
     /**
      * @param string $imageFlag
@@ -497,7 +495,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                     $jobImagePath = null;
             }
     
-
             if($jobImagePath != null) {
                 $edit_image_path_list[$imageFlag] = '';
             } else {
@@ -505,12 +502,8 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
             }
 
             session()->put('data.file.edit_image', $edit_image_path_list);
-
          }
-
-        
     }
-
 
     /**
      * @param string $movieFlag
@@ -542,7 +535,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
             } 
     
             return $movie_path_list;
-
         } else {
             // 編集時
 
@@ -564,9 +556,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     
             return $edit_movie_path_list;
         }
-
-
-        
     }
 
     /**
@@ -623,22 +612,18 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                 }
 
                 unset($movie_path_list[$movieFlag]);
-
             }
 
             session()->put('data.file.movie', $movie_path_list);
-
         } else {
             // 編集時
 
             $edit_movie_path_list = session()->get('data.file.edit_movie');
 
- 
             if($edit_movie_path_list[$movieFlag] == '') {
                 return false;
             }
                    
-
             if(isset($edit_movie_path_list[$movieFlag])) {
                 if (File::exists(public_path() . $edit_movie_path_list[$movieFlag])) {
                     File::delete(public_path() . $edit_movie_path_list[$movieFlag]);
@@ -646,7 +631,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                 if($disk->exists($edit_movie_path_list[$movieFlag])) {
                     $disk->delete($edit_movie_path_list[$movieFlag]);
                 }
-
             }
 
             switch($movieFlag) {
@@ -663,7 +647,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                     $jobMoviePath = null;
             }
     
-
             if($jobMoviePath != null) {
                 $edit_movie_path_list[$movieFlag] = '';
             } else {
@@ -671,7 +654,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
             }
 
             session()->put('data.file.edit_movie', $edit_movie_path_list);
-
         }
     }
 
@@ -691,9 +673,4 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
             return $jobImageBaseUrl;
         }
-
- 
-
-
-   
 }

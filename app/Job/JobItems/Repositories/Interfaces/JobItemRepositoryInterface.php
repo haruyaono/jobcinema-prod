@@ -21,6 +21,8 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function updateAppliedJobItem(int $applyId,  array $data) : bool;
 
+    public function searchJobItem(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection;
+
     public function listRecentJobItemId(int $historyFlag = 0);
 
     public function createRecentJobItemIdList($req, int $id) : void;
@@ -30,6 +32,10 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
     public function getSortJobItems($query, string $order = 'id', string $sort = 'desc', array $columns = ['*']);
 
     public function findJobItemById($id);
+
+    public function findAllJobItemById($id);
+
+    public function savedDbFilePath(JobItem $jobitem) : array;
 
     public function existJobItemImageAndDeleteOnPost(string $imageFlag, int $editFlag = 0);
 
