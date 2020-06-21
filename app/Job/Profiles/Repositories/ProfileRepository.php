@@ -11,6 +11,7 @@ use App\Job\Profiles\Exceptions\ProfileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileRepository extends BaseRepository implements ProfileRepositoryInterface
 {
@@ -80,6 +81,39 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
             throw new ProfileNotFoundException('プロフィールが見つかりませんでした。');
         }
     }
+
+     /**
+     * Return the profile
+     * 
+     * @param int $id
+     * 
+     * @return Profile
+     * @throws ProfileNotFoundException
+     */
+    public function getResume() : Profile
+    {
+        $disk = Storage::disk('s3');
+        $resume = $this->model->getResume();
+
+        if(!is_null($resume)) {
+            if($disk->exists('resume/' . $resume)) {
+                $resumePath =  $disk->url('resume/'.$resume);
+                if(config('app.env') == 'production') {
+                    $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
+                } 
+            } else {
+                $resumePath = '';
+            }
+        } else {
+            $resumePath = '';
+        }
+
+        $this->model->resumePath = $resumePath;
+
+        return $this->model;
+    }
+
+
 
 
 

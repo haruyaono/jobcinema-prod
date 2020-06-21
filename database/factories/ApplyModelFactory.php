@@ -16,7 +16,7 @@ use App\Job\Applies\Apply;
 use App\Job\Users\User;
 
 $factory->define(Apply::class, function (Faker\Generator $faker) {
-
+    static $password;
     $user = factory(User::class)->create();
 
     return [
