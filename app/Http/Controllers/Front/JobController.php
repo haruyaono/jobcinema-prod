@@ -66,6 +66,7 @@ class JobController extends Controller
 
       session()->forget('jobapp_data');
  
+      $recommendJobList = [];
       $job = $this->jobItemRepo->findJobItemById($id);
 
       if(Auth::check()) {
@@ -76,7 +77,13 @@ class JobController extends Controller
         Redis::command('LTRIM', ['Viewer:Item:'.$id, 0, 999]);
 
         $existsApplied = $this->userRepo->existsAppliedJobItem($user, $id);
-      
+  
+        $this->JobItem->calcRecommend();
+        $recommendJobIds = $this->JobItem->getRecommendJobList($id, $request);
+
+        if($recommendJobIds != []) {
+          $recommendJobList = $this->jobItemRepo->find($recommendJobIds);
+        }
       }
 
       // 最近見た求人リストの配列を操作
@@ -91,7 +98,7 @@ class JobController extends Controller
           $jobImageBaseUrl = '';
         }
 
-        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied'));
+        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
       } else {
         if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
           $index = array_search( $id, $jobitem_id_list, true );
@@ -142,39 +149,6 @@ class JobController extends Controller
         }
 
       }
-      
-      // $job_ids = $query->get(['id'])->toArray();
-      // $job_ids = array_flatten($job_ids);
-
-      // foreach ($job_ids as $job_id1) {
-      //   $base = Redis::command('lRange', ['Viewer:Item:' . $job_id1, 0, 999]);
-
-      //   if (count($base) === 0) {
-      //       continue;
-      //   }
-        
-      //   foreach ($job_ids as $job_id2) {
-      //     // var_dump($job_id1 === $job_id2);
-      //       if ($job_id1 === $job_id2) {
-      //           continue;
-      //       }
-     
-      //       $target = Redis::command('lRange', ['Viewer:Item:' . $job_id2, 0, 999]);
-      //       if (count($target) === 0) {
-      //           continue;
-      //       }
-
-      //       # ジャッカード指数を計算
-      //       $join = floatval(count(array_unique(array_merge($base, $target))));
-      //       $intersect = floatval(count(array_intersect($base, $target)));
-      //       if ($intersect == 0 || $join == 0) {
-      //           continue;
-      //       }
-      //       $jaccard = $intersect / $join;
-    
-      //       Redis::command('zAdd', ['Jaccard:Item:' . $job_id1, $jaccard, $job_id2]);
-      //   }
-      // }
       
       $totalJobItem = $query->count();
       $jobs = $query->latest()->paginate(20);

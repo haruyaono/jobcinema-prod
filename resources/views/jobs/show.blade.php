@@ -200,7 +200,7 @@
           <div class="item-row">
             <div class="row-label">代表</div>
             <div class="row-text">
-              <p>{{ $job->company->ceo }}</p>
+              <p>{{ $job->company->ceo }}</p> 
             </div>
           </div>
           @endif
@@ -267,6 +267,35 @@
         
       </div> <!-- entrybtn-field -->
 
+      @if($recommendJobList != []) 
+      <div id="recommend-joblist" class="block-joblist">
+        <div class="box-title">
+          <h3>
+            <i class="far fa-clock font-yellow mr-2 h4"></i>あなたへのオススメ求人
+          </h3>
+        </div>
+        <ul class="box-wrap cf">
+          @foreach($recommendJobList as $recommendJob)
+          <li class="wrap-items">
+            <a href="{{route('jobs.show', [$recommendJob->id])}}">
+              <div class="wrap-img">
+              @if(($recommendJob->job_img) != null)
+                <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$recommendJob->job_img}}@else{{$recommendJob->job_img}}@endif" style="width:100%;" alt=""/>
+              @else
+                <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
+              @endif
+              </div>
+              <div class="wrap-text">
+                <p>■勤務先: {{ str_limit($recommendJob->job_office, $limit = 15, $end = '') }}</p>
+                <p>■職種: {{ str_limit($recommendJob->job_type, $limit = 17, $end = '') }}</p>
+                <p>■給与: {{ str_limit($recommendJob->job_hourly_salary, $limit = 18, $end = '') }}</p>
+              </div>
+            </a>
+          </li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
       <recent-component></recent-component>
 
       <div class="main-section-item top-subsection-item">
@@ -293,25 +322,6 @@
 @endsection
 
 @section('js')
-<!-- <script>
-  $(function() {
-    let is_playing = false;
-
-    videoController () {
-      if (!is_playing) {
-        this.play();
-        is_playing = true;
-      } else {
-        this.pause();
-        is_playing = false;
-      }
-    });
-    }
-
-    
-  });
-  
-</script> -->
 
 @endsection
 

@@ -10,6 +10,7 @@ use App\Job\Employers\Employer;
 use App\Job\Users\User;
 use App\Job\Applies\Apply;
 use App\Traits\IsMobile;
+use Illuminate\Support\Facades\Redis;
 
 class JobItem extends Model
 {
@@ -58,13 +59,6 @@ class JobItem extends Model
     public function employer()
     {
         return $this->belongsTo(Employer::class);
-    }
-
-    public function users()
-    {
-            return $this->belongsToMany(User::class)
-            ->withPivot('id','user_id','last_name','first_name','postcode','prefecture','city','gender','age','phone1','phone2','phone3','occupation','final_education','work_start_date','job_msg','job_q1','job_q2','job_q3','s_status','e_status', 'oiwaikin', 'first_attendance', 'no_first_attendance', 'created_at')
-            ->withTimeStamps();
     }
 
     public function applies()
@@ -176,5 +170,59 @@ class JobItem extends Model
         });
 
         return $jobActive;
+    }
+
+    public function calcRecommend()
+    {
+        $job_ids = $this->ActiveJobitem()->pluck('id')->toArray();
+        $job_ids = array_flatten($job_ids);
+
+        foreach ($job_ids as $job_id1) {
+            $base = Redis::command('lRange', ['Viewer:Item:' . $job_id1, 0, 999]);
+
+            if (count($base) === 0) {
+                continue;
+            }
+        
+            foreach ($job_ids as $job_id2) {
+                if ($job_id1 === $job_id2) {
+                    continue;
+                }
+            
+                $target = Redis::command('lRange', ['Viewer:Item:' . $job_id2, 0, 999]);
+                if (count($target) === 0) {
+                    continue;
+                }
+
+                # ジャッカード指数を計算
+                $join = floatval(count(array_unique(array_merge($base, $target))));
+                $intersect = floatval(count(array_intersect($base, $target)));
+                if ($intersect == 0 || $join == 0) {
+                    continue;
+                }
+                $jaccard = $intersect / $join;
+
+                
+                Redis::command('zAdd', ['Jaccard:Item:' . $job_id1, $jaccard, $job_id2]);
+            }
+        }
+    }
+
+    public function getRecommendJobList($jobItemId, $res)
+    {
+        $deviceFrag = $this->isMobile($res);
+        switch ($deviceFrag) {
+            case 'pc':
+                $historyLimit = 4;
+                break;
+            case 'mobile':
+                $historyLimit = -1;
+                break;
+            default:
+                $historyLimit = 4;
+                break;
+        }
+        
+        return Redis::command('zRevRange', ['Jaccard:Item:' . $jobItemId, 0, $historyLimit]);
     }
 }
