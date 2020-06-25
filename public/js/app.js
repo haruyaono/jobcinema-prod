@@ -38102,64 +38102,75 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "recent-joblist" } }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _vm.loading
-      ? _c("div", { staticClass: "loader" }, [_vm._v("Loading")])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.show
-      ? _c(
-          "ul",
-          { staticClass: "box-wrap cf" },
-          _vm._l(_vm.limitCount, function(item) {
-            return _c(
-              "li",
-              { key: item.id, staticClass: "wrap-items", attrs: { job: item } },
-              [
-                _c("a", { attrs: { href: "/jobs/" + item.id } }, [
-                  _c("div", { staticClass: "wrap-img" }, [
-                    _vm.env == "local"
-                      ? _c("img", { attrs: { src: item.job_img } })
-                      : _c("img", {
-                          attrs: { src: _vm.baseurl + item.job_img }
-                        })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "wrap-text" }, [
-                    _c("p", [
-                      _vm._v(
-                        "勤務先: " +
-                          _vm._s(_vm._f("truncate")(item.job_office, 9))
-                      )
+  return _c(
+    "div",
+    { staticClass: "block-joblist", attrs: { id: "recent-joblist" } },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm.loading
+        ? _c("div", { staticClass: "loader" }, [_vm._v("Loading")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.show
+        ? _c(
+            "ul",
+            { staticClass: "box-wrap cf" },
+            _vm._l(_vm.limitCount, function(item) {
+              return _c(
+                "li",
+                {
+                  key: item.id,
+                  staticClass: "wrap-items",
+                  attrs: { job: item }
+                },
+                [
+                  _c("a", { attrs: { href: "/jobs/" + item.id } }, [
+                    _c("div", { staticClass: "wrap-img" }, [
+                      _vm.env == "local"
+                        ? _c("img", { attrs: { src: item.job_img } })
+                        : _c("img", {
+                            attrs: { src: _vm.baseurl + item.job_img }
+                          })
                     ]),
                     _vm._v(" "),
-                    _c("p", [
-                      _vm._v(
-                        "職種: " + _vm._s(_vm._f("truncate")(item.job_type, 10))
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(
-                        "給与: " +
-                          _vm._s(_vm._f("truncate")(item.job_hourly_salary, 10))
-                      )
+                    _c("div", { staticClass: "wrap-text" }, [
+                      _c("p", [
+                        _vm._v(
+                          "勤務先: " +
+                            _vm._s(_vm._f("truncate")(item.job_office, 9))
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "職種: " +
+                            _vm._s(_vm._f("truncate")(item.job_type, 10))
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "給与: " +
+                            _vm._s(
+                              _vm._f("truncate")(item.job_hourly_salary, 10)
+                            )
+                        )
+                      ])
                     ])
                   ])
-                ])
-              ]
-            )
-          }),
-          0
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.itemflag
-      ? _c("p", [_vm._v("閲覧した求人は現在ありません。")])
-      : _vm._e()
-  ])
+                ]
+              )
+            }),
+            0
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.itemflag
+        ? _c("p", [_vm._v("閲覧した求人は現在ありません。")])
+        : _vm._e()
+    ]
+  )
 }
 var staticRenderFns = [
   function() {

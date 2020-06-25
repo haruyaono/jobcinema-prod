@@ -80,7 +80,7 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach($categoryList[2]->all() as $areaCategory)
+                        @foreach($categoryList[3]->all() as $areaCategory)
                         <div class="e-radio-item02">
                             <input id="area_cat_id_{{$areaCategory->id}}" class="" type="radio" name="area_cat_id" @if(old('area_cat_id') === $areaCategory->id) checked @elseif(intval(Session::get('data.form.category.area_cat_id')) === $areaCategory->id) checked @else @endif value={{ $areaCategory->id }}>
                             <label for="area_cat_id_{{$areaCategory->id}}">{{ $areaCategory->name }}</label>
@@ -94,7 +94,7 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach($categoryList[3]->all() as $hourlySalaryCategory)
+                        @foreach($categoryList[2]->all() as $hourlySalaryCategory)
                         <div class="e-radio-item02">
                             <input id="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(old('hourly_salary_cat_id') === $hourlySalaryCategory->id) checked @elseif(intval(Session::get('data.form.category.hourly_salary_cat_id')) === $hourlySalaryCategory->id) checked @else @endif value={{ $hourlySalaryCategory->id }}>
                             <label for="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}">{{ $hourlySalaryCategory->name }}</label>

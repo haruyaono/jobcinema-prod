@@ -22,8 +22,6 @@ use File;
 
 class JobItemRepository extends BaseRepository implements JobItemRepositoryInterface
 {
-
-    // private $disk;
     /**
      * JobItemRepository constructor.
      * @param JobItem $jobItem
@@ -189,7 +187,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      *
      * @return LengthAwarePaginator|Collection|array
      */
-    public function listRecentJobItemId(int $historyFlag = 0)
+    public function listRecentJobItemId(int $historyFlag = 0) 
     {
         $jobitem_id_list = [];
         switch ($historyFlag) {
@@ -657,20 +655,21 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         }
     }
 
-      /**
-         * @param void
-         *
-         * @return $jobImageBaseUrl
-         */
-        public function getJobImageBaseUrl() : string
-        {
+    /**
+     * @param void
+     *
+     * @return $jobImageBaseUrl
+     */
+    public function getJobImageBaseUrl() : string
+    {
+        $jobImageBaseUrl = '';
+        if(config('app.env') == 'production') {
+            $jobImageBaseUrl = config('app.s3_url');
+        } else {
             $jobImageBaseUrl = '';
-            if(config('app.env') == 'production') {
-                $jobImageBaseUrl = config('app.s3_url');
-            } else {
-                $jobImageBaseUrl = '';
-            }
-
-            return $jobImageBaseUrl;
         }
+
+        return $jobImageBaseUrl;
+    }
+
 }
