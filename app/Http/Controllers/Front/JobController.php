@@ -57,8 +57,9 @@ class JobController extends Controller
     {
       $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
       $jobCount = $this->jobItemRepo->listJobitemCount();
+      $categoryList = $this->categoryRepo->listCategories('id', 'asc');
 
-      return view('jobs.index', compact('topNewJobs', 'jobCount'));
+      return view('jobs.index', compact('topNewJobs', 'jobCount', 'categoryList'));
     }
 
     public function show(Request $request, $id)

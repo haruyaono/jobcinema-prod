@@ -4,10 +4,10 @@
     
     <div class="top-category-wrap">
       <ul class="top-category-list">
-      @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
+      @foreach($categoryList[1]->children as $cat)
         <li class="top-category-list-item">
-          <a href="{{url('jobs/search/all?type_cat_id=' . $typeCategory->id)}}" class="h-100 feature-item">
-           {{$typeCategory->name}}
+          <a href="{{url('jobs/search/all?type_cat_id=' . $cat->id)}}" class="h-100 feature-item">
+           {{$cat->name}}
           </a>
         </li>
       @endforeach

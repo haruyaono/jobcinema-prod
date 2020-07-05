@@ -4,10 +4,10 @@
     
     <div class="top-category-wrap">
       <ul class="top-category-list">
-      @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
+      @foreach($categoryList[2]->children as $cat)
         <li class="top-category-list-item">
-          <a href="{{url('jobs/search/all?area_cat_id=' . $areaCategory->id)}}" class="h-100 feature-item">
-           {{$areaCategory->name}}
+          <a href="{{url('jobs/search/all?area_cat_id=' . $cat->id)}}" class="h-100 feature-item">
+           {{$cat->name}}
           </a>
         </li>
       @endforeach
