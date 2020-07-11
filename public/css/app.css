@@ -16792,6 +16792,11 @@ input[size="28"] {
   letter-spacing: 0;
 }
 
+section.cat-list-section {
+  margin-top: 0;
+  padding-top: 2em;
+}
+
 @media (max-width: 768px) {
   .job-entry .job-list .job-left {
     width: 25%;

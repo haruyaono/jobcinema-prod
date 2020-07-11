@@ -90,8 +90,8 @@ class JobController extends Controller
         }
       }
 
-      $category['status'] = $jobItemRepo->findCategoryAssociatedToJobItemBySlug('status');
-      $category['type'] = $jobItemRepo->findCategoryAssociatedToJobItemBySlug('type');
+      // 最近見た求人リストの配列を操作
+      $this->jobItemRepo->createRecentJobItemIdList($request, $id);
 
       if($job->status == 2) {
         $title = $job->company->cname;
@@ -102,7 +102,7 @@ class JobController extends Controller
           $jobImageBaseUrl = '';
         }
 
-        return view('jobs.show', compact('job','category', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
+        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
       } else {
         if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
           $index = array_search( $id, $jobitem_id_list, true );

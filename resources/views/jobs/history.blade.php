@@ -37,8 +37,8 @@
           <a href="{{ route('jobs.show', [$job->id])}}" class="job-item-link">
             <div class="job-item-heading only-pc">
               <!-- カテゴリ -->
-                <span class="cat-item org">{{ optional($job->type_cat_get)->name}}</span>
-                <span class="cat-item red">{{ optional($job->status_cat_get)->name}}</span>
+              <span class="cat-item org">{{$job->categories()->wherePivot('slug', 'type')->first() !== null ? $job->categories()->wherePivot('slug', 'type')->first()->name : ''}}</span>
+              <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
             </div>
             <div class="title-img-wrap">
             <div class="job-left only-sp">

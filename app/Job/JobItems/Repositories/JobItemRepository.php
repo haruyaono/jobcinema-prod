@@ -661,9 +661,9 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
     /**
      * @param string $slug
-     * @return Category
+     * @return Collection
      */
-    public function findCategoryAssociatedToJobItemBySlug(string $slug) : Category
+    public function findCategoryAssociatedToJobItemBySlug(string $slug) : Collection
     {
         return $this->model->categories()->wherePivot('slug', $slug)->get();
     }

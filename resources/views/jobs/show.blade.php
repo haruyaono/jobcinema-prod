@@ -42,8 +42,8 @@
             @endif
 				<h1 class="txt-h1">@isset ($title) {{$title}}@endissetの求人情報</h1>
         <!-- カテゴリ -->
-         <span class="cat-item org">{{ $category['type']->name }}</span>
-         <span class="cat-item red">{{ $category['status']->name }}</span>
+        <span class="cat-item org">{{$job->categories()->wherePivot('slug', 'type')->first() !== null ? $job->categories()->wherePivot('slug', 'type')->first()->name : ''}}</span>
+        <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
 
         <h2>{{$job->job_title}}</h2>
       	<p class="company_name_item">@isset ($title) {{$title}}@endisset</p>
@@ -79,7 +79,7 @@
           <div class="item-row">
             <div class="row-label">雇用形態</div>
             <div class="row-text">
-              <p>{{ $category['status']->name }}</p>
+              <p>{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</p>
             </div>
           </div>
           <div class="item-row">
