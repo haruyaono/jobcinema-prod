@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Job\Users\User;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\JobItems\JobItem;
+use App\Job\JobItems\Repositories\JobItemRepository;
 use App\Job\Companies\Company;
 use Illuminate\Support\Facades\Auth;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
@@ -68,7 +69,9 @@ class JobController extends Controller
       session()->forget('jobapp_data');
  
       $recommendJobList = [];
+      $category = [];
       $job = $this->jobItemRepo->findJobItemById($id);
+      $jobItemRepo = new JobItemRepository($job);
 
       if(Auth::check()) {
         $user = $this->userRepo->findUserById(auth()->user()->id);
@@ -87,8 +90,8 @@ class JobController extends Controller
         }
       }
 
-      // 最近見た求人リストの配列を操作
-      $this->jobItemRepo->createRecentJobItemIdList($request, $id);
+      $category['status'] = $jobItemRepo->findCategoryAssociatedToJobItemBySlug('status');
+      $category['type'] = $jobItemRepo->findCategoryAssociatedToJobItemBySlug('type');
 
       if($job->status == 2) {
         $title = $job->company->cname;
@@ -99,7 +102,7 @@ class JobController extends Controller
           $jobImageBaseUrl = '';
         }
 
-        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
+        return view('jobs.show', compact('job','category', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
       } else {
         if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
           $index = array_search( $id, $jobitem_id_list, true );
@@ -128,28 +131,37 @@ class JobController extends Controller
 
     public function allJobs(Request $request)
     {
-   
       $searchParam = $request->all();
-      
-      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
+      $categoryList = $this->categoryRepo->listCategories('id', 'asc');
 
       if(array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
 
-        switch ($searchParam['ks']) {
+        switch ($searchParam['ks']['f']) {
           case '1':
-            $query = $this->jobItemRepo->getSortJobItems($query, 'hourly_salary_cat_id');
+            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_h')->first()->parent->id;
             break;
           case '2':
-            $query = $this->jobItemRepo->getSortJobItems($query, 'date_cat_id' , 'asc');
+            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_d')->first()->parent->id;
             break;
           case '3':
-            $query = $this->jobItemRepo->getSortJobItems($query, 'oiwaikin');
+            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_m')->first()->parent->id;
+            break;
+          case '4':
+            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('date')->first()
+            ->parent->id;
+            $searchParam['ks']['order'] = 'asc';
+            break;
+          case '5':
+            $searchParam['ks']['column'] = 'oiwaikin';
             break;
           default:
             break;
         }
-
       }
+
+      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
+
+
       
       $totalJobItem = $query->count();
       $jobs = $query->latest()->paginate(20);
@@ -160,15 +172,11 @@ class JobController extends Controller
       }
 
       $hash = array(
-          'keyword' => array_key_exists( 'title', $searchParam ) ? $searchParam['title'] : '',
-          'status' => array_key_exists( 'status_cat_id', $searchParam ) ? $searchParam['status_cat_id'] : '',
-          'type' => array_key_exists( 'type_cat_id', $searchParam ) ? $searchParam['type_cat_id'] : '',
-          'area' => array_key_exists( 'area_cat_id', $searchParam ) ? $searchParam['area_cat_id'] : '',
-          'hourlySaraly' => array_key_exists( 'hourly_salary_cat_id', $searchParam ) ? $searchParam['hourly_salary_cat_id'] : '',
-          'date' => array_key_exists( 'date_cat_id', $searchParam ) ? $searchParam['date_cat_id'] : '',
           'jobs' => $jobs,
-          'jobCount' => $totalJobItem 
-          );
+          'jobCount' => $totalJobItem,
+          'categoryList' => $categoryList,
+          'searchParam' => $searchParam
+      );
 
        return view('jobs.alljobs')->with($hash);
 

@@ -37,7 +37,7 @@
                             <tr>
                                 <th>雇用形態</th>
                                 <td>
-                                    {{ $applyInfo['jobitem']->status_cat_get->name}}
+                                    {{ App\Job\Categories\Category::find($applyInfo['jobitem']->categories()->wherePivot('slug', 'status')->first()->id)->name}}
                                 </td>
                                 <th>勤務先名</th>
                                 <td>
@@ -47,7 +47,7 @@
                             <tr>
                                 <th>職種</th>
                                 <td>
-                                    {{ $applyInfo['jobitem']->type_cat_get->name}}
+                                {{ App\Job\Categories\Category::find($applyInfo['jobitem']->categories()->wherePivot('slug', 'type')->first()->id)->name}}
                                 </td>
                                 <th>掲載期間</th>
                                 <td>

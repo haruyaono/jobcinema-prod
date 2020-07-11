@@ -61,7 +61,11 @@
                             <tr>
                                 <th>雇用形態</th>
                                 <td>
-                                    {{ $job->status_cat_get->name}}
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '雇用形態')
+                                            {{$category->name}}
+                                        @endif
+                                    @endforeach
                                 </td>
                                 <th>勤務先名</th>
                                 <td>
@@ -121,7 +125,11 @@
                             <tr>
                                 <th>職種</th>
                                 <td>
-                                    {{ $job->type_cat_get->name}}
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '職種')
+                                            {{$category->name}}
+                                        @endif
+                                    @endforeach
                                 </td>
                                 <th>掲載期間</th>
                                 <td>

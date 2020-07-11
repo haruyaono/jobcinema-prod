@@ -42,8 +42,8 @@
             @endif
 				<h1 class="txt-h1">@isset ($title) {{$title}}@endissetの求人情報</h1>
         <!-- カテゴリ -->
-         <span class="cat-item org">{{ optional($job->type_cat_get)->name}}</span>
-         <span class="cat-item red">{{ optional($job->status_cat_get)->name}}</span>
+         <span class="cat-item org">{{ $category['type']->name }}</span>
+         <span class="cat-item red">{{ $category['status']->name }}</span>
 
         <h2>{{$job->job_title}}</h2>
       	<p class="company_name_item">@isset ($title) {{$title}}@endisset</p>
@@ -79,7 +79,7 @@
           <div class="item-row">
             <div class="row-label">雇用形態</div>
             <div class="row-text">
-              <p>{{ optional($job->status_cat_get)->name}}</p>
+              <p>{{ $category['status']->name }}</p>
             </div>
           </div>
           <div class="item-row">

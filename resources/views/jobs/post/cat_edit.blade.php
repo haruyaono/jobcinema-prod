@@ -74,7 +74,7 @@ if( ! function_exists('is_route'))
         @endif
         <form  action="{{route('job.category.update', [$jobItem->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" name="cat_flag" value="{{$category}}">
+        <input type="hidden" name="cat_flag" value="{{$cat_slug}}">
         @if(is_route(['job.category.edit', $jobItem->id,'category'=>'status']))
             <div class="card">
             
@@ -82,11 +82,13 @@ if( ! function_exists('is_route'))
                 <div class="card-body">
                     <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform01">
-                        @foreach(App\Job\Categories\StatusCategory::all() as $statusCategory)
-                        <input id="status_cat_id_{{$statusCategory->id}}" type="radio" name="status_cat_id" @if(Session::has('data.form.edit_category.status')) {{Session::get('data.form.edit_category.status') == $statusCategory->id ? 'checked' : ''}}@else {{$jobItem->status_cat_id == $statusCategory->id ? 'checked' : ''}} @endif value="{{ $statusCategory->id }}">
-                        <label for="status_cat_id_{{$statusCategory->id}}">{{ $statusCategory->name }}</label><br>
+                        @foreach($categories as $pIndex => $category)
+                        <input id="status_cats_{{$pIndex}}" type="radio" name="cats_status[id]" @if(Session::has('data.form.edit_category.cats_status.id')) {{Session::get('data.form.edit_category.cats_status.id') == $category->id ? 'checked' : ''}}@else @foreach($jobItem->categories as $jCat)@if($jCat->id == $category->id) checked @endif @endforeach @endif value="{{ $category->id }}">
+                        <label for="status_cats_{{$pIndex}}">{{ $category->name }}</label><br>
                         <br>
                         @endforeach
+                        <input type="hidden" name="cats_status[slug]" value="{{$categories->first()->parent->slug}}">
+                        <input type="hidden" name="cats_status[parent_id]" value="{{$categories->first()->parent->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
@@ -98,12 +100,14 @@ if( ! function_exists('is_route'))
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
+                        @foreach($categories as $pIndex => $category)
                         <div class="e-radio-item02">
-                            <input id="type_cat_id_{{$typeCategory->id}}" class="" type="radio" name="type_cat_id" @if(Session::has('data.form.edit_category.type')) {{Session::get('data.form.edit_category.type') == $typeCategory->id ? 'checked' : ''}}@else {{$jobItem->type_cat_id == $typeCategory->id ? 'checked' : ''}} @endif value="{{ $typeCategory->id }}">
-                            <label for="type_cat_id_{{$typeCategory->id}}">{{ $typeCategory->name }}</label>
+                            <input id="type_cats_{{$pIndex}}" class="" type="radio" name="cats_type[id]" @if(Session::has('data.form.edit_category.cats_type.id')) {{Session::get('data.form.edit_category.cats_type.id') == $category->id ? 'checked' : ''}}@else @foreach($jobItem->categories as $jCat)@if($jCat->id == $category->id) checked @endif @endforeach @endif value="{{ $category->id }}">
+                            <label for="type_cats_{{$pIndex}}">{{ $category->name }}</label>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_type[slug]" value="{{$categories->first()->parent->slug}}">
+                        <input type="hidden" name="cats_type[parent_id]" value="{{$categories->first()->parent->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
@@ -114,28 +118,40 @@ if( ! function_exists('is_route'))
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
+                        @foreach($categories as $pIndex => $category)
                         <div class="e-radio-item02">
-                            <input id="area_cat_id_{{$areaCategory->id}}" class="" type="radio" name="area_cat_id" @if(Session::has('data.form.edit_category.area')) {{Session::get('data.form.edit_category.area') == $areaCategory->id ? 'checked' : ''}}@else {{$jobItem->area_cat_id == $areaCategory->id ? 'checked' : ''}} @endif value="{{ $areaCategory->id }}">
-                            <label for="area_cat_id_{{$areaCategory->id}}">{{ $areaCategory->name }}</label>
+                            <input id="area_cats_{{$pIndex}}" class="" type="radio" name="cats_area[id]" @if(Session::has('data.form.edit_category.cats_area.id')) {{Session::get('data.form.edit_category.cats_area.id') == $category->id ? 'checked' : ''}}@else @foreach($jobItem->categories as $jCat)@if($jCat->id == $category->id) checked @endif @endforeach @endif value="{{ $category->id }}">
+                            <label for="area_cats_{{$pIndex}}">{{ $category->name }}</label>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_area[slug]" value="{{$categories->first()->parent->slug}}">
+                        <input type="hidden" name="cats_area[parent_id]" value="{{$categories->first()->parent->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
         @endif
-        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'hourly_salary']))
+        @if(is_route(['job.category.edit', $jobItem->id,'category'=>'salary']))
             <div class="card">
-                <div class="card-header">最低時給を選んでください<span class="text-danger">＊</span></div>
+                <div class="card-header">最低給与を選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
-                     <p class="mb-3">※ひとつだけ選択できます</p>
+                     <p class="mb-3">※複数選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Job\Categories\HourlySalaryCategory::all() as $hourlySalaryCategory)
-                        <div class="e-radio-item02">
-                            <input id="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(Session::has('data.form.edit_category.hourly_salary')) {{Session::get('data.form.edit_category.hourly_salary') == $hourlySalaryCategory->id ? 'checked' : ''}}@else {{$jobItem->hourly_salary_cat_id == $hourlySalaryCategory->id ? 'checked' : ''}} @endif value="{{ $hourlySalaryCategory->id }}">
-                            <label for="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}">{{ $hourlySalaryCategory->name }}</label>
+                        @foreach($categories as $pIndex => $category)
+                        <div class="e_radio_cat_item_salary">
+                            <div class="e_radio_cat_item_p_salary">
+                                <input id="salary_cats_{{$pIndex}}" class="jc-jsc-salary-money-selectfield" type="checkbox" name="cats_salary_p[id][]" @if(Session::get('data.form.edit_category.cats_salary_p.id.'.$pIndex) == $category->id ) checked @else @foreach($jobItem->categories as $jCat)@if($jCat->parent->id == $category->id) checked @endif @endforeach @endif value={{ $category->id }}>
+                                <label for="salary_cats_{{$pIndex}}">{{ $category->name }}</label>
+                            </div>
+
+                            <select name="cats_salary[id][]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
+                                @foreach($category->children->sortBy('id') as $cIndex => $cat)
+                                    <option value="{{$cat->id}}" @if(intval(Session::get('data.form.edit_category.cats_salary.id.' . $pIndex)) === $cat->id) selected @else @foreach($jobItem->categories as $jCat)@if($jCat->id == $cat->id) selected @endif @endforeach @endif>{{$cat->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_salary[slug]" value="{{$categories->first()->parent->slug}}">
+                        <input type="hidden" name="cats_salary[parent_id]" value="{{$categories->first()->parent->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
@@ -147,12 +163,14 @@ if( ! function_exists('is_route'))
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach(App\Job\Categories\DateCategory::all() as $dateCategory)
+                        @foreach($categories as $pIndex => $category)
                         <div class="e-radio-item02">
-                            <input id="date_cat_id_{{$dateCategory->id}}" class="" type="radio" name="date_cat_id" @if(Session::has('data.form.edit_category.date')) {{Session::get('data.form.edit_category.date') == $dateCategory->id ? 'checked' : ''}}@else {{$jobItem->date_cat_id == $dateCategory->id ? 'checked' : ''}} @endif value="{{ $dateCategory->id }}">
-                            <label for="date_cat_id_{{$dateCategory->id}}">{{ $dateCategory->name }}</label>
+                            <input id="date_cats_{{$pIndex}}" class="" type="radio" name="cats_date[id]" @if(Session::has('data.form.edit_category.cats_date.id')) {{Session::get('data.form.edit_category.cats_date.id') == $category->id ? 'checked' : ''}}@else @foreach($jobItem->categories as $jCat)@if($jCat->id == $category->id) checked @endif @endforeach @endif value="{{ $category->id }}">
+                            <label for="date_cats_{{$pIndex}}">{{ $category->name }}</label>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_date[slug]" value="{{$categories->first()->parent->slug}}">
+                        <input type="hidden" name="cats_date[parent_id]" value="{{$categories->first()->parent->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 

@@ -48,16 +48,18 @@
         </div>
         @endif
         <form  action="{{route('job.store.step1') }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
-            <div class="card">
+            <div class="card"> 
                 <div class="card-header">雇用形態を選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
                     <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform01">
-                        @foreach($categoryList[0]->all() as $statusCategory)
-                        <input id="status_cat_id_{{$statusCategory->id}}" type="radio" name="status_cat_id" @if(old('status_cat_id') === $statusCategory->id) checked @elseif(intval(Session::get('data.form.category.status_cat_id')) === $statusCategory->id) checked @else @endif value={{ $statusCategory->id }}>
-                        <label for="status_cat_id_{{$statusCategory->id}}">{{ $statusCategory->name }}</label><br>
+                        @foreach($categoryList[0]->children as $pIndex => $statusCategory)
+                        <input id="status_cats_{{$pIndex}}" type="radio" name="cats_status[id]" @if(intval(old('cats_status.id')) == $statusCategory->id) checked @elseif(intval(Session::get('data.form.category.cats_status.id')) === $statusCategory->id) checked @else @endif value={{ $statusCategory->id }}>
+                        <label for="status_cats_{{$pIndex}}">{{ $statusCategory->name }}</label><br>
                         <br>
                         @endforeach
+                        <input type="hidden" name="cats_status[slug]" value="{{$categoryList[0]->slug}}">
+                        <input type="hidden" name="cats_status[parent_id]" value="{{$categoryList[0]->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
@@ -66,12 +68,14 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach($categoryList[1]->all() as $typeCategory)
+                        @foreach($categoryList[1]->children as $pIndex => $typeCategory)
                         <div class="e-radio-item02">
-                            <input id="type_cat_id_{{$typeCategory->id}}" class="" type="radio" name="type_cat_id" @if(old('type_cat_id') === $typeCategory->id) checked @elseif(intval(Session::get('data.form.category.type_cat_id')) === $typeCategory->id) checked @else @endif value={{ $typeCategory->id }}>
-                            <label for="type_cat_id_{{$typeCategory->id}}">{{ $typeCategory->name }}</label>
+                            <input id="type_cats_{{$pIndex}}" class="" type="radio" name="cats_type[id]" @if(intval(old('cats_type.id')) === $typeCategory->id) checked @elseif(intval(Session::get('data.form.category.cats_type.id')) === $typeCategory->id) checked @else @endif value={{ $typeCategory->id }}>
+                            <label for="type_cats_{{$pIndex}}">{{ $typeCategory->name }}</label>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_type[slug]" value="{{$categoryList[1]->slug}}">
+                        <input type="hidden" name="cats_type[parent_id]" value="{{$categoryList[1]->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
@@ -80,26 +84,37 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach($categoryList[3]->all() as $areaCategory)
+                        @foreach($categoryList[2]->children as $pIndex => $areaCategory)
                         <div class="e-radio-item02">
-                            <input id="area_cat_id_{{$areaCategory->id}}" class="" type="radio" name="area_cat_id" @if(old('area_cat_id') === $areaCategory->id) checked @elseif(intval(Session::get('data.form.category.area_cat_id')) === $areaCategory->id) checked @else @endif value={{ $areaCategory->id }}>
-                            <label for="area_cat_id_{{$areaCategory->id}}">{{ $areaCategory->name }}</label>
+                            <input id="area_cats_{{$pIndex}}" class="" type="radio" name="cats_area[id]" @if(intval(old('cats_area.id')) === $areaCategory->id) checked @elseif(intval(Session::get('data.form.category.cats_area.id')) === $areaCategory->id) checked @else @endif value={{ $areaCategory->id }}>
+                            <label for="area_cats_{{$pIndex}}">{{ $areaCategory->name }}</label>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_area[slug]" value="{{$categoryList[2]->slug}}">
+                        <input type="hidden" name="cats_area[parent_id]" value="{{$categoryList[2]->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
             <div class="card">
-                <div class="card-header">最低時給を選んでください<span class="text-danger">＊</span></div>
+                <div class="card-header">最低給与を選んでください<span class="text-danger">＊</span></div>
                 <div class="card-body">
-                     <p class="mb-3">※ひとつだけ選択できます</p>
-                    <div class="form-group e-radioform e-radioform02">
-                        @foreach($categoryList[2]->all() as $hourlySalaryCategory)
-                        <div class="e-radio-item02">
-                            <input id="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}" class="" type="radio" name="hourly_salary_cat_id" @if(old('hourly_salary_cat_id') === $hourlySalaryCategory->id) checked @elseif(intval(Session::get('data.form.category.hourly_salary_cat_id')) === $hourlySalaryCategory->id) checked @else @endif value={{ $hourlySalaryCategory->id }}>
-                            <label for="hourly_salary_cat_id_{{$hourlySalaryCategory->id}}">{{ $hourlySalaryCategory->name }}</label>
+                     <p class="mb-3">※複数選択できます</p>
+                    <div class="form-group e-radioform e-salary-form">
+                        @foreach($categoryList[3]->children as $pIndex => $salaryCategory)
+                        <div class="e_radio_cat_item_salary">
+                            <div class="e_radio_cat_item_p_salary">
+                                <input id="salary_cats_{{$pIndex}}" class="jc-jsc-salary-money-selectfield" type="checkbox" name="cats_salary_p[id][]" @if(intval(old('cats_salary_p.id.' . $pIndex)) === $salaryCategory->id) checked @elseif(intval(Session::get("data.form.category.cats_salary_p.id.$pIndex")) === $salaryCategory->id) checked @else @endif value={{ $salaryCategory->id }}>
+                                <label for="salary_cats_{{$pIndex}}">{{ $salaryCategory->name }}</label>
+                            </div>
+                            <select name="cats_salary[id][]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
+                                @foreach($salaryCategory->children as $cIndex => $cat)
+                                    <option value="{{$cat->id}}" @if(intval(old('cats_salary.id.' . $pIndex)) === $cat->id) selected @elseif(intval(Session::get('data.form.category.cats_salary.id.' . $pIndex)) === $cat->id) selected @else @endif>{{$cat->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_salary[slug]" value="{{$categoryList[3]->slug}}">
+                        <input type="hidden" name="cats_salary[parent_id]" value="{{$categoryList[3]->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 
@@ -108,12 +123,14 @@
                 <div class="card-body">
                      <p class="mb-3">※ひとつだけ選択できます</p>
                     <div class="form-group e-radioform e-radioform02">
-                        @foreach($categoryList[4]->all() as $dateCategory)
+                        @foreach($categoryList[4]->children as $pIndex => $dateCategory)
                         <div class="e-radio-item02">
-                            <input id="date_cat_id_{{$dateCategory->id}}" class="" type="radio" name="date_cat_id" @if(old('date_cat_id') === $dateCategory->id) checked @elseif(intval(Session::get('data.form.category.date_cat_id')) === $dateCategory->id) checked @else @endif value={{ $dateCategory->id }}>
-                            <label for="date_cat_id_{{$dateCategory->id}}">{{ $dateCategory->name }}</label>
+                            <input id="date_cats_{{$pIndex}}" class="" type="radio" name="cats_date[id]" @if(intval(old('cats_date.id')) === $dateCategory->id) checked @elseif(intval(Session::get('data.form.category.cats_date.id')) === $dateCategory->id) checked @else @endif value={{ $dateCategory->id }}>
+                            <label for="date_cats_{{$pIndex}}">{{ $dateCategory->name }}</label>
                         </div>
                         @endforeach
+                        <input type="hidden" name="cats_date[slug]" value="{{$categoryList[4]->slug}}">
+                        <input type="hidden" name="cats_date[parent_id]" value="{{$categoryList[4]->id}}">
                     </div>
                 </div>
             </div> <!-- card --> 

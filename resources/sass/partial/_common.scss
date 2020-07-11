@@ -446,143 +446,168 @@ section {
     line-height: 45px;
     font-size: .9em;
   }
-  
-  
+
   
   /* 絞り込み検索 */
   .search-section {
-    margin-top: 1em;
-  }
-  #composite-form {
-    padding: 20px 10px;
-    clear: both;
-  }
-  .composite {
-    display: flex;
-    width: 50%;
-    float: left;
-    
-  }
-  .composite-left {
-    padding: 10px 20px;
-    width: 30%;
-    border-bottom: 1px solid #E0E0E0;
-    font-weight: bold;
-    min-width: 150px;
-  }
-  .composite-left p {
-    margin: 0;
-    font-size: .9em;
-  }
-  .composite-right {
-    width: 70%;
-    padding: 10px 20px;
-    background: #fff;
-    border-bottom: 1px solid #E0E0E0;
-  }
-  #composite-form button {
-    display: block;
-    width: 100%;
-    max-width: 355px;
-    margin: 10px auto 0;
-    height: 40px;
-    border: none;
-    background-color: #de9610;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-    letter-spacing: 2px;
-  }
-  #composite-form button .fa-search {
-      font-size: .8rem;
-      transition: 0.3s;
-      margin-right: 5px;
-  }
-  
-  .checkbox {
-    display: none;
-  }
-  .checkbox + .checkbox-icon {
-    position: relative;
-    vertical-align: middle;
-  }
-  .checkbox + .checkbox-icon:before {
-    font-family: "Font Awesome 5 Free";
-    content: '\f0c8';
-    font-weight: 900;
-    color: #ccc;
-    font-size: 16px;
-    margin-right: 5px;
-  }
-  .checkbox:checked + .checkbox-icon:before {
-    content: "\f14a";
-    color: #de9610;
-  }
-  
-  .select-wrap {
-      position: relative;
-  }
-  .select-wrap:before {
-      z-index: 1;
-      position: absolute;
-      right: 15px;
-      top: 0;
-      content: "\f078";
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      line-height: 43px;
-      color: #de9610;
-      pointer-events: none;
-  }
-  .selectbox{
-      outline:none;
-      -moz-appearance: none;
-      text-indent: 0.01px;
-      text-overflow: '';
-      background: none transparent;
-      vertical-align: middle;
-      font-size: inherit;
-      font-weight: 500;
-      color: inherit;
-      -webkit-appearance: button;
-      -moz-appearance: button;
-      appearance: button;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
+    margin-top: 0;
+    .inner {
+      padding: 20px 2em;
+    }
+
+    #composite-form {
+      padding: 20px 10px;
+      margin: 20px 0;
+      box-shadow: 0 0 5px rgba(0,0,0,.2);
+      border-radius: 5px;
+      border: solid 1px #dcdada;
+    }
+    .composite {
+      display: flex;
+      align-items: center;
+      width: 50%;
+      float: left;
+      border-bottom: 1px solid #E0E0E0;
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+    }
+
+    .composite-4, .composite-5 {
+      border: 0;
+    }
+
+    .composite-left {
+      padding: 10px 20px;
+      width: 30%;
+      height: 45px;
+      background-color: rgba(200,57,64,0.2);
+      font-weight: bold;
+      min-width: 150px;
+      border-radius: 3px;
+    }
+    .composite-left p {
+      margin: 0;
+      font-size: .9em;
+    }
+    .composite-right {
+      width: 70%;
+      padding: 10px 20px;
+      background: #fff;
+    }
+    #composite-form button {
+      display: block;
+      width: 100%;
+      max-width: 355px;
+      margin: 10px auto 0;
       height: 40px;
-      padding: 8px 12px;
-      border:1px solid #ddd;
-      color:#333;
-      width:100%;
-      border-radius:3px;
-  }
-  .selectbox option{
-    background-color: #fff;
-    color: #333;
+      border: none;
+      background-color: #de9610;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      letter-spacing: 2px;
+    }
+    #composite-form button .fa-search {
+        font-size: .8rem;
+        transition: 0.3s;
+        margin-right: 5px;
+    }
+    
+    .checkbox {
+      display: none;
+    }
+    .checkbox + .checkbox-icon {
+      position: relative;
+      vertical-align: middle;
+    }
+    .checkbox + .checkbox-icon:before {
+      font-family: "Font Awesome 5 Free";
+      content: '\f0c8';
+      font-weight: 900;
+      color: #ccc;
+      font-size: 16px;
+      margin-right: 5px;
+    }
+    .checkbox:checked + .checkbox-icon:before {
+      content: "\f14a";
+      color: #de9610;
+    }
+    
+    .select-wrap {
+        position: relative;
+    }
+    .select-wrap:before {
+        z-index: 1;
+        position: absolute;
+        right: 15px;
+        top: 0;
+        content: "\f078";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        line-height: 43px;
+        color: #de9610;
+        pointer-events: none;
+    }
+    .selectbox{
+        outline:none;
+        -moz-appearance: none;
+        text-indent: 0.01px;
+        text-overflow: '';
+        background: none transparent;
+        vertical-align: middle;
+        font-size: inherit;
+        font-weight: 500;
+        color: inherit;
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        appearance: button;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        height: 35px;
+        padding: 4px 12px;
+        border:1px solid #ddd;
+        color:#333;
+        width:100%;
+    }
+    .selectbox option{
+      background-color: #fff;
+      color: #333;
+    }
+    
+    .select-wrap-salary {
+      margin-right: 3%;
+      width: 50%;
+      display: inline-block;
+    }
+    .option-lst {
+      width: 45%;
+      display: inline-block;
+    }
+  
+    #search-result-count {
+      margin: 10px 0;
+      text-align: center;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    #search-result-count span, .search-count span:first-child {
+      color: #c93a40;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .search-count {
+      margin-top: 20px;
+    }
+    .search-count span:last-child {
+      margin-top: 8px;
+      margin-left: 8px;
+      font-size: 12px;
+    }
+
   }
   
-  #search-result-count {
-    margin: 10px 0;
-    text-align: center;
-    font-weight: 500;
-    font-size: 14px;
-  }
-  #search-result-count span, .search-count span:first-child {
-    color: #c93a40;
-    font-weight: bold;
-    font-size: 18px;
-  }
-  .search-count {
-    margin-top: 20px;
-  }
-  .search-count span:last-child {
-    margin-top: 8px;
-    margin-left: 8px;
-    font-size: 12px;
-  }
-  
-  
+
   .main-section .inner {
     background: #fff;
   }

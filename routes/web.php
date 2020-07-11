@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth:employer']], function() {
 
   Route::get('company/joblist/{jobItem}/edit', 'JobController@edit')->name('job.edit');
   Route::post('company/joblist/{id}/edit', 'JobController@update')->name('job.update');
-  Route::get('company/joblist/{jobItem}/category/{category}', 'JobController@catEdit')->name('job.category.edit');
+  Route::get('company/joblist/{jobItem}/category/{cat_slug}', 'JobController@catEdit')->name('job.category.edit');
   Route::post('company/joblist/{jobItem}/edit/category/update', 'JobController@catUpdate')->name('job.category.update');
 
 

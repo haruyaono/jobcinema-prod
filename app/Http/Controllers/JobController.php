@@ -186,6 +186,7 @@ class JobController extends Controller
       if( Input::get('page') > $jobs->LastPage()) {
         abort(404);
       }
+
       
       return view('jobs.myjob', compact('jobs'));
     }
@@ -215,26 +216,67 @@ class JobController extends Controller
         $jobImageBaseUrl = '';
       }
 
-      return view('jobs.post.edit', compact('job', 'jobImageBaseUrl'));
+      $salaryList = collect();
+
+      if(session()->has('data.form.edit_category.cats_salary')) {
+        $arr = [];
+        $salaryList['session'] = collect(session()->get('data.form.edit_category.cats_salary'));
+        foreach($salaryList['session']['id'] as $id) {
+          array_push($arr, [
+            'id' => $id,
+            'parent_id' => $salaryList['session']['parent_id'],
+            'slug' => $salaryList['session']['slug'],
+          ]);
+        }
+        $salaryList['session'] = $arr;
+      
+      } else {
+      
+            $salaryList['saved'] = $jobItem->categories->map(function($jCategory) {
+              $pName = $jCategory->parent->name;
+              if($pName == '時給' || $pName == '日給' || $pName == '月給') {
+                return $this->categoryRepo->findCategoryById($jCategory->id);
+              }
+            })
+            ->reject(function ($jCategory) {
+              return is_null($jCategory);
+            });
+      }
+
+      return view('jobs.post.edit', compact('job', 'salaryList', 'jobImageBaseUrl'));
     }
 
-    public function catEdit(JobItem $jobItem, $category)
+    public function catEdit(JobItem $jobItem, $cat_slug)
     {
       $this->authorize('view', $jobItem);
+      $categories = $this->categoryRepo->listCategoriesByslug($cat_slug);
 
-      return view('jobs.post.cat_edit', compact('jobItem', 'category'));
+      return view('jobs.post.cat_edit', compact('jobItem', 'cat_slug', 'categories'));
     }
 
     public function catUpdate(Request $request, JobItem $jobItem)
     {
       $this->authorize('view', $jobItem);
+      $categoryFlag = $request->input('cat_flag');
+
+      if($categoryFlag == 'salary')  {
+        $request->validate([
+          'cats_salary_p.id' => 'required',
+          'cats_salary.id' => 'required',
+        ]);
+      }
 
       if(session()->has('data.form.edit_category')){
         $edit_cat_list = session()->get('data.form.edit_category');
       }
 
-      $categoryFlag = $request->input('cat_flag');
-      $edit_cat_list[$categoryFlag] = $request->input($categoryFlag . '_cat_id');
+      if($categoryFlag == 'salary') {
+        $edit_cat_list['cats_salary_p'] = $request->input('cats_salary_p');
+        $edit_cat_list['cats_salary'] = $request->input('cats_salary');
+      } else {
+        $edit_cat_list['cats_'.$categoryFlag] = $request->input('cats_'.$categoryFlag);
+      }
+     
 
       $request->session()->put('data.form.edit_category', $edit_cat_list);
       $request->session()->put('data.jobId', $jobItem->id);
@@ -252,7 +294,7 @@ class JobController extends Controller
 
     public function createStep1()
     {
-      $categoryList = $this->categoryRepo->allCategories();
+      $categoryList = $this->categoryRepo->listCategories('id', 'asc');
 
       if (preg_match("/iPhone|iPod|Android.*Mobile|Windows.*Phone/", $_SERVER['HTTP_USER_AGENT'])) {
         return view('jobs.post.create_step1_sp', compact('categoryList'));
@@ -263,6 +305,10 @@ class JobController extends Controller
 
     public function createStep2()
     {
+      echo '<pre>';
+      var_dump(session()->get('data'));
+      echo '</pre>';
+      
       if(session()->get('count') === 1 || session()->get('count') === 3) {
        
         $jobImageBaseUrl = $this->jobItemRepo->getJobImageBaseUrl();
@@ -317,6 +363,45 @@ class JobController extends Controller
         if($id) {
           // edit
           $job = $this->jobItemRepo->findAllJobItemById($id);
+          $jobItemRepo = new JobItemRepository($job);
+
+          $reqCatData = [];
+          $categorySlugList = config('const.CATEGORY_SLUG');
+          
+          foreach($categorySlugList as $categorySlug) {
+            if($request->session()->has('data.form.edit_category.cats_'.$categorySlug)) {
+              $sCategory = $request->session()->get('data.form.edit_category.cats_' . $categorySlug);
+              if($categorySlug == 'salary') {
+                foreach( $sCategory['id'] as $id) {
+                  $reqCatData[$id] = [
+                    'slug' => $sCategory['slug'], 
+                    'parent_id' => $sCategory['parent_id']
+                  ];
+                }
+                continue;
+              }
+              $reqCatData[$sCategory['id']] = [
+                    'slug' => $sCategory['slug'], 
+                    'parent_id' => $sCategory['parent_id']
+              ];
+            } else {
+
+              $categories = $job->categories()->wherePivot('slug', $categorySlug)->get(); 
+              
+              foreach($categories as $c) {
+                if($c->pivot->slug == $categorySlug) {
+                  $reqCatData[$c->id] = [
+                    'slug' => $c->pivot->slug,
+                    'parent_id' => $c->pivot->parent_id,
+                  ];
+                }
+              }
+
+            }
+          }
+
+          $job->categories()->sync($reqCatData);
+          
           $savedFilePath = $this->jobItemRepo->savedDbFilePath($job);
 
           $reqData = $request->except('_token', 'start_specified_date', 'end_specified_date');
@@ -475,25 +560,6 @@ class JobController extends Controller
             }
           }
 
-          $categorySlugList = config('const.CATEGORY_SLUG');
-
-          foreach($categorySlugList as $categorySlug) {
-            $columnStoring = $categorySlug.'_cat_id';
-
-            if(session()->has('data.form.edit_category')){
-              $edit_cat_list = session()->get('data.form.edit_category');
-
-              if(!isset($edit_cat_list[$categorySlug])) {
-                $reqData[$categorySlug.'_cat_id'] = $job->$columnStoring;
-              } else {
-                $reqData[$categorySlug.'_cat_id'] = $edit_cat_list[$categorySlug];
-              }
-
-            } else {
-              $reqData[$categorySlug.'_cat_id'] = $job->$columnStoring;
-            }
-          }
-        
           $reqData['status'] = 0;
           $reqData['pub_start'] = $pub_start;
           $reqData['pub_end'] = $pub_end;
@@ -504,24 +570,44 @@ class JobController extends Controller
           $reqData['job_mov2'] = $edit_movie_path_list['sub1'];
           $reqData['job_mov3'] = $edit_movie_path_list['sub2'];
 
-          $jobItemRepo = new JobItemRepository($job);
           $jobItemRepo->updatejobItem($reqData);
 
         } else {
 
-          $reqData = $request->except('_token', 'start_specified_date', 'end_specified_date');
+          $reqData = $request->except('_token', 'start_specified_date', 'end_specified_date', 'cats_status', 'cats_type', 'cats_area', 'cats_salary_p', 'cats_salary_c', 'cats_date');
           $reqData['employer_id'] = $employer->id;
           $reqData['company_id'] = $company->id;
           $reqData['status'] = 0;
           $reqData['pub_start'] = $pub_start;
           $reqData['pub_end'] = $pub_end;
-          $reqData['status_cat_id'] = $request->session()->get('data.form.category.status_cat_id');
-          $reqData['type_cat_id'] = $request->session()->get('data.form.category.type_cat_id');
-          $reqData['area_cat_id'] = $request->session()->get('data.form.category.area_cat_id');
-          $reqData['hourly_salary_cat_id'] = $request->session()->get('data.form.category.hourly_salary_cat_id');
-          $reqData['date_cat_id'] = $request->session()->get('data.form.category.date_cat_id');
+
+          $reqCatData = [];
+          $categorySlugList = config('const.CATEGORY_SLUG');
+          foreach($categorySlugList as $categorySlug) {
+            if($request->session()->has('data.form.category.cats_' . $categorySlug)) {
+              $sCategory = $request->session()->get('data.form.category.cats_' . $categorySlug);
+              if($categorySlug == 'salary') {
+                $arr = [];
+                foreach( $sCategory['id'] as $id) {
+                  array_push($arr, [
+                    'id' =>$id, 
+                    'slug' => $sCategory['slug'], 
+                    'parent_id' => $sCategory['parent_id']
+                  ]);
+                }
+                $reqCatData = array_merge($reqCatData, $arr);
+                continue;
+              }
+              array_push($reqCatData, $sCategory);
+            }
+          }
 
           $created = $this->jobItemRepo->createJobItem($reqData);
+          
+          $jobItemRepo = new JobItemRepository($created);
+          foreach($reqCatData as $reqCatItem) {
+              $jobItemRepo->associateCategory($reqCatItem);
+          }
 
           // ディレクトリを作成
           if (!file_exists(public_path() . \Config::get('fpath.real_img') . $created->id)) {
@@ -672,7 +758,7 @@ class JobController extends Controller
 
     public function createConfirm($id='')
     {
-      if(session()->get('count') === 2) {
+      if(session()->get('count') === 2 || session()->get('count') === 3) {
         if($id){
           $job = $this->jobItemRepo->findAllJobItemById($id);
         } else {
@@ -728,6 +814,8 @@ class JobController extends Controller
           if($id) {
             // edit
             $job = $this->jobItemRepo->findAllJobItemById($id);
+            $jobItemRepo = new JobItemRepository($job);
+
             $savedFilePath = $this->jobItemRepo->savedDbFilePath($job);
   
             foreach( $reqData as $sKey => $sValue ){
@@ -735,6 +823,42 @@ class JobController extends Controller
                 unset($reqData[$sKey]);
               } 
             }
+
+            $reqCatData = [];
+            $categorySlugList = config('const.CATEGORY_SLUG');
+            foreach($categorySlugList as $categorySlug) {
+              if($request->session()->has('data.form.edit_category.cats_'.$categorySlug)) {
+                $sCategory = $request->session()->get('data.form.edit_category.cats_' . $categorySlug);
+                if($categorySlug == 'salary') {
+                  foreach( $sCategory['id'] as $id) {
+                    $reqCatData[$id] = [
+                      'slug' => $sCategory['slug'], 
+                      'parent_id' => $sCategory['parent_id']
+                    ];
+                  }
+                  continue;
+                }
+                $reqCatData[$sCategory['id']] = [
+                      'slug' => $sCategory['slug'], 
+                      'parent_id' => $sCategory['parent_id']
+                ];
+              } else {
+  
+                $categories = $job->categories()->wherePivot('slug', $categorySlug)->get(); 
+                
+                foreach($categories as $c) {
+                  if($c->pivot->slug == $categorySlug) {
+                    $reqCatData[$c->id] = [
+                      'slug' => $c->pivot->slug,
+                      'parent_id' => $c->pivot->parent_id,
+                    ];
+                  }
+                }
+  
+              }
+            }
+
+            $job->categories()->sync($reqCatData);
 
             // ディレクトリを作成
             if (!file_exists(public_path() . \Config::get('fpath.real_img') . $job->id)) {
@@ -884,25 +1008,6 @@ class JobController extends Controller
               }
             }
 
-            $categorySlugList = config('const.CATEGORY_SLUG');
-
-            foreach($categorySlugList as $categorySlug) {
-              $columnStoring = $categorySlug.'_cat_id';
-
-              if(session()->has('data.form.edit_category')){
-                $edit_cat_list = session()->get('data.form.edit_category');
-
-                if(!isset($edit_cat_list[$categorySlug])) {
-                  $reqData[$categorySlug.'_cat_id'] = $job->$columnStoring;
-                } else {
-                  $reqData[$categorySlug.'_cat_id'] = $edit_cat_list[$categorySlug];
-                }
-
-              } else {
-                $reqData[$categorySlug.'_cat_id'] = $job->$columnStoring;
-              }
-            }
-
             $reqData['status'] = 1;
             $reqData['pub_start'] = $pub_start;
             $reqData['pub_end'] = $pub_end;
@@ -923,18 +1028,40 @@ class JobController extends Controller
                 unset($reqData[$sKey]);
               } 
             }
+      
             $reqData['employer_id'] = $employer->id;
             $reqData['company_id'] = $company->id;
             $reqData['status'] = 1;
             $reqData['pub_start'] = $pub_start;
             $reqData['pub_end'] = $pub_end;
-            $reqData['status_cat_id'] = $request->session()->get('data.form.category.status_cat_id');
-            $reqData['type_cat_id'] = $request->session()->get('data.form.category.type_cat_id');
-            $reqData['area_cat_id'] = $request->session()->get('data.form.category.area_cat_id');
-            $reqData['hourly_salary_cat_id'] = $request->session()->get('data.form.category.hourly_salary_cat_id');
-            $reqData['date_cat_id'] = $request->session()->get('data.form.category.date_cat_id');
+
+            $reqCatData = [];
+            $categorySlugList = config('const.CATEGORY_SLUG');
+            foreach($categorySlugList as $categorySlug) {
+              if($request->session()->has('data.form.category.cats_' . $categorySlug)) {
+                $sCategory = $request->session()->get('data.form.category.cats_' . $categorySlug);
+                if($categorySlug == 'salary') {
+                  $arr = [];
+                  foreach( $sCategory['id'] as $id) {
+                    array_push($arr, [
+                      'id' =>$id, 
+                      'slug' => $sCategory['slug'], 
+                      'parent_id' => $sCategory['parent_id']
+                    ]);
+                  }
+                  $reqCatData = array_merge($reqCatData, $arr);
+                  continue;
+                }
+                array_push($reqCatData, $sCategory);
+              }
+            }
 
             $created = $this->jobItemRepo->createJobItem($reqData);
+
+            $jobItemRepo = new JobItemRepository($created);
+            foreach($reqCatData as $reqCatItem) {
+                $jobItemRepo->associateCategory($reqCatItem);
+            }
 
             if($created) {
 
@@ -1030,9 +1157,6 @@ class JobController extends Controller
                 $movie_path_list['sub1'] = null;
                 $movie_path_list['sub2'] = null;
               }
-
-
-              $jobItemRepo = new JobItemRepository($created);
 
               $jobItemRepo->updatejobItem([
                 'job_img' => $image_path_list['main'],
