@@ -56,6 +56,15 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     }
 
     /**
+     * @param array $data
+     * @return bool
+     */
+    public function updateCategory(array $data): bool
+    {
+        return $this->update($data);
+    }
+
+    /**
      * Find the category by ID
      *
      * @return Category
