@@ -2,7 +2,7 @@
 
 namespace App\Job\JobItems\Repositories;
 
-use App\Job\JobItemImages\JobItemImage;
+use App\Job\Categories\Category;
 use App\Job\JobItems\JobItem;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
@@ -229,45 +229,21 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function baseSearchJobItems(array $searchParam = [])
     {
 
-        $query = $this->model::query()->ActiveJobitem();
+        $query = $this->model->activeJobitem()->with([
+            'categories'
+            ]);
 
-        //結合
-        if(array_key_exists('title', $searchParam) && !empty($searchParam['title'] )) {
-            $query->where(function($query) use ($searchParam) {
-                $query->where('job_title','like','%'.$searchParam['title'].'%')
-                    ->orWhere('job_type', 'like','%'.$searchParam['title'].'%')
-                    ->orWhere('job_hourly_salary', 'like','%'.$searchParam['title'].'%')
-                    ->orWhere('job_target', 'like','%'.$searchParam['title'].'%')
-                    ->orWhere('job_treatment', 'like','%'.$searchParam['title'].'%')
-                    ->orWhere('job_office_address', 'like','%'.$searchParam['title'].'%');
-            });
-        };
-        $query->whereHas('status_cat_get', function ($query) use($searchParam){
-            if(array_key_exists('status_cat_id', $searchParam) && !empty($searchParam['status_cat_id'])){
-                $query->where('status_categories.id', $searchParam['status_cat_id']);
+        $newsearchParam = $searchParam;
+        foreach($newsearchParam as $key => $p) {
+            if($p === null) {
+                unset($newsearchParam[$key]);
             }
-        });
-        $query->whereHas('type_cat_get', function ($query) use($searchParam){
-            if(array_key_exists('type_cat_id', $searchParam) && !empty($searchParam['type_cat_id'] )){
-                $query->where('type_categories.id', $searchParam['type_cat_id']);
-            }
-        });
-        $query->whereHas('area_cat_get', function ($query) use($searchParam){
-            if(array_key_exists('area_cat_id', $searchParam) && !empty($searchParam['area_cat_id'] )){
-                $query->where('area_categories.id', $searchParam['area_cat_id']);
-            }
-        });
-        $query->whereHas('hourly_salary_cat_get', function ($query) use($searchParam){
-            if(array_key_exists('hourly_salary_cat_id', $searchParam) && !empty($searchParam['hourly_salary_cat_id'] )){
-                $query->where('hourly_salary_categories.id', $searchParam['hourly_salary_cat_id']);
-            }
-        });
-        $query->whereHas('date_cat_get', function ($query) use($searchParam){
-            if(array_key_exists('date_cat_id', $searchParam) && !empty($searchParam['date_cat_id'] )){
-                $query->where('date_categories.id', $searchParam['date_cat_id']);
-            }
-        });
+        }
 
+        if ($newsearchParam !== []) {
+            $query->search($searchParam);
+        }
+       
         return $query;
     }
 
@@ -293,7 +269,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     public function findJobItemById($id)
     {
         try {
-            // return $this->model->ActiveJobitem()->findOrFail($id);
             return $this->model->ActiveJobitem()->findOrFail($id);
         } catch (ModelNotFoundException $e) { 
             throw new JobItemNotFoundException($e);
@@ -670,6 +645,27 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         }
 
         return $jobImageBaseUrl;
+    }
+
+     /**
+     * @param array $category
+     */
+    public function associateCategory(array $category)
+    {
+        $this->model->categories()->attach($category['id'], [
+            'parent_id' => $category['parent_id'],
+            'slug' => $category['slug'],
+            
+        ]);
+    }
+
+    /**
+     * @param string $slug
+     * @return Collection
+     */
+    public function findCategoryAssociatedToJobItemBySlug(string $slug) : Collection
+    {
+        return $this->model->categories()->wherePivot('slug', $slug)->get();
     }
 
 }

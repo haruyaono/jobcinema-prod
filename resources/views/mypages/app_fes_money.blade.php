@@ -83,7 +83,7 @@
                         </tr>
                         <tr>
                             <th>雇用形態</th>
-                            <td>{{$jobitem->status_cat_get->name}}</td>
+                            <td>{{$jobitem->categories()->wherePivot('slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('slug', 'status')->first()->name : ''}}</td>
                         </tr>
                         <tr>
                             <th>職種</th>

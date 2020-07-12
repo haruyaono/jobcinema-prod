@@ -60,15 +60,19 @@
           <span>並び替え：</span>
   
           <li><a href="{{$jobCreateUrl}}">新着順</a></li>
-          <li><a href="{{$jobCreateUrl . '&ks=1'}}">高収入</a></li>
-          <li><a href="{{$jobCreateUrl . '&ks=2'}}">勤務日数が少ない</a></li>
-          <li><a href="{{$jobCreateUrl . '&ks=3'}}">お祝い金額</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks[f]=1'}}">時給</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks[f]=2'}}">日給</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks[f]=3'}}">月給</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks[f]=4'}}">勤務日数が少ない</a></li>
+          <li><a href="{{$jobCreateUrl . '&ks[f]=5'}}">お祝い金額</a></li>
          </ul>
          <select name="job-sort-sp" id="job-sort-sp" data-url="{{$jobCreateUrl}}">
           <option value="0" @if($jobCreateUrl == '') selected @endif>新着順</option>
-          <option value="1" @if($jobCreateUrl == '') selected @endif>高収入</option>
-          <option value="2">勤務日数が少ない</option>
-          <option value="3">お祝い金額</option>
+          <option value="1" @if($jobCreateUrl == '') selected @endif>時給</option>
+          <option value="2" @if($jobCreateUrl == '') selected @endif>日給</option>
+          <option value="3" @if($jobCreateUrl == '') selected @endif>月給</option>
+          <option value="4" @if($jobCreateUrl == '') selected @endif>勤務日数が少ない</option>
+          <option value="5">お祝い金額</option>
          </select>
 
 				<div class="job-list">
@@ -79,8 +83,8 @@
 						<a href="{{ route('jobs.show', [$job->id])}}" class="job-item-link">
               <div class="job-item-heading only-pc">
 								<!-- カテゴリ -->
-                 <span class="cat-item org">{{ optional($job->type_cat_get)->name}}</span>
-                 <span class="cat-item red">{{ optional($job->status_cat_get)->name}}</span>
+                 <span class="cat-item org">{{$job->categories()->wherePivot('slug', 'type')->first() !== null ? $job->categories()->wherePivot('slug', 'type')->first()->name : ''}}</span>
+                 <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
               </div>
 							<div class="title-img-wrap">
               <div class="job-left only-sp">
@@ -175,11 +179,11 @@
       }
 
       var jobsortItem = $('.p-works-sort-conditions li');
-      var sortByKeyValue = getParam('ks');
+      var sortByKeyValue = getParam('ks[f]');
 
-      console.log($('#job-sort-sp').data('url'));
 
       if(sortByKeyValue != null) {
+
         jobsortItem.each(function(index, element) {
           if(sortByKeyValue == index) {
             $(element).addClass('on');
@@ -201,7 +205,7 @@
           if(ks == 0) {
             window.location.href = $('#job-sort-sp').data('url');
           } else {
-            window.location.href = $('#job-sort-sp').data('url') + '&ks=' + ks;
+            window.location.href = $('#job-sort-sp').data('url') + '&ks[f]=' + ks;
           }
 
         });

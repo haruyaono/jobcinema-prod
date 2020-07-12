@@ -23,16 +23,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(CategoryTableSeeder::class);
         // DB::table('users')->truncate();
         // DB::table('admins')->truncate();
         // DB::table('employers')->truncate();
         // DB::table('companies')->truncate();
         // DB::table('job_items')->truncate();
-        DB::table('status_categories')->truncate();
-        DB::table('type_categories')->truncate();
-        DB::table('area_categories')->truncate();
-        DB::table('hourly_salary_categories')->truncate();
-        DB::table('date_categories')->truncate();
+        // DB::table('status_categories')->truncate();
+        // DB::table('type_categories')->truncate();
+        // DB::table('area_categories')->truncate();
+        // DB::table('hourly_salary_categories')->truncate();
+        // DB::table('date_categories')->truncate();
         // DB::table('profiles')->truncate();
         // DB::table('job_item_user')->truncate();
         // DB::table('favourites')->truncate();
@@ -44,10 +45,10 @@ class DatabaseSeeder extends Seeder
         // factory(Employer::class)->create();
         // factory(Company::class)->create();
         // factory(JobItem::class)->create();
-        factory(StatusCategory::class, 4)->create();
-        factory(TypeCategory::class, 16)->create();
-        factory(AreaCategory::class, 14)->create();
-        factory(HourlySalaryCategory::class, 11)->create();
-        factory(DateCategory::class, 6)->create();
+        // factory(StatusCategory::class, 4)->create();
+        // factory(TypeCategory::class, 16)->create();
+        // factory(AreaCategory::class, 14)->create();
+        // factory(HourlySalaryCategory::class, 11)->create();
+        // factory(DateCategory::class, 6)->create();
     }
 }

@@ -22,8 +22,8 @@
     職種から探す
     @elseif($url == 'area')
     エリアから探す
-    @elseif($url == 'hourly_salary')
-    時給から探す
+    @elseif($url == 'salary')
+    給与から探す
     @endif
   </li>
 </ol>
@@ -37,8 +37,8 @@
                 <h1 class="c-title"><i class="far fa-list-alt font-yellow mr-2"></i>求人を職種から探す</h1>
                 <div class="c-box clearfix">
                     <ul class="c-list">
-                    @foreach($typeCats as $typeCat)
-                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?type_cat_id=' . $typeCat->id)}}">{{$typeCat->name}}</a></li>
+                    @foreach($categories->where('slug', 'type')->first()->children->sortBy('id') as $category)
+                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?type=' . $category->id)}}" class="txt-blue-link">{{$category->name}}</a></li>
                     @endforeach
                     </ul>
                 </div>
@@ -46,19 +46,24 @@
                 <h1 class="c-title"><i class="fas fa-map-marker-alt font-yellow mr-2"></i>求人をエリアから探す</h1>
                 <div class="c-box clearfix">
                     <ul class="c-list">
-                    @foreach($areaCats as $areaCat)
-                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?area_cat_id=' . $areaCat->id)}}">{{$areaCat->name}}</a></li>
+                    @foreach($categories->where('slug', 'area')->first()->children->sortBy('id') as $category)
+                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?area=' . $category->id)}}" class="txt-blue-link">{{$category->name}}</a></li>
                     @endforeach
                     </ul>
                 </div>
-            @elseif($url == 'hourly_salary')
+            @elseif($url == 'salary')
                 <h1 class="c-title"><i class="fas fa-money-bill-wave font-yellow mr-2"></i>求人を時給から探す</h1>
                 <div class="c-box clearfix">
-                    <ul class="c-list">
-                    @foreach($hourlySalaryCats as $hourlySalaryCat)
-                        <li><i class="far fa-caret-square-right"></i><a href="{{url('jobs/search/all?hourly_salary_cat_id=' . $hourlySalaryCat->id)}}">{{$hourlySalaryCat->name}}</a></li>
+                    @foreach($categories->where('slug', 'salary')->first()->children->sortBy('id') as $category)
+                        <div class="mb-3 cf">
+                        <p class="h5"><i class="far fa-caret-square-right"></i>{{$category->name}}</p>
+                          <ul class="c-list">
+                            @foreach($category->children->sortBy('id') as $cat)
+                              <li><a href="{{url('jobs/search/all?salary=' . $category->id. '&' . $category->slug. '=' . $cat->id)}}" class="txt-blue-link">{{$cat->name}}</a></li>
+                            @endforeach
+                          </ul>
+                        </div>
                     @endforeach
-                    </ul>
                 </div>
             @endif
 				

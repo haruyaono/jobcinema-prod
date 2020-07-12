@@ -26,31 +26,41 @@
                         <tr>
                             <th>雇用形態</th>
                             <td>
-                                <p>@if($job->status_cat_id){{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</p>
+                                <p>
+                                    {{App\Job\Categories\Category::find($job->categories()->wherePivot('slug', 'status')->first()->id)->name}}
+                                </p>
                             </td>
                         </tr>
                         <tr>
                             <th>募集職種</th>
                             <td>
-                                <p>@if($job->type_cat_id){{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</p>
+                                <p>
+                                {{App\Job\Categories\Category::find($job->categories()->wherePivot('slug', 'type')->first()->id)->name}}
+                                </p>
                             </td>
                         </tr>
                         <tr>
                             <th>勤務地エリア</th>
                             <td>
-                                <p>@if($job->area_cat_id){{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</p>
+                                <p>
+                                {{App\Job\Categories\Category::find($job->categories()->wherePivot('slug', 'area')->first()->id)->name}}
+                                </p>
                             </td>
                         </tr>
                         <tr>
-                            <th>最低時給</th>
+                            <th>最低給与</th>
                             <td>
-                                <p>@if($job->hourly_salary_cat_id){{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</p>
+                                @foreach($job->categories()->wherePivot('slug', 'salary')->get() as $category)
+                                    <p>{{App\Job\Categories\Category::find($category->id)->parent->name}}: {{App\Job\Categories\Category::find($category->id)->name}}</p>
+                                @endforeach
                             </td>
                         </tr>
                         <tr>
                             <th>最低勤務日数</th>
                             <td>
-                                <p>@if($job->date_cat_id){{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</p>
+                                <p>
+                                {{App\Job\Categories\Category::find($job->categories()->wherePivot('slug', 'date')->first()->id)->name}}
+                                </p>
                             </td>
                         </tr>
                     </table>

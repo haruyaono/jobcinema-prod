@@ -9,6 +9,7 @@ use App\Job\Companies\Company;
 use App\Job\Employers\Employer;
 use App\Job\Users\User;
 use App\Job\Applies\Apply;
+use App\Job\Categories\Category;
 use App\Traits\IsMobile;
 use Illuminate\Support\Facades\Redis;
 
@@ -26,30 +27,18 @@ class JobItem extends Model
         'updated_at',
     ];
 
-    public function status_cat_get()
+    public function categories()
     {
-        return $this->belongsTo(\App\Job\Categories\StatusCategory::class, 'status_cat_id');
+        return $this->belongsToMany(Category::class, 'job_item_category')
+                    ->withPivot([
+                        'id',
+                        'job_item_id',
+                        'category_id',
+                        'parent_id',
+                        'slug',
+                    ])->withTimeStamps();
     }
-
-    public function type_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\TypeCategory::class, 'type_cat_id');
-    }
-
-    public function area_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\AreaCategory::class, 'area_cat_id');
-    }
-
-    public function hourly_salary_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\HourlySalaryCategory::class, 'hourly_salary_cat_id');
-    }
-
-    public function date_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\DateCategory::class, 'date_cat_id');
-    }
+  
 
     public function company()
     {
@@ -129,6 +118,52 @@ class JobItem extends Model
     //     var_dump( $this->jobitems->);
     //         return \DB::table('apply_job_item')->where('apply_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
     // }
+
+
+    public function scopeSearch($query, array $searchParams)
+    {
+        if (isset($searchParams['keyword'])) {
+            $query->where(function($query) use ($searchParams){
+                $query->where('job_title', 'like', "%${searchParams['keyword']}%")
+                    ->orWhere('job_office', 'like', "%${searchParams['keyword']}%")
+                    ->orWhere('job_desc', 'like', "%${searchParams['keyword']}%")
+                    ->orWhere('job_intro', 'like', "%${searchParams['keyword']}%");
+            });
+        }
+        foreach($searchParams as $key => $searchParam) {
+            if($key == 'keyword' || $key == 'salary' || $key == 'ks' || $searchParam === null) {
+                continue;
+            }
+            $query->whereHas('categories', function($builder) use ($searchParam) {
+
+                    $builder->where('categories.id', $searchParam);
+            });
+        }
+
+        if(isset($searchParams['ks'])) {
+            $orderFlag = $searchParams['ks'];
+
+            if(array_key_exists('c_id', $orderFlag) && $orderFlag['c_id'] != '') {
+                $sub_query = DB::table('job_item_category')->whereRaw("parent_id = ".$orderFlag['c_id'])->toSql();
+
+                $query->select('job_items.*', 'category.category_id', 'categories.name as category_name','category.parent_id')
+                ->leftJoinSub($sub_query,'category', 'job_items.id', '=', 'category.job_item_id')
+                ->leftJoin('categories', 'category.category_id', '=', 'categories.id');
+
+                if(array_key_exists('order', $orderFlag) && $orderFlag['order'] != '') {
+                    $query->orderBy('categories.name', $orderFlag['order']);
+                } else {
+                    $query->orderBy('categories.name', 'desc');
+                }
+            }
+
+            if(array_key_exists('column', $orderFlag) && $orderFlag['column'] != '') {
+                $query->orderBy("job_items.${orderFlag['column']}", 'desc');
+            }
+                
+        }
+
+    }
 
     public function favourites()
     {

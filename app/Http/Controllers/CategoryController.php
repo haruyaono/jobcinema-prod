@@ -4,18 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Job\JobItems\JobItem;
-use App\Job\Categories\TypeCategory; 
-use App\Job\Categories\AreaCategory; 
-use App\Job\Categories\HourlySalaryCategory; 
+use App\Job\Categories\Category; 
+use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+
 
 class CategoryController extends Controller
 {
-    public function getAllCat($url) {
-        $typeCats = TypeCategory::all();
-        $areaCats = AreaCategory::all();
-        $hourlySalaryCats = HourlySalaryCategory::all();
+      /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepo;
+    
+     /**
+     * CategoryController constructor.
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(
+      CategoryRepositoryInterface $categoryRepository
+    ) {
 
-        return view('jobs.job_cats', compact('typeCats', 'areaCats', 'hourlySalaryCats', 'url'));
+      $this->categoryRepo = $categoryRepository;
+    }
+
+
+    public function getAllCat($url) {
+        $categories = $this->categoryRepo->listCategories();
+
+        return view('jobs.job_cats', compact('categories', 'url'));
     }
 
     public function getTypeCat($id) {

@@ -63,27 +63,73 @@
                     <table class="job-create-table jobcat-edit-create-table">
                         <tr>
                             <th>雇用形態</th>
-                            <td>@if(Session::has('data.form.edit_category.status')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</td>
+                            <td>
+                                @if(Session::has('data.form.edit_category.cats_status.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_status.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '雇用形態')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                               
+                                @endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'status'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>職種</th>
-                            <td>@if(Session::has('data.form.edit_category.type')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</td>
+                            <td>
+                                @if(Session::has('data.form.edit_category.cats_type.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_type.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '職種')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'type'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>勤務地エリア</th>
-                            <td>@if(Session::has('data.form.edit_category.area')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</td>
+                            <td>
+                                @if(Session::has('data.form.edit_category.cats_area.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_area.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == 'エリア')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif</td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'area'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
-                            <th>最低時給</th>
-                            <td>@if(Session::has('data.form.edit_category.hourly_salary')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</td>
-                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'hourly_salary'])}}" class="txt-blue-link">変更する</a></td>
+                            <th>最低給与</th>
+                            <td>
+
+                                @if($salaryList->has('session'))
+                                    @foreach($salaryList['session'] as $salCat)
+                                        <p>{{App\Job\Categories\Category::find($salCat['id'])->parent->name}}: {{App\Job\Categories\Category::find($salCat['id'])->name}}</p>
+                                    @endforeach
+                                @else
+                                    @if($salaryList->has('saved'))
+                                        @foreach($salaryList['saved'] as $pCat => $savSalCat) 
+                                        <p>{{$savSalCat->parent->name}}: {{$savSalCat->name}}</p>
+                                        @endforeach
+                                    @endif
+                                @endif</td>
+                            <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'salary'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                         <tr>
                             <th>最低勤務日数</th>
-                            <td>@if(Session::has('data.form.edit_category.date')){{App\Job\Categories\DateCategory::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</td>
+                            <td>
+                                @if(Session::has('data.form.edit_category.cats_date.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_date.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '勤務日数')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </td>
                             <td><a href="{{route('job.category.edit', [$job->id, 'category'=>'date'])}}" class="txt-blue-link">変更する</a></td>
                         </tr>
                     </table>
@@ -214,7 +260,7 @@
                         <tr>
                             <th>職種<span class="text-danger">（必須）</span></th>
                             <td>
-                                <input type="text" name="job_type" class="form-control {{ $errors->has('job_type') ? 'is-invalid' : ''}}" value="{{ old('job_type') }}@if(!old('job_type') && Session::has('data.form.job_type')){{Session::get('data.form.job_type')}}@elseif(!old('job_type') && Session::has('data.form.job_type')==false){{$job->job_type}}@else @endif">
+                                <input type="text" name="job_type" class="form-control {{ $errors->has('job_type') ? 'is-invalid' : ''}}" value="{{ old('job_type') }}@if(!old('job_type') && Session::has('data.form.text.job_type')){{Session::get('data.form.text.job_type')}}@elseif(!old('job_type') && Session::has('data.form.text.job_type')==false){{$job->job_type}}@else @endif">
                             </td>
                         </tr>
                         <tr>

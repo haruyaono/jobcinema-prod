@@ -29,7 +29,7 @@
                 <a href="{{route('admin_category', ['area'])}}">エリアカテゴリ</a>
             </p>
             <p>
-                <a href="{{route('admin_category', ['hourly_salary'])}}">時給カテゴリ</a>
+                <a href="{{route('admin_category', ['salary'])}}">給与カテゴリ</a>
             </p>
             <p>
                 <a href="{{route('admin_category', ['date'])}}">勤務日数カテゴリ</a>

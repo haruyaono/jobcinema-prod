@@ -8,6 +8,7 @@ $(function () {
     });
 
     var flag = $('input[name=flag]').val();
+    console.log(flag);
 
     // 登録もしくは編集ボタン押下時
     $('[data-toggle=modal]').on('click', function() {
@@ -16,11 +17,18 @@ $(function () {
         // 既存カテゴリーならフォームに値をセット
         if (target_category_id) {
             var target_object = $('tr[data-category_id=' + target_category_id + ']');
+            if(flag == 'salary') {
+                var pIdVal = target_object.parent().find('.parent_id').val();
+            } else {
+                var pIdVal = target_object.parent().next().val();
+            }
             var target_value = {
                 category_id   : target_category_id,
+                pId           : pIdVal,
                 name          : target_object.find('span.name').text()
             };
             $('input[name=category_id]').val(target_value.category_id);
+            $('select.pId option[value=' + target_value.pId + ']').prop('selected', true);
             $('input[name=name]').val(target_value.name);
         }
     });
@@ -37,11 +45,15 @@ $(function () {
         var category_id = $('input[name=category_id]').val(),
         category_id = (category_id) ? category_id : null;
         flag = (flag) ? flag : null;
+        pIdVal = flag == 'status' ? $('input.parent_id').val() : $('input[name=name]').val();
         var data = {
             category_id   : category_id,
+            pId          : pIdVal,
             name          : $('input[name=name]').val(),
             flag          : flag
         };
+
+        console.log(data);
 
         // APIを呼び出してDBに保存
         $.ajax({
@@ -51,14 +63,15 @@ $(function () {
 
         }).done(function(data) {
             // 正常時 結果表示
+           
             $('#api_result').html('<span>正常に処理が完了しました</span>')
                 .removeClass()
                 .addClass('alert alert-success show');
 
             // 少しせこいが、リロードして変更が反映された画面を表示する
             location.reload();
-
-        }).fail(function(data) {
+            
+        }).fail(function(data, error) {
             // エラー時 エラーメッセージ生成
             var error_message = '';
             $.each(data.responseJSON.errors, function(element, message_array) {
@@ -66,7 +79,6 @@ $(function () {
                     error_message += message + '<br>';
                 })
             });
-
             // エラーメッセージ表示
             $('#api_result').html('<span>' + error_message + '</span>')
                 .removeClass()

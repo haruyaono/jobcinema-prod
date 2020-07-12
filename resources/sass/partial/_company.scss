@@ -213,6 +213,15 @@
     float: left;    
     margin-bottom: 12px;
   }
+
+  .e_radio_cat_item_salary {
+    display: flex;
+    margin-bottom: 10px;
+
+    .e_radio_cat_item_p_salary {
+      margin-right: 20px;
+    }
+  }
   
   .e-image-register-area {
     clear: both;

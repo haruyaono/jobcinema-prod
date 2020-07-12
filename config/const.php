@@ -36,7 +36,7 @@ return [
     ],
 
     'CATEGORY_SLUG' => [
-        'status','type','area','hourly_salary','date',
+        'status','type','area','salary','date',
     ],
 
     'FILE_SLUG' => [

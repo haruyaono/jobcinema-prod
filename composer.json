@@ -12,9 +12,10 @@
         "aws/aws-sdk-php": "~3.0",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.5",
-        "jsdecena/baserepo": "^1.0.7",
         "intervention/image": "^2.5",
         "jeroennoten/laravel-adminlte": "^1",
+        "jsdecena/baserepo": "^1.0.7",
+        "kalnoy/nestedset": "^5.0",
         "laracasts/utilities": "~2.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
@@ -22,11 +23,11 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "league/fractal": "^0.17.0",
         "monolog/monolog": "1.*",
+        "nicolaslopezj/searchable": "1.*",
         "pbmedia/laravel-ffmpeg": "3.0",
         "predis/predis": "^1.1",
         "prettus/l5-repository": "^2.6",
-        "prettus/laravel-validation": "^1.1",
-        "nicolaslopezj/searchable": "1.*"
+        "prettus/laravel-validation": "^1.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

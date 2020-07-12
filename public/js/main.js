@@ -52,9 +52,6 @@ $(function() {
     }
 });
 
-   
-
-
 if(document.getElementById('jobsheet-create-form') != null ) {
     var jobSheetCountText = {
         txt1 : document.getElementById('job_title'),
@@ -89,11 +86,8 @@ if(document.getElementById('jobsheet-create-form') != null ) {
     });
 }
 
-
-
-
 $(function() {
-
+    // タブ
     $(".tab_label").on("click",function(){
         var $th = $(this).index();
         $(".tab_label").removeClass("active");
@@ -102,59 +96,79 @@ $(function() {
         $(".tab_panel").eq($th).addClass("active");
     });
 
-    $('#composite-form').change(function(){
+    // 絞り込みAjax
+    // $('#composite-form').change(function(){
 
-        var statusVal = $('#search-status').val() != '' ? Number($('#search-status').val()) : null,
-            typeVal = $('#search-type').val() != '' ? Number($('#search-type').val()) : null,
-            areaVal = $('#search-area').val() != '' ? Number($('#search-area').val()) : null,
-            hourlySalaryVal = $('#search-hourly-salary').val() != '' ? Number($('#search-hourly-salary').val()) : null,
-            dateVal = $('#search-date').val() != '' ? Number($('#search-date').val()) : null,
-            textVal = $('#search-text').val() != '' ? Number($('#search-text').val()) : null;
+    //     var statusVal = $('#search-status').val() != '' ? Number($('#search-status').val()) : null,
+    //         typeVal = $('#search-type').val() != '' ? Number($('#search-type').val()) : null,
+    //         areaVal = $('#search-area').val() != '' ? Number($('#search-area').val()) : null,
+    //         hourlySalaryVal = $('#search-hourly-salary').val() != '' ? Number($('#search-hourly-salary').val()) : null,
+    //         dateVal = $('#search-date').val() != '' ? Number($('#search-date').val()) : null,
+    //         textVal = $('#search-text').val() != '' ? Number($('#search-text').val()) : null;
 
         
-        var searchParam = {
-            "status_cat_id" : statusVal,
-            "type_cat_id" : typeVal,
-            "area_cat_id" : areaVal,
-            "hourly_salary_cat_id" : hourlySalaryVal,
-            "date_cat_id" : dateVal,
-            "title" : textVal
-        }
-        console.log(JSON.stringify(searchParam));
-        $.ajaxSetup({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
-        });
-        $.ajax({
-            type: 'post',
-            contentType: 'application/json',
-            url: 'http://localhost/search/SearchJobItemAjaxAction',
-            cache: false,
-            data: JSON.stringify(searchParam),
-            dataType: 'json',
-            timeout: 3000
-        })
-        .done(function (res, textStatus,jqXHR) {
-                $('#job-count').text(res);
-                console.log(jqXHR.status);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.log("通信に失敗しました");
-            console.log(jqXHR.status);
-            console.log(textStatus);
-            console.log(errorThrown);
-        }).always(function(){
-		});
+    //     var searchParam = {
+    //         "status_cat_id" : statusVal,
+    //         "type_cat_id" : typeVal,
+    //         "area_cat_id" : areaVal,
+    //         "hourly_salary_cat_id" : hourlySalaryVal,
+    //         "date_cat_id" : dateVal,
+    //         "title" : textVal
+    //     }
+    //     console.log(JSON.stringify(searchParam));
+    //     $.ajaxSetup({
+    //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+    //     });
+    //     $.ajax({
+    //         type: 'post',
+    //         contentType: 'application/json',
+    //         url: 'http://localhost/search/SearchJobItemAjaxAction',
+    //         cache: false,
+    //         data: JSON.stringify(searchParam),
+    //         dataType: 'json',
+    //         timeout: 3000
+    //     })
+    //     .done(function (res, textStatus,jqXHR) {
+    //             $('#job-count').text(res);
+    //             console.log(jqXHR.status);
+    //     }).fail(function(jqXHR, textStatus, errorThrown) {
+    //         console.log("通信に失敗しました");
+    //         console.log(jqXHR.status);
+    //         console.log(textStatus);
+    //         console.log(errorThrown);
+    //     }).always(function(){
+	// 	});
     
 
+    // });
+
+    // 求人作成画面の給与カテゴリのセレクト操作
+    var salaryCats = $(".jc-jsc-salary-money-selectfield");
+    salaryCats.each(function(index, element){
+        var select = $(element).parent().next();
+        if(!$(element).prop('checked')) {
+            select.prop('disabled', true)
+        }
+    })
+
+    salaryCats.on('click', function() {
+        var select = $(this).parent().next();
+        if($(this).prop('checked')) {
+            var select = $(this).parent().next();
+            select.prop('disabled', false);
+
+          } else {
+            select.prop('disabled', true);
+            select.val(0);
+          }
     });
 
-
-    // window.opener.execBeforeUnload = false;
-    // window.opener.refresh();
-
+    // 閉じるボタン
     $('#close_button').click(function() {
         window.close();
     });
 
+    // サブミットボタン
     function submitAction(url) {
         $('form').attr('action', url);
         $('form').submit();
@@ -162,5 +176,52 @@ $(function() {
         
 });
 
+$(function() {
 
+    var $children = $('.search-salary-child'),
+        defaultPaVal = $('#search-salary').val();
 
+    if(defaultPaVal == "") {
+        $children.find('option').attr("selected", false);
+        $children.hide();
+    } else {
+        $('.jsc-not-select').hide();
+        $children.each(function() {
+            var defaultChVal = $(this).data('val'); 
+        
+            if (defaultPaVal != defaultChVal) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        
+        });
+    }
+    
+    $('#search-salary').change(function() {
+    
+        var val1 = $(this).val();
+    
+        $children.each(function() {
+            var val2 = $(this).data('val'); 
+            $(this).val('');
+            console.log($(this).find('option'));
+        
+            if (val1 != val2) {
+                $(this).hide();
+                
+            } else {
+                $(this).show();
+            }
+        
+        });
+    
+        if ($(this).val() == "") {
+            $('.jsc-not-select').show();
+        } else {
+            $('.jsc-not-select').hide();
+        }
+    
+    });
+
+});
