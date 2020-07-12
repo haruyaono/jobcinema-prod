@@ -24,11 +24,12 @@ class JobCreateStep1Request extends FormRequest
     public function rules()
     {
         return [
-            'status_cat_id' => 'required',
-            'type_cat_id' => 'required',
-            'area_cat_id' => 'required',
-            'hourly_salary_cat_id' => 'required',
-            'date_cat_id' => 'required',
+            'cats_status.id' => 'required',
+            'cats_type.id' => 'required',
+            'cats_area.id' => 'required',
+            'cats_salary_p.id' => 'required',
+            'cats_salary.id' => 'required',
+            'cats_date.id' => 'required',
            
             
         ];

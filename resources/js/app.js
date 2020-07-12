@@ -28,6 +28,7 @@ Vue.component('v-slick-top', require('./components/SlickTopComponent.vue').defau
 Vue.component('v-slick1', require('./components/SlickComponent.vue').default);
 Vue.component('v-slick', require('./components/SlickVideoComponent.vue').default);
 Vue.component('recent-component', require('./components/RecentJobComponent.vue').default);
+Vue.component('e-create-step1-job-component', require('./components/EmpCreateStep1JobComponent.vue').default);
 
 
 /**

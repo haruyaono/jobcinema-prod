@@ -22,6 +22,7 @@ use App\Job\Categories\TypeCategory;
 use App\Job\Categories\HourlySalaryCategory;
 use App\Job\Categories\AreaCategory;
 use App\Job\Categories\DateCategory;
+use App\Job\Categories\Category;
 use App\Http\Requests\bellingParameter;
 use App\Http\Requests\AdminRequest;
 use Illuminate\Support\Facades\Mail;
@@ -250,15 +251,15 @@ class DashboardController extends Controller
 
     public function getBilling()
     {
+       
         $month_list = $this->jobItem->getMonthList();
-        // $jobItems = $this->jobItemRepo->listJobItems('created_at', 'desc', ['*'], 'off');
         $applyJobItemList = DB::table('apply_job_item')
                         ->select('job_item_id', DB::raw('count(*) as tatal'))
                         ->groupBy('job_item_id')
                         ->get();
 
         foreach($applyJobItemList as $applyJobItem) {
-            $jobitem = $this->jobItemRepo->findJobItemById($applyJobItem->job_item_id);
+            $jobitem = $this->jobItemRepo->findAllJobItemById($applyJobItem->job_item_id);
             $employer = $jobitem->employer;
             if($employer->company) {
                 $applyJobItem->company = $employer->company;
@@ -378,34 +379,54 @@ class DashboardController extends Controller
     
     public function category($url)
     {
-        switch($url) {
-            case 'status':
-                $catList = StatusCategory::paginate(self::NUM_PER_PAGE);
-                $catTitle = '雇用形態';
-                break;
-            case 'type':
-                $catList = TypeCategory::paginate(self::NUM_PER_PAGE);
-                $catTitle = '職種';
-                break;
-            case 'area':
-                $catList = AreaCategory::paginate(self::NUM_PER_PAGE);
-                $catTitle = 'エリア';
-                break;
-            case 'hourly_salary':
-                $catList = HourlySalaryCategory::paginate(self::NUM_PER_PAGE);
-                $catTitle = '時給';
-                break;
-            case 'date':
-                $catList = DateCategory::paginate(self::NUM_PER_PAGE);
-                $catTitle = '勤務日数';
-                break;
-            default:
-                return view('admin.category_top');
+
+        $catList = $this->categoryRepo->listCategoriesByslug($url);
+        $catTitle = $catList->first()->parent->name;
+
+        $arrCatList = $catList->toArray();
+        
+        $tn = $ts = $temp_num = $temp_str = array();
+
+        if($url === 'salary') {
+            foreach ($arrCatList as $key => $row) {
+                $tn = $ts = $temp_num = $temp_str = array();
+
+                foreach ($row['children'] as $k => $r) {
+                    if(is_numeric(substr($r['name'], 0, 1))) {
+                        $tn[$k] = str_replace(',','',$r['name']);
+            
+                        $temp_num[$k] = $r;
+                    }
+                    else {
+                        $ts[$k] = $r['name'];
+                        $temp_str[$k] = $r;
+                    }
+                }
+
+                array_multisort($tn, SORT_ASC, SORT_NUMERIC, $temp_num);
+                array_multisort($ts, SORT_ASC, SORT_STRING, $temp_str);
+                $arrCatList[$key]['children'] = array_merge($temp_num, $temp_str);
+            }
+    
+        } else {
+            foreach ($arrCatList as $key => $row) {
+                if(is_numeric(substr($row['name'], 0, 1))) {
+                    $tn[$key] = str_replace(',','',$row['name']);
+    
+                    $temp_num[$key] = $row;
+                }
+                else {
+                    $ts[$key] = $row['name'];
+                    $temp_str[$key] = $row;
+                }
+            }
+            array_multisort($tn, SORT_ASC, SORT_NUMERIC, $temp_num);
+            array_multisort($ts, SORT_ASC, SORT_STRING, $temp_str);
+            $arrCatList = array_merge($temp_num, $temp_str);
         }
         
-        return view('admin.category', compact('catList','url', 'catTitle'));
+        return view('admin.category', compact('arrCatList','url', 'catTitle'));
     }
-
 
      /**
      * カテゴリ編集・新規作成API
@@ -415,28 +436,17 @@ class DashboardController extends Controller
      */
     public function editCategory(AdminRequest $request, $flag)
     {
-        $input = $request->input();
         $category_id = $request->input('category_id');
 
-        switch($flag) {
-            case 'status':
-                $category = StatusCategory::updateOrCreate(['id' => $category_id ], ['name' => $request->input('name')]);
-                break;
-            case 'type':
-                $category = TypeCategory::updateOrCreate(compact('id'), $input);
-                break;
-            case 'area':
-                $category = AreaCategory::updateOrCreate(compact('id'), $input);
-                break;
-            case 'hourly_salary':
-                $category = HourlySalaryCategory::updateOrCreate(compact('id'), $input);
-                break;
-            case 'date':
-                $category = DateCategory::updateOrCreate(compact('id'), $input);
-                break;
-            default:
-                $category = '';
-                break;
+        if($category_id === null) {
+            $parent = Category::find($request->input('pId'));
+            $children = Category::create(['name' => $request->input('name')]);
+            $category = $parent->appendNode($children);
+        } else {
+            $findCategory = Category::find($category_id);
+            $category = $findCategory->update([
+                'name' => $request->input('name'),
+            ]);
         }
 
         return response()->json($category);
@@ -451,23 +461,7 @@ class DashboardController extends Controller
     public function deleteCategory(AdminRequest $request, $flag)
     {
         $category_id = $request->input('category_id');
-        switch($flag) {
-            case 'status':
-                StatusCategory::destroy($category_id);
-                break;
-            case 'type':
-                TypeCategory::destroy($category_id);
-                break;
-            case 'area':
-                AreaCategory::destroy($category_id);
-                break;
-            case 'hourly_salary':
-                HourlySalaryCategory::destroy($category_id);
-                break;
-            case 'date':
-                DateCategory::destroy($category_id);
-                break;
-        }
+        Category::destroy($category_id);
 
         return response()->json();
     }

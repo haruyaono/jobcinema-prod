@@ -6,7 +6,7 @@
       <ul class="top-category-list">
       @foreach($categoryList[1]->children as $cat)
         <li class="top-category-list-item">
-          <a href="{{url('jobs/search/all?type_cat_id=' . $cat->id)}}" class="h-100 feature-item">
+          <a href="{{url('jobs/search/all?type=' . $cat->id)}}" class="h-100 feature-item">
            {{$cat->name}}
           </a>
         </li>

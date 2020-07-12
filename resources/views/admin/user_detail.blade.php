@@ -17,7 +17,7 @@
 <!-- ページの内容を入力 -->
 @section('content')
 <div class="col-md-12 applicant-detail">
-    <div class="applicant-detail-title">お祝い金</div>
+    <div class="card-header h5">お祝い金</div>
     <div class="card">
         @if($applyJobItem->pivot->oiwaikin)
         <div class="card-body">
@@ -48,10 +48,10 @@
         @endif
     </div>
 
-    <div class="applicant-detail-title">応募先</div>
+    <div class="card-header h5">応募先</div>
     <div class="card">
         @if($applyJobItem)
-        <div class="card-header">求人番号：{{$applyJobItem->id}}　<a href="{{ route('admin.job.detail', [$applyJobItem->id]) }}" target="_blank">
+        <div class="mb-2 h4">求人番号：{{$applyJobItem->id}}　<a href="{{ route('admin.job.detail', [$applyJobItem->id]) }}" target="_blank">
                                     求人票を確認
                                 </a></div>
         <div class="card-body">
@@ -59,7 +59,7 @@
                     <tr>
                         <th>雇用形態</th>
                         <td>
-                            {{ $applyJobItem->status_cat_get->name}}
+                            {{$applyJobItem->categories()->wherePivot('slug', 'status')->first() !== null ? $applyJobItem->categories()->wherePivot('slug', 'status')->first()->name : ''}}
                         </td>
                         <th>勤務先名</th>
                         <td>
@@ -69,7 +69,7 @@
                     <tr>
                         <th>職種</th>
                         <td>
-                            {{ $applyJobItem->type_cat_get->name}}
+                            {{$applyJobItem->categories()->wherePivot('slug', 'status')->first() !== null ? $applyJobItem->categories()->wherePivot('slug', 'status')->first()->name : ''}}
                         </td>
                         <th>掲載期間</th>
                         <td>
@@ -83,7 +83,7 @@
         @endif
     </div>
 
-    <div class="applicant-detail-title">応募者情報</div>
+    <div class="card-header h5">応募者情報</div>
     <div class="detail-box">
         <div class="detail-item">
             <div class="item-row">

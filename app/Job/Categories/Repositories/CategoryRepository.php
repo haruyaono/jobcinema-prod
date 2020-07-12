@@ -38,4 +38,53 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     {
         return $this->all($columns, $order, $sort)->toTree();
     }
+
+    /**
+     * List all categories by parent slug
+     *
+    *  @param string $childSlug 
+     * @param string $parentSlug 
+    * @return Collection
+    */
+    public function listCategoriesByslug(string $parentSlug, string $childSlug = '') : Collection
+    {
+        $categories = $this->listCategories();
+        if($childSlug !== '') {
+            return $categories->where('slug', $parentSlug)->first()->children->where('slug', $childSlug)->first()->children->sortKeysDesc()->values();
+        }
+        return $categories->where('slug', $parentSlug)->first()->children->sortKeysDesc()->values();
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function updateCategory(array $data): bool
+    {
+        return $this->update($data);
+    }
+
+    /**
+     * Find the category by ID
+     *
+     * @return Category
+     * @throws CategoryNotFoundException : Category
+     */
+    public function findCategoryById($id)
+    {
+        try {
+            return $this->findOneOrFail($id);
+        } catch (ModelNotFoundException $e) { 
+            throw new CategoryNotFoundException($e);
+        }
+    }
+
+    /**
+     * @param JobItem $jobitem
+     * @param array $data
+     */
+    public function associateJobItem(JobItem $jobitem)
+    {
+        $this->model->jobitems()->attach($jobitem);
+    }
 }
