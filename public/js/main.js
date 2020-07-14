@@ -86,6 +86,41 @@ if(document.getElementById('jobsheet-create-form') != null ) {
     });
 }
 
+// $(function() {
+//     var params = {
+//         status: '',
+//         type: '',
+//         area: '',
+//         hourly_salary: '',
+//         date: '',
+//         keyword: ''
+//     };
+//     var searchObj = []
+
+//     if(sessionStorage.hasOwnProperty('search-params')) {
+//         var searchObj = searchObj.concat(JSON.parse(
+//             sessionStorage.getItem('search-params')
+//         ));
+//         if(searchObj.length >= 3) {
+//             searchObj = searchObj.slice(-3);
+//         }
+//     }
+   
+//     if($('#composite-form').length) {
+//         $('#filter-search').click(function() {
+        
+//             $('.selectbox').each(function(index, element) {
+//                 params[$(element).data('slug')] = element.value;
+//             });
+//             params['keyword'] = $('#search-text').val();
+            
+//             searchObj.push(params);
+//             sessionStorage.setItem('search-params', JSON.stringify(searchObj));
+//         });
+//     }
+
+// });
+
 $(function() {
     // タブ
     $(".tab_label").on("click",function(){
@@ -180,6 +215,7 @@ $(function() {
 
     var $children = $('.search-salary-child'),
         defaultPaVal = $('#search-salary').val();
+        console.log(defaultPaVal);
 
     if(defaultPaVal == "") {
         $children.find('option').attr("selected", false);
@@ -201,6 +237,7 @@ $(function() {
     $('#search-salary').change(function() {
     
         var val1 = $(this).val();
+        console.log(val1);
     
         $children.each(function() {
             var val2 = $(this).data('val'); 

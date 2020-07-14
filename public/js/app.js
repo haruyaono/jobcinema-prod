@@ -1688,106 +1688,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _mixins_processing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/processing */ "./resources/js/mixins/processing.js");
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_processing__WEBPACK_IMPORTED_MODULE_0__["default"]],
-  props: ['jobid', 'favourited'],
-  data: function data() {
-    return {
-      show: true,
-      count: [document.getElementById('saveCount-pc').innerHTML, document.getElementById('saveCount-sp').innerHTML, document.getElementById('hamburgerLogoutClipJobCount').innerHTML],
-      countElm: [document.getElementById('saveCount-pc'), document.getElementById('saveCount-sp'), document.getElementById('hamburgerLogoutClipJobCount')]
-    };
-  },
-  mounted: function mounted() {
-    this.show = this.jobFavourited ? true : false;
-  },
-  computed: {
-    jobFavourited: function jobFavourited() {
-      return this.favourited;
-    }
-  },
-  methods: {
-    save: function save() {
-      var _this = this;
-
-      this.startProcessing();
-      axios.post('/save/' + this.jobid).then(function (response) {
-        if (response.data.fav_save_status == 1) {
-          _this.show = true;
-
-          for (var i in _this.count) {
-            _this.count[i]++;
-          }
-
-          document.getElementById('saveCount-pc').innerHTML = _this.count[0];
-          document.getElementById('saveCount-sp').innerHTML = _this.count[1];
-          document.getElementById('hamburgerLogoutClipJobCount').innerHTML = _this.count[2];
-          alert('お仕事情報を保存しました。');
-        } else {
-          console.log('アイテムがすでに存在');
-        }
-      })["catch"](function (error) {
-        return alert('お仕事情報の保存に失敗しました');
-      })["finally"](function () {
-        return _this.endProcessing();
-      });
-    },
-    unsave: function unsave() {
-      var _this2 = this;
-
-      if (confirm('選択した求人情報を削除しますか？')) {
-        this.startProcessing();
-        axios.post('/unsave/' + this.jobid).then(function (response) {
-          if (response.data.fav_del_status == 1) {
-            _this2.show = false;
-
-            if (_this2.count[0] > 0 && _this2.count[1] > 0) {
-              for (var i in _this2.count) {
-                _this2.count[i]--;
-              }
-
-              ;
-              document.getElementById('saveCount-pc').innerHTML = _this2.count[0];
-              document.getElementById('saveCount-sp').innerHTML = _this2.count[1];
-              document.getElementById('hamburgerLogoutClipJobCount').innerHTML = _this2.count[1];
-            }
-
-            alert('削除しました。');
-          } else {
-            console.log('削除するアイテムなし');
-          }
-        })["catch"](function (error) {
-          return alert('お仕事情報の削除に失敗しました');
-        })["finally"](function () {
-          return _this2.endProcessing();
-        });
-      } else {
-        return;
-      }
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
@@ -1963,6 +1863,7 @@ __webpack_require__.r(__webpack_exports__);
   headers: {
     "X-CSRF-TOKEN": document.getElementsByName("csrf-token")[0].content
   },
+  name: 'recent-component',
   props: ["job"],
   data: function data() {
     return {
@@ -2018,6 +1919,436 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return value.substring(0, length) + ommision;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SearchComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "search-component",
+  data: function data() {
+    return {
+      params: {
+        status: '',
+        type: '',
+        area: '',
+        salary: '',
+        salary_child: {
+          salary_h: '',
+          salary_d: '',
+          salary_m: ''
+        },
+        date: '',
+        keyword: '',
+        count: null
+      },
+      salaries: [],
+      categories: [],
+      searchObj: [],
+      jobs: []
+    };
+  },
+  mounted: function mounted() {
+    var self = this;
+    var sessionParam = [];
+
+    if (sessionStorage.hasOwnProperty('search-params')) {
+      sessionParam = JSON.parse(sessionStorage.getItem('search-params'));
+    }
+
+    this.getCategory();
+    this.getJobItems();
+
+    if (sessionParam.length !== 0) {
+      var defaultParams = sessionParam.pop();
+
+      for (var dParam in defaultParams) {
+        if (dParam == 'count') {
+          continue;
+        }
+
+        this.params[dParam] = defaultParams[dParam];
+      }
+    }
+  },
+  watch: {
+    params: {
+      handler: function handler(val) {
+        var filterJobs = this.filterJobItems();
+
+        if (filterJobs === false) {
+          this.params.count = this.jobs.length;
+        } else {
+          this.params.count = Object.keys(filterJobs).length;
+        }
+      },
+      deep: true
+    }
+  },
+  updated: function updated() {
+    var self = this;
+    this.$nextTick(function () {
+      if (self.params.salary !== '') {
+        var sVal = self.params.salary,
+            tmp_salaries = [];
+
+        if (self.categories.length !== 0) {
+          if (sVal == 284) {
+            tmp_salaries = self.categories[3]['children'][0];
+          } else if (sVal == 297) {
+            tmp_salaries = self.categories[3]['children'][1];
+          } else if (sVal == 306) {
+            tmp_salaries = self.categories[3]['children'][2];
+          } else {
+            $('#salary-child').prop("selectedIndex", 0);
+          }
+        }
+
+        self.salaries = tmp_salaries;
+      }
+    });
+  },
+  methods: {
+    fetchSalaries: function fetchSalaries() {
+      var self = this;
+      var tmp_salaries = [];
+      Object.keys(self.params.salary_child).forEach(function (key) {
+        return self.params.salary_child[key] = '';
+      });
+
+      if (self.params.salary == 284) {
+        tmp_salaries = self.categories[3]['children'][0];
+      } else if (self.params.salary == 297) {
+        tmp_salaries = self.categories[3]['children'][1];
+      } else if (self.params.salary == 306) {
+        tmp_salaries = self.categories[3]['children'][2];
+      } else {
+        $('#salary-child').prop("selectedIndex", 0);
+      }
+
+      self.salaries = tmp_salaries;
+    },
+    getCategory: function getCategory() {
+      var self = this;
+      fetch('/api/all_category').then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        self.categories = data.categoryList;
+      })["catch"](function (error) {});
+    },
+    getJobItems: function getJobItems() {
+      var self = this;
+      axios.get('/api/jobs').then(function (res) {
+        self.jobs = res.data.data;
+        self.params.count = self.jobs.length;
+      })["catch"](function (err) {
+        console.log(err.statusText);
+      });
+    },
+    filterJobItems: function filterJobItems() {
+      var self = this;
+      var params = [],
+          filtered = {};
+
+      for (var pKey in self.params) {
+        if (pKey == 'count' || pKey == 'salary') {
+          continue;
+        }
+
+        if (pKey == 'salary_child') {
+          for (var sItem in self.params[pKey]) {
+            if (self.params[pKey][sItem] === '') {
+              continue;
+            }
+
+            params.push(sItem);
+          }
+
+          continue;
+        }
+
+        if (self.params[pKey] !== '') {
+          params.push(pKey);
+        }
+      }
+
+      if (params.length == 0) {
+        filtered = false;
+      } else {
+        if (self.jobs != null) {
+          for (var i in self.jobs) {
+            var job = self.jobs[i];
+            var cResult = [];
+
+            var _loop = function _loop(param) {
+              if (params[param] == 'keyword') {
+                if (job['job_title'].indexOf(self.params[params[param]]) === -1) {
+                  if (filtered["job_id" + job.id] !== undefined) {
+                    delete filtered["job_id" + job.id];
+                  }
+
+                  return "break";
+                }
+              } else {
+                var categories = job.categories;
+                var cList = categories.filter(function (value) {
+                  if (params[param] == 'salary_d' || params[param] == 'salary_h' || params[param] == 'salary_m') {
+                    for (var sChildParam in params[param]) {
+                      if (value.id === parseInt(self.params['salary_child'][params[param]])) {
+                        return value;
+                      }
+                    }
+                  }
+
+                  if (value.id === parseInt(self.params[params[param]])) {
+                    return value;
+                  }
+                });
+
+                if (cList.length === 1) {
+                  cResult.push(cList);
+                } else {
+                  cResult = null;
+                }
+              }
+
+              if (cResult === null) {
+                if (filtered["job_id" + job.id] !== undefined) {
+                  delete filtered["job_id" + job.id];
+                }
+
+                return "break";
+              }
+
+              if (filtered[job.id] !== undefined) return "break";
+              filtered["job_id" + job.id] = job;
+            };
+
+            for (var param in params) {
+              var _ret = _loop(param);
+
+              if (_ret === "break") break;
+            }
+          }
+        }
+      }
+
+      return filtered;
+    },
+    search: function search() {
+      var self = this;
+      var sessionParam = JSON.parse(sessionStorage.getItem('search-params'));
+
+      if (sessionParam.length >= 3) {
+        sessionParam = sessionParam.slice(-2);
+      }
+
+      sessionParam.push(self.params);
+      sessionStorage.setItem('search-params', JSON.stringify(sessionParam));
+    }
+  }
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchHistoryComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SearchHistoryComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      searchItems: [],
+      nameList: {
+        no0: '',
+        no1: '',
+        no2: ''
+      },
+      params: []
+    };
+  },
+  mounted: function mounted() {
+    if (sessionStorage.hasOwnProperty('search-params')) {
+      this.searchItems = JSON.parse(sessionStorage.getItem('search-params'));
+      this.getName();
+      this.getUrl();
+    }
+
+    ;
+  },
+  methods: {
+    getName: function getName() {
+      var self = this;
+      var searchItems = this.searchItems;
+
+      var _loop = function _loop(sItem) {
+        var data = {
+          idList: []
+        };
+
+        for (var key in searchItems[sItem]) {
+          if (key == 'count' || key == 'keyword' || key == 'salary') {
+            continue;
+          }
+
+          if (key == 'salary_child') {
+            for (var sChildItem in searchItems[sItem][key]) {
+              if (searchItems[sItem][key][sChildItem] !== '') {
+                data.idList.push(searchItems[sItem][key][sChildItem]);
+              }
+            }
+
+            continue;
+          }
+
+          data.idList.push(searchItems[sItem][key]);
+        }
+
+        axios.post('/api/category_namelist', data, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(function (response) {
+          var nl = response.data.nameList;
+
+          if (nl.length === 0) {
+            nl = '条件なし';
+            self.nameList['no' + sItem] = nl;
+          } else {
+            if (searchItems[sItem]['keyword'] !== '') {
+              nl.push(searchItems[sItem]['keyword']);
+            }
+
+            self.nameList['no' + sItem] = nl.join('、');
+          }
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      };
+
+      for (var sItem in searchItems) {
+        _loop(sItem);
+      }
+    },
+    getUrl: function getUrl() {
+      var self = this;
+      var searchItems = self.searchItems,
+          searchParams = [],
+          paramList = [];
+
+      for (var sItem in searchItems) {
+        var paramStr = '';
+
+        for (var i in searchItems[sItem]) {
+          if (searchItems[sItem][i] === '' || i == 'count') {
+            continue;
+          }
+
+          if (i == 'salary_child') {
+            for (var sChildItem in searchItems[sItem][i]) {
+              if (searchItems[sItem][i][sChildItem] !== '') {
+                paramStr += sChildItem + '=' + searchItems[sItem][i][sChildItem] + '&';
+              }
+            }
+
+            continue;
+          }
+
+          paramStr += i + '=' + searchItems[sItem][i] + '&';
+        }
+
+        paramList[sItem] = paramStr;
+      }
+
+      for (var param in paramList) {
+        searchParams[param] = new URLSearchParams(paramList[param]);
+        searchParams[param] = searchParams[param].toString();
+      }
+
+      self.params = searchParams;
     }
   }
 });
@@ -2149,6 +2480,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // コンポーネント使用の宣言
+  name: 'v-slick-top',
   components: {
     Slick: vue_slick__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -38071,60 +38403,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028&":
-/*!*****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028& ***!
-  \*****************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "entrybtn-item" }, [
-    _vm.show
-      ? _c(
-          "button",
-          {
-            staticClass: "entry-btn favourite-btn",
-            attrs: { type: "submit", disabled: _vm.isProcessing() },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.unsave()
-              }
-            }
-          },
-          [_vm._v("お気に入りリストから削除")]
-        )
-      : _c(
-          "button",
-          {
-            staticClass: "entry-btn favourite-btn",
-            attrs: { type: "submit", disabled: _vm.isProcessing() },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.save()
-              }
-            }
-          },
-          [_vm._v("お気に入りリストに追加")]
-        )
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
 /*!*******************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
@@ -38321,6 +38599,399 @@ var staticRenderFns = [
         _c("i", { staticClass: "far fa-clock font-yellow mr-2 h4" }),
         _vm._v("最近見た求人\n    ")
       ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchComponent.vue?vue&type=template&id=89b0c3cc&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SearchComponent.vue?vue&type=template&id=89b0c3cc& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("section", { staticClass: "search-section" }, [
+    _c("div", { staticClass: "inner" }, [
+      _c(
+        "form",
+        {
+          staticClass: "cf",
+          attrs: {
+            id: "composite-form",
+            method: "get",
+            action: "/jobs/search/all",
+            role: "form"
+          }
+        },
+        [
+          _vm._l(_vm.categories, function(category, index) {
+            return _c(
+              "div",
+              { key: category.id, class: "composite composite-" + index },
+              [
+                _c("div", { staticClass: "composite-left" }, [
+                  _c("p", [
+                    _vm._v(_vm._s(category.name)),
+                    _c("span", { staticClass: "ib-only-pc" }, [
+                      _vm._v("で探す")
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "composite-right" }, [
+                  _c(
+                    "div",
+                    { class: "select-wrap select-wrap-" + category.slug },
+                    [
+                      category.slug == "salary"
+                        ? _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.params[category.slug],
+                                  expression: "params[category.slug]"
+                                }
+                              ],
+                              staticClass: "selectbox",
+                              attrs: {
+                                id: "search-" + category.slug,
+                                name: category.slug
+                              },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.params,
+                                      category.slug,
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  _vm.fetchSalaries
+                                ]
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("選択してください")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(category.children, function(cat) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: cat.id,
+                                    ref: "category",
+                                    refInFor: true,
+                                    attrs: { "data-val": cat.name },
+                                    domProps: { value: cat.id }
+                                  },
+                                  [_vm._v(_vm._s(cat.name))]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        : _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.params[category.slug],
+                                  expression: "params[category.slug]"
+                                }
+                              ],
+                              staticClass: "selectbox",
+                              attrs: {
+                                id: "search-" + category.slug,
+                                name: category.slug
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.params,
+                                    category.slug,
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("選択してください")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(category.children, function(cat) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: cat.id,
+                                    ref: "category",
+                                    refInFor: true,
+                                    attrs: { "data-val": cat.name },
+                                    domProps: { value: cat.id }
+                                  },
+                                  [_vm._v(_vm._s(cat.name))]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  category.slug == "salary"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "option-lst jsc-option-lst jsc-option-required-wrapper select-wrap"
+                        },
+                        [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value:
+                                    _vm.params.salary_child[
+                                      _vm.salaries["slug"]
+                                    ],
+                                  expression:
+                                    "params.salary_child[salaries['slug']]"
+                                }
+                              ],
+                              staticClass: "selectbox",
+                              attrs: {
+                                name: _vm.salaries["slug"],
+                                id: "salary-child"
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.params.salary_child,
+                                    _vm.salaries["slug"],
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("指定なし")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.salaries["children"], function(cCat) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: cCat.id,
+                                    domProps: { value: cCat.id }
+                                  },
+                                  [_vm._v(_vm._s(cCat.name))]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "composite mb-3 composite-5" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "composite-right" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.params.keyword,
+                    expression: "params.keyword"
+                  }
+                ],
+                staticStyle: {
+                  height: "35px",
+                  padding: "4px 6px",
+                  width: "100%"
+                },
+                attrs: {
+                  id: "search-text",
+                  type: "text",
+                  name: "keyword",
+                  placeholder: "例）コンビニ",
+                  value: ""
+                },
+                domProps: { value: _vm.params.keyword },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.params, "keyword", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "job-count" }, [
+            _vm._v("検索結果 "),
+            _c("span", { attrs: { id: "job-count" } }, [
+              _vm._v(_vm._s(_vm.params.count))
+            ]),
+            _vm._v("件")
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              attrs: { type: "submit", id: "filter-search" },
+              on: {
+                click: function($event) {
+                  return _vm.search()
+                }
+              }
+            },
+            [_c("i", { staticClass: "fas fa-search" }), _vm._v("絞り込み検索")]
+          )
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "composite-left" }, [
+      _c("p", [_vm._v("キーワード")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchHistoryComponent.vue?vue&type=template&id=62f1103c&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SearchHistoryComponent.vue?vue&type=template&id=62f1103c& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "search-history-section" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "search-history-wrap" }, [
+      _c(
+        "ul",
+        { staticClass: "search-history-list" },
+        _vm._l(_vm.searchItems, function(searchItem, index) {
+          return _c("li", { key: searchItem.id }, [
+            _c("dl", { staticClass: "p-mypage-search-condition-text" }, [
+              _c("dt", [_vm._v("履歴" + _vm._s(index + 1))]),
+              _vm._v(" "),
+              _c("dd", [
+                _c(
+                  "a",
+                  {
+                    staticClass: "txt-blue-link",
+                    attrs: { href: "/jobs/search/all?" + _vm.params[index] }
+                  },
+                  [_vm._v(_vm._s(_vm.nameList["no" + index]))]
+                ),
+                _vm._v(
+                  "\n              \n             " +
+                    _vm._s(searchItem.count) +
+                    "件\n           "
+                )
+              ])
+            ])
+          ])
+        }),
+        0
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h2", { staticClass: "txt-h2 top-heading-h2" }, [
+      _c("i", { staticClass: "fas fa-history font-yellow mr-2" }),
+      _vm._v("検索履歴")
     ])
   }
 ]
@@ -53971,11 +54642,12 @@ __webpack_provided_window_dot_Vue = __webpack_require__(/*! vue */ "./node_modul
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('favourite-component', __webpack_require__(/*! ./components/FavouriteComponent.vue */ "./resources/js/components/FavouriteComponent.vue")["default"]);
-Vue.component('v-slick-top', __webpack_require__(/*! ./components/SlickTopComponent.vue */ "./resources/js/components/SlickTopComponent.vue")["default"]);
+Vue.component('slick-top', __webpack_require__(/*! ./components/SlickTopComponent.vue */ "./resources/js/components/SlickTopComponent.vue")["default"]);
 Vue.component('v-slick1', __webpack_require__(/*! ./components/SlickComponent.vue */ "./resources/js/components/SlickComponent.vue")["default"]);
 Vue.component('v-slick', __webpack_require__(/*! ./components/SlickVideoComponent.vue */ "./resources/js/components/SlickVideoComponent.vue")["default"]);
 Vue.component('recent-component', __webpack_require__(/*! ./components/RecentJobComponent.vue */ "./resources/js/components/RecentJobComponent.vue")["default"]);
-Vue.component('e-create-step1-job-component', __webpack_require__(/*! ./components/EmpCreateStep1JobComponent.vue */ "./resources/js/components/EmpCreateStep1JobComponent.vue")["default"]);
+Vue.component('search-component', __webpack_require__(/*! ./components/SearchComponent.vue */ "./resources/js/components/SearchComponent.vue")["default"]);
+Vue.component('search-history-component', __webpack_require__(/*! ./components/SearchHistoryComponent.vue */ "./resources/js/components/SearchHistoryComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -54045,75 +54717,6 @@ if (token) {
 //     encrypted: true
 // });
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
-/***/ "./resources/js/components/EmpCreateStep1JobComponent.vue":
-/*!****************************************************************!*\
-  !*** ./resources/js/components/EmpCreateStep1JobComponent.vue ***!
-  \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _EmpCreateStep1JobComponent_vue_vue_type_template_id_08f40028___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028& */ "./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028&");
-/* harmony import */ var _EmpCreateStep1JobComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EmpCreateStep1JobComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _EmpCreateStep1JobComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _EmpCreateStep1JobComponent_vue_vue_type_template_id_08f40028___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _EmpCreateStep1JobComponent_vue_vue_type_template_id_08f40028___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/EmpCreateStep1JobComponent.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************!*\
-  !*** ./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EmpCreateStep1JobComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./EmpCreateStep1JobComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EmpCreateStep1JobComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028&":
-/*!***********************************************************************************************!*\
-  !*** ./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028& ***!
-  \***********************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmpCreateStep1JobComponent_vue_vue_type_template_id_08f40028___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmpCreateStep1JobComponent.vue?vue&type=template&id=08f40028&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmpCreateStep1JobComponent_vue_vue_type_template_id_08f40028___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmpCreateStep1JobComponent_vue_vue_type_template_id_08f40028___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
 
 /***/ }),
 
@@ -54319,6 +54922,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecentJobComponent_vue_vue_type_template_id_610203e6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecentJobComponent_vue_vue_type_template_id_610203e6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SearchComponent.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/SearchComponent.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SearchComponent_vue_vue_type_template_id_89b0c3cc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SearchComponent.vue?vue&type=template&id=89b0c3cc& */ "./resources/js/components/SearchComponent.vue?vue&type=template&id=89b0c3cc&");
+/* harmony import */ var _SearchComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SearchComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/SearchComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SearchComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SearchComponent_vue_vue_type_template_id_89b0c3cc___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SearchComponent_vue_vue_type_template_id_89b0c3cc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SearchComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SearchComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/SearchComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SearchComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SearchComponent.vue?vue&type=template&id=89b0c3cc&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/SearchComponent.vue?vue&type=template&id=89b0c3cc& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchComponent_vue_vue_type_template_id_89b0c3cc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SearchComponent.vue?vue&type=template&id=89b0c3cc& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchComponent.vue?vue&type=template&id=89b0c3cc&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchComponent_vue_vue_type_template_id_89b0c3cc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchComponent_vue_vue_type_template_id_89b0c3cc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SearchHistoryComponent.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/SearchHistoryComponent.vue ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SearchHistoryComponent_vue_vue_type_template_id_62f1103c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SearchHistoryComponent.vue?vue&type=template&id=62f1103c& */ "./resources/js/components/SearchHistoryComponent.vue?vue&type=template&id=62f1103c&");
+/* harmony import */ var _SearchHistoryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SearchHistoryComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/SearchHistoryComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SearchHistoryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SearchHistoryComponent_vue_vue_type_template_id_62f1103c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SearchHistoryComponent_vue_vue_type_template_id_62f1103c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SearchHistoryComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SearchHistoryComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/SearchHistoryComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchHistoryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SearchHistoryComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchHistoryComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchHistoryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SearchHistoryComponent.vue?vue&type=template&id=62f1103c&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/SearchHistoryComponent.vue?vue&type=template&id=62f1103c& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchHistoryComponent_vue_vue_type_template_id_62f1103c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SearchHistoryComponent.vue?vue&type=template&id=62f1103c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchHistoryComponent.vue?vue&type=template&id=62f1103c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchHistoryComponent_vue_vue_type_template_id_62f1103c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SearchHistoryComponent_vue_vue_type_template_id_62f1103c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

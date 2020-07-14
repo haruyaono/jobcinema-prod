@@ -1,4 +1,5 @@
 $(function() {
+
   var topBtn = $('.to-top');
   //ボタンを非表示にする
   topBtn.hide();

@@ -19,6 +19,7 @@
     import Slick from 'vue-slick';
     export default {
         // コンポーネント使用の宣言
+        name: 'v-slick-top',
         components: { Slick },
         data() {
             return {
