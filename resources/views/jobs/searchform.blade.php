@@ -48,7 +48,7 @@
 
         <p class="job-count">検索結果 <span id="job-count">{{isset($jobCount) ? $jobCount : 0}}</span>件</p>
 
-        <button type="submit" id="filter-search"><i class="fas fa-search"></i>絞り込み検索</button>
+        <button type="button" id="filter-search" @click="search()"><i class="fas fa-search" ></i>絞り込み検索</button>
       </form>
 
   </div> <!-- inner -->

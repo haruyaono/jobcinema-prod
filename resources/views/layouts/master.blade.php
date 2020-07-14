@@ -3,7 +3,7 @@
 <head>
   <title>@isset ($title) {{$title}} | @endisset @yield('title')</title>
   @include('../partials.head')
-  <script defer src="{{ asset('js/app.js') }}" ></script>
+  <script defer src="{{ mix('js/app.js') }}" ></script>
 </head>
 <body>
 <!-- 動画背景 -->

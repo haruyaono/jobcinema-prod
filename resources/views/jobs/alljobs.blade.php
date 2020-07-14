@@ -47,7 +47,7 @@
 <!-- ここからメインコンテンツ -->
 <div class="main-wrap">
 	<!-- 絞り込み・検索エリア -->
-	@include('jobs.searchform')
+	<search-component></search-component>
 
 	<section class="main-section job-entry">
 		<div class="inner">
@@ -144,10 +144,13 @@
           <p>条件にマッチする求人がありません。</p>
         @endif
 				</div> <!-- newjob-list -->
+        <div class="paginate text-center">
+        {{ $jobs->appends(Illuminate\Support\Facades\Input::except('page'))->links()}}
+        </div>
+
+        <search-history-component></search-history-component>
+
 			</div> <!-- pad -->
-      <div class="paginate text-center">
-      {{ $jobs->appends(Illuminate\Support\Facades\Input::except('page'))->links()}}
-      </div>
 		</div> <!-- inner -->
 	</section> <!-- newjob-entry -->
 
@@ -163,9 +166,7 @@
 @section('js')
   <script src="{{ asset('js/main.js') }}"></script>
   <script>
-    
-    
-
+  
     $(function() {
 
       function getParam(name, url) {

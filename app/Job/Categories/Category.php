@@ -26,4 +26,9 @@ class Category extends Model
                         'parent_id',
                     ])->withTimeStamps();
     }
+
+    public function getNameList(array $idList)
+    {
+        return $this->find($idList)->pluck('name');
+    }
 }

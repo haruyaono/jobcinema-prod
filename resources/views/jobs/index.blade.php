@@ -11,7 +11,7 @@
 @section('contents')
 
 <div class="main-slider-wrap">
-	<v-slick-top></v-slick-top>
+	<slick-top></slick-top>
 </div>
 
 <!-- ここからメインコンテンツ -->
@@ -24,7 +24,7 @@
 @endif -->
 	<!-- 絞り込み・検索エリア -->
 <div class="only-pc">
-@include('jobs.searchform')
+	<search-component></search-component>
 </div>
   
 	<section class="main-section">
@@ -108,7 +108,7 @@
 
 
 @section('js')
-<script type="text/javascript">
+<script type="text/javascript" refer>
     $(function(){
         $(".wide-notice-overlay").show();
         Cookies.get('btnFlg') == 'on'?$(".wide-notice-overlay").hide():$(".wide-notice-overlay").show();
@@ -117,8 +117,6 @@
 			Cookies.set('btnFlg', 'on', { expires: 30,path: '/' }); //cookieの保存
 			
 		});
-		console.log(Cookies.get('btnFlg'));
 	});
-
 </script>
 @endsection

@@ -24,12 +24,12 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('favourite-component', require('./components/FavouriteComponent.vue').default);
-Vue.component('v-slick-top', require('./components/SlickTopComponent.vue').default);
+Vue.component('slick-top', require('./components/SlickTopComponent.vue').default);
 Vue.component('v-slick1', require('./components/SlickComponent.vue').default);
 Vue.component('v-slick', require('./components/SlickVideoComponent.vue').default);
 Vue.component('recent-component', require('./components/RecentJobComponent.vue').default);
-Vue.component('e-create-step1-job-component', require('./components/EmpCreateStep1JobComponent.vue').default);
-
+Vue.component('search-component', require('./components/SearchComponent.vue').default);
+Vue.component('search-history-component', require('./components/SearchHistoryComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,5 +38,5 @@ Vue.component('e-create-step1-job-component', require('./components/EmpCreateSte
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });

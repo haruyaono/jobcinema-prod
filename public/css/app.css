@@ -16797,6 +16797,31 @@ section.cat-list-section {
   padding-top: 2em;
 }
 
+.search-history-section {
+  margin: 5em 0;
+}
+
+.search-history-section .search-history-wrap {
+  border: 1px solid #ccc;
+  padding: 20px 25px;
+}
+
+.search-history-section .search-history-list li {
+  margin-bottom: 20px;
+}
+
+.search-history-section .search-history-list li:last-child {
+  margin-bottom: 0;
+}
+
+.search-history-section .p-mypage-search-condition-text {
+  display: flex;
+}
+
+.search-history-section .p-mypage-search-condition-text dt {
+  margin-right: 20px;
+}
+
 @media (max-width: 768px) {
   .job-entry .job-list .job-left {
     width: 25%;

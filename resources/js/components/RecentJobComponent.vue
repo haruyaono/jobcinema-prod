@@ -31,6 +31,7 @@ export default {
   headers: {
     "X-CSRF-TOKEN": document.getElementsByName("csrf-token")[0].content
   },
+  name: 'recent-component',
   props: ["job"],
   data() {
     return {

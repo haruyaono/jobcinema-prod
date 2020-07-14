@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Job\Users\User;
+use App\Job\Categories\Category;
 
 class JobItemServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,7 @@ class JobItemServiceProvider extends ServiceProvider
     {
         $this->app->bind('JobItem', JobItem::class);
         $this->app->bind('user', User::class);
+        $this->app->bind('category', Category::class);
     }
 
     /**
