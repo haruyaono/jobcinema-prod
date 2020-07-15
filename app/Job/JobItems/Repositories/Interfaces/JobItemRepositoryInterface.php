@@ -29,8 +29,6 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function baseSearchJobItems(array $searchParam = []); 
 
-    public function getSortJobItems($query, string $order = 'id', string $sort = 'desc', array $columns = ['*']);
-
     public function findJobItemById($id);
 
     public function findAllJobItemById($id);
