@@ -247,19 +247,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         return $query;
     }
 
-     /**
-     * search query jobitems
-     *
-     * @param string $order
-     * @param string $sort
-     * @param array $columns
-     * @return $query
-     */
-    public function getSortJobItems($query, string $order = 'id', string $sort = 'desc', array $columns = ['*'])
-    {
-        return $query->orderBy($order, $sort);
-    }
-
     /**
      * Find the active jobitem by ID
      *

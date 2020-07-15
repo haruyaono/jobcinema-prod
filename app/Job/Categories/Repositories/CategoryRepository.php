@@ -67,10 +67,11 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     /**
      * Find the category by ID
      *
+     * @param int $id
      * @return Category
      * @throws CategoryNotFoundException : Category
      */
-    public function findCategoryById($id)
+    public function findCategoryById(int $id)
     {
         try {
             return $this->findOneOrFail($id);
