@@ -51,7 +51,9 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function getJobImageBaseUrl() : string;
 
+    public function associateCategory(array $category);
 
- 
- 
+    public function findCategoryAssociatedToJobItemBySlug(string $slug) : Collection;
+
+
 }
