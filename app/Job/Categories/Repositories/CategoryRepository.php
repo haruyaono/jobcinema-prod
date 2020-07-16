@@ -3,7 +3,7 @@
 namespace App\Job\Categories\Repositories;
 
 use App\Job\Categories\Category;
-// use App\Job\Categories\Exceptions\CategoryNotFoundException;
+use App\Job\Categories\Exceptions\CategoryNotFoundException;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\JobItem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -29,7 +29,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     /**
     * List all categories
     *
-    * @param string $order 
+    * @param string $order
     * @param string $sort
     * @param array $columns
     * @return \Illuminate\Support\Collection
@@ -42,8 +42,8 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     /**
      * List all categories by parent slug
      *
-    *  @param string $childSlug 
-     * @param string $parentSlug 
+    *  @param string $childSlug
+     * @param string $parentSlug
     * @return Collection
     */
     public function listCategoriesByslug(string $parentSlug, string $childSlug = '') : Collection
@@ -75,7 +75,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     {
         try {
             return $this->findOneOrFail($id);
-        } catch (ModelNotFoundException $e) { 
+        } catch (ModelNotFoundException $e) {
             throw new CategoryNotFoundException($e);
         }
     }
