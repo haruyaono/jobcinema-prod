@@ -41,11 +41,11 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      * @param string $active
      * @return Collection
      */
-    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*'], string $active = 'on') : Collection
+    public function listJobItems(string $order = 'id', string $sort = 'desc', array $columns = ['*'], string $active = 'on'): Collection
     {
-        if($active === 'on') {
+        if ($active === 'on') {
             return $this->model->ActiveJobitem()->orderBy($order, $sort)->get($columns);
-        } elseif($active === 'off') {
+        } elseif ($active === 'off') {
             return $this->model->orderBy($order, $sort)->get($columns);
         }
     }
@@ -55,12 +55,12 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      *
      * @return integer
      */
-    public function listJobitemCount() : int
+    public function listJobitemCount(): int
     {
         return $this->model->ActiveJobitem()->count();
     }
 
-     /**
+    /**
      * Create the jobitem
      *
      * @param array $data
@@ -68,7 +68,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      * @return JobItem
      * @throws JobItemCreateErrorException
      */
-    public function createJobItem(array $data) : JobItem
+    public function createJobItem(array $data): JobItem
     {
         try {
             return $this->create($data);
@@ -77,10 +77,10 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         }
     }
 
-   /**
+    /**
      * @param array $data
      * @return bool
-     * 
+     *
      * @throws JobItemUpdateErrorException
      */
     public function updateJobItem(array $data): bool
@@ -97,16 +97,16 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      * @param array $data
      * @return bool
      */
-    public function updateAppliedJobItem(int $applyId,  array $data) : bool
+    public function updateAppliedJobItem(int $applyId,  array $data): bool
     {
-     return $this->model->applies()->updateExistingPivot($applyId, $data);
+        return $this->model->applies()->updateExistingPivot($applyId, $data);
     }
 
     /**
      * @param array $data
      * @return mixed
      */
-    public function searchJobItem(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection
+    public function searchJobItem(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']): Collection
     {
         if ($data !== []) {
             return $this->queryBy($this->model::query(), $data)->orderBy($orderBy, $sortBy)->get($columns);
@@ -122,10 +122,10 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      * @param integer $id
      * @return void
      */
-    public function createRecentJobItemIdList($req, int $id) : void
+    public function createRecentJobItemIdList($req, int $id): void
     {
-        if(session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
-      
+        if (session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
+
             $historyLimit = '';
             $jobitem_id_list = array(
                 'limit_list' => [],
@@ -134,7 +134,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
             $jobitem_id_list['limit_list'] = session()->get('recent_jobs.limit_list');
             $jobitem_id_list['all_list'] = session()->get('recent_jobs.all_list');
-    
+
             $deviceFrag = $this->model->isMobile($req);
             switch ($deviceFrag) {
                 case 'pc':
@@ -148,77 +148,76 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                     break;
             }
 
-            foreach($jobitem_id_list as $listKey => $idList) {
-                if($listKey === 'limit_list') {
-                    if(in_array($id, $idList) == false ) {
-                        if(count($idList) >= $historyLimit) {
+            foreach ($jobitem_id_list as $listKey => $idList) {
+                if ($listKey === 'limit_list') {
+                    if (in_array($id, $idList) == false) {
+                        if (count($idList) >= $historyLimit) {
                             array_shift($idList);
-                        } 
+                        }
                         array_push($idList, $id);
                     } else {
-                        while(($index = array_search($id, $idList)) !== false) {
-                            unset( $idList[$index] );
+                        while (($index = array_search($id, $idList)) !== false) {
+                            unset($idList[$index]);
                         };
                         array_push($idList, $id);
                     }
-        
+
                     session()->put('recent_jobs.limit_list', $idList);
                 } else {
-                    if(in_array($id, $idList) == false ) {
+                    if (in_array($id, $idList) == false) {
                         session()->push('recent_jobs.all_list', $id);
                     } else {
-                        while(($index = array_search($id, $idList)) !== false) {
-                            unset( $idList[$index] );
+                        while (($index = array_search($id, $idList)) !== false) {
+                            unset($idList[$index]);
                         };
                         array_push($idList, $id);
                         session()->put('recent_jobs.all_list', $idList);
                     }
                 }
             }
-    
         } else {
             session()->push('recent_jobs.limit_list', $id);
             session()->push('recent_jobs.all_list', $id);
         }
     }
-    
-     /**
+
+    /**
      *  list recent jobitems id
      *
      * @return LengthAwarePaginator|Collection|array
      */
-    public function listRecentJobItemId(int $historyFlag = 0) 
+    public function listRecentJobItemId(int $historyFlag = 0)
     {
         $jobitem_id_list = [];
         switch ($historyFlag) {
             case 0:
-                if(session()->has('recent_jobs.limit_list') && is_array(session()->get('recent_jobs.limit_list'))) {
+                if (session()->has('recent_jobs.limit_list') && is_array(session()->get('recent_jobs.limit_list'))) {
                     $jobitem_id_list = session()->get('recent_jobs.limit_list');
                 }
                 break;
             case 1:
-                if(session()->has('recent_jobs.all_list') && is_array(session()->get('recent_jobs.all_list'))) {
+                if (session()->has('recent_jobs.all_list') && is_array(session()->get('recent_jobs.all_list'))) {
                     $jobitem_id_list = session()->get('recent_jobs.all_list');
                 }
                 break;
         }
 
-        if($jobitem_id_list !== []) {
+        if ($jobitem_id_list !== []) {
             $jobitem_id_rv_list = array_reverse($jobitem_id_list);
             $placeholder = '';
             foreach ($jobitem_id_rv_list as $key => $value) {
                 $placeholder .= ($key == 0) ? '?' : ',?';
             }
-    
-            if($historyFlag === 0) {
-                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)",$jobitem_id_rv_list)->get();
-            } elseif($historyFlag === 1) {
-                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)",$jobitem_id_rv_list)->paginate(20);
+
+            if ($historyFlag === 0) {
+                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)", $jobitem_id_rv_list)->get();
+            } elseif ($historyFlag === 1) {
+                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)", $jobitem_id_rv_list)->paginate(20);
             }
         } else {
             return $jobitem_id_list;
         }
-    } 
+    }
 
     /**
      * base search the jobitems
@@ -231,11 +230,11 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
         $query = $this->model->activeJobitem()->with([
             'categories'
-            ]);
+        ]);
 
         $newsearchParam = $searchParam;
-        foreach($newsearchParam as $key => $p) {
-            if($p === null) {
+        foreach ($newsearchParam as $key => $p) {
+            if ($p === null) {
                 unset($newsearchParam[$key]);
             }
         }
@@ -243,7 +242,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         if ($newsearchParam !== []) {
             $query->search($searchParam);
         }
-       
+
         return $query;
     }
 
@@ -257,7 +256,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     {
         try {
             return $this->model->ActiveJobitem()->findOrFail($id);
-        } catch (ModelNotFoundException $e) { 
+        } catch (ModelNotFoundException $e) {
             throw new JobItemNotFoundException($e);
         }
     }
@@ -273,7 +272,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         try {
             // return $this->model->ActiveJobitem()->findOrFail($id);
             return $this->model->findOrFail($id);
-        } catch (ModelNotFoundException $e) { 
+        } catch (ModelNotFoundException $e) {
             throw new JobItemNotFoundException($e);
         }
     }
@@ -282,26 +281,26 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      * @param JobItem $jobitem
      * @return array
      */
-    public function savedDbFilePath(JobItem $jobitem) : array
+    public function savedDbFilePath(JobItem $jobitem): array
     {
         $savedFilePath = [];
         $fileSessionKeys = config('const.FILE_SLUG');
 
-        foreach($fileSessionKeys as $fileSessionKey) {
-          switch($fileSessionKey) {
-            case 'main':
-                $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img;
-                $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov;
-                break;
-            case 'sub1':
-                $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img2;
-                $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov2;
-              break;
-            case 'sub2':
-                $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img3;
-                $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov3;
-              break;
-          }
+        foreach ($fileSessionKeys as $fileSessionKey) {
+            switch ($fileSessionKey) {
+                case 'main':
+                    $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img;
+                    $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov;
+                    break;
+                case 'sub1':
+                    $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img2;
+                    $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov2;
+                    break;
+                case 'sub2':
+                    $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img3;
+                    $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov3;
+                    break;
+            }
         }
 
         return $savedFilePath;
@@ -317,46 +316,43 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         $disk = Storage::disk('s3');
 
         // 新規作成時か編集時か
-        if($editFlag === 0) {
+        if ($editFlag === 0) {
             // 新規作成時
             $image_path_list = session()->get('data.file.image');
 
-            if($imageFlag) {
-                if(isset($image_path_list[$imageFlag])) {
+            if ($imageFlag) {
+                if (isset($image_path_list[$imageFlag])) {
                     if (File::exists(public_path() . $image_path_list[$imageFlag])) {
                         File::delete(public_path() . $image_path_list[$imageFlag]);
                     }
-    
-                    if($disk->exists($image_path_list[$imageFlag])) {
+
+                    if ($disk->exists($image_path_list[$imageFlag])) {
                         $disk->delete($image_path_list[$imageFlag]);
                     }
-    
+
                     unset($image_path_list[$imageFlag]);
                 }
-                
-            } 
-    
+            }
+
             return $image_path_list;
-    
         } else {
             // 編集時
             $edit_image_path_list = session()->get('data.file.edit_image');
 
-            if($imageFlag) {
-                if(isset($edit_image_path_list[$imageFlag])) {
+            if ($imageFlag) {
+                if (isset($edit_image_path_list[$imageFlag])) {
                     if (File::exists(public_path() . $edit_image_path_list[$imageFlag])) {
                         File::delete(public_path() . $edit_image_path_list[$imageFlag]);
                     }
-    
-                    if($disk->exists($edit_image_path_list[$imageFlag])) {
+
+                    if ($disk->exists($edit_image_path_list[$imageFlag])) {
                         $disk->delete($edit_image_path_list[$imageFlag]);
                     }
-    
+
                     unset($edit_image_path_list[$imageFlag]);
                 }
-                
-            } 
-    
+            }
+
             return $edit_image_path_list;
         }
     }
@@ -366,26 +362,26 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      *
      * @return $image_path
      */
-    public function saveJobItemImages(UploadedFile $file, $imageFlag) : string
+    public function saveJobItemImages(UploadedFile $file, $imageFlag): string
     {
         $disk = Storage::disk('s3');
 
         $resize_image = Image::make($file)->widen(300);
 
-        if($imageFlag) {
-            $image_name = uniqid($imageFlag . "_image").".".$file->guessExtension();
+        if ($imageFlag) {
+            $image_name = uniqid($imageFlag . "_image") . "." . $file->guessExtension();
         } else {
             $image_name = $file->hashName();
         }
 
         // ファイルを保存
-        $resize_image->save(public_path(\Config::get('fpath.tmp_img').$image_name));
-       
+        $resize_image->save(public_path(\Config::get('fpath.tmp_img') . $image_name));
+
         // ファイルパスを取得
-        $image_path = \Config::get('fpath.tmp_img').$image_name;
+        $image_path = \Config::get('fpath.tmp_img') . $image_name;
 
         // ファイル情報を取得
-        $imageContents = File::get(public_path(\Config::get('fpath.tmp_img').$image_name));
+        $imageContents = File::get(public_path(\Config::get('fpath.tmp_img') . $image_name));
 
         $disk->put($image_path, $imageContents, 'public');
 
@@ -401,47 +397,45 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
     {
         $disk = Storage::disk('s3');
 
-         // 新規作成時か編集時か
-         if($editFlag === 0) {
+        // 新規作成時か編集時か
+        if ($editFlag === 0) {
             // 新規作成時
 
             $image_path_list = session()->get('data.file.image');
 
-            if(isset($image_path_list[$imageFlag])) {
+            if (isset($image_path_list[$imageFlag])) {
 
                 if (File::exists(public_path() . $image_path_list[$imageFlag])) {
                     File::delete(public_path() . $image_path_list[$imageFlag]);
-                  }
-                  if($disk->exists($image_path_list[$imageFlag])) {
+                }
+                if ($disk->exists($image_path_list[$imageFlag])) {
                     $disk->delete($image_path_list[$imageFlag]);
-                  }
-    
-                  unset($image_path_list[$imageFlag]);
-            }
-    
-            session()->put('data.file.image', $image_path_list);
+                }
 
-         } else {
+                unset($image_path_list[$imageFlag]);
+            }
+
+            session()->put('data.file.image', $image_path_list);
+        } else {
             // 編集時
-            
+
             $edit_image_path_list = session()->get('data.file.edit_image');
 
-            if($edit_image_path_list[$imageFlag] == '') {
+            if ($edit_image_path_list[$imageFlag] == '') {
                 return false;
             }
 
-            if(isset($edit_image_path_list[$imageFlag])) {
+            if (isset($edit_image_path_list[$imageFlag])) {
 
                 if (File::exists(public_path() . $edit_image_path_list[$imageFlag])) {
                     File::delete(public_path() . $edit_image_path_list[$imageFlag]);
                 }
-                if($disk->exists($edit_image_path_list[$imageFlag])) {
+                if ($disk->exists($edit_image_path_list[$imageFlag])) {
                     $disk->delete($edit_image_path_list[$imageFlag]);
                 }
-    
             }
 
-            switch($imageFlag) {
+            switch ($imageFlag) {
                 case $imageFlag == 'main':
                     $jobImagePath = $job->job_img;
                     break;
@@ -454,15 +448,15 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                 default:
                     $jobImagePath = null;
             }
-    
-            if($jobImagePath != null) {
+
+            if ($jobImagePath != null) {
                 $edit_image_path_list[$imageFlag] = '';
             } else {
                 unset($edit_image_path_list[$imageFlag]);
             }
 
             session()->put('data.file.edit_image', $edit_image_path_list);
-         }
+        }
     }
 
     /**
@@ -470,50 +464,50 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      *
      * @return array $movie_path_list
      */
-    public function existJobItemMovieAndDeleteOnPost(string $movieFlag, int $editFlag = 0) : array
+    public function existJobItemMovieAndDeleteOnPost(string $movieFlag, int $editFlag = 0): array
     {
         $disk = Storage::disk('s3');
 
         // 新規作成時か編集時か
-        if($editFlag === 0) {
+        if ($editFlag === 0) {
             // 新規作成時
 
             $movie_path_list = session()->get('data.file.movie');
 
-            if($movieFlag) {
-                if(isset($movie_path_list[$movieFlag])) {
+            if ($movieFlag) {
+                if (isset($movie_path_list[$movieFlag])) {
                     if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
-                        File::delete(public_path() . $movie_path_list[$movieFlag ]);
+                        File::delete(public_path() . $movie_path_list[$movieFlag]);
                     }
-    
-                    if($disk->exists($movie_path_list[$movieFlag ])) {
-                        $disk->delete($movie_path_list[$movieFlag ]);
+
+                    if ($disk->exists($movie_path_list[$movieFlag])) {
+                        $disk->delete($movie_path_list[$movieFlag]);
                     }
-    
+
                     unset($movie_path_list[$movieFlag]);
-                }  
-            } 
-    
+                }
+            }
+
             return $movie_path_list;
         } else {
             // 編集時
 
             $edit_movie_path_list = session()->get('data.file.edit_movie');
 
-            if($movieFlag) {
-                if(isset($edit_movie_path_list[$movieFlag])) {
+            if ($movieFlag) {
+                if (isset($edit_movie_path_list[$movieFlag])) {
                     if (File::exists(public_path() . $edit_movie_path_list[$movieFlag])) {
-                        File::delete(public_path() . $edit_movie_path_list[$movieFlag ]);
+                        File::delete(public_path() . $edit_movie_path_list[$movieFlag]);
                     }
-    
-                    if($disk->exists($edit_movie_path_list[$movieFlag ])) {
-                        $disk->delete($edit_movie_path_list[$movieFlag ]);
+
+                    if ($disk->exists($edit_movie_path_list[$movieFlag])) {
+                        $disk->delete($edit_movie_path_list[$movieFlag]);
                     }
-    
+
                     unset($edit_movie_path_list[$movieFlag]);
-                }  
-            } 
-    
+                }
+            }
+
             return $edit_movie_path_list;
         }
     }
@@ -523,24 +517,24 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      *
      * @return string $movie_path
      */
-    public function saveJobItemMovies(UploadedFile $file, string $movieFlag) : string
+    public function saveJobItemMovies(UploadedFile $file, string $movieFlag): string
     {
         $disk = Storage::disk('s3');
 
-        if($movieFlag) {
-            $movie_name = uniqid($movieFlag . "_movie").".".$file->guessExtension();
+        if ($movieFlag) {
+            $movie_name = uniqid($movieFlag . "_movie") . "." . $file->guessExtension();
         } else {
             $movie_name = $file->hashName();
         }
 
         // ファイルを保存
         $file->move(public_path() . \Config::get('fpath.tmp_mov'), $movie_name);
-       
+
         // ファイルパスを取得
-        $movie_path = \Config::get('fpath.tmp_mov').$movie_name;
+        $movie_path = \Config::get('fpath.tmp_mov') . $movie_name;
 
         // ファイル情報を取得
-        $movieContents = File::get(public_path(\Config::get('fpath.tmp_mov').$movie_name));
+        $movieContents = File::get(public_path(\Config::get('fpath.tmp_mov') . $movie_name));
 
         $disk->put($movie_path, $movieContents, 'public');
 
@@ -558,16 +552,16 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         $disk = Storage::disk('s3');
 
         // 新規作成時か編集時か
-        if($editFlag === 0) {
+        if ($editFlag === 0) {
             // 新規作成時
 
             $movie_path_list = session()->get('data.file.movie');
 
-            if(isset($movie_path_list[$movieFlag])) {
+            if (isset($movie_path_list[$movieFlag])) {
                 if (File::exists(public_path() . $movie_path_list[$movieFlag])) {
                     File::delete(public_path() . $movie_path_list[$movieFlag]);
                 }
-                if($disk->exists($movie_path_list[$movieFlag])) {
+                if ($disk->exists($movie_path_list[$movieFlag])) {
                     $disk->delete($movie_path_list[$movieFlag]);
                 }
 
@@ -580,20 +574,20 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
 
             $edit_movie_path_list = session()->get('data.file.edit_movie');
 
-            if($edit_movie_path_list[$movieFlag] == '') {
+            if ($edit_movie_path_list[$movieFlag] == '') {
                 return false;
             }
-                   
-            if(isset($edit_movie_path_list[$movieFlag])) {
+
+            if (isset($edit_movie_path_list[$movieFlag])) {
                 if (File::exists(public_path() . $edit_movie_path_list[$movieFlag])) {
                     File::delete(public_path() . $edit_movie_path_list[$movieFlag]);
                 }
-                if($disk->exists($edit_movie_path_list[$movieFlag])) {
+                if ($disk->exists($edit_movie_path_list[$movieFlag])) {
                     $disk->delete($edit_movie_path_list[$movieFlag]);
                 }
             }
 
-            switch($movieFlag) {
+            switch ($movieFlag) {
                 case $movieFlag == 'main':
                     $jobMoviePath = $job->job_mov;
                     break;
@@ -606,8 +600,8 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
                 default:
                     $jobMoviePath = null;
             }
-    
-            if($jobMoviePath != null) {
+
+            if ($jobMoviePath != null) {
                 $edit_movie_path_list[$movieFlag] = '';
             } else {
                 unset($edit_movie_path_list[$movieFlag]);
@@ -622,10 +616,10 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
      *
      * @return $jobImageBaseUrl
      */
-    public function getJobImageBaseUrl() : string
+    public function getJobImageBaseUrl(): string
     {
         $jobImageBaseUrl = '';
-        if(config('app.env') == 'production') {
+        if (config('app.env') == 'production') {
             $jobImageBaseUrl = config('app.s3_url');
         } else {
             $jobImageBaseUrl = '';
@@ -634,7 +628,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         return $jobImageBaseUrl;
     }
 
-     /**
+    /**
      * @param array $category
      */
     public function associateCategory(array $category)
@@ -642,17 +636,7 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         $this->model->categories()->attach($category['id'], [
             'parent_id' => $category['parent_id'],
             'slug' => $category['slug'],
-            
+
         ]);
     }
-
-    /**
-     * @param string $slug
-     * @return Collection
-     */
-    public function findCategoryAssociatedToJobItemBySlug(string $slug) : Collection
-    {
-        return $this->model->categories()->wherePivot('slug', $slug)->get();
-    }
-
 }

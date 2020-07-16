@@ -9,13 +9,11 @@ use Illuminate\Support\Collection;
 
 interface CategoryRepositoryInterface
 {
-    public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection;
+    public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
-    public function listCategoriesByslug(string $parentSlug, string $childSlug = '') : Collection;
+    public function listCategoriesByslug(string $parentSlug, string $childSlug = ''): Collection;
 
     public function updateCategory(array $data): bool;
 
     public function findCategoryById(int $id);
-
-    public function associateJobItem(JobItem $jobitem);
 }
