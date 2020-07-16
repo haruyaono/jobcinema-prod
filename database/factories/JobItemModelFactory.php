@@ -12,6 +12,7 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
 use App\Job\JobItems\JobItem;
 use App\Job\Employers\Employer;
 use App\Job\Companies\Company;
@@ -42,20 +43,15 @@ $factory->define(JobItem::class, function (Faker\Generator $faker) {
         'job_type' => $faker->jobTitle,
         'job_hourly_salary' => '８５０円以上',
         'job_office' => $company->cname,
-        'job_office_address' => $company->prefecture .''. $company->address,
+        'job_office_address' => $company->prefecture . '' . $company->address,
         'job_desc' => $faker->paragraph,
         'job_intro' => $faker->sentence,
-        'salary_increase' => $jobname=$faker->sentence,
+        'salary_increase' => $jobname = $faker->sentence,
         'job_time' => '8:00~16:00',
         'job_target' => $faker->sentence,
         'job_treatment' => $faker->sentence,
         'pub_start' => '最短で掲載',
         'pub_end' => '無期限で掲載',
         'remarks' => $faker->sentence,
-        'status_cat_id' => rand(1,4),
-        'type_cat_id' => rand(1,16),
-        'area_cat_id' => rand(1,14),
-        'hourly_salary_cat_id' => rand(1,11),
-        'date_cat_id' => rand(1,6),
     ];
 });

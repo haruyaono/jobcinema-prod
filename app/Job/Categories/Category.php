@@ -8,8 +8,9 @@ use Kalnoy\Nestedset\NodeTrait;
 
 class Category extends Model
 {
-    use NodeTrait;  
+    use NodeTrait;
 
+    protected $table = 'categories';
     protected $fillable = ['name', 'slug'];
     protected $dates = ['created_at', 'updated_at'];
 
