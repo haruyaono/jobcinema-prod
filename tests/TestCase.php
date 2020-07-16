@@ -4,7 +4,6 @@ namespace Tests;
 
 use App\Job\JobItems\JobItem;
 use App\Job\Users\User;
-use App\Job\Companies\Company;
 use App\Job\Categories\Category;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -30,11 +29,8 @@ abstract class TestCase extends BaseTestCase
 
         $this->faker = Faker::create();
 
-        $this->baseQueryData = [
-            'title' => '',
-        ];
-
         $this->category = factory(Category::class)->create();
+        $this->jobitem = factory(JobItem::class)->create();
         $this->user = factory(User::class)->create();
     }
 
@@ -45,7 +41,7 @@ abstract class TestCase extends BaseTestCase
     }
 
 
-   /**
+    /**
      * Set the referer header to simulate a previous request.
      *
      * @param  string  $url

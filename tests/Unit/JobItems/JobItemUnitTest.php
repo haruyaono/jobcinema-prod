@@ -4,6 +4,7 @@ namespace Tests\Unit\JobItems;
 
 use App\Job\Employers\Employer;
 use App\Job\Applies\Apply;
+use App\Job\Categories\Category;
 use App\Job\Applies\Repositories\ApplyRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
@@ -57,11 +58,6 @@ class JobItemUnitTest extends TestCase
       'status' => 0,
       'job_title' => $this->faker->sentence,
       'job_img' => $image,
-      'status_cat_id' => 1,
-      'type_cat_id' => 1,
-      'area_cat_id' => 1,
-      'hourly_salary_cat_id' => 1,
-      'date_cat_id' => 1
     ];
 
     $jobitem = new JobItemRepository(new JobItem);
@@ -73,11 +69,6 @@ class JobItemUnitTest extends TestCase
     $this->assertEquals($params['status'], $created->status);
     $this->assertEquals($params['job_title'], $created->job_title);
     $this->assertEquals($params['job_img'], $created->job_img);
-    $this->assertEquals($params['status_cat_id'], $created->status_cat_id);
-    $this->assertEquals($params['type_cat_id'], $created->type_cat_id);
-    $this->assertEquals($params['area_cat_id'], $created->area_cat_id);
-    $this->assertEquals($params['hourly_salary_cat_id'], $created->hourly_salary_cat_id);
-    $this->assertEquals($params['date_cat_id'], $created->date_cat_id);
   }
 
   /** @test */
@@ -171,14 +162,49 @@ class JobItemUnitTest extends TestCase
   }
 
   /** @test */
+  public function it_can_search_jobitems()
+  {
+    $param = [
+      'job_title' => $this->jobitem->job_title
+    ];
+
+    $jobItemRepo = new JobItemRepository($this->jobitem);
+    $result = $jobItemRepo->searchJobItem($param);
+
+    foreach ($result as $p) {
+      $this->assertIsObject($p);
+      $this->assertEquals($p->job_title, $this->jobitem->job_title);
+    }
+  }
+
+  /** @test */
   public function it_can_query_base_search_jobitems()
   {
-    $jobItemRepo = new JobItemRepository($this->jobitem);
-    $queryJobitems = $jobItemRepo->baseSearchJobItems($this->baseQueryData);
+    $jobitem = factory(JobItem::class)->create();
+    $category = factory(Category::class)->create([
+      'parent_id' => $this->category->id,
+      'slug' => 'status'
+    ]);
+
+    $param = [
+      'id' => $category->id,
+      'parent_id' => $category->parent_id,
+      'slug' => $category->slug
+    ];
+
+    $jobItemRepo = new JobItemRepository($jobitem);
+    $jobItemRepo->associateCategory($param);
+
+    $searchParam = [
+      'status' => $category->id
+    ];
+
+
+    $queryJobitems = $jobItemRepo->baseSearchJobItems($searchParam);
     $getJobitem = $queryJobitems->first();
 
     $this->assertIsObject($getJobitem);
-    $this->assertEquals($getJobitem->job_title, $this->jobitem->job_title);
+    $this->assertEquals($getJobitem->job_title, $jobitem->job_title);
 
     return $queryJobitems;
   }
@@ -199,5 +225,31 @@ class JobItemUnitTest extends TestCase
     $baseUrl = $jobItemRepo->getJobImageBaseUrl();
 
     $this->assertEmpty($baseUrl);
+  }
+
+  /** @test */
+  public function it_can_associate_the_category_in_the_jobitem()
+  {
+    $jobitem = factory(JobItem::class)->create();
+    $category = factory(Category::class)->create([
+      'parent_id' => $this->category->id,
+      'slug' => 'status'
+    ]);
+
+    $param = [
+      'id' => $category->id,
+      'parent_id' => $category->parent_id,
+      'slug' => $category->slug
+    ];
+
+    $jobitemRepo = new JobItemRepository($jobitem);
+    $jobitemRepo->associateCategory($param);
+
+    $categories = $jobitem->categories;
+
+    foreach ($categories as $p) {
+      $this->assertEquals($category->name, $p->name);
+      $this->assertEquals($category->parent_id, $p->parent_id);
+    }
   }
 }
