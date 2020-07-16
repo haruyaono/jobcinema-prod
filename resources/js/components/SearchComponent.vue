@@ -312,7 +312,11 @@ export default {
     },
     search: function() {
       const self = this;
-      let sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
+      let sessionParam = [];
+
+      if (sessionStorage.hasOwnProperty("search-params")) {
+        sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
+      }
 
       if (sessionParam.length >= 3) {
         sessionParam = sessionParam.slice(-2);
