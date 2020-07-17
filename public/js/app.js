@@ -1863,7 +1863,7 @@ __webpack_require__.r(__webpack_exports__);
   headers: {
     "X-CSRF-TOKEN": document.getElementsByName("csrf-token")[0].content
   },
-  name: 'recent-component',
+  name: "recent-component",
   props: ["job"],
   data: function data() {
     return {
@@ -1981,22 +1981,79 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "search-component",
   data: function data() {
     return {
       params: {
-        status: '',
-        type: '',
-        area: '',
-        salary: '',
+        status: "",
+        type: "",
+        area: "",
+        salary: "",
         salary_child: {
-          salary_h: '',
-          salary_d: '',
-          salary_m: ''
+          salary_h: "",
+          salary_d: "",
+          salary_m: ""
         },
-        date: '',
-        keyword: '',
+        date: "",
+        keyword: "",
         count: null
       },
       salaries: [],
@@ -2009,8 +2066,8 @@ __webpack_require__.r(__webpack_exports__);
     var self = this;
     var sessionParam = [];
 
-    if (sessionStorage.hasOwnProperty('search-params')) {
-      sessionParam = JSON.parse(sessionStorage.getItem('search-params'));
+    if (sessionStorage.hasOwnProperty("search-params")) {
+      sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
     }
 
     this.getCategory();
@@ -2020,7 +2077,7 @@ __webpack_require__.r(__webpack_exports__);
       var defaultParams = sessionParam.pop();
 
       for (var dParam in defaultParams) {
-        if (dParam == 'count') {
+        if (dParam == "count") {
           continue;
         }
 
@@ -2045,19 +2102,19 @@ __webpack_require__.r(__webpack_exports__);
   updated: function updated() {
     var self = this;
     this.$nextTick(function () {
-      if (self.params.salary !== '') {
+      if (self.params.salary !== "") {
         var sVal = self.params.salary,
             tmp_salaries = [];
 
         if (self.categories.length !== 0) {
           if (sVal == 284) {
-            tmp_salaries = self.categories[3]['children'][0];
+            tmp_salaries = self.categories[3]["children"][0];
           } else if (sVal == 297) {
-            tmp_salaries = self.categories[3]['children'][1];
+            tmp_salaries = self.categories[3]["children"][1];
           } else if (sVal == 306) {
-            tmp_salaries = self.categories[3]['children'][2];
+            tmp_salaries = self.categories[3]["children"][2];
           } else {
-            $('#salary-child').prop("selectedIndex", 0);
+            $("#salary-child").prop("selectedIndex", 0);
           }
         }
 
@@ -2070,24 +2127,24 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
       var tmp_salaries = [];
       Object.keys(self.params.salary_child).forEach(function (key) {
-        return self.params.salary_child[key] = '';
+        return self.params.salary_child[key] = "";
       });
 
       if (self.params.salary == 284) {
-        tmp_salaries = self.categories[3]['children'][0];
+        tmp_salaries = self.categories[3]["children"][0];
       } else if (self.params.salary == 297) {
-        tmp_salaries = self.categories[3]['children'][1];
+        tmp_salaries = self.categories[3]["children"][1];
       } else if (self.params.salary == 306) {
-        tmp_salaries = self.categories[3]['children'][2];
+        tmp_salaries = self.categories[3]["children"][2];
       } else {
-        $('#salary-child').prop("selectedIndex", 0);
+        $("#salary-child").prop("selectedIndex", 0);
       }
 
       self.salaries = tmp_salaries;
     },
     getCategory: function getCategory() {
       var self = this;
-      fetch('/api/all_category').then(function (response) {
+      fetch("/api/all_category").then(function (response) {
         return response.json();
       }).then(function (data) {
         self.categories = data.categoryList;
@@ -2095,7 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getJobItems: function getJobItems() {
       var self = this;
-      axios.get('/api/jobs').then(function (res) {
+      axios.get("/api/jobs").then(function (res) {
         self.jobs = res.data.data;
         self.params.count = self.jobs.length;
       })["catch"](function (err) {
@@ -2108,13 +2165,13 @@ __webpack_require__.r(__webpack_exports__);
           filtered = {};
 
       for (var pKey in self.params) {
-        if (pKey == 'count' || pKey == 'salary') {
+        if (pKey == "count" || pKey == "salary") {
           continue;
         }
 
-        if (pKey == 'salary_child') {
+        if (pKey == "salary_child") {
           for (var sItem in self.params[pKey]) {
-            if (self.params[pKey][sItem] === '') {
+            if (self.params[pKey][sItem] === "") {
               continue;
             }
 
@@ -2124,7 +2181,7 @@ __webpack_require__.r(__webpack_exports__);
           continue;
         }
 
-        if (self.params[pKey] !== '') {
+        if (self.params[pKey] !== "") {
           params.push(pKey);
         }
       }
@@ -2138,8 +2195,8 @@ __webpack_require__.r(__webpack_exports__);
             var cResult = [];
 
             var _loop = function _loop(param) {
-              if (params[param] == 'keyword') {
-                if (job['job_title'].indexOf(self.params[params[param]]) === -1) {
+              if (params[param] == "keyword") {
+                if (job["job_title"].indexOf(self.params[params[param]]) === -1) {
                   if (filtered["job_id" + job.id] !== undefined) {
                     delete filtered["job_id" + job.id];
                   }
@@ -2149,9 +2206,9 @@ __webpack_require__.r(__webpack_exports__);
               } else {
                 var categories = job.categories;
                 var cList = categories.filter(function (value) {
-                  if (params[param] == 'salary_d' || params[param] == 'salary_h' || params[param] == 'salary_m') {
+                  if (params[param] == "salary_d" || params[param] == "salary_h" || params[param] == "salary_m") {
                     for (var sChildParam in params[param]) {
-                      if (value.id === parseInt(self.params['salary_child'][params[param]])) {
+                      if (value.id === parseInt(self.params["salary_child"][params[param]])) {
                         return value;
                       }
                     }
@@ -2194,14 +2251,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     search: function search() {
       var self = this;
-      var sessionParam = JSON.parse(sessionStorage.getItem('search-params'));
+      var sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
 
       if (sessionParam.length >= 3) {
         sessionParam = sessionParam.slice(-2);
       }
 
       sessionParam.push(self.params);
-      sessionStorage.setItem('search-params', JSON.stringify(sessionParam));
+      sessionStorage.setItem("search-params", JSON.stringify(sessionParam));
     }
   }
 });
@@ -38644,7 +38701,11 @@ var render = function() {
               [
                 _c("div", { staticClass: "composite-left" }, [
                   _c("p", [
-                    _vm._v(_vm._s(category.name)),
+                    _vm._v(
+                      "\n            " +
+                        _vm._s(category.name) +
+                        "\n            "
+                    ),
                     _c("span", { staticClass: "ib-only-pc" }, [
                       _vm._v("で探す")
                     ])
@@ -38699,7 +38760,7 @@ var render = function() {
                             },
                             [
                               _c("option", { attrs: { value: "" } }, [
-                                _vm._v("選択してください")
+                                _vm._v("選択")
                               ]),
                               _vm._v(" "),
                               _vm._l(category.children, function(cat) {
@@ -38892,26 +38953,31 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("p", { staticClass: "job-count" }, [
-            _vm._v("検索結果 "),
-            _c("span", { attrs: { id: "job-count" } }, [
-              _vm._v(_vm._s(_vm.params.count))
+          _c("div", { staticClass: "search-bottom" }, [
+            _c("p", { staticClass: "search-job-result" }, [
+              _vm._v("\n          検索結果\n          "),
+              _c("span", { attrs: { id: "job-count" } }, [
+                _vm._v(_vm._s(_vm.params.count))
+              ]),
+              _vm._v("件\n        ")
             ]),
-            _vm._v("件")
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              attrs: { type: "submit", id: "filter-search" },
-              on: {
-                click: function($event) {
-                  return _vm.search()
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                attrs: { type: "submit", id: "filter-search" },
+                on: {
+                  click: function($event) {
+                    return _vm.search()
+                  }
                 }
-              }
-            },
-            [_c("i", { staticClass: "fas fa-search" }), _vm._v("絞り込み検索")]
-          )
+              },
+              [
+                _c("i", { staticClass: "fas fa-search" }),
+                _vm._v("絞り込み検索\n        ")
+              ]
+            )
+          ])
         ],
         2
       )

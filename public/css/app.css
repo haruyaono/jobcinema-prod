@@ -13024,7 +13024,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 
@@ -13125,7 +13125,7 @@ textarea {
 }
 
 .font-blue {
-  color: #0368B8;
+  color: #0368b8;
 }
 
 .font-bold {
@@ -13211,8 +13211,11 @@ select:hover {
 }
 
 .box-wrap .wrap-items .wrap-img {
-  width: 30%;
-  margin-right: 4%;
+  height: 79px;
+  margin-right: 6px;
+  padding: 1px;
+  position: relative;
+  width: 101px;
 }
 
 @media screen and (min-width: 768px) {
@@ -13220,6 +13223,29 @@ select:hover {
     width: 100%;
     margin-bottom: 15px;
     margin-right: 0;
+    height: auto;
+  }
+}
+
+.box-wrap .wrap-items .wrap-img img {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  max-height: 79px;
+  max-width: 101px;
+  width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .box-wrap .wrap-items .wrap-img img {
+    position: unset;
+    max-height: 225px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    max-width: none;
   }
 }
 
@@ -13312,7 +13338,7 @@ select:hover {
 }
 
 .userErrorField p + p {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 
 section {
@@ -13323,7 +13349,7 @@ section {
 }
 
 .thead-lignt th {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
 }
 
 /*slick setting*/
@@ -13352,12 +13378,12 @@ input {
 
 .main-slider-wrap .slick-slide {
   margin: 5px;
-  transition: all .3s;
+  transition: all 0.3s;
   /* max-width:  */
 }
 
 .main-slider-wrap .slick-slide:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .slick-slide img {
@@ -13443,7 +13469,7 @@ input {
 }
 
 .slide-dots li button::before {
-  content: '\25CB';
+  content: "\25CB";
   text-indent: 0px;
   position: absolute;
   top: 0;
@@ -13453,7 +13479,7 @@ input {
 }
 
 .slide-dots li.slick-active button:before {
-  content: '\25CF';
+  content: "\25CF";
   color: #de9610;
 }
 
@@ -13465,7 +13491,7 @@ input {
 .screen-reader-text {
   font-weight: bold;
   line-height: 45px;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 /* 絞り込み検索 */
@@ -13475,25 +13501,39 @@ input {
 }
 
 .search-section .inner {
-  padding: 20px 2em;
+  padding: 10px 0.5em;
 }
 
-.search-section #composite-form {
-  padding: 20px 10px;
-  margin: 20px 0;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-  border: solid 1px #dcdada;
+@media screen and (min-width: 768px) {
+  .search-section .inner {
+    padding: 20px 2em;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .search-section #composite-form {
+    padding: 20px 10px;
+    margin: 20px 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border: solid 1px #dcdada;
+  }
 }
 
 .search-section .composite {
   display: flex;
   align-items: center;
-  width: 50%;
-  float: left;
-  border-bottom: 1px solid #E0E0E0;
-  margin-bottom: 4px;
-  padding-bottom: 4px;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+@media screen and (min-width: 768px) {
+  .search-section .composite {
+    width: 50%;
+    float: left;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+  }
 }
 
 .search-section .composite-4,
@@ -13502,31 +13542,72 @@ input {
 }
 
 .search-section .composite-left {
-  padding: 10px 20px;
-  width: 30%;
-  height: 45px;
-  background-color: rgba(200, 57, 64, 0.2);
   font-weight: bold;
-  min-width: 150px;
-  border-radius: 3px;
+  width: 100px;
+  background-color: rgba(222, 149, 16, 0.2);
+}
+
+@media screen and (min-width: 768px) {
+  .search-section .composite-left {
+    padding: 10px 20px;
+    width: 30%;
+    min-width: 150px;
+    height: 45px;
+    background-color: rgba(200, 57, 64, 0.2);
+    border-radius: 3px;
+  }
 }
 
 .search-section .composite-left p {
   margin: 0;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .search-section .composite-right {
-  width: 70%;
-  padding: 10px 20px;
   background: #fff;
+  width: 100%;
+  padding-left: 4px;
 }
 
-.search-section #composite-form button {
+@media screen and (min-width: 768px) {
+  .search-section .composite-right {
+    padding: 10px 20px;
+    width: 70%;
+  }
+}
+
+.search-section .search-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 768px) {
+  .search-section .search-bottom {
+    display: block;
+  }
+}
+
+.search-section .search-bottom .search-job-result {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .search-section .search-bottom .search-job-result {
+    text-align: center;
+  }
+}
+
+.search-section .search-bottom .search-job-result span {
+  font-size: 24px;
+  color: #c93a40;
+  font-size: bold;
+}
+
+.search-section .search-bottom button#filter-search {
   display: block;
-  width: 100%;
-  max-width: 355px;
-  margin: 10px auto 0;
+  width: 150px;
   height: 40px;
   border: none;
   background-color: #de9610;
@@ -13536,8 +13617,17 @@ input {
   letter-spacing: 2px;
 }
 
-.search-section #composite-form button .fa-search {
-  font-size: .8rem;
+@media screen and (min-width: 768px) {
+  .search-section .search-bottom button#filter-search {
+    text-align: center;
+    width: 100%;
+    max-width: 355px;
+    margin: 10px auto 0;
+  }
+}
+
+.search-section .search-bottom button#filter-search .fa-search {
+  font-size: 0.8rem;
   transition: 0.3s;
   margin-right: 5px;
 }
@@ -13553,7 +13643,7 @@ input {
 
 .search-section .checkbox + .checkbox-icon:before {
   font-family: "Font Awesome 5 Free";
-  content: '\F0C8';
+  content: "\F0C8";
   font-weight: 900;
   color: #ccc;
   font-size: 16px;
@@ -13586,7 +13676,7 @@ input {
   outline: none;
   -moz-appearance: none;
   text-indent: 0.01px;
-  text-overflow: '';
+  text-overflow: "";
   background: none transparent;
   vertical-align: middle;
   font-size: inherit;
@@ -13598,11 +13688,17 @@ input {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  height: 35px;
+  height: 50px;
   padding: 4px 12px;
   border: 1px solid #ddd;
   color: #333;
   width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .search-section .selectbox {
+    height: 35px;
+  }
 }
 
 .search-section .selectbox option {
@@ -13619,6 +13715,16 @@ input {
 .search-section .option-lst {
   width: 45%;
   display: inline-block;
+}
+
+.search-section #search-text {
+  height: 45px !important;
+}
+
+@media screen and (min-width: 768px) {
+  .search-section #search-text {
+    height: 35px !important;
+  }
 }
 
 .search-section #search-result-count {
@@ -13650,7 +13756,13 @@ input {
 }
 
 .pad {
-  padding: 2em;
+  padding: 1.5em 0.5em;
+}
+
+@media screen and (min-width: 768px) {
+  .pad {
+    padding: 2em;
+  }
 }
 
 /* ページネーション */
@@ -13753,11 +13865,13 @@ input {
 }
 
 .newjob-item-link:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
-.title-img-wrap {
-  margin-bottom: 20px;
+.jobCassette__header {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #ececec;
 }
 
 .title-img-wrap img {
@@ -13775,7 +13889,7 @@ input {
 }
 
 .more-link a:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .jobitem-footer {
@@ -13787,7 +13901,7 @@ input {
 
 .form-wrap {
   display: block;
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
   border-radius: 3px;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -13825,7 +13939,7 @@ input {
 }
 
 .btn:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .detail-btn {
@@ -13841,7 +13955,7 @@ input {
 
 .btn-yellow:hover {
   color: #fff;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .btn-outline-yellow {
@@ -13851,7 +13965,7 @@ input {
 }
 
 .detail-btn span::after {
-  content: '\F105';
+  content: "\F105";
   color: #c93a40;
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
@@ -13912,7 +14026,7 @@ input {
 }
 
 .bread li:after {
-  content: '>';
+  content: ">";
   color: #888;
 }
 
@@ -13930,7 +14044,7 @@ input {
 
 .to-top {
   position: fixed;
-  opacity: .8;
+  opacity: 0.8;
   right: 40px;
   bottom: 16px;
   width: 65px;
@@ -13941,17 +14055,13 @@ input {
   color: white;
   text-align: center;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
   border-radius: 5px;
 }
 
 .to-top i {
   font-size: 32px;
   line-height: 65px;
-}
-
-.job-count {
-  text-align: center;
 }
 
 .job-count span {
@@ -13983,7 +14093,7 @@ input {
 
 .c-box .c-list li {
   float: left;
-  margin: .5em 0;
+  margin: 0.5em 0;
   padding-right: 1em;
 }
 
@@ -13991,7 +14101,7 @@ input {
   margin-right: 5px;
 }
 
-.c-box .c-list li:nth-child(3n+1) {
+.c-box .c-list li:nth-child(3n + 1) {
   clear: both;
 }
 
@@ -14092,18 +14202,6 @@ input {
     display: block !important;
   }
 
-  .pad {
-    padding: 1.5em 1em;
-  }
-
-  .search-section {
-    margin-top: 2em;
-  }
-
-  #composite-form {
-    padding: 0 10px 10px;
-  }
-
   .composite {
     height: 50px;
     width: 100%;
@@ -14115,12 +14213,6 @@ input {
     height: 50px;
     font-weight: bold;
     min-width: 120px;
-  }
-
-  .composite-right {
-    width: 70%;
-    padding: 0;
-    border-bottom: 0;
   }
 
   .composite-4,
@@ -14170,11 +14262,11 @@ input {
     padding: 20px;
   }
 
-  .c-box .c-list li:nth-child(3n+1) {
+  .c-box .c-list li:nth-child(3n + 1) {
     clear: none;
   }
 
-  .c-box .c-list li:nth-child(2n+1) {
+  .c-box .c-list li:nth-child(2n + 1) {
     clear: both;
   }
 
@@ -14189,11 +14281,11 @@ input {
   }
 
   .card-header {
-    padding: 0.25rem .5rem;
+    padding: 0.25rem 0.5rem;
   }
 
   .card-body {
-    padding: .5rem;
+    padding: 0.5rem;
   }
 
   .form-wrap {
@@ -14225,7 +14317,7 @@ input {
 
   .h4,
   .h5 {
-    font-size: .95rem;
+    font-size: 0.95rem;
   }
 
   .entrybtn-field {
@@ -14250,7 +14342,7 @@ input {
 
   .main-slider-wrap .slick-slide {
     margin: 2px;
-    transition: all .3s;
+    transition: all 0.3s;
   }
 
   .main-slider-wrap .slick-slide {
@@ -14259,14 +14351,10 @@ input {
 
   /* フリー検索 */
 
-  .search-section {
-    margin-top: 10px;
-  }
-
   .free-search-form {
     display: flex;
     height: 50px;
-    background: #EEEEEE;
+    background: #eeeeee;
     padding: 5px;
   }
 
@@ -14279,7 +14367,7 @@ input {
 
   .screen-reader-text {
     font-weight: bold;
-    font-size: .8em;
+    font-size: 0.8em;
   }
 
   .form-right {
@@ -14305,7 +14393,7 @@ input {
 
   .free-search-form button .fa-search {
     color: #fff;
-    font-size: .8rem;
+    font-size: 0.8rem;
     transition: 0.3s;
     margin-right: 0;
   }
@@ -14313,7 +14401,7 @@ input {
   /* 複合検索 */
 
   .composite-left p {
-    font-size: .8em;
+    font-size: 0.8em;
   }
 
   .composite-right #open,
@@ -15849,7 +15937,7 @@ input[size="28"] {
 }
 
 .wide-notice-overlay .notice-close::after {
-  font-family: "Font Awesome 5 Free",FontAwesome;
+  font-family: "Font Awesome 5 Free", FontAwesome;
   font-weight: 900;
   content: "\F00D";
 }
@@ -15870,7 +15958,7 @@ input[size="28"] {
 .newjob-entry .newjob-item {
   width: 100%;
   padding: 15px 0;
-  border-top: 1px solid #E8E8E8;
+  border-top: 1px solid #e8e8e8;
 }
 
 @media screen and (min-width: 768px) {
@@ -15881,31 +15969,43 @@ input[size="28"] {
   }
 }
 
-.newjob-entry .newjob-item .img-wrap {
-  width: 30%;
-  margin-right: 4%;
+.newjob-entry .newjob-item .joblist_jobCassette__image_wrap {
+  height: 79px;
+  margin-right: 6px;
+  padding: 1px;
+  position: relative;
+  width: 101px;
 }
 
 @media screen and (min-width: 768px) {
-  .newjob-entry .newjob-item .img-wrap {
+  .newjob-entry .newjob-item .joblist_jobCassette__image_wrap {
+    margin-bottom: 10px;
     display: block;
     width: 100%;
     margin-right: 0;
-    margin-bottom: 10px;
+    height: auto;
   }
 }
 
-.newjob-entry .newjob-item .img-wrap {
-  width: 30%;
-  margin-right: 4%;
+.newjob-entry .newjob-item .joblist_jobCassette__image_wrap img {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  max-height: 79px;
+  max-width: 101px;
+  width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 @media screen and (min-width: 768px) {
-  .newjob-entry .newjob-item .img-wrap {
-    margin-bottom: 10px;
-    display: block;
-    width: 100%;
-    margin-right: 0;
+  .newjob-entry .newjob-item .joblist_jobCassette__image_wrap img {
+    position: unset;
+    max-height: 135px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    max-width: none;
   }
 }
 
@@ -16032,7 +16132,7 @@ input[size="28"] {
   .top-category-list .top-category-list-item a {
     font-size: 13px;
     line-height: 1.5;
-    letter-spacing: -.1px;
+    letter-spacing: -0.1px;
   }
 
   .top-sp-auth-btn-wrap a {
@@ -16256,7 +16356,7 @@ input[size="28"] {
   display: inline-block;
   font-size: 14px;
   line-height: 1;
-  padding: 0 .7em;
+  padding: 0 0.7em;
 }
 
 .p-works-sort-conditions > li a {
@@ -16269,10 +16369,10 @@ input[size="28"] {
 
 #job-sort-sp {
   display: inline-block;
-  margin-top: 24px;
+  margin-top: -15px;
   width: 40%;
   float: right;
-  height: 30px;
+  height: 35px;
 }
 
 @media screen and (min-width: 768px) {
@@ -16298,7 +16398,7 @@ input[size="28"] {
 .job-entry .job-item {
   width: 100%;
   border: 2px solid #ececec;
-  border-top: 4px solid #C93A3F;
+  border-top: 4px solid #c93a3f;
   display: table;
   position: relative;
 }
@@ -16309,8 +16409,14 @@ input[size="28"] {
 
 .job-entry .job-item-link {
   display: block;
-  padding: 1em 1.5em;
+  padding: 1em;
   color: #333;
+}
+
+@media screen and (min-width: 768px) {
+  .job-entry .job-item-link {
+    padding: 1em 1.5em;
+  }
 }
 
 .job-entry .job-item-link:hover {
@@ -16318,32 +16424,76 @@ input[size="28"] {
 }
 
 .job-entry .job-item-link:hover h3 {
-  opacity: .8;
+  opacity: 0.8;
+}
+
+.job-entry .job-left {
+  background-color: #f2f2f2;
+  border: 1px solid #e8e8e8;
+  height: 79px;
+  margin-right: 6px;
+  padding: 1px;
+  position: relative;
+  width: 101px;
+}
+
+@media screen and (min-width: 768px) {
+  .job-entry .job-left {
+    max-width: 270px;
+    width: 100%;
+    height: auto;
+    vertical-align: bottom;
+    -o-object-fit: cover;
+       object-fit: cover;
+    transition: all 0.3s ease-in-out;
+  }
 }
 
 .job-entry .job-left img {
-  max-width: 350px;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  max-height: 79px;
+  max-width: 101px;
   width: 100%;
-  height: auto;
-  vertical-align: bottom;
-  -o-object-fit: cover;
-     object-fit: cover;
-  transition: all .3s ease-in-out;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
-.job-entry .title-img-wrap {
+@media screen and (min-width: 768px) {
+  .job-entry .job-left img {
+    position: unset;
+    max-height: 175px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    max-width: none;
+  }
+}
+
+.job-entry .jobCassette__header {
   display: flex;
 }
 
 @media screen and (min-width: 768px) {
-  .job-entry .title-img-wrap {
+  .job-entry .jobCassette__header {
     display: block;
   }
 }
 
-.job-entry .job-list .job-left {
-  width: 30%;
-  align-self: flex-end;
+.job-entry .jobCassette__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-entry .jobCassette__jobTypeTxt {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-decoration: underline;
+  word-break: break-all;
 }
 
 .job-entry .job-list .job-right {
@@ -16370,15 +16520,26 @@ input[size="28"] {
 }
 
 .job-entry .job-table th {
-  background-color: #F5F5F5;
   white-space: nowrap;
   width: 20%;
 }
 
+@media screen and (min-width: 768px) {
+  .job-entry .job-table th {
+    background-color: #f5f5f5;
+  }
+}
+
 .job-entry .job-table th,
 .job-entry .job-table td {
-  border: solid 1px #ececec;
   padding: 8px 16px;
+}
+
+@media screen and (min-width: 768px) {
+  .job-entry .job-table th,
+  .job-entry .job-table td {
+    border: solid 1px #ececec;
+  }
 }
 
 .job-entry .job-table td {
@@ -16402,32 +16563,32 @@ input[size="28"] {
 
 .job-table th span.money::before,
 .job-desc-list span.money::before {
-  content: '\F157';
+  content: "\F157";
 }
 
 .job-table th span.occupation::before,
 .job-desc-list span.occupation::before {
-  content: '\F007';
+  content: "\F007";
 }
 
 .job-table th span.place::before,
 .job-desc-list span.place::before {
-  content: '\F3C5';
+  content: "\F3C5";
 }
 
 .job-table th span.time::before,
 .job-desc-list span.time::before {
-  content: '\F017';
+  content: "\F017";
 }
 
 .job-table th span.date::before,
 .job-desc-list span.date::before {
-  content: '\F073';
+  content: "\F073";
 }
 
 .job-table th span.work::before,
 .job-desc-list span.work::before {
-  content: '\F684';
+  content: "\F684";
 }
 
 /********** 個別ページ************/
@@ -16437,7 +16598,7 @@ input[size="28"] {
   align-items: flex-end;
   justify-content: center;
   margin: 40px 0 90px;
-  background: #F5F5F5;
+  background: #f5f5f5;
   padding: 35px 15px;
 }
 
@@ -16469,7 +16630,7 @@ input[size="28"] {
 
 .full-wide-slider .slick-slide::before {
   background-color: #000;
-  opacity: .3;
+  opacity: 0.3;
   z-index: 1;
 }
 
@@ -16524,9 +16685,9 @@ input[size="28"] {
   box-shadow: 0 0 0 0 transparent;
   vertical-align: middle;
   color: #fff;
-  background-color: #B6B6B6;
-  transition: all .3s ease;
-  opacity: .4;
+  background-color: #b6b6b6;
+  transition: all 0.3s ease;
+  opacity: 0.4;
   font-size: 0;
 }
 
@@ -16537,12 +16698,12 @@ input[size="28"] {
 
 .full-wide-slider .prev-arrow {
   left: 0;
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .full-wide-slider .next-arrow {
   right: 0;
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .full-wide-slider .prev-arrow::before,
@@ -16619,7 +16780,7 @@ input[size="28"] {
 
 .invi-job-entry h1 {
   margin-bottom: 3em;
-  padding: 0 .5em;
+  padding: 0 0.5em;
   padding-bottom: 20px;
   border-bottom: 1px solid #666;
 }
@@ -16627,7 +16788,7 @@ input[size="28"] {
 .invi-job-entry h2 {
   font-size: 1.5em;
   font-weight: bold;
-  margin: 1em 0em .5em;
+  margin: 1em 0em 0.5em;
 }
 
 .detail-box {
@@ -16636,7 +16797,7 @@ input[size="28"] {
 }
 
 .detail-item {
-  letter-spacing: .1rem;
+  letter-spacing: 0.1rem;
 }
 
 .item-title {
@@ -16644,9 +16805,9 @@ input[size="28"] {
   height: 50px;
   font-size: 1.4rem;
   font-weight: bold;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   text-align: center;
-  border: 1px solid #E8E8E8;
+  border: 1px solid #e8e8e8;
 }
 
 .item-title h3 {
@@ -16666,9 +16827,9 @@ input[size="28"] {
   display: table-cell;
   width: 25%;
   width: 250px;
-  border-left: 1px solid #E8E8E8;
-  border-bottom: 1px solid #E8E8E8;
-  border-right: 1px solid #E8E8E8;
+  border-left: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
   font-weight: bold;
 }
 
@@ -16677,8 +16838,8 @@ input[size="28"] {
   display: table-cell;
   width: 75%;
   width: 750px;
-  border-bottom: 1px solid #E8E8E8;
-  border-right: 1px solid #E8E8E8;
+  border-bottom: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
 }
 
 .item-row::after {
@@ -16691,7 +16852,7 @@ input[size="28"] {
   font-family: "Font Awesome 5 Free";
   content: "\F086";
   position: absolute;
-  left: .5em;
+  left: 0.5em;
   /*左端からのアイコンまでの距離*/
 }
 
@@ -16699,7 +16860,7 @@ input[size="28"] {
   font-family: "Font Awesome 5 Free";
   content: "\F54F";
   position: absolute;
-  left: .5em;
+  left: 0.5em;
   /*左端からのアイコンまでの距離*/
 }
 
@@ -16733,7 +16894,7 @@ input[size="28"] {
 
 .detail-area .newjob-table .sub-text {
   font-weight: bold;
-  margin: .5em 0 0;
+  margin: 0.5em 0 0;
 }
 
 .entrybtn-field .entry-btn {
@@ -16758,7 +16919,7 @@ input[size="28"] {
 .entrybtn-field .favourite-btn {
   background: #f2f2f2;
   color: #333;
-  border: 1px solid #E8E8E8;
+  border: 1px solid #e8e8e8;
   width: 80%;
   margin-left: auto;
 }
@@ -16768,11 +16929,11 @@ input[size="28"] {
 }
 
 .entrybtn-field .favourite-btn:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .entrybtn-field .apply-btn::before {
-  content: '\F0A4';
+  content: "\F0A4";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   margin-right: 8px;
@@ -16923,7 +17084,7 @@ section.cat-list-section {
   }
 
   .image3-area {
-    margin: .2em 0 2em;
+    margin: 0.2em 0 2em;
     width: 100%;
   }
 
@@ -16941,7 +17102,7 @@ section.cat-list-section {
     padding: 9px 20px;
     display: block;
     width: 100%;
-    border-left: 1px solid #E8E8E8;
+    border-left: 1px solid #e8e8e8;
   }
 }
 
@@ -16954,11 +17115,7 @@ section.cat-list-section {
     width: 30px;
     height: 30px;
     line-height: 30px;
-    font-size: .7em;
-  }
-
-  .job-entry .job-item-link {
-    padding: .5em;
+    font-size: 0.7em;
   }
 
   .job-entry .job-item:not(:last-child) {
@@ -16981,7 +17138,7 @@ section.cat-list-section {
     width: 15%;
     line-height: 1.2;
     text-align: center;
-    letter-spacing: .01em;
+    letter-spacing: 0.01em;
   }
 
   .job-entry .job-table th span::before {
@@ -16996,7 +17153,7 @@ section.cat-list-section {
 
   .invi-job-entry h2 {
     font-size: 18px;
-    margin: .5em 0em .5em;
+    margin: 0.5em 0em 0.5em;
   }
 
   .text-contents p {
