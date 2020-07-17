@@ -5,12 +5,20 @@ namespace App\Job\JobItems;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
-use App\Models\Company;
-use App\Models\Employer;
-use App\Models\User;
+use App\Job\Companies\Company;
+use App\Job\Employers\Employer;
+use App\Job\Users\User;
+use App\Job\Applies\Apply;
+use App\Job\Categories\Category;
+use App\Traits\IsMobile;
+use Illuminate\Support\Facades\Redis;
 
 class JobItem extends Model
 {
+    use IsMobile; 
+
+    protected $table = 'job_items';
+
     protected $guarded  = [];
 
 
@@ -19,46 +27,43 @@ class JobItem extends Model
         'updated_at',
     ];
 
-    public function status_cat_get()
+    public function categories()
     {
-        return $this->belongsTo(\App\Job\Categories\StatusCategory::class, 'status_cat_id');
+        return $this->belongsToMany(Category::class, 'job_item_category')
+                    ->withPivot([
+                        'id',
+                        'job_item_id',
+                        'category_id',
+                        'parent_id',
+                        'slug',
+                    ])->withTimeStamps();
     }
-
-    public function type_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\TypeCategory::class, 'type_cat_id');
-    }
-
-    public function area_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\AreaCategory::class, 'area_cat_id');
-    }
-
-    public function hourly_salary_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\HourlySalaryCategory::class, 'hourly_salary_cat_id');
-    }
-
-    public function date_cat_get()
-    {
-        return $this->belongsTo(\App\Job\Categories\DateCategory::class, 'date_cat_id');
-    }
+  
 
     public function company()
     {
-        return $this->belongsTo(\App\Models\Company::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function employer()
     {
-        return $this->belongsTo(\App\Models\Employer::class);
+        return $this->belongsTo(Employer::class);
     }
 
-    public function users()
+    public function applies()
     {
-            return $this->belongsToMany(\App\Models\User::class)
-            ->withPivot('id','user_id','last_name','first_name','postcode','prefecture','city','gender','age','phone1','phone2','phone3','occupation','final_education','work_start_date','job_msg','job_q1','job_q2','job_q3','s_status','e_status', 'oiwaikin', 'first_attendance', 'no_first_attendance', 'created_at')
-            ->withTimeStamps();
+        return $this->belongsToMany(Apply::class, 'apply_job_item')
+                    ->withPivot([
+                        'id',
+                        'apply_id',
+                        'job_item_id',
+                        's_status',
+                        'e_status',
+                        'oiwaikin',
+                        'oiwaikin_status',
+                        'first_attendance',
+                        'no_first_attendance'
+                    ])->withTimeStamps();
     }
 
     public function getAppJobList(int $num_per_page = 10, array $condition = [])
@@ -67,8 +72,7 @@ class JobItem extends Model
         $year  = array_get($condition, 'year');
         $month = array_get($condition, 'month');
 
-        $query = DB::table('job_item_user')->orderBy('created_at', 'desc');
-
+        $query = DB::table('apply_job_item')->orderBy('created_at', 'desc');
         // 期間の指定
         if ($year) {
             if ($month) {
@@ -80,21 +84,17 @@ class JobItem extends Model
                 $start_date = Carbon::createFromDate($year, 1, 1);
                 $end_date   = Carbon::createFromDate($year, 1, 1)->addYear();           // 1年後
             }
-            // Where句を追加
+
             $query->where('created_at', '>=', $start_date->format('Y-m-d'))
                   ->where('created_at', '<',  $end_date->format('Y-m-d'));
         }
 
-        // paginate メソッドを使うと、ページネーションに必要な全件数やオフセットの指定などは全部やってくれる
         return $query->paginate($num_per_page);
     }
 
     public function getMonthList()
     {
-        // selectRaw メソッドを使うと、引数にSELECT文の中身を書いてそのまま実行できる
-        // 返り値はコレクション（Illuminate\Database\Eloquent\Collection Object）
-        // コレクションとは配列データを操作するための便利なラッパーで、多種多様なメソッドが用意されている
-        $month_list = DB::table('job_item_user')
+        $month_list = DB::table('apply_job_item')
             ->selectRaw('substring(created_at, 1, 7) AS year_and_month')
             ->groupBy('year_and_month')
             ->orderBy('year_and_month', 'desc')
@@ -103,16 +103,66 @@ class JobItem extends Model
         foreach ($month_list as $value) {
             // YYYY-MM をハイフンで分解して、YYYY年MM月という表記を作る
             list($year, $month) = explode('-', $value->year_and_month);
-            $value->year  = $year;
+            $value->year = (int)$year;
             $value->month = (int)$month;
             $value->year_month = sprintf("%04d年 %02d月", $year, $month);
         }
         return $month_list;
     }
 
-    public function checkApplication()
+    // public function checkApplication()
+    // {
+     
+    //     // $this->jobitems->get;
+
+    //     var_dump( $this->jobitems->);
+    //         return \DB::table('apply_job_item')->where('apply_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
+    // }
+
+
+    public function scopeSearch($query, array $searchParams)
     {
-            return \DB::table('job_item_user')->where('user_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
+        if (isset($searchParams['keyword'])) {
+            $query->where(function($query) use ($searchParams){
+                $query->where('job_title', 'like', "%${searchParams['keyword']}%")
+                    ->orWhere('job_office', 'like', "%${searchParams['keyword']}%")
+                    ->orWhere('job_desc', 'like', "%${searchParams['keyword']}%")
+                    ->orWhere('job_intro', 'like', "%${searchParams['keyword']}%");
+            });
+        }
+        foreach($searchParams as $key => $searchParam) {
+            if($key == 'keyword' || $key == 'salary' || $key == 'ks' || $searchParam === null) {
+                continue;
+            }
+            $query->whereHas('categories', function($builder) use ($searchParam) {
+
+                    $builder->where('categories.id', $searchParam);
+            });
+        }
+
+        if(isset($searchParams['ks'])) {
+            $orderFlag = $searchParams['ks'];
+
+            if(array_key_exists('c_id', $orderFlag) && $orderFlag['c_id'] != '') {
+                $sub_query = DB::table('job_item_category')->whereRaw("parent_id = ".$orderFlag['c_id'])->toSql();
+
+                $query->select('job_items.*', 'category.category_id', 'categories.name as category_name','category.parent_id')
+                ->leftJoinSub($sub_query,'category', 'job_items.id', '=', 'category.job_item_id')
+                ->leftJoin('categories', 'category.category_id', '=', 'categories.id');
+
+                if(array_key_exists('order', $orderFlag) && $orderFlag['order'] != '') {
+                    $query->orderBy('categories.name', $orderFlag['order']);
+                } else {
+                    $query->orderBy('categories.name', 'desc');
+                }
+            }
+
+            if(array_key_exists('column', $orderFlag) && $orderFlag['column'] != '') {
+                $query->orderBy("job_items.${orderFlag['column']}", 'desc');
+            }
+                
+        }
+
     }
 
     public function favourites()
@@ -155,5 +205,59 @@ class JobItem extends Model
         });
 
         return $jobActive;
+    }
+
+    public function calcRecommend()
+    {
+        $job_ids = $this->ActiveJobitem()->pluck('id')->toArray();
+        $job_ids = array_flatten($job_ids);
+
+        foreach ($job_ids as $job_id1) {
+            $base = Redis::command('lRange', ['Viewer:Item:' . $job_id1, 0, 999]);
+
+            if (count($base) === 0) {
+                continue;
+            }
+        
+            foreach ($job_ids as $job_id2) {
+                if ($job_id1 === $job_id2) {
+                    continue;
+                }
+            
+                $target = Redis::command('lRange', ['Viewer:Item:' . $job_id2, 0, 999]);
+                if (count($target) === 0) {
+                    continue;
+                }
+
+                # ジャッカード指数を計算
+                $join = floatval(count(array_unique(array_merge($base, $target))));
+                $intersect = floatval(count(array_intersect($base, $target)));
+                if ($intersect == 0 || $join == 0) {
+                    continue;
+                }
+                $jaccard = $intersect / $join;
+
+                
+                Redis::command('zAdd', ['Jaccard:Item:' . $job_id1, $jaccard, $job_id2]);
+            }
+        }
+    }
+
+    public function getRecommendJobList($jobItemId, $res)
+    {
+        $deviceFrag = $this->isMobile($res);
+        switch ($deviceFrag) {
+            case 'pc':
+                $historyLimit = 4;
+                break;
+            case 'mobile':
+                $historyLimit = -1;
+                break;
+            default:
+                $historyLimit = 4;
+                break;
+        }
+        
+        return Redis::command('zRevRange', ['Jaccard:Item:' . $jobItemId, 0, $historyLimit]);
     }
 }

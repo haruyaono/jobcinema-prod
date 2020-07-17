@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">求人カテゴリ</h1>
-<span><a href="/dashboard/home" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin.home')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
@@ -29,7 +29,7 @@
                 <a href="{{route('admin_category', ['area'])}}">エリアカテゴリ</a>
             </p>
             <p>
-                <a href="{{route('admin_category', ['hourly_salary'])}}">時給カテゴリ</a>
+                <a href="{{route('admin_category', ['salary'])}}">給与カテゴリ</a>
             </p>
             <p>
                 <a href="{{route('admin_category', ['date'])}}">勤務日数カテゴリ</a>

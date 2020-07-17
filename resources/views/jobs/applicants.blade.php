@@ -38,11 +38,11 @@
         </div>
     @endif
 
-        @if($applicants->count() > 0)
-            @foreach($applicants as $applicant)
+        @if($applyJobList !==  [])
+            @foreach($applyJobList as $id => $applies)
                 <div class="card mt-3">
                     <div class="card-header">
-                        求人番号：{{$applicant->id}} <a href="{{ route('jobs.show', [$applicant->id])}}">詳細</a>      
+                        求人番号：{{$id}} <a href="{{ route('jobs.show', [$id])}}" class="txt-blue-link">詳細</a>      
                     </div>
                     
                     <div class="card-body table-responsive">
@@ -58,24 +58,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($applicant->users as $user)
+                            @foreach($applies as $apply)
                             <?php 
                                 $before1month = date("Y-m-d H:i:s",strtotime("-1 month")); 
                             ?>
-                            @if($user->pivot->created_at > $before1month)
+                            @if($apply->pivot->created_at > $before1month)
                                
                                 <tr>
-                                    <td>{{ $user->pivot->last_name }}&nbsp{{ $user->pivot->first_name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td class="td-only-pc">{{ $user->pivot->gender }}</td>
-                                    <td class="td-only-pc">{{ $user->pivot->phone1 }}-{{ $user->pivot->phone2 }}-{{ $user->pivot->phone3 }}</td>
+                                    <td>{{ $apply->last_name }}&nbsp{{ $apply->first_name }}</td>
+                                    <td>{{ $apply->user->email }}</td>
+                                    <td class="td-only-pc">{{ $apply->gender }}</td>
+                                    <td class="td-only-pc">{{ $apply->phone1 }}-{{ $apply->phone2 }}-{{ $apply->phone3 }}</td>
                                     <td class="e-status-text">
-                                    <span class="@if($user->pivot->e_status == 1) font-yellow @elseif($user->pivot->e_status == 2) font-blue @else @endif">
-                                        {{config("const.JOB_STATUS.{$user->pivot->e_status}", "未定義")}}
+                                    <span class="@if($apply->pivot->e_status == 1) font-yellow @elseif($apply->pivot->e_status == 2) font-blue @else @endif">
+                                        {{config("const.JOB_STATUS.{$apply->pivot->e_status}", "未定義")}}
                                     </span>
                                     </td>
                                     <td>
-                                        <a href="{{route('applicants.detail', [$applicant->id, $user->id])}}">詳細</a>
+                                        <a href="{{route('applicants.detail', [$id, $apply->id])}}" class="txt-blue-link">詳細</a>
                                     </td>
                                 </tr>
                             @endif

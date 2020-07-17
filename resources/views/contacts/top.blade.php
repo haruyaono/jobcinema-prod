@@ -32,9 +32,9 @@
 　    <h1><span class="ib-only-pc">求人サイト</span>JOBCiNEMAに関するお問い合わせ</h1>
       <p>お問い合わせいただいた内容に関するご返答は、3営業日以内に行わせていただきます。<br>下記フォームに必要事項をご記入ください。</p>
       @if($c_flag == 'seeker')
-      <p class="c-complete-textbox">企業担当者専用のお問い合わせは<br class="c-568-only"><a href="/contact_e">こちら</a>になります。</p>
+      <p class="c-complete-textbox">企業担当者専用のお問い合わせは<br class="c-568-only"><a class="txt-blue-link" href="/contact_e">こちら</a>になります。</p>
       @elseif($c_flag == 'employer')
-      <p class="c-complete-textbox">求職者専用のお問い合わせは<br class="c-568-only"><a href="/contact_s">こちら</a>になります。</p>
+      <p class="c-complete-textbox">求職者専用のお問い合わせは<br class="c-568-only"><a class="txt-blue-link" href="/contact_s">こちら</a>になります。</p>
       @endif
 
       @if(count($errors) > 0)
@@ -92,13 +92,12 @@
                   <tr id="c-tr4">
                       <th>
                           <label class="contact-form-heading-text">氏名<br class="only-pc">(フリガナ)</label>
-                          <span class="contact-form-heading-label required">必須</span>
                       </th>
                       <td>
                       @if( Auth::check() == true )
-                        <input class="contact-form-textfield form-control {{ $errors->has('name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="@if(old('name_ruby')){{old('name_ruby')}}@elseif(!old('name_ruby') && $user->last_name && $user->first_name){{$user->last_name}} {{$user->first_name}} @endif" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="name_ruby">
+                        <input class="contact-form-textfield form-control {{ $errors->has('name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="@if(old('name_ruby')){{old('name_ruby')}}@elseif(!old('name_ruby') && $user->last_name && $user->first_name){{$user->last_name}} {{$user->first_name}} @endif" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="name_ruby">
                        @else
-                        <input class="contact-form-textfield form-control {{ $errors->has('name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="{{old('name_ruby')}}" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="name_ruby">
+                        <input class="contact-form-textfield form-control {{ $errors->has('name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('name_ruby')}}" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="name_ruby">
                        @endif
                       </td>
                   </tr>
@@ -136,7 +135,7 @@
               </tbody>
           </table>
           <div class="contact-button-wrap">
-            <button name="commit" type="submit" class="btn btn-yellow mt-4">送信する<i class="icon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-yellow mt-4">送信する<i class="icon-chevron-right"></i></button>
           </div>
           
       </form>
@@ -179,9 +178,9 @@
                       </th>
                       <td>
                         @if( Auth::guard('employer')->check() == true )
-                        <input class="contact-form-textfield form-control {{ $errors->has('cname') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="@if(old('cname')){{old('cname')}}@elseif(!old('cname') && Auth::guard('employer')->user()->company->cname){{Auth::guard('employer')->user()->company->cname}}@endif" style="ime-mode:active;" placeholder="例：株式会社ジョブシネマ" type="text" name="cname">
+                        <input class="contact-form-textfield form-control {{ $errors->has('c_name') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="@if(old('c_name')){{old('c_name')}}@elseif(!old('c_name') && Auth::guard('employer')->user()->company->cname){{Auth::guard('employer')->user()->company->cname}}@endif" style="ime-mode:active;" placeholder="例：株式会社ジョブシネマ" type="text" name="c_name">
                         @else
-                        <input class="contact-form-textfield form-control {{ $errors->has('cname') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="{{old('cname')}}" style="ime-mode:active;" placeholder="例：株式会社ジョブシネマ" type="text" name="cname">
+                        <input class="contact-form-textfield form-control {{ $errors->has('c_name') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="{{old('c_name')}}" style="ime-mode:active;" placeholder="例：株式会社ジョブシネマ" type="text" name="c_name">
                         @endif
                       </td>
                   </tr>
@@ -192,9 +191,9 @@
                       </th>
                       <td>
                       @if( Auth::guard('employer')->check() == true )
-                        <input class="contact-form-textfield form-control {{ $errors->has('cname_katakana') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="@if(old('cname_katakana')){{old('cname_katakana')}}@elseif(!old('cname_katakana') && $employer->company->cname_katakana){{$employer->company->cname_katakana}}@endif" style="ime-mode:active;" placeholder="例：ジョブシネマ" type="text" name="cname_katakana">
+                        <input class="contact-form-textfield form-control {{ $errors->has('c_name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="@if(old('c_name_ruby')){{old('c_name_ruby')}}@elseif(!old('c_name_ruby') && $employer->company->cname_katakana){{$employer->company->cname_katakana}}@endif" style="ime-mode:active;" placeholder="例：ジョブシネマ" type="text" name="c_name_ruby">
                       @else
-                        <input class="contact-form-textfield form-control {{ $errors->has('cname_katakana') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('cname_katakana')}}" style="ime-mode:active;" placeholder="例：ジョブシネマ" type="text" name="cname_katakana">
+                        <input class="contact-form-textfield form-control {{ $errors->has('c_name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('c_name_ruby')}}" style="ime-mode:active;" placeholder="例：ジョブシネマ" type="text" name="c_name_ruby">
                       @endif
                     </td>
                   </tr>
@@ -205,9 +204,9 @@
                       </th>
                       <td>
                       @if( Auth::guard('employer')->check() == true )
-                        <input class="contact-form-textfield form-control {{ $errors->has('e_name') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="@if(old('e_name')){{old('e_name')}}@elseif(!old('e_name') && $employer->last_name && $employer->first_name){{$employer->last_name}} {{$employer->first_name}} @endif" style="ime-mode:active;" placeholder="例：佐藤　一郎" type="text" name="e_name">
+                        <input class="contact-form-textfield form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" size="20" maxlength="100" required="required" value="@if(old('name')){{old('name')}}@elseif(!old('name') && $employer->last_name && $employer->first_name){{$employer->last_name}} {{$employer->first_name}} @endif" style="ime-mode:active;" placeholder="例：佐藤　一郎" type="text" name="name">
                       @else
-                        <input class="contact-form-textfield form-control {{ $errors->has('e_name') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('e_name')}}" style="ime-mode:active;" placeholder="例：佐藤　一郎" type="text" name="e_name">
+                        <input class="contact-form-textfield form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('name')}}" style="ime-mode:active;" placeholder="例：佐藤　一郎" type="text" name="name">
                       @endif
                       </td>
                   </tr>
@@ -217,9 +216,9 @@
                       </th>
                       <td>
                       @if( Auth::guard('employer')->check() == true )
-                        <input class="contact-form-textfield form-control {{ $errors->has('e_name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="@if(old('name_ruby')){{old('e_name_ruby')}}@elseif(!old('e_name_ruby') && $employer->last_name_katakana && $employer->first_name_katakana  ){{$employer->last_name_katakana}} {{$employer->first_name_katakana}} @endif" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="e_name_ruby">
+                        <input class="contact-form-textfield form-control {{ $errors->has('name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="@if(old('name_ruby')){{old('name_ruby')}}@elseif(!old('name_ruby') && $employer->last_name_katakana && $employer->first_name_katakana  ){{$employer->last_name_katakana}} {{$employer->first_name_katakana}} @endif" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="name_ruby">
                        @else
-                        <input class="contact-form-textfield form-control {{ $errors->has('e_name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('e_name_ruby')}}" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="e_name_ruby">
+                        <input class="contact-form-textfield form-control {{ $errors->has('name_ruby') ? ' is-invalid' : '' }}" size="20" maxlength="100" value="{{old('name_ruby')}}" style="ime-mode:active;" placeholder="例：サトウ　イチロウ" type="text" name="name_ruby">
                        @endif
                       </td>
                   </tr>
@@ -257,7 +256,7 @@
               </tbody>
           </table>
           <div class="contact-button-wrap">
-            <button name="commit" type="submit" class="btn btn-yellow mt-4">送信する<i class="icon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-yellow mt-4">送信する<i class="icon-chevron-right"></i></button>
           </div>
           
       </form>

@@ -93,9 +93,9 @@ $(function() {
         if(window.confirm('登録されているサブ写真2を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/sub/image02/delete/' + job.id + '?imageflag=sub2';
+                window.location.href = '/company/job/create/sub/image02/delete/' + job.id + '?imageflag=sub2';
             } else {
-                window.location.href = '/jobs/sub/image02/delete?imageflag=sub2';
+                window.location.href = '/company/job/create/sub/image02/delete?imageflag=sub2';
             }
 
             window.opener.$("#photo3").attr('src', '/uploads/images/no-image.gif');

@@ -50,7 +50,7 @@
             </ul>
         </div>
         @endif
-        <form id="jobsheet-create-form" action="{{route('job.draftOrStep2')}}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+        <form id="jobsheet-create-form" action="" class="job-create jobSaveForm file-apload-form" method="POST" enctype="multipart/form-data">@csrf
             <div class="card">
                 <div class="card-header">写真/画像（メイン写真は必ず登録してください）<span class="text-danger">＊</span></div>
                 <div class="card-body">
@@ -58,26 +58,23 @@
                         <div class="e-image-register-item">
                             <p class="e-image-wrap"> 
                             
-                                <img src="@if(Session::has('data.file.image.main')) {{Session::get('data.file.image.main')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo1" id="photo1">
+                                <img src="@if(Session::has('data.file.image.main')) {{$jobImageBaseUrl.Session::get('data.file.image.main')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo1" id="photo1">
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('main.image.get')}}" target="_blank">メイン写真を登録</a>
-                                <input type="hidden" name="data[File][isExist1]" value="0" id="FileIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if(Session::has('data.file.image.sub1')) {{Session::get('data.file.image.sub1')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo2" id="photo2"></p>
+                            <p class="e-image-wrap"><img src="@if(Session::has('data.file.image.sub1')) {{$jobImageBaseUrl.Session::get('data.file.image.sub1')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo2" id="photo2"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image1.get')}}" target="_blank">サブ写真を登録</a>
-                                <input type="hidden" name="data[File][isExist2]" value="0" id="FileIsExist2" class="">
                             </p>
                             </p>
                         </div>
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if(Session::has('data.file.image.sub2')) {{Session::get('data.file.image.sub2')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo3" id="photo3"></p>
+                            <p class="e-image-wrap"><img src="@if(Session::has('data.file.image.sub2')) {{$jobImageBaseUrl.Session::get('data.file.image.sub2')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真を登録してください" name="photo3" id="photo3"></p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-orange" href="{{route('sub.image2.get')}}" target="_blank">サブ写真を登録</a>
-                                <input type="hidden" name="data[File][isExist3]" value="0" id="FileIsExist3" class="">
                             </p>
                             </p>
                         </div>
@@ -91,32 +88,29 @@
                     <div oncontextmenu="return false;" class="form-group e-image-register-area">
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
-                                <video src="@if(Session::has('data.file.movie.main')) {{Session::get('data.file.movie.main')}}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film1" id="film1">
+                                <video src="@if(Session::has('data.file.movie.main')) {{$jobImageBaseUrl.Session::get('data.file.movie.main')}}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film1" id="film1">
                                 </video>
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('main.movie.get')}}" target="_blank">メイン動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist1]" value="0" id="FileMovieIsExist1" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
-                                <video src="@if(Session::has('data.file.movie.sub1')) {{Session::get('data.file.movie.sub1')}}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film2" id="film2">
+                                <video src="@if(Session::has('data.file.movie.sub1')) {{$jobImageBaseUrl.Session::get('data.file.movie.sub1')}}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film2" id="film2">
                                 </video>
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('sub.movie1.get')}}" target="_blank">サブ動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist2]" value="0" id="FileMovieIsExist2" class="">
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
-                                <video src="@if(Session::has('data.file.movie.sub2')) {{Session::get('data.file.movie.sub2')}}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film3" id="film3">
+                                <video src="@if(Session::has('data.file.movie.sub2')) {{$jobImageBaseUrl.Session::get('data.file.movie.sub2')}}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film3" id="film3">
                                 </video>
                             </p>
                             <p class="text-center">
                                 <a class="btn-gradient-3d-blue" href="{{route('sub.movie2.get')}}" target="_blank">サブ動画を登録</a>
-                                <input type="hidden" name="data[File][Movie][isExist3]" value="0" id="FileMovieIsExist3" class="">
                             </p>
                         </div>
                     
@@ -130,18 +124,18 @@
                         <tr>
                             <th>掲載開始日</th>
                             <td>
-                                <input id="shortest" type="radio" name="pub_start" value="最短で掲載" checked {{ old('pub_start') == '最短で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == 'shortest' ? 'checked' : ''}} @endif onClick="pubstartflg0(this.checked);">
+                                <input id="shortest" type="radio" name="pub_start" value="最短で掲載" checked {{ old('pub_start') == '最短で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == '最短で掲載' ? 'checked' : ''}} @endif>
                                 <label for="shortest">最短で掲載</label><br>
-                                <input id="start_specified"  type="radio"  name="pub_start" value="start_specified" {{ old('pub_start') == 'start_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == 'start_specified' ? 'checked' : ''}} @endif onClick="pubstartflg1(this.checked);">
+                                <input id="start_specified"  type="radio"  name="pub_start" value="start_specified" {{ old('pub_start') == 'start_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_start') && !old('pub_start')) {{Session::get('data.form.text.pub_start') == 'start_specified' ? 'checked' : ''}} @endif>
                                 <label for="start_specified">掲載開始日を指定</label><input class="ml-2" id="start_specified_date" type="text"  name="start_specified_date" disabled="disabled" value="{{old('start_specified_date')}} @if(!old('start_specified_date')) {{Session::get('data.form.text.start_specified_date')}}@endif" required><br>
                             </td>
                         </tr>
                         <tr>
                         <th>掲載終了日</th>
                             <td>
-                                <input id="not_specified" type="radio" name="pub_end" value="無期限で掲載" checked {{ old('pub_end') == '無期限で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == 'not_specified' ? 'checked' : ''}} @endif onClick="pubendflg0(this.checked);">
+                                <input id="not_specified" type="radio" name="pub_end" value="無期限で掲載" checked {{ old('pub_end') == '無期限で掲載' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == '無期限で掲載' ? 'checked' : ''}} @endif>
                                 <label for="not_specified">無期限で掲載</label><br>
-                                <input id="end_specified" type="radio" name="pub_end" value="end_specified" {{ old('pub_end') == 'end_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == 'end_specified' ? 'checked' : ''}} @endif onClick="pubendflg1(this.checked);">
+                                <input id="end_specified" type="radio" name="pub_end" value="end_specified" {{ old('pub_end') == 'end_specified' ? 'checked' : ''}} @if(Session::has('data.form.text.pub_end') && !old('pub_end')) {{Session::get('data.form.text.pub_end') == 'end_specified' ? 'checked' : ''}} @endif>
                                 <label for="end_specified">掲載終了日を指定</label><input class="ml-2" id="end_specified_date" type="text" name ="end_specified_date" disabled="disabled" value="{{old('end_specified_date')}} @if(!old('end_specified_date')) {{Session::get('data.form.text.end_specified_date')}}@endif" required><br>
                             </td>
                         </tr>
@@ -159,7 +153,7 @@
                                 <p class="chara-count" v-bind:class="{'text-danger': charaCount1 > 30 }">(@{{ charaCount1 }}/30字)</p>
                                 </th>
                                 <td>
-                                <input type="text" v-model="typedText1" name="job_title" class="form-control {{ $errors->has('job_title') ? 'is-invalid' : ''}}" value="{{ old('job_title') }}@if(!old('job_title')){{Session::get('data.form.text.job_title')}}@endif">
+                                <input type="text" id="job_title" v-model="typedText1" name="job_title" class="form-control {{ $errors->has('job_title') ? 'is-invalid' : ''}}" value="{{ old('job_title') }}@if(!old('job_title')){{Session::get('data.form.text.job_title')}}@endif">
                                 </td>
                             </tr>
                             <tr>
@@ -268,8 +262,8 @@
                 </div>
             </div> <!-- card --> 
             <div class="form-group text-center">
-                <input type="submit" class="btn btn-dark" name="storestep2" value="確認画面へ進む">
-                <input type="submit" class="btn btn-outline-secondary" name="draft" value="一時保存する">
+                <button type="button" onclick="submitAction('/company/job/store/step2')" class="btn btn-dark" name="storestep2">確認画面へ進む</button>
+                <button type="button" onclick="submitAction('/company/job/store/draft')" class="btn btn-outline-secondary">一時保存する</button>
                     
             </div>
             <div class="form-group text-center">
@@ -294,10 +288,8 @@
     $(function() {
         $("#start_specified_date, #end_specified_date").datepicker({
             dateFormat: 'yy-mm-dd',
-        });
+        });    
 
-
-        
     });
 
 </script>

@@ -58,6 +58,9 @@ class Handler extends ExceptionHandler
     protected function renderHttpException(\Symfony\Component\HttpKernel\Exception\HttpException $e)
     {
         $status = $e->getStatusCode();
+        if(auth('employer')->check()) {
+            return response()->view("errors.employer.common", ['exception' => $e], $status);
+        }
         return response()->view("errors.common", ['exception' => $e], $status);
     }
 

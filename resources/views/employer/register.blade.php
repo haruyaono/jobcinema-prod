@@ -48,7 +48,7 @@
                 
                 <div class="col-md-12 p-0">
                   
-                    <form class="form-horizontal" method="POST" action="{{ route('employer.confirm') }}" aria-label="{{ __('Register') }}">
+                    <form class="form-horizontal" method="POST" action="{{route('employer.confirm') }}" aria-label="{{ __('Register') }}">
                         {{ csrf_field() }}
                             <table class="table table-bordered">
                             <tbody>
@@ -100,7 +100,7 @@
                         <div class="form-group row mb-5">
                             
                                 <!-- <p>ご登録前に<a href="">利用規約</a>と<a href="">プライバシーポリシー</a>をご確認ください。</p> -->
-                                <p>ご登録前に<a href="/terms_service_e">利用規約</a>をご確認ください。</p>
+                                <p>ご登録前に<a href="/terms_service_e" class="d-inline-block txt-blue-link">利用規約</a>をご確認ください。</p>
                                 <div class="col-md-12">
                                     <button type="submit" class="btn btn-primary">
                                         {{ __('同意して確認する') }}
@@ -110,7 +110,7 @@
                     </form>
                     <div class="text-center mb-5">
                         <p class="text-danger">※もし仮登録完了メールが届かない場合は下記から再送してください</p>
-                        <a class="" href="{{ url('/employer/verify/resend') }}">本登録用メールを再送する</a>
+                        <a class="txt-blue-link" href="{{ url('/employer/verify/resend') }}">本登録用メールを再送する</a>
                     </div>
                     
                     <ul class="emp-form-pagetop-list mb-1">

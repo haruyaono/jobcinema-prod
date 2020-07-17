@@ -58,7 +58,6 @@ return [
             // ],
 
             'database' => env('DB_DATABASE', 'forge'),
-            // 'database' => 'test_db',
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
@@ -148,6 +147,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DB', 0),
+            'read_write_timeout' => env('REDIS_READ_WRITE_TIMEOUT', 60),
         ],
 
         'cache' => [

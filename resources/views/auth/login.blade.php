@@ -18,7 +18,7 @@
     </a>
   </li>
   <li>
-        ログイン
+        求職者ログイン
   </li>
 </ol>
 </div>
@@ -27,12 +27,11 @@
     <section class="main-section newjob-entry">
 		<div class="inner">
 			<div class="pad">
-            <h2 class="txt-h2">ログイン</h2>
+            <h2 class="txt-h2"><i class="fas fa-user font-yellow mr-2"></i>求職者ログイン</h2>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-12 col-md-10 col-lg-8">
             <div class="card login-card">
-
                 <div class="card-body login-card-body">
                     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                     {{ csrf_field() }}
@@ -64,6 +63,12 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="forget-passlink-wrap" style="text-align:right">
+                            <a class="forget-passlink" href="{{ route('password.request') }}">
+                                {{ __('パスワードを忘れた方') }}
+                            </a>
+                        </div>
+                        
 
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-3">
@@ -81,18 +86,18 @@
                             <div class="col-md-6 offset-md-3">
                                 <button type="submit" class="btn">
                                     {{ __('ログイン') }}
-                                </button>
-
-                                <a class="forget-passlink" href="{{ route('password.request') }}">
-                                    {{ __('パスワードを忘れた方') }}
-                                </a>
+                                </button>     
                             </div>
                         </div>
+
+                        <p class="text-center mt-4" ><a href="{{route('register')}}" class="txt-blue-link">無料会員登録はこちら</a></p>
                     </form>
                 </div>
             </div>
-            <p class="text-center" ><a href="{{route('register')}}">無料会員登録はこちら</a></p>
-            
+           
+            <div class="c-login-link-in-user-login">
+                <a href="{{url('/employer/login')}}"><i class="fas fa-building d-block"></i>企業用ログインはこちら</a>
+            </div>
         </div>
     </div>
 </div>

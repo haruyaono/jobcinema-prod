@@ -20,7 +20,7 @@
         <p class="text-danger h3 mb-3">まだ求人票の登録は完了していません！</p>
         下記の内容で間違いがなければ、登録ボタンを押してください。
     </div>
-        <form  action="@if($job){{ route('job.store.complete', [$job->id]) }}@else{{ route('job.store.complete') }}@endif" class="job-create" method="POST" enctype="multipart/form-data">
+        <form  action="@if($job){{ route('job.store.complete', [$job->id]) }}@else{{ route('job.store.complete') }}@endif" class="job-create file-apload-form" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="status" value="1">
         <div class="card">
@@ -30,31 +30,86 @@
                         <tr>
                             <th>雇用形態</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.status_cat_id')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.category.status_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.status')){{App\Job\Categories\StatusCategory::find(Session::get('data.form.edit_category.status'))->name}}@else{{App\Job\Categories\StatusCategory::find($job->status_cat_id)->name}}@endif</p>
+                                <p>
+                                @if(Session::has('data.form.category.cats_status.id')){{App\Job\Categories\Category::find(Session::get('data.form.category.cats_status.id'))->name}}
+                                @elseif(Session::has('data.form.edit_category.cats_status.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_status.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '雇用形態')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif
+                                </p>
                             </td>
                         </tr>
                         <tr>
                             <th>募集職種</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.type_cat_id')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.category.type_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.type')){{App\Job\Categories\TypeCategory::find(Session::get('data.form.edit_category.type'))->name}}@else{{App\Job\Categories\TypeCategory::find($job->type_cat_id)->name}}@endif</p>
+                                <p>
+                                @if(Session::has('data.form.category.cats_type.id')){{App\Job\Categories\Category::find(Session::get('data.form.category.cats_type.id'))->name}}
+                                @elseif(Session::has('data.form.edit_category.cats_type.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_type.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '職種')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif
+                                </p>
                             </td>
                         </tr>
                         <tr>
                             <th>勤務地エリア</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.area_cat_id')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.category.area_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.area')){{App\Job\Categories\AreaCategory::find(Session::get('data.form.edit_category.area'))->name}}@else{{App\Job\Categories\AreaCategory::find($job->area_cat_id)->name}}@endif</p>
+                                <p>
+                                @if(Session::has('data.form.category.cats_area.id')){{App\Job\Categories\Category::find(Session::get('data.form.category.cats_area.id'))->name}}
+                                @elseif(Session::has('data.form.edit_category.cats_area.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_area.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == 'エリア')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif
+                                </p>
                             </td>
                         </tr>
                         <tr>
-                            <th>最低時給</th>
+                            <th>最低給与</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.hourly_salary_cat_id')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.category.hourly_salary_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.hourly_salary')){{App\Job\Categories\HourlySalaryCategory::find(Session::get('data.form.edit_category.hourly_salary'))->name}}@else{{App\Job\Categories\HourlySalaryCategory::find($job->hourly_salary_cat_id)->name}}@endif</p>
+                                <p>
+                                @if(Session::has('data.form.category.cats_salary.id'))
+                                    @foreach(Session::get('data.form.category.cats_salary.id') as $sCtegory)
+                                        <p>{{App\Job\Categories\Category::find($sCtegory)->parent->name}}: {{App\Job\Categories\Category::find($sCtegory)->name}}</p>
+                                    @endforeach
+                                @elseif(Session::has('data.form.edit_category.cats_salary.id'))
+                                    @foreach(Session::get('data.form.edit_category.cats_salary.id') as $sCtegory)
+                                        <p>{{App\Job\Categories\Category::find($sCtegory)->parent->name}}: {{App\Job\Categories\Category::find($sCtegory)->name}}</p>
+                                    @endforeach
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->parent !== null &&$category->parent->parent->slug == 'salary')
+                                            <p>{{App\Job\Categories\Category::find($category->id)->parent->name}}: {{App\Job\Categories\Category::find($category->id)->name}}</p>
+                                        @endif
+                                    @endforeach
+                                @endif
+                                </p>
                             </td>
                         </tr>
                         <tr>
                             <th>最低勤務日数</th>
                             <td>
-                                <p>@if(Session::has('data.form.category.date_cat_id')){{App\Job\Categories\DateCategory::find(Session::get('data.form.category.date_cat_id'))->name}}@elseif(Session::has('data.form.edit_category.date')){{App\Job\Categories\DateCategory::find(Session::get('data.form.edit_category.date'))->name}}@else{{App\Job\Categories\DateCategory::find($job->date_cat_id)->name}}@endif</p>
+                                <p>@if(Session::has('data.form.category.cats_date.id')){{App\Job\Categories\Category::find(Session::get('data.form.category.cats_date.id'))->name}}
+                                @elseif(Session::has('data.form.edit_category.cats_date.id')){{App\Job\Categories\Category::find(Session::get('data.form.edit_category.cats_date.id'))->name}}
+                                @else
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '勤務日数')
+                                            {{App\Job\Categories\Category::find($category->id)->name}}
+                                        @endif
+                                    @endforeach
+                                @endif
+                                </p>
                             </td>
                         </tr>
                     </table>
@@ -65,13 +120,13 @@
                 <div class="card-body">
                     <div class="form-group e-image-register-area">
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if($job == '' && Session::has('data.file.image.main')) {{Session::get('data.file.image.main')}}@elseif($job != '' && $job->job_img != null && Session::has('data.file.edit_image.main') == false ) {{$job->job_img}}@elseif($job != '' && Session::get('data.file.edit_image.main') != $job->job_img && Session::get('data.file.edit_image.main') != ''){{Session::get('data.file.edit_image.main')}}@elseif(Session::get('data.file.edit_image.main')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
+                            <p class="e-image-wrap"><img src="@if($job == '' && Session::has('data.file.image.main')) {{$jobImageBaseUrl.Session::get('data.file.image.main')}}@elseif($job != '' && $job->job_img != null && Session::has('data.file.edit_image.main') == false ) {{$jobImageBaseUrl.$job->job_img}}@elseif($job != '' && Session::get('data.file.edit_image.main') != $job->job_img && Session::get('data.file.edit_image.main') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.main')}}@elseif(Session::get('data.file.edit_image.main')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                         </div>
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if($job == '' && Session::has('data.file.image.sub1')) {{Session::get('data.file.image.sub1')}}@elseif($job != '' && $job->job_img2 != null && Session::has('data.file.edit_image.sub1') == false ) {{$job->job_img2}}@elseif($job != '' && Session::get('data.file.edit_image.sub1') != $job->job_img2 && Session::get('data.file.edit_image.sub1') != ''){{Session::get('data.file.edit_image.sub1')}}@elseif(Session::get('data.file.edit_image.sub1')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
+                            <p class="e-image-wrap"><img src="@if($job == '' && Session::has('data.file.image.sub1')) {{$jobImageBaseUrl.Session::get('data.file.image.sub1')}}@elseif($job != '' && $job->job_img2 != null && Session::has('data.file.edit_image.sub1') == false ) {{$jobImageBaseUrl.$job->job_img2}}@elseif($job != '' && Session::get('data.file.edit_image.sub1') != $job->job_img2 && Session::get('data.file.edit_image.sub1') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.sub1')}}@elseif(Session::get('data.file.edit_image.sub1')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                         </div>
                         <div class="e-image-register-item">
-                            <p class="e-image-wrap"><img src="@if($job == '' && Session::has('data.file.image.sub2')) {{Session::get('data.file.image.sub2')}}@elseif($job != '' && $job->job_img3 != null && Session::has('data.file.edit_image.sub2') == false ) {{$job->job_img3}}@elseif($job != '' && Session::get('data.file.edit_image.sub2') != $job->job_img3 && Session::get('data.file.edit_image.sub2') != ''){{Session::get('data.file.edit_image.sub2')}}@elseif(Session::get('data.file.edit_image.sub2')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
+                            <p class="e-image-wrap"><img src="@if($job == '' && Session::has('data.file.image.sub2')) {{$jobImageBaseUrl.Session::get('data.file.image.sub2')}}@elseif($job != '' && $job->job_img3 != null && Session::has('data.file.edit_image.sub2') == false ) {{$jobImageBaseUrl.$job->job_img3}}@elseif($job != '' && Session::get('data.file.edit_image.sub2') != $job->job_img3 && Session::get('data.file.edit_image.sub2') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_image.sub2')}}@elseif(Session::get('data.file.edit_image.sub2')  == ''){{asset('uploads/images/no-image.gif')}}@else {{asset('uploads/images/no-image.gif')}}@endif" alt="写真"></p>
                         </div>
                     
                     </div>
@@ -84,21 +139,21 @@
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
                                 <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                    <source src="@if($job == '' && Session::has('data.file.movie.main')) {{Session::get('data.file.movie.main')}}@elseif($job != '' && $job->job_mov != null && Session::has('data.file.edit_movie.main') == false ) {{$job->job_mov}}@elseif($job != '' && Session::get('data.file.edit_movie.main') != $job->job_mov && Session::get('data.file.edit_movie.main') != ''){{Session::get('data.file.edit_movie.main')}}@elseif(Session::get('data.file.edit_movie.main')  == '')@else @endif"/></iframe>
+                                    <source src="@if($job == '' && Session::has('data.file.movie.main')) {{$jobImageBaseUrl.Session::get('data.file.movie.main')}}@elseif($job != '' && $job->job_mov != null && Session::has('data.file.edit_movie.main') == false ) {{$jobImageBaseUrl.$job->job_mov}}@elseif($job != '' && Session::get('data.file.edit_movie.main') != $job->job_mov && Session::get('data.file.edit_movie.main') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_movie.main')}}@elseif(Session::get('data.file.edit_movie.main')  == '')@else @endif"/></iframe>
                                 </video>
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
                                 <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                    <source src="@if($job == '' && Session::has('data.file.movie.sub1')) {{Session::get('data.file.movie.sub1')}}@elseif($job != '' && $job->job_mov2 != null && Session::has('data.file.edit_movie.sub1') == false ) {{$job->job_mov2}}@elseif($job != '' && Session::get('data.file.edit_movie.sub1') != $job->job_mov2 && Session::get('data.file.edit_movie.sub1') != ''){{Session::get('data.file.edit_movie.sub1')}}@elseif(Session::get('data.file.edit_movie.sub1')  == '')@else @endif"/></iframe>
+                                    <source src="@if($job == '' && Session::has('data.file.movie.sub1')) {{$jobImageBaseUrl.Session::get('data.file.movie.sub1')}}@elseif($job != '' && $job->job_mov2 != null && Session::has('data.file.edit_movie.sub1') == false ) {{$jobImageBaseUrl.$job->job_mov2}}@elseif($job != '' && Session::get('data.file.edit_movie.sub1') != $job->job_mov2 && Session::get('data.file.edit_movie.sub1') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_movie.sub1')}}@elseif(Session::get('data.file.edit_movie.sub1')  == '')@else @endif"/></iframe>
                                 </video>
                             </p>
                         </div>
                         <div class="e-image-register-item">
                             <p class="e-image-wrap">
                                 <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                    <source src="@if($job == '' && Session::has('data.file.movie.sub2')) {{Session::get('data.file.movie.sub2')}}@elseif($job != '' && $job->job_mov3 != null && Session::has('data.file.edit_movie.sub2') == false ) {{$job->job_mov3}}@elseif($job != '' && Session::get('data.file.edit_movie.sub2') != $job->job_mov3 && Session::get('data.file.edit_movie.sub2') != ''){{Session::get('data.file.edit_movie.sub2')}}@elseif(Session::get('data.file.edit_movie.sub2')  == '')@else @endif"/></iframe>
+                                    <source src="@if($job == '' && Session::has('data.file.movie.sub2')) {{$jobImageBaseUrl.Session::get('data.file.movie.sub2')}}@elseif($job != '' && $job->job_mov3 != null && Session::has('data.file.edit_movie.sub2') == false ) {{$jobImageBaseUrl.$job->job_mov3}}@elseif($job != '' && Session::get('data.file.edit_movie.sub2') != $job->job_mov3 && Session::get('data.file.edit_movie.sub2') != ''){{$jobImageBaseUrl.Session::get('data.file.edit_movie.sub2')}}@elseif(Session::get('data.file.edit_movie.sub2')  == '')@else @endif"/></iframe>
                                 </video>
                             </p>
                         </div>

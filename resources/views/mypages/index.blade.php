@@ -38,12 +38,12 @@
                                     <a class="btn-gray" href="{{route('mypage.jobapp.manage')}}">応募管理</a>
                                 </li>
                                 <li>
-                                    <a class="btn-gray" href="/mypage/profile_edit">会員情報編集</a>
+                                    <a class="btn-gray" href="{{route('user.profile.get')}}">会員情報編集</a>
                                 </li>
                             </ul>
                             <ul class="mypage-btn-list-inner">
                                 <li>
-                                    <a class="btn-gray" href="/mypage/career_edit">現在の状況・希望編集</a>
+                                    <a class="btn-gray" href="{{route('user.career.get')}}">現在の状況・希望編集</a>
                                 </li>
                                 <li>
                                     <a class="btn-gray" href="{{route('mypage.changepassword.get')}}">パスワード変更</a>
@@ -69,8 +69,8 @@
                             </ul>
                         </div>
                     </div>
-                    <p class="mypage-pagetop-btn"><a class="btn-gray" href="/">トップページに戻る</a></p>
-                    <p class="text-right mt-5"><a class="" href="{{route('mypage.delete')}}" onclick="return window.confirm('お祝い金申請中の場合、受け取りができなくなります。よろしいですか？');">退会する</a></p>
+                    <p class="mypage-pagetop-btn"><a class="txt-blue-link" href="/">トップページに戻る</a></p>
+                    <p class="text-right mt-5"><a class="txt-blue-link" href="{{route('mypage.delete')}}" onclick="return window.confirm('お祝い金申請中の場合、受け取りができなくなります。よろしいですか？');">退会する</a></p>
                 </div>
 
 </div>

@@ -42,6 +42,7 @@
       <ul>
         <li><a href="/terms_service" target="_blank">利用規約</a></li>
         <li><a href="/lp">求人掲載をお考えの方はこちら</a></li>
+        <li><a href="{{route('employer.login')}}">求人掲載企業様ログイン</a></li>
       </ul>
     </div>
 

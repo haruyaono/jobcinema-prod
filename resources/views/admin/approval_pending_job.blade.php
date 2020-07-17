@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">承認待ちの求人</h1>
-<span><a href="/dashboard/home" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin.home')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
@@ -57,14 +57,14 @@
                 @if($job->status=='0')
                     <a href="{{route('job.delete',[$job->id])}}" class="text-danger"> 削除</a>
                 @elseif($job->status=='1')
-                    <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 承認</a>
-                    <a href="{{route('job.non.approve',[$job->id])}}" class="label label-default"> 非承認</a>
+                    <a href="{{route('job.status.change',[$job->id, 'status_approve'])}}" class="label label-info"> 承認</a>
+                    <a href="{{route('job.status.change',[$job->id, 'status_non_approve'])}}" class="label label-default"> 非承認</a>
                     <a href="{{route('job.delete',[$job->id])}}" class="text-danger" onclick="return window.confirm('「削除」で間違いありませんか？');"> 削除</a>
                 @elseif($job->status=='2')
-                    <a href="{{route('job.non.approve',[$job->id])}}" class="label label-default"> 非承認</a>
+                    <a href="{{route('job.status.change',[$job->id, 'status_non_approve'])}}" class="label label-default"> 非承認</a>
                     <a href="{{route('job.delete',[$job->id])}}" class="text-danger"> 削除</a>
                 @elseif($job->status=='3')
-                    <a href="{{route('job.approve',[$job->id])}}" class="label label-info"> 承認</a>
+                    <a href="{{route('job.status.change',[$job->id, 'status_approve'])}}" class="label label-info"> 承認</a>
                     <a href="{{route('job.delete',[$job->id])}}" class="text-danger"> 削除</a>
                 @endif
             </td>

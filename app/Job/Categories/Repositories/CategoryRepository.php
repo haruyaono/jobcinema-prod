@@ -2,99 +2,81 @@
 
 namespace App\Job\Categories\Repositories;
 
-use App\Job\Categories\StatusCategory;
-use App\Job\Categories\TypeCategory;
-use App\Job\Categories\HourlySalaryCategory;
-use App\Job\Categories\AreaCategory;
-use App\Job\Categories\DateCategory;
-// use App\Job\Categories\Exceptions\CategoryInvalidArgumentException;
-// use App\Job\Categories\Exceptions\CategoryNotFoundException;
+use App\Job\Categories\Category;
+use App\Job\Categories\Exceptions\CategoryNotFoundException;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\JobItem;
-// use App\Job\JobItems\Transformations\JobItemTransformable;
-// use App\Job\Tools\UploadableTrait;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Jsdecena\Baserepo\BaseRepository;
 
-class CategoryRepository implements CategoryRepositoryInterface
+class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
 
     /**
      * CategoryRepository constructor.
-     * @param StatusCategory $statusCategory
+     * @param Category $category
      */
 
-     public function __construct(
-         StatusCategory $statusCategory,
-         TypeCategory $typeCategory, 
-         HourlySalaryCategory $hourlySalaryCategory, 
-         AreaCategory $areaCategory, 
-         DateCategory $dateCategory)
-     {  
-        $this->model = [$statusCategory,$typeCategory,$hourlySalaryCategory,$areaCategory,$dateCategory];
-     }
-
-      /**
-     * @param int $flag_category
-     * @return Category
-     */
-    public function determineCategory(int $flag_category)
-    {
-        switch ($flag_category) {
-            case 0:
-                return $this->model[0];
-                break;
-            case 1:
-                return $this->model[1];
-                break;
-            case 2:
-                return $this->model[2];
-                break;
-            case 3:
-                return $this->model[3];
-                break;
-            case 4:
-                return $this->model[4];
-                break;
-        }
+    public function __construct(
+        Category $category
+    ) {
+        $this->model = $category;
     }
 
     /**
-      * all categories
-      */
-      public function allCategories()
-      {
-          return $this->model;;
-      }
-
-
-    /**
-      * List all categories
-      *
-      * @param string $order 
-      * @param string $sort
-      * @param array $except
-      * @return \Illuminate\Support\Collection
-      */
-      public function listCategories(int $flag_category, string $order = 'id', string $sort = 'desc', $except = []) : Collection
-      {
-          return $this->determineCategory($flag_category)->orderBy($order, $sort)->get()->except($except);
-      }
+     * List all categories
+     *
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @return \Illuminate\Support\Collection
+     */
+    public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection
+    {
+        return $this->all($columns, $order, $sort)->toTree();
+    }
 
     /**
+     * List all categories by parent slug
+     *
+     *  @param string $childSlug
+     * @param string $parentSlug
+     * @return Collection
+     */
+    public function listCategoriesByslug(string $parentSlug, string $childSlug = ''): Collection
+    {
+        $categories = $this->listCategories();
+        if ($childSlug !== '') {
+            return $categories->where('slug', $parentSlug)->first()->children->where('slug', $childSlug)->first()->children->sortKeysDesc()->values();
+        }
+        return $categories->where('slug', $parentSlug)->first()->children->sortKeysDesc()->values();
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function updateCategory(array $data): bool
+    {
+        return $this->update($data);
+    }
+
+    /**
+     * Find the category by ID
+     *
      * @param int $id
      * @return Category
-     * @throws CategoryNotFoundException
+     * @throws CategoryNotFoundException : Category
      */
-    public function findCategoryById(int $id, int $flag_category)
+    public function findCategoryById(int $id)
     {
-        // try {
-            return $this->determineCategory($flag_category)->findOrFail($id);
-        // } catch (ModelNotFoundException $e) {
-        //     throw new CategoryNotFoundException($e->getMessage());
-        // }
+        try {
+            return $this->findOneOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            throw new CategoryNotFoundException($e);
+        }
     }
-
 }

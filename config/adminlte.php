@@ -140,13 +140,13 @@ return [
         ],
         [
             'text'        => '求人一覧',
-            'url'         => 'dashboard/jobs',
+            'url'         => 'dashboard/joblist/index',
             
 
         ],
         [
             'text'        => '承認待ち',
-            'url'         => 'dashboard/jobs/approval_pending',
+            'url'         => 'dashboard/joblist/index/approval_pending',
         ],
         [
             'text'        => '応募管理',

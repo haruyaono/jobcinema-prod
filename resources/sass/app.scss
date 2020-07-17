@@ -3,12 +3,21 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
-@import 'variables';
+@import './configs/variables', "./configs/mixins";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
+@import './partial/common';
+@import './partial/header';
+@import './partial/footer';
+@import './partial/login';
+@import './partial/register';
+@import './partial/top';
+@import './partial/job_apply';
+@import './partial/job';
+@import './partial/user';
+@import './partial/company';
+@import './partial/lp';
+@import './partial/contact';
+@import './partial/page';

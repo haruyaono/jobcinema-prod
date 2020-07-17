@@ -42,8 +42,8 @@
             @endif
 				<h1 class="txt-h1">@isset ($title) {{$title}}@endissetの求人情報</h1>
         <!-- カテゴリ -->
-         <span class="cat-item org">{{ optional($job->type_cat_get)->name}}</span>
-         <span class="cat-item red">{{ optional($job->status_cat_get)->name}}</span>
+        <span class="cat-item org">{{$job->categories()->wherePivot('slug', 'type')->first() !== null ? $job->categories()->wherePivot('slug', 'type')->first()->name : ''}}</span>
+        <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
 
         <h2>{{$job->job_title}}</h2>
       	<p class="company_name_item">@isset ($title) {{$title}}@endisset</p>
@@ -79,7 +79,7 @@
           <div class="item-row">
             <div class="row-label">雇用形態</div>
             <div class="row-text">
-              <p>{{ optional($job->status_cat_get)->name}}</p>
+              <p>{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</p>
             </div>
           </div>
           <div class="item-row">
@@ -200,7 +200,7 @@
           <div class="item-row">
             <div class="row-label">代表</div>
             <div class="row-text">
-              <p>{{ $job->company->ceo }}</p>
+              <p>{{ $job->company->ceo }}</p> 
             </div>
           </div>
           @endif
@@ -251,7 +251,7 @@
         @if(Auth::guard()->check())
           <favourite-component :jobid={{$job->id}} :favourited={{$job->checkSaved()?'true':'false'}}></favourite-component>
           <div class="entrybtn-item">
-          @if(!$job->checkApplication())
+          @if(!$existsApplied)
               <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$job->id])}}">応募する</a>
           @else
             <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>
@@ -267,6 +267,35 @@
         
       </div> <!-- entrybtn-field -->
 
+      @if($recommendJobList != []) 
+      <div id="recommend-joblist" class="block-joblist">
+        <div class="box-title">
+          <h3>
+            <i class="far fa-clock font-yellow mr-2 h4"></i>あなたへのオススメ求人
+          </h3>
+        </div>
+        <ul class="box-wrap cf">
+          @foreach($recommendJobList as $recommendJob)
+          <li class="wrap-items">
+            <a href="{{route('jobs.show', [$recommendJob->id])}}">
+              <div class="wrap-img">
+              @if(($recommendJob->job_img) != null)
+                <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$recommendJob->job_img}}@else{{$recommendJob->job_img}}@endif" style="width:100%;" alt=""/>
+              @else
+                <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
+              @endif
+              </div>
+              <div class="wrap-text">
+                <p>■勤務先: {{ str_limit($recommendJob->job_office, $limit = 15, $end = '') }}</p>
+                <p>■職種: {{ str_limit($recommendJob->job_type, $limit = 17, $end = '') }}</p>
+                <p>■給与: {{ str_limit($recommendJob->job_hourly_salary, $limit = 18, $end = '') }}</p>
+              </div>
+            </a>
+          </li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
       <recent-component></recent-component>
 
       <div class="main-section-item top-subsection-item">
@@ -293,7 +322,6 @@
 @endsection
 
 @section('js')
-
 
 @endsection
 

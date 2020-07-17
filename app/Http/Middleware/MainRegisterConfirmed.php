@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\Employer;
+use App\Job\Employers\Employer;
 
 class MainRegisterConfirmed
 {

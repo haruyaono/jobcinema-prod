@@ -1,100 +1,54 @@
 
 <section class="search-section">
   <div class="inner">
-      <form id="composite-form" method="get" action="{{route('alljobs')}}" role="form">
-        <div class="composite composite-1">
+      <form id="composite-form" method="get" action="{{route('alljobs')}}" role="form" class="cf">
+        @foreach($categoryList as $itemIndex => $categoryItem) 
+        <div class="composite composite-{{$itemIndex}}">
           <div class="composite-left">
-            <p>雇用形態<span class="ib-only-pc">で探す</span></p>
+            <p>{{$categoryItem->name}}<span class="ib-only-pc">で探す</span></p>
           </div>
-
           <div class="composite-right">
-            <div class="select-wrap">
-                <select id="search-status" class="selectbox" name="status_cat_id" data-toggle="select">
-                <option value="">-選択-</option>
-                @foreach(App\Job\Categories\StatusCategory::all() as $statusCategory)
-                <option value="{{ $statusCategory->id }}" {{ ( old('status_cat_id') == $statusCategory->id ) ? 'selected' : '' }} @if(isset($status) && $status == $statusCategory->id) selected @endif>{{ $statusCategory->name }}</option>
+            <div class="select-wrap select-wrap-{{$categoryItem->slug}}">
+              <select id="search-{{$categoryItem->slug}}" class="selectbox" name="{{$categoryItem->slug}}" data-toggle="select">
+                <option value="">選択してください</option>
+                @foreach($categoryItem->children as $cIndex => $cat)
+                  <option value="{{ $cat->id }}" {{ ( old($categoryItem->slug) == $cat->id ) ? 'selected' : '' }} @if(isset($searchParam[$categoryItem->slug]) && $searchParam[$categoryItem->slug] == $cat->id) selected @endif>{{ $cat->name }}</option>
                 @endforeach
               </select>
             </div>
-          </div>
-        </div>
-        <div class="composite composite-2">
-          <div class="composite-left">
-            <p>職種<span class="ib-only-pc">で探す</span></p>
-          </div>
-
-          <div class="composite-right">
-            <div class="select-wrap">
-                <select id="search-type" class="selectbox" name="type_cat_id" data-toggle="select">
-                <option value="">-選択-</option>
-                @foreach(App\Job\Categories\TypeCategory::all() as $typeCategory)
-                <option  value="{{ $typeCategory->id }}" @if(old('type_cat_id') == $typeCategory->id)selected @elseif(!old('type_cat_id') && isset($typeCatArchive) && $typeCategory->id == $typeCatArchive->id)selected @elseif(!old('type_cat_id') && !isset($typeCatArchive) && isset($type) && $type == $typeCategory->id) selected @endif>{{ $typeCategory->name }}</option>
-                @endforeach
+            @if($categoryItem->slug == 'salary')
+            <div class="option-lst jsc-option-lst jsc-option-required-wrapper select-wrap"> 
+                <select class="jsc-not-select selectbox" disabled="disabled">
+                  <option value="">指定なし</option>
                 </select>
-            </div>
-          </div>
-        </div>
-        <div class="composite composite-3">
-          <div class="composite-left">
-            <p>エリア<span class="ib-only-pc">で探す</span></p>
-          </div>
-
-          <div class="composite-right">
-            <div class="select-wrap">
-                <select id="search-area" class="selectbox" name="area_cat_id" data-toggle="select">
-                <option value="">-選択-</option>
-                @foreach(App\Job\Categories\AreaCategory::all() as $areaCategory)
-                <option  value="{{ $areaCategory->id }}" @if(old('area_cat_id') == $areaCategory->id)selected @elseif(!old('area_cat_id') && isset($areaCatArchive) && $areaCategory->id == $areaCatArchive->id)selected @elseif(!old('area_cat_id') && !isset($areaCatArchive) && isset($area) && $area == $areaCategory->id) selected @endif>{{ $areaCategory->name }}</option>
-                @endforeach
-                </select> 
-            </div>
-          </div>
-        </div>
-        <div class="composite composite-4">
-          <div class="composite-left">
-            <p>時給<span class="ib-only-pc">で探す</span></p>
-          </div>
-
-          <div class="composite-right">
-            <div class="select-wrap">
-                <select id="search-hourly-salary" class="selectbox" name="hourly_salary_cat_id" data-toggle="select">
-                <option value="">-選択-</option>
-                @foreach(App\Job\Categories\HourlySalaryCategory::all() as $hourlySalaryCategory)
-                <option  value="{{ $hourlySalaryCategory->id }}" @if(old('hourly_salary_cat_id') == $hourlySalaryCategory->id)selected @elseif(!old('hourly_salary_cat_id') && isset($hourlySalaryCatArchive) && $hourlySalaryCategory->id == $hourlySalaryCatArchive->id)selected @endif>{{ $hourlySalaryCategory->name }}</option>
-                @endforeach
+              @foreach($categoryItem->children as $cIndex => $cat)
+                @if($cat->children->count() !== 0)
+                <select id="search-{{$cat->slug}}" class="selectbox search-{{$categoryItem->slug}}-child" name="{{$cat->slug}}" data-toggle="select" data-val="{{$cat->id}}">
+                  <option value="">指定なし</option>
+                  @foreach($cat->children as $cCIndex => $cCat)
+                    <option value="{{ $cCat->id }}" {{ ( old($cat->slug) == $cCat->id ) ? 'selected' : '' }} @if(isset($searchParam[$cat->slug]) && $searchParam[$cat->slug] == $cCat->id) selected @endif>{{ $cCat->name }}</option>
+                  @endforeach
                 </select>
+                @endif
+              @endforeach
             </div>
+            @endif
           </div>
         </div>
-        <div class="composite composite-5">
-          <div class="composite-left">
-            <p>勤務日数<span class="ib-only-pc">で探す</span></p>
-          </div>
-
-          <div class="composite-right">
-            <div class="select-wrap">
-                <select id="search-date" class="selectbox" name="date_cat_id" data-toggle="select">
-                <option value="">-選択-</option>
-                @foreach(App\Job\Categories\DateCategory::all() as $dateCategory)
-                <option  value="{{ $dateCategory->id }}" {{ ( old('date_cat_id') == $dateCategory->id ) ? 'selected' : '' }}>{{ $dateCategory->name }}</option>
-                @endforeach
-                </select>
-            </div>
-          </div>
-        </div>
-        <div class="composite mb-3 composite-6">
+        @endforeach
+        <div class="composite mb-3 composite-5">
           <div class="composite-left">
            <p>キーワード</p>
           </div>
 
           <div class="composite-right">
-            <input id="search-text" type="text" name="title" style="height:40px; padding: 3px 6px; width: 100%;" placeholder="例）コンビニ" value="@if(old('title')){{ old('title') }} @elseif(!old('title') && isset($keyword)){{$keyword}}@endif">  
+            <input id="search-text" type="text" name="keyword" style="height:35px; padding: 4px 6px; width: 100%;" placeholder="例）コンビニ" value="@if(old('keyword')){{ old('keyword') }} @elseif(!old('keyword') && isset($searchParam['keyword'])){{$searchParam['keyword']}}@endif">  
           </div>
         </div>
 
-        <p class="job-count">検索結果 <span id="job-count">{{$jobs->count()}}</span>件</p>
+        <p class="job-count">検索結果 <span id="job-count">{{isset($jobCount) ? $jobCount : 0}}</span>件</p>
 
-        <button type="submit" id="filter-search"><i class="fas fa-search"></i>絞り込み検索</button>
+        <button type="button" id="filter-search" @click="search()"><i class="fas fa-search" ></i>絞り込み検索</button>
       </form>
 
   </div> <!-- inner -->

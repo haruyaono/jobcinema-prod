@@ -100,7 +100,7 @@
 
             <ul class="emp-login-link">
                 <li>
-                    <a href="{{route('employer.register.index')}}">新規企業のご登録はこちら</a>
+                    <a href="{{route('employer.register.index')}}" class="txt-blue-link">新規企業のご登録はこちら</a>
                 </li>
                 <li>
                     <a class="forget-passlink" href="{{ route('employer.password.request') }}">

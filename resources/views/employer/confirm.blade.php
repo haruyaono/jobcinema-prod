@@ -52,7 +52,6 @@
                                 <th scope="row">パスワード</th>
                                 <td>
                                 {{$password_mask}}
-                                <!-- <input size="45" id="password" type="password"  name="password" disabled="disabled" value="{{$password}}"> -->
                                 </td>
                                 </tr>
                                 <tr>
@@ -72,7 +71,7 @@
                         <div class="form-group row mb-5">
                             <p>内容にお間違いなければ「登録する」ボタンをクリックしてください。</p>
                             <div class="col-md-12 mt-3 text-center">
-                              <a href="/employer/getpage" class="d-inline-block mr-3">修正する</a>
+                              <a href="#" onclick="javascript:window.history.back(-1);return false;" class="d-inline-block mr-3 txt-blue-link">修正する</a>
                               <button type="submit" name="action" value="post" class="btn btn-primary d-inline-block">登録する</button>
                             </div>
                         </div>

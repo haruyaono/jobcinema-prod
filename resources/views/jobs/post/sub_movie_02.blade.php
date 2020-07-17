@@ -107,9 +107,9 @@ $(function() {
         if(window.confirm('登録されているサブ動画２を削除します。よろしいですか？')) {
             
             if(job != '') {
-                window.location.href = '/jobs/sub/movie02/delete/' + job.id + '?movieflag=sub2';
+                window.location.href = '/company/job/create/sub/movie02/delete/' + job.id + '?movieflag=sub2';
             } else {
-                window.location.href = '/jobs/sub/movie02/delete?movieflag=sub2';
+                window.location.href = '/company/job/create/sub/movie02/delete?movieflag=sub2';
             }
 
             window.opener.$("#film3").attr('src', '');

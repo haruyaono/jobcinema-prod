@@ -32,7 +32,7 @@
             </div>
         @endif
         @if(Session::has('message_success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success"> 
                 {{ Session::get('message_success') }}
             </div>
         @endif
@@ -41,7 +41,7 @@
             @if($job->status != 6)
                 <div class="card">
                     <div class="card-header">
-                        求人番号：{{$job->id}}@if($job->status != 5)<a class="ml-3" href="{{ route('myjob.app.delete', [$job->id]) }}" onclick="return window.confirm('「削除申請」が許可された場合、運営が削除いたします');">削除申請</a>@endif
+                        求人番号：{{$job->id}}@if($job->status != 5)<a class="ml-3 txt-blue-link" href="{{ route('myjob.app.delete', [$job]) }}" onclick="return window.confirm('「削除申請」が許可された場合、運営が削除いたします');">削除申請</a>@endif
                     </div>
                     <div class="card-body">
                         <?php
@@ -61,7 +61,11 @@
                             <tr>
                                 <th>雇用形態</th>
                                 <td>
-                                    {{ $job->status_cat_get->name}}
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '雇用形態')
+                                            {{$category->name}}
+                                        @endif
+                                    @endforeach
                                 </td>
                                 <th>勤務先名</th>
                                 <td>
@@ -88,31 +92,31 @@
                                         <div class="status-text">{{config('const.EMP_JOB_STATUS.5')}}</div>
                                     @endif
                                     
-                                    <a class="btn myjob-show-btn" href="{{ route('job.form.show', [$job->id]) }}" target="_blank">
+                                    <a class="btn myjob-show-btn" href="{{ route('job.form.show', [$job]) }}" target="_blank">
                                         求人票を確認する
                                     </a><br>
                                     @if($job->status == 0)
-                                        <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job->id]) }}" target="_blank">
+                                        <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job]) }}" target="_blank">
                                             編集・申請する
                                         </a>
                                     @elseif ($job->status == 1) 
-                                        <a class="btn myjob-edit-btn" href="{{ route('myjob.app.cancel.get', [$job->id]) }}" target="_blank">
+                                        <a class="btn myjob-edit-btn" href="{{ route('myjob.app.cancel.get', [$job]) }}" target="_blank">
                                             申請を取り消す
                                         </a>
                                     @elseif ($job->status == 2) 
-                                        <a class="btn" href="{{ route('myjob.app.stop', [$job->id]) }}">
+                                        <a class="btn" href="{{ route('myjob.app.stop', [$job]) }}">
                                             公開を停止する
                                         </a>
                                     @elseif ($job->status == 3) 
-                                        <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job->id]) }}" target="_blank">
+                                        <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job]) }}" target="_blank">
                                             編集・申請する
                                         </a>
                                     @elseif ($job->status == 4) 
-                                    <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job->id]) }}" target="_blank">
+                                    <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job]) }}" target="_blank">
                                         編集・申請する
                                     </a>
                                     @elseif ($job->status == 5) 
-                                    <a class="btn" href="{{ route('myjob.app.delete.cancel', [$job->id]) }}" onclick="return window.confirm('「削除申請」を取り消しますか？');">
+                                    <a class="btn" href="{{ route('myjob.app.delete.cancel', [$job]) }}" onclick="return window.confirm('「削除申請」を取り消しますか？');">
                                         削除申請を取り消す
                                     </a>
                                     @endif
@@ -121,7 +125,11 @@
                             <tr>
                                 <th>職種</th>
                                 <td>
-                                    {{ $job->type_cat_get->name}}
+                                    @foreach($job->categories as $category)
+                                        @if($category->parent->name == '職種')
+                                            {{$category->name}}
+                                        @endif
+                                    @endforeach
                                 </td>
                                 <th>掲載期間</th>
                                 <td>
@@ -151,31 +159,31 @@
                                         <div class="status-text">{{config('const.EMP_JOB_STATUS.5')}}</div>
                                     @endif
                                 
-                                <a class="btn myjob-show-btn" href="{{ route('job.form.show', [$job->id]) }}" target="_blank">
+                                <a class="btn myjob-show-btn" href="{{ route('job.form.show', [$job]) }}" target="_blank">
                                         求人票を確認
                                     </a>
                                 @if($job->status == 0)
-                                    <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job->id]) }}" target="_blank">
+                                    <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job]) }}" target="_blank">
                                         編集・申請
                                     </a>
                                 @elseif ($job->status == 1) 
-                                    <a class="btn myjob-edit-btn" href="{{ route('myjob.app.cancel.get', [$job->id]) }}" target="_blank">
+                                    <a class="btn myjob-edit-btn" href="{{ route('myjob.app.cancel.get', [$job]) }}" target="_blank">
                                         申請を取消
                                     </a>
                                 @elseif ($job->status == 2) 
-                                    <a class="btn" href="{{ route('myjob.app.stop', [$job->id]) }}">
+                                    <a class="btn" href="{{ route('myjob.app.stop', [$job]) }}">
                                         公開を停止
                                     </a>
                                 @elseif ($job->status == 3) 
-                                    <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job->id]) }}" target="_blank">
+                                    <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job]) }}" target="_blank">
                                         編集・申請
                                     </a>
                                 @elseif ($job->status == 4) 
-                                <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job->id]) }}" target="_blank">
+                                <a class="btn myjob-edit-btn" href="{{ route('job.edit', [$job]) }}" target="_blank">
                                     編集・申請
                                 </a>
                                 @elseif ($job->status == 5) 
-                                <a class="btn" href="{{ route('myjob.app.delete.cancel', [$job->id]) }}" onclick="return window.confirm('「削除申請」を取り消しますか？');">
+                                <a class="btn" href="{{ route('myjob.app.delete.cancel', [$job]) }}" onclick="return window.confirm('「削除申請」を取り消しますか？');">
                                     削除申請を取消
                                 </a>
                                 @endif

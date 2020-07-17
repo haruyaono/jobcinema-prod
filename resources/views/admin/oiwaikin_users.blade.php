@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">お祝い金申請ユーザー</h1>
-<span><a href="/dashboard/home" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin.home')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
@@ -38,7 +38,7 @@
 
             <tr>
             <td>{{ $oiwaikin_user->user_id}}</td>
-            <td><a href="{{route('user.detail.get', [$oiwaikin_user->id])}}">{{ $oiwaikin_user->last_name}} {{ $oiwaikin_user->first_name}}</a></td>
+            <td><a href="{{route('user.detail.get', [$oiwaikin_user->apply_id])}}">{{ $oiwaikin_user->last_name}} {{ $oiwaikin_user->first_name}}</a></td>
             <td>{{ $oiwaikin_user->first_attendance}}</td>
             <td>あり {{ $oiwaikin_user->oiwaikin}}円</td>
             <td>{{config("const.JOB_STATUS.{$oiwaikin_user->e_status}", "未定義")}}</td>

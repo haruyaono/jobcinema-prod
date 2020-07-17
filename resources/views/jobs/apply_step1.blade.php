@@ -13,15 +13,15 @@
   <section class="main-section">
     <div class="inner">
       <div class="pad">
-        <h1 class="txt-h1">{{ $job->job_office}}への応募情報の入力</h1>
+        <h1 class="txt-h1">{{ $jobitem->job_office}}への応募情報の入力</h1>
         @if( Auth::check() )
         <section class="apply-job-info">
           <h2>応募先企業</h2>
           <div class="job-apply-item">
                 <div class="d-flex">
                   <div class="job-left only-pc">
-                    @if($job->job_img)
-                    <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" style="width:100%;" alt=""/>
+                    @if($jobitem->job_img)
+                    <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$jobitem->job_img}}@else{{$jobitem->job_img}}@endif" style="width:100%;" alt=""/>
                     @else
                     <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
                     @endif 
@@ -30,19 +30,19 @@
                     <table class="job-apply-table">
                     <tr>
                         <th>応募先企業</th>
-                        <td>{{ $job->company->cname}}</td>
+                        <td>{{ $jobitem->company->cname}}</td>
                       </tr>
                       <tr>
                         <th>勤務先</th>
-                        <td>{{ str_limit($job->job_office, $limit = 40, $end = '...')}}</td>
+                        <td>{{ str_limit($jobitem->job_office, $limit = 40, $end = '...')}}</td>
                       </tr>
                       <tr>
                         <th>雇用形態</th>
-                        <td>{{ $job->status_cat_get->name}}</td>
+                        <td>{{$jobitem->categories()->wherePivot('slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('slug', 'status')->first()->name : ''}}</td>
                       </tr>
                       <tr>
                         <th>職種</th>
-                        <td>{{ str_limit($job->job_type, $limit = 40, $end = '...')}}</td>
+                        <td>{{ str_limit($jobitem->job_type, $limit = 40, $end = '...')}}</td>
                       </tr>
                     </table>
                   </div>
@@ -62,7 +62,7 @@
           </div>
           @endif
 
-          <form action="{{route('apply.step1.post', [$job->id])}}"  method="POST">
+          <form action="{{route('apply.step1.post', [$jobitem->id])}}"  method="POST">
           @csrf
           <input type="hidden" name="email" value="{{$user->email}}">
             <section class="apply-job-form">
@@ -161,7 +161,7 @@
               </th>
                 <td>
                   <select name="occupation" id="">
-                      <option value="-----">-----</option>
+                      <option value="0">-----</option>
                       <option value="高校生" @if(old('occupation')=='高校生') selected @elseif(!old('occupation') && Session::get('jobapp_data.occupation')=='高校生') selected @elseif(!old('occupation') && Session::has('jobapp_data.occupation')==false && Auth::user()->profile->occupation == "高校生") selected @else @endif>高校生</option>
                       <option value="大学生" @if(old('occupation')=='大学生') selected @elseif(!old('occupation') && Session::get('jobapp_data.occupation')=='大学生') selected @elseif(!old('occupation') && Session::has('jobapp_data.occupation')==false && Auth::user()->profile->occupation == "大学生") selected @else @endif>大学生</option>
                       <option value="大学院生" @if(old('occupation')=='大学院生') selected @elseif(!old('occupation') && Session::get('jobapp_data.occupation')=='大学院生') selected @elseif(!old('occupation') && Session::has('jobapp_data.occupation')==false && Auth::user()->profile->occupation == "大学院生") selected @else @endif>大学院生</option>
@@ -183,7 +183,7 @@
                 </th>
                 <td>
                   <select name="final_education" id="">
-                      <option value="-----">-----</option>
+                      <option value="0">-----</option>
                       <option value="大学院" @if(old('final_education')=='大学院') selected @elseif(!old('final_education') && Session::get('jobapp_data.final_education')=='大学院') selected @elseif(!old('final_education') && Session::has('jobapp_data.final_education')==false && Auth::user()->profile->final_education == "大学院") selected @else @endif>大学院</option>
                       <option value="大学" @if(old('final_education')=='大学') selected @elseif(!old('final_education') && Session::get('jobapp_data.final_education')=='大学') selected @elseif(!old('final_education') && Session::has('jobapp_data.final_education')==false && Auth::user()->profile->final_education == "大学") selected @else @endif>大学</option>
                       <option value="短期大学" @if(old('final_education')=='短期大学') selected @elseif(!old('final_education') && Session::get('jobapp_data.final_education')=='短期大学') selected @elseif(!old('final_education') && Session::has('jobapp_data.final_education')==false && Auth::user()->profile->final_education == "短期大学") selected @else @endif>短期大学</option>
@@ -218,14 +218,14 @@
               </tr>
             </table>
           </section>
-          @if($job->job_q1 || $job->job_q2 || $job->job_q3)
+          @if($jobitem->job_q1 || $jobitem->job_q2 || $jobitem->job_q3)
           <section class="apply-job-form mb-3">
             <h2>企業からあなたへの質問</h2>
             <table class="apply-job-form-table apply-job-form-table-last">
-              @if($job->job_q1)
+              @if($jobitem->job_q1)
               <tr>
                 <th>
-                  <span class="apply-job-table-heading-text">Q1. {{$job->job_q1}}</span>
+                  <span class="apply-job-table-heading-text">Q1. {{$jobitem->job_q1}}</span>
                   <span class="apply-job-badge required">必須</span>
               </th>
                 <td>
@@ -235,10 +235,10 @@
                 </td>
               </tr>
               @endif
-              @if($job->job_q2)
+              @if($jobitem->job_q2)
               <tr>
                 <th>
-                  <span class="apply-job-table-heading-text">Q2. {{$job->job_q2}}</span>
+                  <span class="apply-job-table-heading-text">Q2. {{$jobitem->job_q2}}</span>
                   <span class="apply-job-badge required">必須</span>
               </th>
                 <td>
@@ -248,11 +248,11 @@
                 </td>
               </tr>
               @endif
-              @if($job->job_q3)
+              @if($jobitem->job_q3)
               <tr>
                 
                 <th>
-                  <span class="apply-job-table-heading-text">Q3. {{$job->job_q3}}</span>
+                  <span class="apply-job-table-heading-text">Q3. {{$jobitem->job_q3}}</span>
                   <span class="apply-job-badge required">必須</span>
               </th>
                 <td>
@@ -281,6 +281,7 @@
                       <div class="card-body login-card-body">
                           <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                           {{ csrf_field() }}
+                          <input type="hidden" name="redirect_to" value="<?php echo $_SERVER['REQUEST_URI']?>">
 
                               <div class="form-group row">
                                   <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('メールアドレス') }}</label>

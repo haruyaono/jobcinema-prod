@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">課金管理</h1>
-<span><a href="/dashboard/home" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin.home')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div id="photo2" class="tab-pane">
-                @if(empty($companies))
+                @if(empty($applyJobItemList))
                     <p>データがありません</p>
                 @else 
                 <table class="table table-striped">
@@ -57,47 +57,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($companies as $company)
+                        @foreach($applyJobItemList as $applyJobItem)
                         <tr>
-                        <td><a href="{{route('admin.company.detail',[$company->id])}}" target="_blank">{{ $company['id']}}</a>
+                        <td><a href="{{route('admin.company.detail',[$applyJobItem->company->id])}}" target="_blank">{{ $applyJobItem->company->id}}</a>
                         </td>
-                        <td>{{ $company['cname']}}</a></td>
-                        <td>{{ App\Job\JobItems\JobItem::where('employer_id', $company['employer_id'])->count()}}</td>
+                        <td>{{ $applyJobItem->company->cname}}</a></td>
+                        <td>{{ $applyJobItem->company->jobs->count()}}</td>
                         <?php 
-                            $app_job_count = DB::table('job_item_user')->where('employer_id', $company['employer_id'])->count();
-                            $app_total_money = $app_job_count * 30000;
-                            $app_total_money = number_format($app_total_money);
+                            $appTotalMoney = number_format($applyJobItem->tatal * 30000);
                         ?>
-                        <td>{{ $app_job_count }}</td>
-                        <td>{{ $app_total_money }} 円</td>
-                        </tr>
-                       
-                            
+                        <td>{{ $applyJobItem->tatal }}</td>
+                        <td>{{ $appTotalMoney }} 円</td>
+                        </tr>   
                         @endforeach
-
                     </tbody>
                 </table>
-               
                 @endif
-        
                 </div>
             </div>
-
-
         
         </div>
     </div>
 </div>
 
-
 @stop
-
 <!-- 読み込ませるCSSを入力 -->
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
     <link rel="stylesheet" href="/css/admin.css">
 @stop
-
 <!-- 読み込ませるJSを入力 -->
 @section('js')
 

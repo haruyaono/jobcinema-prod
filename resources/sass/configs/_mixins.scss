@@ -1,0 +1,50 @@
+@mixin mq($breakpoint: medium) {
+  @if $breakpoint == xsmall {
+    @media screen and (min-width: 320px) {
+      @content;
+    }
+  } @else if $breakpoint == small {
+    @media screen and (min-width: 568px) {
+      @content;
+    }
+  } @else if $breakpoint == medium {
+    @media screen and (min-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == large {
+    @media screen and (min-width: 1024px) {
+      @content;
+    }
+  } @else if $breakpoint == xlarge {
+    @media screen and (min-width: 1280px) {
+        @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media screen and (min-width: 1440px) {
+        @content;
+    }
+  }
+
+  
+}
+  
+  @mixin sr-only {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    border: 0;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+  
+  @mixin clearfix {
+    &::after {
+      display: block;
+      clear: both;
+      content: '';
+    }
+  }
+  

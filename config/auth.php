@@ -79,15 +79,15 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Job\Users\User::class,
         ],
         'employers' => [ //追加
             'driver' => 'eloquent', //追加
-            'model' => App\Models\Employer::class, //追加
+            'model' => App\Job\Employers\Employer::class, //追加
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'model' => App\Job\Admins\Admin::class,
         ],
 
         // 'users' => [

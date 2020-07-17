@@ -12,7 +12,7 @@
     "devDependencies": {
         "axios": "^0.18",
         "bootstrap": "^4.0.0",
-        "browser-sync-webpack-plugin": "^2.0.1",
+        "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.2.1",
         "jquery": "^3.5.0",
         "laravel-mix": "^4.1.4",
@@ -26,7 +26,10 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "ismobilejs": "^1.1.1",
+        "laravel-mix": "^4.1.4",
+        "vue-router": "^3.3.4",
         "vue-slick": "^1.1.15",
-        "laravel-mix": "^2.1.11"
+        "vuejs-dialog": "^1.4.1"
     }
 }

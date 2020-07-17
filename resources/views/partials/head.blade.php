@@ -12,13 +12,13 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/app.css') }} ">
-<link rel="stylesheet" href="{{ asset('css/styles.css') }} ">
+<link rel="stylesheet" href="{{ mix('css/app.css') }} ">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <!------ js ------>
 <!-- jquery -->
 <script src="{{ asset('js/jquery-3.5.0.min.js') }}"></script>
+<!-- <script src="{{ asset('js/lib/bacon.js') }}"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <!-- vue -->
 <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->

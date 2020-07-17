@@ -7,7 +7,7 @@
 <!-- ページの見出しを入力 -->
 @section('content_header')
 <h1 style="display:inline-block">企業一覧</h1>
-<span><a href="/dashboard/home" style="margin-left:10px;">Back</a></span>
+<span><a href="{{route('admin.home')}}" style="margin-left:10px;">Back</a></span>
   
     @if(Session::has('message'))
     <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
@@ -23,10 +23,18 @@
 	<div class="card">
 		<div class="card-body">
 
-        <form name="sort" action="{{route('all.company.sort')}}" method="get">
-            <select id="company_status" name="company_status">
+        <form name="sort" action="{{route('all.company.get')}}" method="get">
+            <select id="c_status01" name="created_at" >
+                <option value="desc" @if(isset($param['created_at']) && $param['created_at']=='desc') selected @endif>新しい順</option>
+                <option value="asc" @if(isset($param['created_at']) && $param['created_at']=='asc') selected @endif>古い順</option>
+            </select>
+            <select id="c_status02" name="c_status">
                 <option value="">---</option>
-                <option value="status_8" {{$sortBy1=='status_8'?'selected':''}}>退会申請中</option>
+                <option value="0" @if(isset($param['c_status']) && $param['c_status']=='0') selected @endif>仮登録</option>
+                <option value="1" @if(isset($param['c_status']) && $param['c_status']=='1') selected @endif>本登録</option>
+                <option value="2" @if(isset($param['c_status']) && $param['c_status']=='2') selected @endif>メール認証済</option>
+                <option value="8" @if(isset($param['c_status']) && $param['c_status']=='8') selected @endif>退会申請中</option>
+                <option value="9" @if(isset($param['c_status']) && $param['c_status']=='9') selected @endif>退会済</option>
             </select>
             <button type="submit">検索</button>
         </form>
@@ -47,7 +55,7 @@
             @foreach($companies as $company)
 
             <tr>
-            <td>{{ $company->id}}</td>
+            <td>{{$company->id}}</td>
             <td>{{$company->cname}}</td>
             <td>{{$company->jobs->count()}}</td>
             <td> @if($company->employer->status == '0')

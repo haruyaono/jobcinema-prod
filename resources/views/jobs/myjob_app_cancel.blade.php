@@ -20,7 +20,7 @@
                         <div class="my-3">
                             <p class="after-text h3">求人票の申請を取り消します</p>
                         </div>
-                        <form name="form" action="{{route('myjob.app.cancel.post', [$job->id])}}" method="POST" class="text-center">
+                        <form name="form" action="{{route('myjob.app.cancel.post', [$job])}}" method="POST" class="text-center">
                           @csrf
                           <input type="hidden" value="0" name="status">
                           <button type="submit" class="btn btn-secondary" onClick="check(event);">申請取り消し</button>

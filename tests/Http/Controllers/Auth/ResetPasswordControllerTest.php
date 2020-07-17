@@ -3,7 +3,7 @@
 namespace Tests\Http\Controllers\Auth;
 
 use Tests\TestCase;
-use App\Models\User;
+use App\Job\Users\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\AnonymousNotifiable;
@@ -24,50 +24,57 @@ class UserResetPassword extends TestCase
     }
     
     /** @test */
-    public function test_user_can_view_reset_request()
+    public function it_can_show_the_reset_request_password_page()
     {
-        $response = $this->get('/members/password/reset');
+        $response = $this->get(route('password.request'));
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function valid_user_can_request_reset()
+    public function it_can_request_reset_by_valid_user()
     {
         $user = factory(User::class)->create();
-        $response = $this->from('members/password/reset')->post('members/password/email', [
-            'email' => $user->email,
+        $response = $this->from(route('password.request'))->post(route('password.email'), [
+            'email' => $this->user->email,
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect('members/password/reset');
-
+        $response->assertRedirect(route('password.request'));
         $response->assertSessionHas('status', 
             'パスワード再設定用のURLをメールで送りました。');
     }
 
     /** @test */
-    public function invalid_user_cannot_request_reset()
+    public function it_errors_when_invalid_user_is_requesting_reset()
     {
-        $user = factory(User::class)->create();
 
         $response = $this->from('members/password/reset')->post('members/password/email', [
             'email' => 'nobody@example.com'
         ]);
     
         $response->assertStatus(302);
-        $response->assertRedirect('members/password/reset');
+        $response->assertRedirect(route('password.request'));
     
         $response->assertSessionHasErrors('email',
             'メールアドレスに一致するユーザーが存在しません。');
     }
 
+     /** @test */
+    public function it_can_show_the_reset_password_page()
+    {
+        $this->get(route('password.reset', $this->faker->uuid))
+            ->assertStatus(200);
+    }
+
     /** @test */
-    // public function valid_user_can_request_password()
+    // public function it_can_request_password_by_valid_user()
     // {
+
+    //     Notification::fake();
 
     //     $user = factory(User::class)->create();
     //     $user->save();
-    //     $response = $this->post('members/password/email', [
+    //     $response = $this->post(route('password.email'), [
     //         'email' => $user->email,
     //     ]);
 
@@ -83,12 +90,12 @@ class UserResetPassword extends TestCase
 
     //     );
 
-    //     $response = $this->get('members/password/reset/'.$token);
+    //     $response = $this->get(route('password.reset'), ['token' => $token]);
     //     $response->assertStatus(200);
 
     //     $new = 'reset1111';
 
-    //     $response = $this->post('members/password/reset', [
+    //     $response = $this->post(route('password.update'), [
     //         'email' => $user->email,
     //         'token' => $token,
     //         'password' => $new,
@@ -96,7 +103,7 @@ class UserResetPassword extends TestCase
     //     ]);
 
     //     $response->assertStatus(302);
-    //     $response->assertRedirect('mypage/index');
+    //     $response->assertRedirect(route('mypages.index'));
 
     //     $this->assertTrue(Auth::check());
 
