@@ -13242,7 +13242,7 @@ select:hover {
 @media screen and (min-width: 768px) {
   .box-wrap .wrap-items .wrap-img img {
     position: unset;
-    max-height: 225px;
+    max-height: 125px;
     -o-object-fit: cover;
        object-fit: cover;
     max-width: none;
@@ -16002,7 +16002,7 @@ input[size="28"] {
 @media screen and (min-width: 768px) {
   .newjob-entry .newjob-item .joblist_jobCassette__image_wrap img {
     position: unset;
-    max-height: 135px;
+    max-height: 225px;
     -o-object-fit: cover;
        object-fit: cover;
     max-width: none;
@@ -16427,7 +16427,7 @@ input[size="28"] {
   opacity: 0.8;
 }
 
-.job-entry .job-left {
+.job-entry .jobCassette__image_wrap {
   background-color: #f2f2f2;
   border: 1px solid #e8e8e8;
   height: 79px;
@@ -16438,7 +16438,7 @@ input[size="28"] {
 }
 
 @media screen and (min-width: 768px) {
-  .job-entry .job-left {
+  .job-entry .jobCassette__image_wrap {
     max-width: 270px;
     width: 100%;
     height: auto;
@@ -16449,7 +16449,7 @@ input[size="28"] {
   }
 }
 
-.job-entry .job-left img {
+.job-entry .jobCassette__image_wrap img {
   bottom: 0;
   left: 0;
   margin: auto;
@@ -16462,7 +16462,7 @@ input[size="28"] {
 }
 
 @media screen and (min-width: 768px) {
-  .job-entry .job-left img {
+  .job-entry .jobCassette__image_wrap img {
     position: unset;
     max-height: 175px;
     -o-object-fit: cover;
