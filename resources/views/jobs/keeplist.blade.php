@@ -42,7 +42,7 @@
                 <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
               </div>
               <div class="jobCassette__header">
-                <div class="job-left only-sp">
+                <div class="jobCassette__image_wrap only-sp">
                   @if(($job->job_img) ==! null)
                   <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt="" />
                   @endif
@@ -54,7 +54,7 @@
               </div>
 
               <div class="d-flex">
-                <div class="job-left only-pc">
+                <div class="jobCassette__image_wrap only-pc">
                   @if(($job->job_img) ==! null)
                   <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" style="width:100%;" alt="" />
                   @else

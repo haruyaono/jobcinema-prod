@@ -322,7 +322,7 @@ select:hover {
 
     @include mq(medium) {
       position: unset;
-      max-height: 225px;
+      max-height: 125px;
       object-fit: cover;
       max-width: none;
     }
