@@ -127,7 +127,7 @@ export default {
       jobs: []
     };
   },
-  mounted() {
+  created() {
     const self = this;
     let sessionParam = [];
 
@@ -192,6 +192,8 @@ export default {
       Object.keys(self.params.salary_child).forEach(
         key => (self.params.salary_child[key] = "")
       );
+
+      self.salaries = [];
 
       if (self.params.salary == 284) {
         tmp_salaries = self.categories[3]["children"][0];
