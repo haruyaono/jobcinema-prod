@@ -161,28 +161,28 @@ export default {
       deep: true
     }
   },
-  // updated() {
-  //   const self = this;
-  //   this.$nextTick(function() {
-  //     if (self.params.salary !== "") {
-  //       let sVal = self.params.salary,
-  //         tmp_salaries = [];
+  updated() {
+    const self = this;
+    this.$nextTick(function() {
+      if (self.params.salary !== "") {
+        let sVal = self.params.salary,
+          tmp_salaries = [];
 
-  //       if (self.categories.length !== 0) {
-  //         if (sVal == 284) {
-  //           tmp_salaries = self.categories[3]["children"][0];
-  //         } else if (sVal == 297) {
-  //           tmp_salaries = self.categories[3]["children"][1];
-  //         } else if (sVal == 306) {
-  //           tmp_salaries = self.categories[3]["children"][2];
-  //         } else {
-  //         }
-  //       }
+        if (self.categories.length !== 0) {
+          if (sVal == 284) {
+            tmp_salaries = self.categories[3]["children"][0];
+          } else if (sVal == 297) {
+            tmp_salaries = self.categories[3]["children"][1];
+          } else if (sVal == 306) {
+            tmp_salaries = self.categories[3]["children"][2];
+          } else {
+          }
+        }
 
-  //       self.salaries = tmp_salaries;
-  //     }
-  //   });
-  // },
+        self.salaries = tmp_salaries;
+      }
+    });
+  },
   methods: {
     fetchSalaries: function() {
       const self = this;
