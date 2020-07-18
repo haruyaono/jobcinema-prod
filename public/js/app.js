@@ -2062,7 +2062,7 @@ __webpack_require__.r(__webpack_exports__);
       jobs: []
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     var self = this;
     var sessionParam = [];
 
@@ -2129,6 +2129,7 @@ __webpack_require__.r(__webpack_exports__);
       Object.keys(self.params.salary_child).forEach(function (key) {
         return self.params.salary_child[key] = "";
       });
+      self.salaries = [];
 
       if (self.params.salary == 284) {
         tmp_salaries = self.categories[3]["children"][0];
