@@ -161,39 +161,36 @@ export default {
       deep: true
     }
   },
-  updated() {
-    const self = this;
-    this.$nextTick(function() {
-      if (self.params.salary !== "") {
-        let sVal = self.params.salary,
-          tmp_salaries = [];
+  // updated() {
+  //   const self = this;
+  //   this.$nextTick(function() {
+  //     if (self.params.salary !== "") {
+  //       let sVal = self.params.salary,
+  //         tmp_salaries = [];
 
-        if (self.categories.length !== 0) {
-          if (sVal == 284) {
-            tmp_salaries = self.categories[3]["children"][0];
-          } else if (sVal == 297) {
-            tmp_salaries = self.categories[3]["children"][1];
-          } else if (sVal == 306) {
-            tmp_salaries = self.categories[3]["children"][2];
-          } else {
-            $("#salary-child").prop("selectedIndex", 0);
-          }
-        }
+  //       if (self.categories.length !== 0) {
+  //         if (sVal == 284) {
+  //           tmp_salaries = self.categories[3]["children"][0];
+  //         } else if (sVal == 297) {
+  //           tmp_salaries = self.categories[3]["children"][1];
+  //         } else if (sVal == 306) {
+  //           tmp_salaries = self.categories[3]["children"][2];
+  //         } else {
+  //         }
+  //       }
 
-        self.salaries = tmp_salaries;
-      }
-    });
-  },
+  //       self.salaries = tmp_salaries;
+  //     }
+  //   });
+  // },
   methods: {
     fetchSalaries: function() {
       const self = this;
       var tmp_salaries = [];
 
-      Object.keys(self.params.salary_child).forEach(
-        key => (self.params.salary_child[key] = "")
-      );
+      const salary_child = self.params.salary_child;
 
-      self.salaries = [];
+      Object.keys(salary_child).forEach(key => (salary_child[key] = ""));
 
       if (self.params.salary == 284) {
         tmp_salaries = self.categories[3]["children"][0];
@@ -202,7 +199,6 @@ export default {
       } else if (self.params.salary == 306) {
         tmp_salaries = self.categories[3]["children"][2];
       } else {
-        $("#salary-child").prop("selectedIndex", 0);
       }
       self.salaries = tmp_salaries;
     },
