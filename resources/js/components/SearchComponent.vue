@@ -161,44 +161,46 @@ export default {
       deep: true
     }
   },
-  // updated() {
-  //   const self = this;
-  //   this.$nextTick(function() {
-  //     if (self.params.salary !== "") {
-  //       let sVal = self.params.salary,
-  //         tmp_salaries = [];
+  updated() {
+    const self = this;
+    this.$nextTick(function() {
+      if (self.params.salary !== "") {
+        const pSalaryCategory = self.categories[3]["children"];
+        let sVal = self.params.salary,
+          tmp_salaries = [];
 
-  //       if (self.categories.length !== 0) {
-  //         if (sVal == 284) {
-  //           tmp_salaries = self.categories[3]["children"][0];
-  //         } else if (sVal == 297) {
-  //           tmp_salaries = self.categories[3]["children"][1];
-  //         } else if (sVal == 306) {
-  //           tmp_salaries = self.categories[3]["children"][2];
-  //         } else {
-  //           $("#salary-child").prop("selectedIndex", 0);
-  //         }
-  //       }
+        if (self.categories.length !== 0) {
+          if (sVal == pSalaryCategory[0].id) {
+            tmp_salaries = pSalaryCategory[0];
+          } else if (sVal == pSalaryCategory[1].id) {
+            tmp_salaries = pSalaryCategory[1];
+          } else if (sVal == pSalaryCategory[2].id) {
+            tmp_salaries = pSalaryCategory[2];
+          } else {
+            $("#salary-child").prop("selectedIndex", 0);
+          }
+        }
 
-  //       self.salaries = tmp_salaries;
-  //     }
-  //   });
-  // },
+        self.salaries = tmp_salaries;
+      }
+    });
+  },
   methods: {
     fetchSalaries: function() {
-      const self = this;
+      const self = this,
+        pSalaryCategory = self.categories[3]["children"];
       var tmp_salaries = [];
 
       Object.keys(self.params.salary_child).forEach(
         key => (self.params.salary_child[key] = "")
       );
 
-      if (self.params.salary == 284) {
-        tmp_salaries = self.categories[3]["children"][0];
-      } else if (self.params.salary == 297) {
-        tmp_salaries = self.categories[3]["children"][1];
-      } else if (self.params.salary == 306) {
-        tmp_salaries = self.categories[3]["children"][2];
+      if (self.params.salary == SalaryCategory[0].id) {
+        tmp_salaries = pSalaryCategory[0];
+      } else if (self.params.salary == SalaryCategory[1].id) {
+        tmp_salaries = pSalaryCategory[1];
+      } else if (self.params.salary == SalaryCategory[2].id) {
+        tmp_salaries = pSalaryCategory[2];
       } else {
         $("#salary-child").prop("selectedIndex", 0);
       }
