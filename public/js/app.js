@@ -2099,26 +2099,27 @@ __webpack_require__.r(__webpack_exports__);
       deep: true
     }
   },
-  // updated() {
-  //   const self = this;
-  //   this.$nextTick(function() {
-  //     if (self.params.salary !== "") {
-  //       let sVal = self.params.salary,
-  //         tmp_salaries = [];
-  //       if (self.categories.length !== 0) {
-  //         if (sVal == 284) {
-  //           tmp_salaries = self.categories[3]["children"][0];
-  //         } else if (sVal == 297) {
-  //           tmp_salaries = self.categories[3]["children"][1];
-  //         } else if (sVal == 306) {
-  //           tmp_salaries = self.categories[3]["children"][2];
-  //         } else {
-  //         }
-  //       }
-  //       self.salaries = tmp_salaries;
-  //     }
-  //   });
-  // },
+  updated: function updated() {
+    var self = this;
+    this.$nextTick(function () {
+      if (self.params.salary !== "") {
+        var sVal = self.params.salary,
+            tmp_salaries = [];
+
+        if (self.categories.length !== 0) {
+          if (sVal == 284) {
+            tmp_salaries = self.categories[3]["children"][0];
+          } else if (sVal == 297) {
+            tmp_salaries = self.categories[3]["children"][1];
+          } else if (sVal == 306) {
+            tmp_salaries = self.categories[3]["children"][2];
+          } else {}
+        }
+
+        self.salaries = tmp_salaries;
+      }
+    });
+  },
   methods: {
     fetchSalaries: function fetchSalaries() {
       var self = this;
