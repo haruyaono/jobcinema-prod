@@ -1934,7 +1934,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {//
+//
 //
 //
 //
@@ -2099,37 +2099,34 @@ __webpack_require__.r(__webpack_exports__);
       deep: true
     }
   },
-  updated: function updated() {
-    var self = this;
-    this.$nextTick(function () {
-      if (self.params.salary !== "") {
-        var sVal = self.params.salary,
-            tmp_salaries = [];
-
-        if (self.categories.length !== 0) {
-          if (sVal == 284) {
-            tmp_salaries = self.categories[3]["children"][0];
-          } else if (sVal == 297) {
-            tmp_salaries = self.categories[3]["children"][1];
-          } else if (sVal == 306) {
-            tmp_salaries = self.categories[3]["children"][2];
-          } else {
-            $("#salary-child").prop("selectedIndex", 0);
-          }
-        }
-
-        self.salaries = tmp_salaries;
-      }
-    });
-  },
+  // updated() {
+  //   const self = this;
+  //   this.$nextTick(function() {
+  //     if (self.params.salary !== "") {
+  //       let sVal = self.params.salary,
+  //         tmp_salaries = [];
+  //       if (self.categories.length !== 0) {
+  //         if (sVal == 284) {
+  //           tmp_salaries = self.categories[3]["children"][0];
+  //         } else if (sVal == 297) {
+  //           tmp_salaries = self.categories[3]["children"][1];
+  //         } else if (sVal == 306) {
+  //           tmp_salaries = self.categories[3]["children"][2];
+  //         } else {
+  //         }
+  //       }
+  //       self.salaries = tmp_salaries;
+  //     }
+  //   });
+  // },
   methods: {
     fetchSalaries: function fetchSalaries() {
       var self = this;
       var tmp_salaries = [];
-      Object.keys(self.params.salary_child).forEach(function (key) {
-        return self.params.salary_child[key] = "";
+      var salary_child = self.params.salary_child;
+      Object.keys(salary_child).forEach(function (key) {
+        return salary_child[key] = "";
       });
-      self.salaries = [];
 
       if (self.params.salary == 284) {
         tmp_salaries = self.categories[3]["children"][0];
@@ -2137,9 +2134,7 @@ __webpack_require__.r(__webpack_exports__);
         tmp_salaries = self.categories[3]["children"][1];
       } else if (self.params.salary == 306) {
         tmp_salaries = self.categories[3]["children"][2];
-      } else {
-        $("#salary-child").prop("selectedIndex", 0);
-      }
+      } else {}
 
       self.salaries = tmp_salaries;
     },
@@ -2267,7 +2262,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
