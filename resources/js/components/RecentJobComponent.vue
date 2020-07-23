@@ -1,7 +1,7 @@
 <template>
   <div id="recent-joblist" class="block-joblist">
     <div class="box-title">
-      <h3>
+      <h3 class="txt-h3">
         <i class="far fa-clock font-yellow mr-2 h4"></i>最近見た求人
       </h3>
     </div>

@@ -2072,17 +2072,41 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getCategory();
     this.getJobItems();
+    var urlParam = new Object();
+    var pair = location.search.substring(1).split("&");
+    pair = pair.filter(function (v) {
+      return v;
+    });
 
-    if (sessionParam.length !== 0) {
-      var defaultParams = sessionParam.pop();
+    for (var i = 0; pair[i]; i++) {
+      if (pair[i] === "") {
+        continue;
+      }
 
-      for (var dParam in defaultParams) {
-        if (dParam == "count") {
-          continue;
+      var kv = pair[i].split("=");
+      urlParam[kv[0]] = kv[1];
+    }
+
+    if (urlParam.length !== 0) {
+      urlParam["salary_child"] = {
+        salary_h: "",
+        salary_d: "",
+        salary_m: ""
+      };
+
+      for (var p in urlParam) {
+        if (p == "page" || p == "ks[f]") {
+          delete urlParam[p];
         }
 
-        this.params[dParam] = defaultParams[dParam];
+        if (p == "salary_h" || p == "salary_d" || p == "salary_m") {
+          urlParam["salary_child"][p] = urlParam[p];
+          delete urlParam[p];
+        }
       }
+
+      self.params = Object.assign(self.params, urlParam);
+      console.log(self.params);
     }
   },
   watch: {
@@ -38662,7 +38686,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "box-title" }, [
-      _c("h3", [
+      _c("h3", { staticClass: "txt-h3" }, [
         _c("i", { staticClass: "far fa-clock font-yellow mr-2 h4" }),
         _vm._v("最近見た求人\n    ")
       ])
@@ -39038,7 +39062,7 @@ var render = function() {
                 _c("dl", { staticClass: "p-mypage-search-condition-text" }, [
                   _c("dt", [_vm._v("履歴" + _vm._s(index + 1))]),
                   _vm._v(" "),
-                  _c("dd", [
+                  _c("dd", { staticClass: "job-hostory-name" }, [
                     _c(
                       "a",
                       {
@@ -39046,12 +39070,11 @@ var render = function() {
                         attrs: { href: "/jobs/search/all?" + _vm.params[index] }
                       },
                       [_vm._v(_vm._s(_vm.nameList["no" + index]))]
-                    ),
-                    _vm._v(
-                      "\n            " +
-                        _vm._s(searchItem.count) +
-                        "件\n          "
                     )
+                  ]),
+                  _vm._v(" "),
+                  _c("dd", { staticClass: "job-hostory-count" }, [
+                    _vm._v(_vm._s(searchItem.count) + "件")
                   ])
                 ])
               ])
@@ -55396,6 +55419,58 @@ __webpack_require__.r(__webpack_exports__);
     }
   });
 });
+
+(function ($, window, undefined) {
+  'use strict';
+
+  jQuery(function ($) {
+    $('.fullHeaderMenu, .prefectureTopHeaderMenu, .fullHeaderNoShadowMenu').click(function (t) {
+      if ($('.hamburgerLogin').length) {
+        $('.hamburgerLoginlayer').addClass('on');
+      } else if ($('.hamburgerLogout').length) {
+        $('.hamburgerLogoutlayer').addClass('on');
+      } else if ($('.hamburgerUnknow').length) {
+        $('.hamburgerUnknowlayer').addClass('on');
+      }
+
+      $('.hamburgerLoginlayer, .hamburgerLogoutlayer, .hamburgerUnknowlayer').css("height", $(document).height());
+      $('.hamburgerLoginWrap, .hamburgerLogoutWrap, .hamburgerUnknowWrap').css("top", $(document).scrollTop());
+    });
+    $('.hamburgerLoginHeaderClossInner').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLoginlayer').removeClass('on');
+    });
+    $('.hamburgerLogoutHeaderClossInner').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLogoutlayer').removeClass('on');
+    });
+    $('.hamburgerUnknowHeaderClossInner').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerUnknowlayer').removeClass('on');
+    });
+    $('.hamburgerLoginlayer').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLoginlayer').removeClass('on');
+    });
+    $('.hamburgerLoginInner').click(function (t) {
+      t.stopPropagation();
+    });
+    $('.hamburgerLogoutlayer').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerLogoutlayer').removeClass('on');
+    });
+    $('.hamburgerLogoutInner').click(function (t) {
+      t.stopPropagation();
+    });
+    $('.hamburgerUnknowlayer').click(function (t) {
+      t.preventDefault();
+      $('.hamburgerUnknowlayer').removeClass('on');
+    });
+    $('.hamburgerUnknowInner').click(function (t) {
+      t.stopPropagation();
+    });
+  });
+})(jQuery, window);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),

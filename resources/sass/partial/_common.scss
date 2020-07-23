@@ -250,11 +250,25 @@ h3 {
 }
 
 .txt-h1 {
-  font-weight: bold;
+  font-weight: normal;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  @include mq(medium) {
+    font-weight: bold;
+  }
 }
 .txt-h2 {
-  font-weight: bold;
+  font-weight: normal;
   margin-bottom: 24px;
+  @include mq(medium) {
+    font-weight: bold;
+  }
+}
+.txt-h3 {
+  font-weight: normal;
+  @include mq(medium) {
+    font-weight: bold;
+  }
 }
 
 select:hover {
@@ -631,18 +645,21 @@ input {
     }
 
     .search-job-result {
-      font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       text-align: center;
 
       @include mq(medium) {
-        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
       }
 
       span {
-        font-size: 24px;
+        font-size: 22px;
         color: #c93a40;
         font-size: bold;
+        @include mq(medium) {
+          font-size: 24px;
+        }
       }
     }
 

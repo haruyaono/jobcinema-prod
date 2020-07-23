@@ -138,14 +138,37 @@ export default {
     this.getCategory();
     this.getJobItems();
 
-    if (sessionParam.length !== 0) {
-      let defaultParams = sessionParam.pop();
-      for (let dParam in defaultParams) {
-        if (dParam == "count") {
-          continue;
-        }
-        this.params[dParam] = defaultParams[dParam];
+    var urlParam = new Object();
+    var pair = location.search.substring(1).split("&");
+    pair = pair.filter(v => v);
+
+    for (var i = 0; pair[i]; i++) {
+      if (pair[i] === "") {
+        continue;
       }
+      var kv = pair[i].split("=");
+      urlParam[kv[0]] = kv[1];
+    }
+
+    if (urlParam.length !== 0) {
+      urlParam["salary_child"] = {
+        salary_h: "",
+        salary_d: "",
+        salary_m: ""
+      };
+      for (let p in urlParam) {
+        if (p == "page" || p == "ks[f]") {
+          delete urlParam[p];
+        }
+
+        if (p == "salary_h" || p == "salary_d" || p == "salary_m") {
+          urlParam["salary_child"][p] = urlParam[p];
+          delete urlParam[p];
+        }
+      }
+
+      self.params = Object.assign(self.params, urlParam);
+      console.log(self.params);
     }
   },
   watch: {
