@@ -189,17 +189,17 @@ export default {
     fetchSalaries: function() {
       const self = this,
         pSalaryCategory = self.categories[3]["children"];
-      var tmp_salaries = [];
+      let tmp_salaries = [];
 
       Object.keys(self.params.salary_child).forEach(
         key => (self.params.salary_child[key] = "")
       );
 
-      if (self.params.salary == SalaryCategory[0].id) {
+      if (self.params.salary == pSalaryCategory[0].id) {
         tmp_salaries = pSalaryCategory[0];
-      } else if (self.params.salary == SalaryCategory[1].id) {
+      } else if (self.params.salary == pSalaryCategory[1].id) {
         tmp_salaries = pSalaryCategory[1];
-      } else if (self.params.salary == SalaryCategory[2].id) {
+      } else if (self.params.salary == pSalaryCategory[2].id) {
         tmp_salaries = pSalaryCategory[2];
       } else {
         $("#salary-child").prop("selectedIndex", 0);

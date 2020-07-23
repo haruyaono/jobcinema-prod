@@ -2132,11 +2132,11 @@ __webpack_require__.r(__webpack_exports__);
         return self.params.salary_child[key] = "";
       });
 
-      if (self.params.salary == SalaryCategory[0].id) {
+      if (self.params.salary == pSalaryCategory[0].id) {
         tmp_salaries = pSalaryCategory[0];
-      } else if (self.params.salary == SalaryCategory[1].id) {
+      } else if (self.params.salary == pSalaryCategory[1].id) {
         tmp_salaries = pSalaryCategory[1];
-      } else if (self.params.salary == SalaryCategory[2].id) {
+      } else if (self.params.salary == pSalaryCategory[2].id) {
         tmp_salaries = pSalaryCategory[2];
       } else {
         $("#salary-child").prop("selectedIndex", 0);
@@ -2301,26 +2301,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       searchItems: [],
       nameList: {
-        no0: '',
-        no1: '',
-        no2: ''
+        no0: "",
+        no1: "",
+        no2: ""
       },
       params: []
     };
   },
   mounted: function mounted() {
-    if (sessionStorage.hasOwnProperty('search-params')) {
-      this.searchItems = JSON.parse(sessionStorage.getItem('search-params'));
+    var self = this;
+
+    if (sessionStorage.hasOwnProperty("search-params")) {
+      this.searchItems = JSON.parse(sessionStorage.getItem("search-params"));
       this.getName();
       this.getUrl();
     }
-
-    ;
   },
   methods: {
     getName: function getName() {
@@ -2333,13 +2337,13 @@ __webpack_require__.r(__webpack_exports__);
         };
 
         for (var key in searchItems[sItem]) {
-          if (key == 'count' || key == 'keyword' || key == 'salary') {
+          if (key == "count" || key == "keyword" || key == "salary") {
             continue;
           }
 
-          if (key == 'salary_child') {
+          if (key == "salary_child") {
             for (var sChildItem in searchItems[sItem][key]) {
-              if (searchItems[sItem][key][sChildItem] !== '') {
+              if (searchItems[sItem][key][sChildItem] !== "") {
                 data.idList.push(searchItems[sItem][key][sChildItem]);
               }
             }
@@ -2350,22 +2354,22 @@ __webpack_require__.r(__webpack_exports__);
           data.idList.push(searchItems[sItem][key]);
         }
 
-        axios.post('/api/category_namelist', data, {
+        axios.post("/api/category_namelist", data, {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            "Content-Type": "application/x-www-form-urlencoded"
           }
         }).then(function (response) {
           var nl = response.data.nameList;
 
           if (nl.length === 0) {
-            nl = '条件なし';
-            self.nameList['no' + sItem] = nl;
+            nl = "条件なし";
+            self.nameList["no" + sItem] = nl;
           } else {
-            if (searchItems[sItem]['keyword'] !== '') {
-              nl.push(searchItems[sItem]['keyword']);
+            if (searchItems[sItem]["keyword"] !== "") {
+              nl.push(searchItems[sItem]["keyword"]);
             }
 
-            self.nameList['no' + sItem] = nl.join('、');
+            self.nameList["no" + sItem] = nl.join("、");
           }
         })["catch"](function (error) {
           console.log(error);
@@ -2383,24 +2387,24 @@ __webpack_require__.r(__webpack_exports__);
           paramList = [];
 
       for (var sItem in searchItems) {
-        var paramStr = '';
+        var paramStr = "";
 
         for (var i in searchItems[sItem]) {
-          if (searchItems[sItem][i] === '' || i == 'count') {
+          if (searchItems[sItem][i] === "" || i == "count") {
             continue;
           }
 
-          if (i == 'salary_child') {
+          if (i == "salary_child") {
             for (var sChildItem in searchItems[sItem][i]) {
-              if (searchItems[sItem][i][sChildItem] !== '') {
-                paramStr += sChildItem + '=' + searchItems[sItem][i][sChildItem] + '&';
+              if (searchItems[sItem][i][sChildItem] !== "") {
+                paramStr += sChildItem + "=" + searchItems[sItem][i][sChildItem] + "&";
               }
             }
 
             continue;
           }
 
-          paramStr += i + '=' + searchItems[sItem][i] + '&';
+          paramStr += i + "=" + searchItems[sItem][i] + "&";
         }
 
         paramList[sItem] = paramStr;
@@ -39021,40 +39025,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "search-history-section" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "search-history-wrap" }, [
-      _c(
-        "ul",
-        { staticClass: "search-history-list" },
-        _vm._l(_vm.searchItems, function(searchItem, index) {
-          return _c("li", { key: searchItem.id }, [
-            _c("dl", { staticClass: "p-mypage-search-condition-text" }, [
-              _c("dt", [_vm._v("履歴" + _vm._s(index + 1))]),
-              _vm._v(" "),
-              _c("dd", [
-                _c(
-                  "a",
-                  {
-                    staticClass: "txt-blue-link",
-                    attrs: { href: "/jobs/search/all?" + _vm.params[index] }
-                  },
-                  [_vm._v(_vm._s(_vm.nameList["no" + index]))]
-                ),
-                _vm._v(
-                  "\n              \n             " +
-                    _vm._s(searchItem.count) +
-                    "件\n           "
-                )
+  return _vm.searchItems.length !== 0
+    ? _c("div", { staticClass: "search-history-section" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "search-history-wrap" }, [
+          _c(
+            "ul",
+            { staticClass: "search-history-list" },
+            _vm._l(_vm.searchItems, function(searchItem, index) {
+              return _c("li", { key: searchItem.id }, [
+                _c("dl", { staticClass: "p-mypage-search-condition-text" }, [
+                  _c("dt", [_vm._v("履歴" + _vm._s(index + 1))]),
+                  _vm._v(" "),
+                  _c("dd", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "txt-blue-link",
+                        attrs: { href: "/jobs/search/all?" + _vm.params[index] }
+                      },
+                      [_vm._v(_vm._s(_vm.nameList["no" + index]))]
+                    ),
+                    _vm._v(
+                      "\n            " +
+                        _vm._s(searchItem.count) +
+                        "件\n          "
+                    )
+                  ])
+                ])
               ])
-            ])
-          ])
-        }),
-        0
-      )
-    ])
-  ])
+            }),
+            0
+          )
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = [
   function() {
@@ -39063,7 +39069,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h2", { staticClass: "txt-h2 top-heading-h2" }, [
       _c("i", { staticClass: "fas fa-history font-yellow mr-2" }),
-      _vm._v("検索履歴")
+      _vm._v("検索履歴\n  ")
     ])
   }
 ]
@@ -55390,58 +55396,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   });
 });
-
-(function ($, window, undefined) {
-  'use strict';
-
-  jQuery(function ($) {
-    $('.fullHeaderMenu, .prefectureTopHeaderMenu, .fullHeaderNoShadowMenu').click(function (t) {
-      if ($('.hamburgerLogin').length) {
-        $('.hamburgerLoginlayer').addClass('on');
-      } else if ($('.hamburgerLogout').length) {
-        $('.hamburgerLogoutlayer').addClass('on');
-      } else if ($('.hamburgerUnknow').length) {
-        $('.hamburgerUnknowlayer').addClass('on');
-      }
-
-      $('.hamburgerLoginlayer, .hamburgerLogoutlayer, .hamburgerUnknowlayer').css("height", $(document).height());
-      $('.hamburgerLoginWrap, .hamburgerLogoutWrap, .hamburgerUnknowWrap').css("top", $(document).scrollTop());
-    });
-    $('.hamburgerLoginHeaderClossInner').click(function (t) {
-      t.preventDefault();
-      $('.hamburgerLoginlayer').removeClass('on');
-    });
-    $('.hamburgerLogoutHeaderClossInner').click(function (t) {
-      t.preventDefault();
-      $('.hamburgerLogoutlayer').removeClass('on');
-    });
-    $('.hamburgerUnknowHeaderClossInner').click(function (t) {
-      t.preventDefault();
-      $('.hamburgerUnknowlayer').removeClass('on');
-    });
-    $('.hamburgerLoginlayer').click(function (t) {
-      t.preventDefault();
-      $('.hamburgerLoginlayer').removeClass('on');
-    });
-    $('.hamburgerLoginInner').click(function (t) {
-      t.stopPropagation();
-    });
-    $('.hamburgerLogoutlayer').click(function (t) {
-      t.preventDefault();
-      $('.hamburgerLogoutlayer').removeClass('on');
-    });
-    $('.hamburgerLogoutInner').click(function (t) {
-      t.stopPropagation();
-    });
-    $('.hamburgerUnknowlayer').click(function (t) {
-      t.preventDefault();
-      $('.hamburgerUnknowlayer').removeClass('on');
-    });
-    $('.hamburgerUnknowInner').click(function (t) {
-      t.stopPropagation();
-    });
-  });
-})(jQuery, window);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),

@@ -583,6 +583,13 @@ input {
     }
   }
 
+  .composite-3 {
+    .composite-right {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
   .composite-4,
   .composite-5 {
     border: 0;
