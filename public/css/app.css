@@ -13536,6 +13536,11 @@ input {
   }
 }
 
+.search-section .composite-3 .composite-right {
+  display: flex;
+  justify-content: space-between;
+}
+
 .search-section .composite-4,
 .search-section .composite-5 {
   border: 0;
