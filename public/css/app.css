@@ -13153,12 +13153,36 @@ h3 {
 }
 
 .txt-h1 {
-  font-weight: bold;
+  font-weight: normal;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+@media screen and (min-width: 768px) {
+  .txt-h1 {
+    font-weight: bold;
+  }
 }
 
 .txt-h2 {
-  font-weight: bold;
+  font-weight: normal;
   margin-bottom: 24px;
+}
+
+@media screen and (min-width: 768px) {
+  .txt-h2 {
+    font-weight: bold;
+  }
+}
+
+.txt-h3 {
+  font-weight: normal;
+}
+
+@media screen and (min-width: 768px) {
+  .txt-h3 {
+    font-weight: bold;
+  }
 }
 
 select:hover {
@@ -13593,21 +13617,27 @@ input {
 }
 
 .search-section .search-bottom .search-job-result {
-  font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
 @media screen and (min-width: 768px) {
   .search-section .search-bottom .search-job-result {
-    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
   }
 }
 
 .search-section .search-bottom .search-job-result span {
-  font-size: 24px;
+  font-size: 22px;
   color: #c93a40;
   font-size: bold;
+}
+
+@media screen and (min-width: 768px) {
+  .search-section .search-bottom .search-job-result span {
+    font-size: 24px;
+  }
 }
 
 .search-section .search-bottom button#filter-search {
@@ -16986,6 +17016,17 @@ section.cat-list-section {
 
 .search-history-section .p-mypage-search-condition-text dt {
   margin-right: 20px;
+  white-space: nowrap;
+}
+
+.search-history-section .p-mypage-search-condition-text dd {
+  white-space: nowrap;
+}
+
+.search-history-section .p-mypage-search-condition-text .job-hostory-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 20px;
 }
 
 @media (max-width: 768px) {
@@ -17157,7 +17198,7 @@ section.cat-list-section {
   }
 
   .invi-job-entry h2 {
-    font-size: 18px;
+    font-size: 16px;
     margin: 0.5em 0em 0.5em;
   }
 

@@ -52,9 +52,11 @@ if ($getJobUrlPrmList !== []) {
   <section class="main-section job-entry">
     <div class="inner">
       <div class="pad cf">
-        <h1 class="txt-h1">ヒットした求人</h1>
+        <h1 class="txt-h1">求人検索結果</h1>
         <div class="d-flex mb-3 p-works-count-box">
+          @if($jobs->count() !== 0)
           <p class="search-count"><span>{{ $jobs->firstItem() }}件 〜 {{ $jobs->lastItem() }}件を表示</span></p>
+          @endif
         </div>
         <ul class="p-works-sort-conditions">
           <span>並び替え：</span>

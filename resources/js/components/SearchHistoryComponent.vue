@@ -8,13 +8,13 @@
         <li v-for="(searchItem, index) in searchItems" :key="searchItem.id">
           <dl class="p-mypage-search-condition-text">
             <dt>履歴{{index + 1}}</dt>
-            <dd>
+            <dd class="job-hostory-name">
               <a
                 v-bind:href="'/jobs/search/all?' + params[index] "
                 class="txt-blue-link"
               >{{ nameList['no'+index] }}</a>
-              {{searchItem.count}}件
             </dd>
+            <dd class="job-hostory-count">{{searchItem.count}}件</dd>
           </dl>
         </li>
       </ul>

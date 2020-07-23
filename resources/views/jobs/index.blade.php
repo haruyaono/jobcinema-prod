@@ -60,7 +60,7 @@
 							</div> <!-- newjob-item -->
 							<!-- △ ループ終了 △ -->
 							@empty
-							<p>新着案件がありません。</p>
+							<p class="my-3">新着案件がありません。</p>
 							@endforelse
 						</div> <!-- newjob-list -->
 						<p class="more-link">
