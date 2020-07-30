@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Job\Users\User;
 use App\Job\Employers\Employer;
 use App\Job\JobItems\JobItem;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -22,8 +21,8 @@ class JobItemPolicy
         //
     }
 
-    public function view(Employer $employer, JobItem $jobitem) {
+    public function view(Employer $employer, JobItem $jobitem)
+    {
         return $employer->id === $jobitem->employer_id;
     }
-
 }
