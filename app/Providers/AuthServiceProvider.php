@@ -3,8 +3,7 @@
 namespace App\Providers;
 
 use App\Job\JobItems\JobItem;
-use App\policies\JobItemPolicy;
-use Illuminate\Support\Facades\Gate;
+use App\Policies\JobItemPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

@@ -2099,6 +2099,11 @@ __webpack_require__.r(__webpack_exports__);
           delete urlParam[p];
         }
 
+        if (p == "keyword") {
+          urlParam[p] = decodeURIComponent(urlParam[p]);
+          continue;
+        }
+
         if (p == "salary_h" || p == "salary_d" || p == "salary_m") {
           urlParam["salary_child"][p] = urlParam[p];
           delete urlParam[p];
@@ -2106,7 +2111,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       self.params = Object.assign(self.params, urlParam);
-      console.log(self.params);
     }
   },
   watch: {
@@ -2345,7 +2349,7 @@ __webpack_require__.r(__webpack_exports__);
     var self = this;
 
     if (sessionStorage.hasOwnProperty("search-params")) {
-      this.searchItems = JSON.parse(sessionStorage.getItem("search-params"));
+      self.searchItems = JSON.parse(sessionStorage.getItem("search-params"));
       this.getName();
       this.getUrl();
     }
@@ -2385,7 +2389,7 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           var nl = response.data.nameList;
 
-          if (nl.length === 0) {
+          if (nl.length === 0 && searchItems[sItem]["keyword"] === "") {
             nl = "条件なし";
             self.nameList["no" + sItem] = nl;
           } else {

@@ -39,7 +39,7 @@ export default {
     const self = this;
 
     if (sessionStorage.hasOwnProperty("search-params")) {
-      this.searchItems = JSON.parse(sessionStorage.getItem("search-params"));
+      self.searchItems = JSON.parse(sessionStorage.getItem("search-params"));
 
       this.getName();
       this.getUrl();
@@ -76,7 +76,7 @@ export default {
           })
           .then(function(response) {
             let nl = response.data.nameList;
-            if (nl.length === 0) {
+            if (nl.length === 0 && searchItems[sItem]["keyword"] === "") {
               nl = "条件なし";
               self.nameList["no" + sItem] = nl;
             } else {
