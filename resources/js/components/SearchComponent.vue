@@ -156,9 +156,14 @@ export default {
         salary_d: "",
         salary_m: ""
       };
+
       for (let p in urlParam) {
         if (p == "page" || p == "ks[f]") {
           delete urlParam[p];
+        }
+        if (p == "keyword") {
+          urlParam[p] = decodeURIComponent(urlParam[p]);
+          continue;
         }
 
         if (p == "salary_h" || p == "salary_d" || p == "salary_m") {
@@ -168,7 +173,6 @@ export default {
       }
 
       self.params = Object.assign(self.params, urlParam);
-      console.log(self.params);
     }
   },
   watch: {
