@@ -18,13 +18,13 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            if($guard == 'employer') {
-                if ($request->path() == 'employer/login'){
+            if ($guard == 'employer') {
+                if ($request->path() == 'employer/login') {
                     return redirect('/company/mypage');
                 }
             }
-            if($guard == '') {
-                if ($request->url() == 'members/login'){
+            if ($guard == '') {
+                if ($request->url() == 'members/login') {
                     return redirect('/mypage/index');
                 }
             }
