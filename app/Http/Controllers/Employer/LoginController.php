@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Job\Employers\Employer;
 
 class LoginController extends Controller
 {
@@ -32,7 +33,7 @@ class LoginController extends Controller
     protected $maxAttempts = 10;     // ログイン試行回数（回）
     protected $decayMinutes = 10;   // ログインロックタイム（分）
 
-    
+
     protected $redirectTo = '/company/mypage';
 
     /**
@@ -43,6 +44,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest:employer')->except('logout');
+        $this->middleware('confirm:employer');
     }
 
     public function showLoginForm()
@@ -56,7 +58,7 @@ class LoginController extends Controller
         return Auth::guard('employer');  //変更
     }
 
-    
+
 
     public function logout(Request $request)
     {
@@ -73,5 +75,16 @@ class LoginController extends Controller
             $this->username() => [trans('認証に失敗しました。')],
         ]);
     }
-    
+
+
+    protected function attemptLogin(Request $request)
+    {
+        $credentials = $this->credentials($request);
+        $credentials['status'] = 1;
+
+        return $this->guard()->attempt(
+            $credentials,
+            $request->filled('remember')
+        );
+    }
 }

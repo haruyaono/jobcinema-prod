@@ -24,13 +24,13 @@ Route::get('/jobs/info')->name('info.get');
 Route::namespace('Front')->group(function () {
   # 求人
   Route::get('/', 'JobController@index')->name('top.get');
-  Route::group(['prefix' => 'jobs'], function() {
+  Route::group(['prefix' => 'jobs'], function () {
     Route::get('{id}', 'JobController@show')->name('jobs.show');
     Route::get('search/all', 'JobController@allJobs')->name('alljobs');
     Route::post('ajax_history_sheet_list', 'JobController@postJobHistory');
   });
   Route::get('history/jobs', 'JobController@getJobHistory')->name('history.get');
-  Route::post('search/SearchJobItemAjaxAction','JobController@realSearchJob');
+  Route::post('search/SearchJobItemAjaxAction', 'JobController@realSearchJob');
   # 求人応募
   Route::get('apply_step1/{id}', 'ApplyController@getApplyStep1')->name('apply.step1.get');
   Route::post('apply_step1/{id}', 'ApplyController@postApplyStep1')->name('apply.step1.post');
@@ -54,7 +54,7 @@ Route::namespace('Front')->group(function () {
   Route::get('ceo', 'PageController@getCeo');
   Route::get('manage_about', 'PageController@getManageAbout');
 
-  Route::group(['middleware' => ['auth:user']], function() {
+  Route::group(['middleware' => ['auth:user']], function () {
     //求職者
     Route::get('/mypage/index', 'UserController@index')->name('mypages.index');
     Route::get('/mypage/profile_edit', 'UserProfileController@edit')->name('user.profile.get');
@@ -65,7 +65,7 @@ Route::namespace('Front')->group(function () {
     Route::delete('/mypage/resume/delete', 'UserProfileController@resumeDelete')->name('resume.delete');
 
     Route::get('/mypage/application', 'UserController@jobAppManage')->name('mypage.jobapp.manage');
-    Route::get('/mypage/result_report/{apply_id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report'); 
+    Route::get('/mypage/result_report/{apply_id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report');
     Route::get('/mypage/apply_festive_money/{id}', 'UserController@getAppFesMoney')->name('app.fesmoney.get');
     Route::post('/mypage/apply_festive_money/{id}', 'UserController@postAppFesMoney')->name('app.fesmoney.post');
     Route::get('/mypage/unadopt/{id}', 'UserController@unAdoptJob')->name('appjob.unadopt');
@@ -83,7 +83,7 @@ Route::namespace('Front')->group(function () {
 Auth::routes(['verify' => true]);
 
 Route::namespace('Auth')->group(function () {
-  Route::group(['prefix' => 'members'], function() {
+  Route::group(['prefix' => 'members'], function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login')->name('login.post');
     Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
@@ -94,7 +94,7 @@ Route::namespace('Auth')->group(function () {
     Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
     Route::view('logout', 'auth.logout')->name('user.logout.cpl');
 
-    Route::group(['middleware' => 'auth:user'], function() {
+    Route::group(['middleware' => 'auth:user'], function () {
       Route::get('register_complete', 'HomeController@index')->name('home');
       Route::post('logout', 'LoginController@logout')->name('logout');
     });
@@ -102,7 +102,7 @@ Route::namespace('Auth')->group(function () {
 });
 
 Route::namespace('Employer')->group(function () {
-  Route::group(['prefix' => 'employer'], function() {
+  Route::group(['prefix' => 'employer'], function () {
     # ログイン
     Route::get('login', 'LoginController@showLoginForm')->name('employer.login');
     Route::post('login', 'LoginController@login')->name('employer.login.post');
@@ -132,13 +132,14 @@ Route::namespace('Employer')->group(function () {
     Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('employer.password.reset');
     Route::get('redirect/passreset', 'ResetPasswordController@redirectPassReset');
 
-    Route::group(['middleware' => ['auth:employer']], function() {
+    Route::group(['middleware' => ['auth:employer']], function () {
       Route::post('logout',   'LoginController@logout')->name('employer.logout');
     });
   });
 });
 
-Route::group(['middleware' => ['auth:employer']], function() {
+
+Route::group(['middleware' => ['auth:employer', 'confirm']], function () {
   Route::get('company/job/create/top', 'JobController@createTop')->name('job.create.top');
   Route::get('company/job/create/step1', 'JobController@createStep1')->name('job.create.step1');
   Route::post('company/job/create/step1', 'JobController@storeStep1')->name('job.store.step1');
@@ -197,12 +198,12 @@ Route::group(['middleware' => ['auth:employer']], function() {
   Route::get('applylist/detail/unadopt/{jobitem_id}/{apply_id}', 'JobController@empUnAdoptJob')->name('emp.applicant.unadopt');
   Route::get('applylist/detail/adopt_cancel/{jobitem_id}/{apply_id}', 'JobController@empAdoptCancelJob')->name('emp.applicant.adopt.cancel');
 
-  Route::group(['prefix' => 'company'], function() {
+  Route::group(['prefix' => 'company'], function () {
     #会社・企業
     Route::get('mypage', 'CompanyController@mypageIndex')->name('company.mypage');
     Route::get('edit', 'CompanyController@edit')->name('companies.edit');
     Route::post('edit', 'CompanyController@update')->name('companies.update');
-    Route::get('logo', function(){
+    Route::get('logo', function () {
       return redirect('/company/create');
     });
     Route::post('logo', 'CompanyController@companyLogo')->name('companies.logo');
@@ -210,8 +211,8 @@ Route::group(['middleware' => ['auth:employer']], function() {
     Route::get('delete', 'CompanyController@companyDeleteApp')->name('companies.delete');
     Route::get('delete_cancel', 'CompanyController@companyDeleteAppCancel')->name('companies.delete.cancel');
   });
-  
-  
+
+
   //企業マイページからのパスワード ・メールアドレス 変更
   Route::get('changepassword', 'CompanyController@getChangePasswordForm')->name('employer.changepassword.get');
   Route::post('changepassword', 'CompanyController@postChangePassword')->name('employer.changepassword.post');
@@ -222,42 +223,41 @@ Route::group(['middleware' => ['auth:employer']], function() {
 
 
 // 管理者
-Route::group(['prefix' => 'dashboard'], function(){
+Route::group(['prefix' => 'dashboard'], function () {
   Route::get('login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.login');
   Route::post('login', 'Admin\Auth\LoginController@login')->name('admin.login');
 
-  Route::group(['middleware' => ['auth:admin']], function() {
+  Route::group(['middleware' => ['auth:admin']], function () {
     Route::post('logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
     Route::get('home', 'Admin\HomeController@index')->name('admin.home')->middleware('admin');
-  
+
     Route::get('joblist/index', 'DashboardController@getAlljobs')->name('alljob.get');
     Route::get('joblist/sort', 'DashboardController@jobsSort')->name('alljob.sort');
     Route::get('joblist/show/{id}', 'DashboardController@getJobDetail')->name('admin.job.detail');
-  
+
     Route::get('joblist/{id}/oiwaikin', 'DashboardController@oiwaikinChange')->name('admin.job.oiwaikin.change');
-  
+
     Route::get('joblist/index/approval_pending', 'DashboardController@getApprovalPendingJobs');
     Route::get('joblist/{id}/Status/{slug}', 'DashboardController@approveJobStatus')->name('job.status.change');
-  
+
     Route::get('joblist/delete/{id}', 'DashboardController@jobDetete')->name('job.delete');
-  
+
     Route::get('app_manage', 'DashboardController@getAppManage')->name('admin.app.manage');
     Route::get('oiwaikin/users', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.get');
     // Route::get('oiwaikin/users/{id}/detail', 'DashboardController@getOiwaikinUsers')->name('oiwaikin.users.detail.get');
     Route::get('user/{id}/detail', 'DashboardController@getUserDetail')->name('user.detail.get');
-  
+
     Route::get('billing/top', 'DashboardController@getBilling')->name('billing.index');
     Route::get('billing/year_and_month', 'DashboardController@getBillingYear')->name('billing.year');
-  
+
     Route::get('companies', 'DashboardController@getAllCompanies')->name('all.company.get');
     Route::get('company/{id}/detail', 'DashboardController@getCompanyDetail')->name('admin.company.detail');
-  
+
     Route::get('company/{id}/delete', 'DashboardController@companyDelete')->name('admin.company.delete');
-  
+
     Route::get('category_top', 'DashboardController@categoryTop')->name('admin_category.top');
     Route::get('category/{url}', 'DashboardController@category')->name('admin_category');
     Route::post('category/{flag}/edit', 'DashboardController@editCategory')->name('admin_category_edit');
     Route::post('category/{flag}/delete', 'DashboardController@deleteCategory')->name('admin_category_delete');
   });
- 
 });

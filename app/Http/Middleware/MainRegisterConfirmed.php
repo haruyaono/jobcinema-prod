@@ -18,16 +18,16 @@ class MainRegisterConfirmed
     {
         $employer = Employer::where('email', '=', $request->input('email'))->first();
         if ($employer) {
-            if(! $employer->isMainRegistered()) {
-                \Session::flash('flash_message_danger', 
+            if (!$employer->isMainRegistered()) {
+                \Session::flash(
+                    'flash_message_danger',
                     '本登録が終わっておりません。
                     送付された仮登録完了メールから本登録をしてください。'
                 );
                 return redirect()->back()->withInput($request->only('email'));
             }
-            
         }
- 
+
         return $next($request);
     }
 }
