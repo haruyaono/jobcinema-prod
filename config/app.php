@@ -127,6 +127,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Line Notify
+    |--------------------------------------------------------------------------
+    */
+
+    'line_notify' => [
+        'token' => env('LINE_NOTIFY_TOKEN'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -180,10 +190,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ValidatorServiceProvider::class, 
+        App\Providers\ValidatorServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         // Prettus\Repository\Providers\RepositoryServiceProvider::class,
-        App\Providers\JobItemServiceProvider::class
+        App\Providers\JobItemServiceProvider::class,
+        App\Providers\LineNotifyServiceProvider::class,
 
     ],
 
@@ -237,19 +248,18 @@ return [
         'Form' => Collective\Html\FormFacade::class, //add
         'Html' => Collective\Html\HtmlFacade::class, //add
         'Image' => Intervention\Image\Facades\Image::class, //add
-
         'CustomValidator' => 'app\Library\CustomValidator', //add
-
-        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class
+        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class, //add
+        'LineNotify' => App\Facades\LineNotify::class, //add
 
     ],
 
     'debug_blacklist' => [
         '_ENV' => [
             'APP_KEY',
-        'URL' => Illuminate\Support\Facades\URL::class,
+            'URL' => Illuminate\Support\Facades\URL::class,
             'AMAZON_API_SECRET_KEY',
-        'Config' => Illuminate\Support\Facades\Config::class,
+            'Config' => Illuminate\Support\Facades\Config::class,
             'SENDGRID_API_KEY',
             'MAIL_FROM_ADDRESS',
             'FACEBOOK_APP_ID',

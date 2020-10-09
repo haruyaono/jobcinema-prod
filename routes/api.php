@@ -22,4 +22,3 @@ Route::group(['namespace' => 'API'], function () {
     Route::get('/jobs', 'JobController@index');
     // Route::get('/job_search', 'JobController@searchJobItem');
 });
-

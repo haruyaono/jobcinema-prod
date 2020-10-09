@@ -221,7 +221,7 @@ Route::group(['middleware' => ['auth:employer', 'confirm']], function () {
 });
 
 
-
+Route::post('/dashboard/line_callback', 'Admin\LineController@callback');
 // 管理者
 Route::group(['prefix' => 'dashboard'], function () {
   Route::get('login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.login');
