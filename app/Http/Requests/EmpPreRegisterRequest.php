@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class EmpPreRegisterRequest extends FormRequest
 {
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +26,7 @@ class EmpPreRegisterRequest extends FormRequest
     {
         return [
             'email' => 'required|email|string|max:191|unique:employers|unique:users',
-            'password' => 'required|min:6|string|max:191|confirmed',
+            'password' => 'required|min:8|string|max:191|confirmed',
             'e_last_name' => 'required|string|max:191',
             'e_first_name' => 'required|string|max:191',
             'e_phone1' => 'required|numeric|digits_between:2,5',
@@ -35,5 +35,4 @@ class EmpPreRegisterRequest extends FormRequest
             'cname' => 'required|string|max:191',
         ];
     }
-    
 }
