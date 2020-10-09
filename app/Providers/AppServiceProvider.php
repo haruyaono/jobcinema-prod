@@ -14,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
-    {
-    
-    }
+    { }
 
     /**
      * Bootstrap any application services.
@@ -26,12 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-	if (env('APP_ENV') === 'production')
-	{
-		\URL::forceScheme('https');
-	}
+        if (env('APP_ENV') === 'production') {
+            \URL::forceScheme('https');
+        }
 
-	$is_production = env('APP_ENV') === 'production' ? true : false;
-        View::share('is_production',$is_production);
+        $is_production = env('APP_ENV') === 'production' ? true : false;
+        View::share('is_production', $is_production);
     }
 }
