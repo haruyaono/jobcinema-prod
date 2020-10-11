@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Job\JobItems\JobItem;
 use App\Policies\JobItemPolicy;
+use App\Providers\CustomProvider\CustomAuthServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -26,6 +28,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Auth::provider('custom_auth', function ($app, array $config) {
+            return new CustomAuthServiceProvider($this->app['hash'], $config['model']);
+        });
     }
 }
