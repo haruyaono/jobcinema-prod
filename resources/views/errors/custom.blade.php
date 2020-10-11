@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'ページが見つかりません')
+@section('title', 'JOB CiNEMA')
 @section('description', '釧路の職場を上映する求人サイト')
 
 @section('header')
@@ -9,7 +9,6 @@
 @endsection
 
 @section('contents')
-<!-- パンくず -->
 <div id="breadcrumb" class="bread only-pc">
   <ol>
     <li>
@@ -24,29 +23,29 @@
     </li>
   </ol>
 </div>
-
 <div class="main-wrap">
-  <section class="newjob-entry">
+  <section class="main-section error-section">
     <div class="inner">
       <div class="pad">
-        <h2 class="txt-h2">エラー</h2>
-
-        <div class="newjob-list">
-          <p class="msg-404">ページが見つかりません。</p>
-
-          <p class="linkbtn-404">
-            <a href="/">トップページに戻る</a>
+        <h2 class="txt-h2 left-border-h2">エラー</h2>
+        <div class="text-center my-5">
+          <p class="my-5 h3">
+            @if($error_name === 'NotAppliedJob')
+            この求人は応募済みです
+            @else
+            エラー
+            @endif
           </p>
-        </div> <!-- newjob-list -->
+          <a class="btn btn-yellow my-5" href="/">トップページに戻る</a>
+        </div>
       </div> <!-- pad -->
     </div> <!-- inner -->
-  </section> <!-- newjob-entry -->
-
-
+  </section> <!-- main-section -->
 </div> <!-- main-wrap-->
+
 @endsection
 
 @section('footer')
-@component('components.footer')
+@component('components.employer.mypage_footer')
 @endcomponent
 @endsection

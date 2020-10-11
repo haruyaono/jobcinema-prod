@@ -76,15 +76,24 @@ class LoginController extends Controller
         ]);
     }
 
-
-    protected function attemptLogin(Request $request)
+    public function authenticate(Request $request)
     {
-        $credentials = $this->credentials($request);
-        $credentials['status'] = 1;
+        $credentials = $request->only('email', 'password');
 
-        return $this->guard()->attempt(
-            $credentials,
-            $request->filled('remember')
-        );
+        if (Auth::guard('employer')->attempt($credentials)) {
+            // Authentication passed...
+            return redirect()->intended('company/mypage');
+        }
     }
+
+    // protected function attemptLogin(Request $request)
+    // {
+    //     $credentials = $this->credentials($request);
+    //     $credentials['status'] = 1;
+
+    //     return $this->guard()->attempt(
+    //         $credentials,
+    //         $request->filled('remember')
+    //     );
+    // }
 }

@@ -78,12 +78,13 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'custom_auth',
             'model' => App\Job\Users\User::class,
         ],
-        'employers' => [ //追加
-            'driver' => 'eloquent', //追加
-            'model' => App\Job\Employers\Employer::class, //追加
+        'employers' => [
+            // 'driver' => 'eloquent',
+            'driver' => 'custom_auth',
+            'model' => App\Job\Employers\Employer::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
@@ -117,10 +118,10 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
-        'employers' => [ 
-            'provider' => 'employers', 
-            'table' => 'password_resets', 
-            'expire' => 60, 
+        'employers' => [
+            'provider' => 'employers',
+            'table' => 'password_resets',
+            'expire' => 60,
         ],
         'admins' => [
             'provider' => 'admins',
