@@ -85,15 +85,4 @@ class LoginController extends Controller
             return redirect()->intended('company/mypage');
         }
     }
-
-    // protected function attemptLogin(Request $request)
-    // {
-    //     $credentials = $this->credentials($request);
-    //     $credentials['status'] = 1;
-
-    //     return $this->guard()->attempt(
-    //         $credentials,
-    //         $request->filled('remember')
-    //     );
-    // }
 }
