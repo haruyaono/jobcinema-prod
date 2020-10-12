@@ -1,6 +1,5 @@
 <!-- adminlte::pageを継承 -->
 @extends('adminlte::page')
-@inject('lineLoginUrl','App\Http\Controllers\Admin\LineController')
 <!-- ページタイトルを入力 -->
 @section('title', '管理画面')
 
@@ -12,7 +11,6 @@
 <!-- ページの内容を入力 -->
 @section('content')
 <p>JOBCiNEMA専用の管理画面です</p>
-{{$lineLoginUrl->createUrl()}}
 @stop
 
 <!-- 読み込ませるCSSを入力 -->
