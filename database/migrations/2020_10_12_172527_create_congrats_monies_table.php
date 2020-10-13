@@ -16,9 +16,9 @@ class CreateCongratsMoniesTable extends Migration
         Schema::create('congrats_monies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('amount')->default(0);
-            $table->string('label')->default('なし');
+            $table->string('label')->default('なし')->nullable();
             $table->unsignedInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

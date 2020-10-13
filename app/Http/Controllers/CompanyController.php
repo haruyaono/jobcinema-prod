@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use File;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Facades\LineNotify;
 
 class CompanyController extends Controller
 {
@@ -209,6 +210,13 @@ class CompanyController extends Controller
         $employerRepo->updateEmployer([
             'status' => 8
         ]);
+
+        $message = "\n\n■企業アカウント削除申請がありました\n";
+        $message .= "\n・企業ID：" . $employer->company->id;
+        $message .= "\n・企業名：" . $employer->company->cname;
+        $message .= "\n・申請URL：" . config('app.url') . "/dashboard/joblist/index/approval_pending\n";
+
+        LineNotify::lineNotify($message);
 
         return redirect()->back()->with('message_success', 'アカウント削除申請をしました');
     }
