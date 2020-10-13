@@ -68,7 +68,7 @@
             @else
             <br>
             <p>採用単価・お祝い金は、[システム設定→求人カテゴリ→雇用形態カテゴリ→登録or削除]で自動登録・削除されます。</p>
-            <a href="{{config('app.url')}}//dashboard/category/status">設定する</a>
+            <a href="{{route('admin_category', ['flag' => 'status'])}}">設定する</a>
             @endif
 
             <!-- モーダル・ダイアログ -->
@@ -91,7 +91,8 @@
 
                         <div class="modal-body">
                             {{--API 通信結果表示部分--}}
-                            <div id="api_result" class="hidden"></div>
+                            <div id=" api_result" class="hidden">
+                            </div>
 
                             <form class="form-horizontal">
                                 <div class="form-group">
@@ -141,15 +142,5 @@
 
 <!-- 読み込ませるJSを入力 -->
 @section('js')
-<script>
-    $(function() {
-        $('a').click(function() {
-            $(this).click(function() {
-                alert('只今処理中です。\nそのままお待ちください。');
-                return false;
-            });
-        });
-    });
-</script>
 <script src="{{ asset('js/admin_system.js') }}"></script>
 @stop

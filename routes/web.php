@@ -255,13 +255,12 @@ Route::group(['prefix' => 'dashboard'], function () {
 
     Route::get('company/{id}/delete', 'DashboardController@companyDelete')->name('admin.company.delete');
 
-    Route::get('category_top', 'DashboardController@categoryTop')->name('admin_category.top');
-    Route::get('category/{url}', 'DashboardController@category')->name('admin_category');
-    Route::post('category/{flag}/edit', 'DashboardController@editCategory')->name('admin_category_edit');
-    Route::post('category/{flag}/delete', 'DashboardController@deleteCategory')->name('admin_category_delete');
-
     // システム設定
     Route::group(['prefix' => 'setting'], function () {
+      Route::get('category_top', 'DashboardController@categoryTop')->name('admin_category.top');
+      Route::get('category/{url}', 'DashboardController@category')->name('admin_category');
+      Route::post('category/{flag}/edit', 'DashboardController@editCategory')->name('admin_category_edit');
+      Route::post('category/{flag}/delete', 'DashboardController@deleteCategory')->name('admin_category_delete');
       Route::get('monies/{flag}', 'DashboardController@getSettingMonies')->name('admin.get.monies');
       Route::post('monies/{flag}/edit', 'DashboardController@editSettingMoney')->name('admin.post.money');
     });
