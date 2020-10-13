@@ -141,7 +141,7 @@ return [
         [
             'text'        => '求人一覧',
             'url'         => 'dashboard/joblist/index',
-            
+
 
         ],
         [
@@ -165,8 +165,22 @@ return [
             'url'         => 'dashboard/billing/top',
         ],
         [
-            'text'        => '求人カテゴリ',
-            'url'         => 'dashboard/category_top',
+            'text'        => 'システム設定',
+            'icon'    => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => '求人カテゴリ',
+                    'url'  => 'dashboard/setting/category_top',
+                ],
+                [
+                    'text' => '採用単価',
+                    'url'  => 'dashboard/setting/monies/achievement_rewards',
+                ],
+                [
+                    'text' => 'お祝い金',
+                    'url'  => 'dashboard/setting/monies/congrats',
+                ],
+            ],
         ],
         [
             'text'        => 'サイトに戻る',
