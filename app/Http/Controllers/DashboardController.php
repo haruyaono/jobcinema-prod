@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Input;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
@@ -17,23 +18,20 @@ use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
 use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
 use App\Job\Admins\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Job\Companies\Repositories\Interfaces\CompanyRepositoryInterface;
-use App\Job\Categories\StatusCategory;
-use App\Job\Categories\TypeCategory;
-use App\Job\Categories\HourlySalaryCategory;
-use App\Job\Categories\AreaCategory;
-use App\Job\Categories\DateCategory;
 use App\Job\Categories\Category;
+use App\Job\CongratsMonies\CongratsMoney;
+use App\Job\AchievementRewards\AchievementReward;
 use App\Http\Requests\bellingParameter;
 use App\Http\Requests\AdminRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use File; 
+use File;
 
 class DashboardController extends Controller
 {
 
-     /**
+    /**
      * @var CategoryRepositoryInterface
      * @var JobItemRepositoryInterface
      * @var UserRepositoryInterface
@@ -54,7 +52,7 @@ class DashboardController extends Controller
     // 1ページ当たりの表示件数
     const NUM_PER_PAGE = 10;
 
-     /**
+    /**
      * DashboardController constructor.
      * @param JobItem $jobItem
      * @param CategoryRepositoryInterface $categoryRepository
@@ -91,17 +89,17 @@ class DashboardController extends Controller
         $param = request()->all();
 
         if (request()->has('status') && request()->input('status') != '') {
-            $data = array_merge($data, array( 'status' => request()->input('status')));
-        } 
-        
+            $data = array_merge($data, array('status' => request()->input('status')));
+        }
+
         if (request()->has('oiwaikin') && request()->input('oiwaikin') != '') {
             $oiwaikin_q = request()->input('oiwaikin');
-            if($oiwaikin_q == "3000") {
+            if ($oiwaikin_q == "3000") {
                 $oiwaikin_q  = intval($oiwaikin_q);
-            } elseif($oiwaikin_q == "not"){
+            } elseif ($oiwaikin_q == "not") {
                 $oiwaikin_q = null;
             }
-            $data = array_merge($data, array( 'oiwaikin' => $oiwaikin_q));
+            $data = array_merge($data, array('oiwaikin' => $oiwaikin_q));
         }
         if (request()->has('created_at') && request()->input('created_at') != '') {
             $list = $this->jobItemRepo->searchJobItem($data, 'created_at', request()->input('created_at'));
@@ -110,7 +108,7 @@ class DashboardController extends Controller
         }
 
         return view('admin.alljob', [
-            'jobs' => $this->jobItemRepo->paginateArrayResults($list->all(), 10), 
+            'jobs' => $this->jobItemRepo->paginateArrayResults($list->all(), 10),
             'param' => $param
         ]);
     }
@@ -118,7 +116,7 @@ class DashboardController extends Controller
     public function getJobDetail($id)
     {
         $job = $this->jobItemRepo->findAllJobItemById($id);
-      
+
         return view('admin.job_detail', compact('job'));
     }
 
@@ -130,14 +128,14 @@ class DashboardController extends Controller
         $data = [
             'oiwaikin' => ''
         ];
-        if($job->oiwaikin === null) {
+        if ($job->oiwaikin === null) {
             $data['oiwaikin'] = config('const.OIWAIKIN_AMOUNT');
         } else {
             $data['oiwaikin'] = null;
         }
         $jobItemRepo->updateJobItem($data);
 
-        return redirect()->back()->with('message','お祝い金設定を変更しました');
+        return redirect()->back()->with('message', 'お祝い金設定を変更しました');
     }
 
     public function getApprovalPendingJobs()
@@ -145,7 +143,7 @@ class DashboardController extends Controller
         $list = $this->jobItemRepo->findBy(['status' => 1])->sortByDesc('created_at');
 
         return view('admin.approval_pending_job', [
-            'jobs' => $this->jobItemRepo->paginateArrayResults($list->all(), 10), 
+            'jobs' => $this->jobItemRepo->paginateArrayResults($list->all(), 10),
         ]);
     }
 
@@ -156,18 +154,18 @@ class DashboardController extends Controller
 
         $jobItemRepo = new JobItemRepository($job);
 
-        switch($slug) {
+        switch ($slug) {
             case 'status_approve':
                 $jobItemRepo->updateJobItem(['status' => 2]);
-                $message['message'] = '【求人(' . $job->id .')】を承認しました';
+                $message['message'] = '【求人(' . $job->id . ')】を承認しました';
                 break;
             case 'status_non_approve':
                 $jobItemRepo->updateJobItem(['status' => 3]);
-                $message['message'] = '【求人(' . $job->id .')】を非承認にしました';
+                $message['message'] = '【求人(' . $job->id . ')】を非承認にしました';
                 break;
             case 'status_non_public':
                 $jobItemRepo->updateJobItem(['status' => 6]);
-                $message['message'] = '【求人(' . $job->id .')】を完全非公開にしました';
+                $message['message'] = '【求人(' . $job->id . ')】を完全非公開にしました';
                 break;
         }
         $this->adminRepo->sendEmailToEmployer($job, $slug);
@@ -179,22 +177,22 @@ class DashboardController extends Controller
     {
         $disk = Storage::disk('s3');
         $job = $this->jobItemRepo->findAllJobItemById($id);
-        
+
         $dirList['image'] = \Config::get('fpath.real_img') . $job->id;
         $dirList['movie'] = \Config::get('fpath.real_mov') . $job->id;
 
-        foreach($dirList as $dKey => $dir) {
+        foreach ($dirList as $dKey => $dir) {
             File::deleteDirectory(public_path() . $dirList[$dKey]);
             $disk->deleteDirectory($dirList[$dKey]);
         }
 
         DB::beginTransaction();
         try {
-    
-            if($job->applies()->exists()) {
+
+            if ($job->applies()->exists()) {
                 $job->applies()->detach();
             }
-            if($job->favourites()->exists()) {
+            if ($job->favourites()->exists()) {
                 $job->favourites()->detach();
             }
 
@@ -204,64 +202,64 @@ class DashboardController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
         }
-    
-        return redirect()->back()->with('message','求人削除しました');
+
+        return redirect()->back()->with('message', '求人削除しました');
     }
 
     public function getAppManage()
     {
         $app_list = DB::table('apply_job_item')
-                        ->select('apply_job_item.id as apply_job_item_id', 'apply_job_item.job_item_id', 'apply_job_item.apply_id', 'apply_job_item.s_status', 'apply_job_item.e_status', 'apply_job_item.created_at', 'applies.user_id', 'applies.last_name', 'applies.first_name')
-                        ->leftJoin('applies', 'apply_job_item.apply_id', 'applies.id')
-                        ->latest()
-                        ->paginate(10);
-      
+            ->select('apply_job_item.id as apply_job_item_id', 'apply_job_item.job_item_id', 'apply_job_item.apply_id', 'apply_job_item.s_status', 'apply_job_item.e_status', 'apply_job_item.created_at', 'applies.user_id', 'applies.last_name', 'applies.first_name')
+            ->leftJoin('applies', 'apply_job_item.apply_id', 'applies.id')
+            ->latest()
+            ->paginate(10);
+
         return view('admin.app_list', compact('app_list'));
     }
 
     public function getOiwaikinUsers()
     {
         $oiwaikin_users = DB::table('apply_job_item')
-                            ->whereNotNull('oiwaikin')
-                            ->whereNotNull('first_attendance')
-                            ->select('apply_job_item.id as apply_job_item_id', 'apply_job_item.job_item_id', 'apply_job_item.apply_id', 'apply_job_item.s_status', 'apply_job_item.e_status', 'apply_job_item.oiwaikin', 'apply_job_item.first_attendance','apply_job_item.created_at', 'applies.user_id', 'applies.last_name', 'applies.first_name')
-                            ->leftJoin('applies', 'apply_job_item.apply_id', 'applies.id')
-                            ->latest()
-                            ->paginate(10);
-      
+            ->whereNotNull('oiwaikin')
+            ->whereNotNull('first_attendance')
+            ->select('apply_job_item.id as apply_job_item_id', 'apply_job_item.job_item_id', 'apply_job_item.apply_id', 'apply_job_item.s_status', 'apply_job_item.e_status', 'apply_job_item.oiwaikin', 'apply_job_item.first_attendance', 'apply_job_item.created_at', 'applies.user_id', 'applies.last_name', 'applies.first_name')
+            ->leftJoin('applies', 'apply_job_item.apply_id', 'applies.id')
+            ->latest()
+            ->paginate(10);
+
         return view('admin.oiwaikin_users', compact('oiwaikin_users'));
     }
-    
+
     public function getUserDetail($id)
     {
         $apply = $this->applyRepo->findApplyById($id);
 
-        if(!$apply->user) {
+        if (!$apply->user) {
             return view('errors.admin.custom')->with('error_name', 'NotUser');
         }
-        foreach($apply->jobItems as $jobItem) {
+        foreach ($apply->jobItems as $jobItem) {
             $applyJobItem = $jobItem;
         }
 
         $profileRepo = new ProfileRepository($apply->user->profile);
         $profile = $profileRepo->getResume();
- 
+
         return view('admin.user_detail', compact('apply', 'applyJobItem', 'profile'));
     }
 
     public function getBilling()
     {
-       
+
         $month_list = $this->jobItem->getMonthList();
         $applyJobItemList = DB::table('apply_job_item')
-                        ->select('job_item_id', DB::raw('count(*) as tatal'))
-                        ->groupBy('job_item_id')
-                        ->get();
+            ->select('job_item_id', DB::raw('count(*) as tatal'))
+            ->groupBy('job_item_id')
+            ->get();
 
-        foreach($applyJobItemList as $applyJobItem) {
+        foreach ($applyJobItemList as $applyJobItem) {
             $jobitem = $this->jobItemRepo->findAllJobItemById($applyJobItem->job_item_id);
             $employer = $jobitem->employer;
-            if($employer->company) {
+            if ($employer->company) {
                 $applyJobItem->company = $employer->company;
             }
         }
@@ -280,18 +278,18 @@ class DashboardController extends Controller
         // ページネーションリンクにクエリストリングを付け加える
         $app_list->appends($input);
         $month_list = $this->jobItem->getMonthList()
-                        ->where('year', $input['year'])
-                        ->where('month', $input['month'])
-                        ->first();
-        
-        foreach($app_list as $app_item) {
+            ->where('year', $input['year'])
+            ->where('month', $input['month'])
+            ->first();
+
+        foreach ($app_list as $app_item) {
             $app_item->apply = $this->applyRepo->findApplyById($app_item->apply_id);
             $app_item->user = $app_item->apply->user;
         }
 
         $total = $app_list->count() * 30000;
         $total = number_format($total);
-    
+
         return view('admin.billing_year', compact('app_list', 'month_list', 'total'));
     }
 
@@ -302,16 +300,16 @@ class DashboardController extends Controller
 
         if (request()->has('created_at') && request()->input('created_at') != '') {
             $list = $this->companyRepo->listCompanies('created_at', request()->input('created_at'));
-        } 
+        }
 
         if (request()->has('c_status') && request()->input('c_status') != '') {
             $list = $list->filter(function ($cItem, $cKey) {
                 return $cItem->employer->status === intval(request()->input('c_status'));
             });
-        } 
-       
+        }
+
         return view('admin.all_company', [
-            'companies'=> $this->companyRepo->paginateArrayResults($list->all(), 10),
+            'companies' => $this->companyRepo->paginateArrayResults($list->all(), 10),
             'param' => $param
         ]);
     }
@@ -320,7 +318,7 @@ class DashboardController extends Controller
     {
         $company =  $this->companyRepo->findCompanyById($id);
         $jobs =  $company->jobs;
-       
+
         return view('admin.company_detail', compact('company', 'jobs'));
     }
 
@@ -334,26 +332,26 @@ class DashboardController extends Controller
 
         DB::beginTransaction();
         try {
-            if(!$jobs->isEmpty()) {
+            if (!$jobs->isEmpty()) {
 
-                foreach($dirList as $dKey => $dir) {
+                foreach ($dirList as $dKey => $dir) {
                     File::deleteDirectory(public_path() . $dirList[$dKey]);
                     $disk->deleteDirectory($dirList[$dKey]);
                 }
 
-                foreach($jobs as $job) {
+                foreach ($jobs as $job) {
                     $dirList['image'] = \Config::get('fpath.real_img') . $job->id;
                     $dirList['movie'] = \Config::get('fpath.real_mov') . $job->id;
 
-                    foreach($dirList as $dKey => $dir) {
+                    foreach ($dirList as $dKey => $dir) {
                         File::deleteDirectory(public_path() . $dirList[$dKey]);
                         $disk->deleteDirectory($dirList[$dKey]);
                     }
 
-                    if($job->applies()->exists()) {
+                    if ($job->applies()->exists()) {
                         $job->applies()->detach();
                     }
-                    if($job->favourites()->exists()) {
+                    if ($job->favourites()->exists()) {
                         $job->favourites()->detach();
                     }
 
@@ -368,7 +366,7 @@ class DashboardController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
         }
-       
+
         return redirect()->back()->with('message', 'アカウントを削除しました');
     }
 
@@ -376,7 +374,7 @@ class DashboardController extends Controller
     {
         return view('admin.category_top');
     }
-    
+
     public function category($url)
     {
 
@@ -384,20 +382,19 @@ class DashboardController extends Controller
         $catTitle = $catList->first()->parent->name;
 
         $arrCatList = $catList->toArray();
-        
+
         $tn = $ts = $temp_num = $temp_str = array();
 
-        if($url === 'salary') {
+        if ($url === 'salary') {
             foreach ($arrCatList as $key => $row) {
                 $tn = $ts = $temp_num = $temp_str = array();
 
                 foreach ($row['children'] as $k => $r) {
-                    if(is_numeric(substr($r['name'], 0, 1))) {
-                        $tn[$k] = str_replace(',','',$r['name']);
-            
+                    if (is_numeric(substr($r['name'], 0, 1))) {
+                        $tn[$k] = str_replace(',', '', $r['name']);
+
                         $temp_num[$k] = $r;
-                    }
-                    else {
+                    } else {
                         $ts[$k] = $r['name'];
                         $temp_str[$k] = $r;
                     }
@@ -407,15 +404,13 @@ class DashboardController extends Controller
                 array_multisort($ts, SORT_ASC, SORT_STRING, $temp_str);
                 $arrCatList[$key]['children'] = array_merge($temp_num, $temp_str);
             }
-    
         } else {
             foreach ($arrCatList as $key => $row) {
-                if(is_numeric(substr($row['name'], 0, 1))) {
-                    $tn[$key] = str_replace(',','',$row['name']);
-    
+                if (is_numeric(substr($row['name'], 0, 1))) {
+                    $tn[$key] = str_replace(',', '', $row['name']);
+
                     $temp_num[$key] = $row;
-                }
-                else {
+                } else {
                     $ts[$key] = $row['name'];
                     $temp_str[$key] = $row;
                 }
@@ -424,11 +419,11 @@ class DashboardController extends Controller
             array_multisort($ts, SORT_ASC, SORT_STRING, $temp_str);
             $arrCatList = array_merge($temp_num, $temp_str);
         }
-        
-        return view('admin.category', compact('arrCatList','url', 'catTitle'));
+
+        return view('admin.category', compact('arrCatList', 'url', 'catTitle'));
     }
 
-     /**
+    /**
      * カテゴリ編集・新規作成API
      *
      * @param AdminRequest $request
@@ -438,9 +433,19 @@ class DashboardController extends Controller
     {
         $category_id = $request->input('category_id');
 
-        if($category_id === null) {
+        if ($category_id === null) {
             $parent = Category::find($request->input('pId'));
-            $children = Category::create(['name' => $request->input('name')]);
+            $children = Category::create([
+                'name' => $request->input('name')
+            ]);
+            if ($flag === 'status') {
+                CongratsMoney::create([
+                    'category_id' => $children->id
+                ]);
+                AchievementReward::create([
+                    'category_id' => $children->id
+                ]);
+            }
             $category = $parent->appendNode($children);
         } else {
             $findCategory = Category::find($category_id);
@@ -460,10 +465,69 @@ class DashboardController extends Controller
      */
     public function deleteCategory(AdminRequest $request, $flag)
     {
-        $category_id = $request->input('category_id');
-        Category::destroy($category_id);
+        $categoryId = $request->input('category_id');
 
-        return response()->json();
+        try {
+            Category::destroy($categoryId);
+        } catch (Exception $e) {
+            return response()->json($e);
+        }
     }
 
+    public function getSettingMonies($flag)
+    {
+
+        if ($flag === 'congrats') {
+            $moniesList = CongratsMoney::all();
+        } elseif ($flag === 'achievement_rewards') {
+            $moniesList = AchievementReward::all();
+        } else {
+            return view('admin.home');
+        }
+
+        $parent = Category::where('slug', 'status')->first();
+        $statusCategories = $parent->children();
+
+        return view('admin.setting.monies', [
+            'moniesList' => $moniesList,
+            'statusCategories' => $statusCategories,
+            'flag' => $flag,
+        ]);
+    }
+
+    /**
+     * お祝い金編集・新規作成API
+     *
+     * @param AdminRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function editSettingMoney(Request $request, $flag)
+    {
+        $request->validate([
+            'amount' => 'required|integer',
+            'label' => 'max:191',
+        ]);
+
+        $target_id = $request->input('target_id');
+
+        try {
+            if ($flag === 'congrats') {
+                $targetMoney = CongratsMoney::findOrFail($target_id);
+            } elseif ($flag === 'achievement_rewards') {
+                $targetMoney = AchievementReward::findOrFail($target_id);
+            } else {
+                return redirect()->back();
+            }
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => '該当するデータが存在しません',
+            ], 404);
+        }
+        $updated = $targetMoney->update([
+            'amount' => $request->input('amount'),
+            'label' => $request->input('label'),
+        ]);
+
+        return response()->json($updated);
+    }
 }

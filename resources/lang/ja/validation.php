@@ -107,6 +107,9 @@ return [
     */
 
     'attributes' => [
+        // common
+        'amount' => '金額',
+        'label' => 'ラベル',
         //user
         'email' => '「メールアドレス」',
         'password' => '「パスワード」',
@@ -153,7 +156,7 @@ return [
         'c_phone2' => '「応募者に通知する電話番号」',
         'c_phone3' => '「応募者に通知する電話番号」',
         'logo' => '「企業ロゴ」',
-        
+
         // 求人票
         'job_title' => 'キャッチコピー',
         'job_intro' => '紹介文',
