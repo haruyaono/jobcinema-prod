@@ -3,8 +3,11 @@
 namespace App\Job\Categories;
 
 use App\Job\JobItems\JobItem;
+use App\Job\AchievementRewards\AchievementReward;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -14,22 +17,24 @@ class Category extends Model
     protected $fillable = ['name', 'slug'];
     protected $dates = ['created_at', 'updated_at'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function jobitems()
+    public function jobitems(): BelongsToMany
     {
         return $this->belongsToMany(JobItem::class, 'job_item_category')
-                    ->withPivot([
-                        'id',
-                        'job_item_id',
-                        'category_id',
-                        'parent_id',
-                    ])->withTimeStamps();
+            ->withPivot([
+                'id',
+                'job_item_id',
+                'category_id',
+                'parent_id',
+            ])->withTimeStamps();
     }
 
     public function getNameList(array $idList)
     {
         return $this->find($idList)->pluck('name');
+    }
+
+    public function achievementReward(): HasOne
+    {
+        return $this->hasOne(AchievementReward::class);
     }
 }

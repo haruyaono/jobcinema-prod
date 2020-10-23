@@ -26,397 +26,236 @@ class MediaController extends Controller
 
   /**
    * JobItemController constructor.
-   * 
+   *
    * @param JobItemRepositoryInterface $jobItemRepository
    */
 
-   public function __construct(JobItemRepositoryInterface $jobItemRepository)
-   {
-     $this->JobItemRepo = $jobItemRepository;
+  public function __construct(JobItemRepositoryInterface $jobItemRepository)
+  {
+    $this->JobItemRepo = $jobItemRepository;
 
-     $this->middleware(['employer']);
-   }
+    $this->middleware(['employer']);
+  }
 
+  public function editMainImage(JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+    return view('companies.job_sheet.image.main_image', compact('jobitem'));
+  }
 
-    /**
-     * Display a main page of the uploading main image
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function getMainImage($id='')
-    {
-      if($id != '') {
-        $job = JobItem::findOrFail($id);
+  public function editSubImage1(JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+    return view('companies.job_sheet.image.sub_image_01', compact('jobitem'));
+  }
 
-        return view('jobs.post.main_image', compact('job'));
+  public function editSubImage2(JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+    return view('companies.job_sheet.image.sub_image_02', compact('jobitem'));
+  }
 
-      }
+  public function updateImage(ImageUploadRequest $request, JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
 
-      $job = '';
-      return view('jobs.post.main_image', compact('job'));
-    }
+    $disk = Storage::disk('s3');
+    $imageFlag = (int) $request->input('data.File.suffix');
 
-    public function postImage(ImageUploadRequest $request, $id = '')
-    {
-      $disk = Storage::disk('s3');
-      $imageFlag = $request->input('imageFlag');
-  
-      if($request->hasfile('data.File.image')) {
+    if ($request->hasfile('data.File.image')) {
 
-        // 新規作成画面かどうか
-        if($id !== '') {
+      $image = Image::make($request->file('data.File.image'))->widen(300);
 
-          $job = JobItem::findOrFail($id);
-          $editFlag = 1;
-
-          if(session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image'))) {
-      
-             // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-             $edit_image_path_list = $this->JobItemRepo->existJobItemImageAndDeleteOnPost($imageFlag, $editFlag);
-
-          }
-        } else {
-          $job = '';
-          if(session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
-            // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-            $image_path_list = $this->JobItemRepo->existJobItemImageAndDeleteOnPost($imageFlag);
-          }
-        }
-
-        // サブ１かサブ２の判定フラグ
-        $suffix = $request->input('data.File.suffix');
-
-        // 画像ファイルをs3・ローカルに保存に保存
-        $image_path = $this->JobItemRepo->saveJobItemImages($request->file('data.File.image'), $imageFlag);
-        
-        // 新規作成画面かどうか
-        if($id != '') {
-          
-          $edit_image_path_list[$imageFlag] = $image_path;
-          $request->session()->put('data.file.edit_image', $edit_image_path_list);
-          $request->session()->put('data.jobId', $id);
-
-        } else {
-
-          $image_path_list[$imageFlag] = $image_path;
-          $request->session()->put('data.file.image', $image_path_list);
-        }
-
-        // 登録完了画面を返す
-        if($imageFlag == 'main') {
-          return view('jobs.post.main_image_complete', compact('job'));
-        } else {
-          return view('jobs.post.sub_image_complete', compact('job', 'suffix'));
-        }
-
+      if ($imageFlag !== null) {
+        $imageName = "img_" . $jobitem->id . "_" . $imageFlag . '.jpg';
       } else {
-
-        if($movieFlag == 'main') {
-          return redirect()->back()->with('message_danger', '登録するメイン画像が選ばれていません');
-        } else {
-          return redirect()->back()->with('message_danger', '登録するサブ画像が選ばれていません');
-        }
-
+        $imageName = $image->hashName();
       }
 
-    }
+      $path = \Config::get('fpath.job_sheet_img') . $imageName;
 
-    public function imageDelete(Request $request, $id='')
-    {
+      if ($disk->exists($path)) {
+        $disk->delete($path);
+      }
+      if (File::exists(public_path() . $path)) {
+        File::delete(public_path() . $path);
+      }
 
-      $disk = Storage::disk('s3');
-      $imageFlag = $request->imageflag;
+      $image->save(public_path($path));
 
-       // 新規作成画面かどうか
-      if($id != '') {
-
-        $job = JobItem::findOrFail($id);
-        $editFlag = 1;
-
-        if(session()->has('data.file.edit_image.'. $imageFlag) && is_array(session()->get('data.file.edit_image'))) {
-
-          // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-          $this->JobItemRepo->existJobItemImageAndDeleteOnDelete($imageFlag, $editFlag, $job);
-
-           // 削除完了画面を返す
-          if($imageFlag === 'main') {
-            return redirect()->back()->with('message_success', 'メイン写真を削除しました');
-          } else {
-            return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-          }
-
-        } else {
-
-          switch($imageFlag) {
-            case $imageFlag === 'main':
-                $jobImagePath = $job->job_img;
-                break;
-            case $imageFlag === 'sub1':
-                $jobImagePath = $job->job_img2;
-                break;
-            case $imageFlag === 'sub2':
-                $jobImagePath = $job->job_img3;
-                break;
-            default:
-                $jobImagePath = null;
-          }
-
-          if($jobImagePath !== null) {
-            session()->put('data.file.edit_image.' . $imageFlag, '');
-            session()->put('data.jobId', $id);
-
-             // 削除完了画面を返す
-            if($imageFlag == 'main') {
-              return redirect()->back()->with('message_success', 'メイン写真を削除しました');
-            } else {
-              return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-            }
-          }
-
-          // 画像がセットされていないならエラー画面を返す
-          if($imageFlag == 'main') {
-            return redirect()->back()->with('message_danger', '削除するメイン写真はありません');
-          } else {
-            return redirect()->back()->with('message_danger', '削除する　サブ写真はありません');
-          }
-
-        }
+      $imageContents = File::get(public_path($path));
 
 
+      $disk->put($path, $imageContents, 'public');
+
+      $jobitem->update([
+        'job_img_' . $imageFlag => $imageName,
+      ]);
+
+      if ($imageFlag === 1) {
+        return view('companies.job_sheet.image.main_image_complete', compact('jobitem'));
       } else {
-        // 新規作成時
-
-        if (session()->has('data.file.image.'.$imageFlag) && is_array(session()->get('data.file.image'))) {
-
-          // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-          $this->JobItemRepo->existJobItemImageAndDeleteOnDelete($imageFlag);
-
-          if($imageFlag == 'main') {
-            return redirect()->back()->with('message_success', 'メイン写真を削除しました');
-          } else {
-            return redirect()->back()->with('message_success', 'サブ写真を削除しました');
-          }
-
-         
-
-        } else {
-
-          if($imageFlag == 'main') {
-            return redirect()->back()->with('message_danger', '削除するメイン写真はありません');
-          } else {
-            return redirect()->back()->with('message_danger', '削除するサブ写真はありません');
-          }
-
-        }
-
+        return view('companies.job_sheet.image.sub_image_complete', compact('jobitem', 'imageFlag'));
       }
+    } else {
 
-    }
-
-    //sub image
-    public function getSubImage1($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_image_01', compact('job'));
-      }
-
-      $job = '';
-      return view('jobs.post.sub_image_01', compact('job'));
-
-    }
-
-    public function getSubImage2($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_image_02', compact('job'));
-      }
-
-      $job = '';
-      return view('jobs.post.sub_image_02', compact('job'));
-
-    }
-
-    //main movie
-    public function getMainMovie($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.main_movie', compact('job'));
-      }
-      $job = '';
-      return view('jobs.post.main_movie', compact('job'));
-    }
-
-    public function postMovie(MovieUploadRequest $request, $id='')
-    {
-
-      $disk = Storage::disk('s3');
-      $movieFlag = $request->input('movieFlag');
-
-      if($request->hasfile('data.File.movie')) {
-        // 新規作成画面かどうか  
-        if($id != '') {
-          // 編集時
-          $job = JobItem::findOrFail($id);
-          $editFlag = 1;
-
-          if(session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie'))) {
-              // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-              $edit_movie_path_list = $this->JobItemRepo->existJobItemMovieAndDeleteOnPost($movieFlag, $editFlag);
-          }
-
-        } else {
-          // 新規作成時
-          $job = '';
-          if(session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
-            // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-            $movie_path_list = $this->JobItemRepo->existJobItemMovieAndDeleteOnPost($movieFlag);
-          }
-        }
-
-        // サブ１かサブ２の判定フラグ
-        $suffix = $request->input('data.File.suffix');
-        // 動画ファイルをs3・ローカルに保存に保存
-        $movie_path = $this->JobItemRepo->saveJobItemMovies($request->file('data.File.movie'), $movieFlag);
-
-        // $after_movie = shell_exec('ffmpeg -i ' . '/public' . \Config::get('fpath.tmp_mov') . $main_movie_name .  '-vf scale=320:-1' . '/public' . \Config::get('fpath.tmp_mov') . 'sample.mp4' . 'pipe:1');
-        // $beforeMovie = FFMpeg::fromDisk('local')->open(\Config::get('fpath.tmp_mov'), $main_movie_name);
-        // $beforeMovieStreams = $beforeMovie->getStreams()->first();
-        // $beforeMovie->addFilter(function ($filters) {
-        //     $filters->resize(new \FFMpeg\Coordinate\Dimension(720, 480));
-        // })
-        // ->export()
-        // ->toDisk('public')
-        // ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-        // ->save(\Config::get('fpath.tmp_mov'), $main_movie_name);
-
-        if($id !== '') {
-          $edit_movie_path_list[$movieFlag] = $movie_path;
-          $request->session()->put('data.file.edit_movie', $edit_movie_path_list);
-          $request->session()->put('data.jobId', $id);
-
-        } else {
-          $movie_path_list[$movieFlag] = $movie_path;
-          $request->session()->put('data.file.movie', $movie_path_list);
-        }
-
-
-        // 登録完了画面を返す
-        if($movieFlag === 'main') {
-          return view('jobs.post.main_movie_complete', compact('job'));
-        } else {
-          return view('jobs.post.sub_movie_complete', compact('job', 'suffix'));
-        }
-
+      if ($imageFlag === 1) {
+        return redirect()->back()->with('message_danger', '登録するメイン画像が選ばれていません');
       } else {
-
-        if($movieFlag === 'main') {
-          return redirect()->back()->with('message_danger', '登録するメイン動画が選ばれていません');
-        } else {
-          return redirect()->back()->with('message_danger', '登録するサブ動画が選ばれていません');
-        }
+        return redirect()->back()->with('message_danger', '登録するサブ画像が選ばれていません');
       }
     }
+  }
 
-    public function movieDelete(Request $request, $id = '')
-    {
-      $disk = Storage::disk('s3');
-      $movieFlag = $request->movieflag;
-      // 新規作成画面かどうか
-      if($id !== '') {
-        // 編集時
-        $job = JobItem::findOrFail($id);
-        $editFlag = 1;
+  public function deleteImage(Request $request, JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
 
-        if(session()->has('data.file.edit_movie.' . $movieFlag) && is_array(session()->get('data.file.edit_movie'))) {
-          // もしセッションに画像がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-          $this->JobItemRepo->existJobItemMovieAndDeleteOnDelete($movieFlag, $editFlag, $job);
-          
-          if($movieFlag === 'main') {
-            return redirect()->back()->with('message_success', 'メイン動画を削除しました');
-          } else {
-            return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-          }
+    $disk = Storage::disk('s3');
+    $imageFlag = (int) $request->flag;
 
-        } else {
-          switch($movieFlag) {
-            case $movieFlag === 'main':
-                $jobMoviePath = $job->job_mov;
-                break;
-            case $movieFlag === 'sub1':
-                $jobMoviePath = $job->job_mov2;
-                break;
-            case $movieFlag === 'sub2':
-                $jobMoviePath = $job->job_mov3;
-                break;
-            default:
-                $jobMoviePath = null;
-          }
+    switch ($imageFlag) {
+      case $imageFlag === 1:
+        $imageName = $jobitem->job_img_1;
+        break;
+      case $imageFlag === 2:
+        $imageName = $jobitem->job_img_2;
+        break;
+      case $imageFlag === 3:
+        $imageName = $jobitem->job_img_3;
+        break;
+      default:
+        $imageName = null;
+    }
 
-          if($jobMoviePath !== null) {
-            session()->put('data.file.edit_movie.' . $movieFlag, '');
-            session()->put('data.jobId', $id);
+    $path = \Config::get('fpath.job_sheet_img') . $imageName;
 
-            // 削除完了画面を返す
-            if($movieFlag === 'main') {
-              return redirect()->back()->with('message_success', 'メイン動画を削除しました');
-            } else {
-              return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-            }
+    if ($disk->exists($path)) {
+      $disk->delete($path);
+    }
+    if (File::exists(public_path() . $path)) {
+      File::delete(public_path() . $path);
+    }
 
-          }
+    $jobitem->update([
+      'job_img_' . $imageFlag => null
+    ]);
 
-          // 動画がセットされていないならエラー画面を返す
-          if($movieFlag === 'main') {
-            return redirect()->back()->with('message_danger', '削除するメイン動画はありません');
-          } else {
-            return redirect()->back()->with('message_danger', '削除する　サブ動画はありません');
-          }
-        }
+    if ($imageFlag === 1) {
+      return redirect()->back()->with('message_success', 'メイン写真を削除しました');
+    } else {
+      return redirect()->back()->with('message_success', 'サブ写真を削除しました');
+    }
+  }
 
+  public function editMainMovie(JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+    return view('companies.job_sheet.movie.main_movie', compact('jobitem'));
+  }
+
+  public function editSubMovie1(JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+    return view('companies.job_sheet.movie.sub_movie_01', compact('jobitem'));
+  }
+
+  public function editSubMovie2(JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+    return view('companies.job_sheet.movie.sub_movie_02', compact('jobitem'));
+  }
+
+  public function updateMovie(MovieUploadRequest $request, JobItem $jobitem)
+  {
+
+    $this->authorize('view', $jobitem);
+
+    $disk = Storage::disk('s3');
+    $movieFlag = (int) $request->input('data.File.suffix');
+
+    if ($request->hasfile('data.File.movie')) {
+
+      $movie = $request->file('data.File.movie');
+
+      if ($movieFlag !== null) {
+        $movieName = "mov_" . $jobitem->id . "_" . $movieFlag . '.' . $movie->guessExtension();
       } else {
-        // 新規作成時
-        if (session()->has('data.file.movie.'.$movieFlag) && is_array(session()->get('data.file.movie'))) {
-           // もしセッションに動画がセットされている且つs3・ローカルにファイルが保存されていたら、削除
-           $this->JobItemRepo->existJobItemMovieAndDeleteOnDelete($movieFlag);
+        $movieName = $movie->hashName();
+      }
 
-          if($movieFlag === 'main') {
-            return redirect()->back()->with('message_success', 'メイン動画を削除しました');
-          } else {
-            return redirect()->back()->with('message_success', 'サブ動画を削除しました');
-          }
+      $path = \Config::get('fpath.job_sheet_mov') . $movieName;
 
-        } else {
-          if($movieFlag === 'main') {
-            return redirect()->back()->with('message_danger', '削除するメイン動画はありません');
-          } else {
-            return redirect()->back()->with('message_danger', '削除するサブ動画はありません');
-          }
-        }
+      if ($disk->exists($path)) {
+        $disk->delete($path);
+      }
+      if (File::exists(public_path() . $path)) {
+        File::delete(public_path() . $path);
+      }
+
+      $movie->move(public_path() . \Config::get('fpath.job_sheet_mov'), $movieName);
+
+      $movieContents = File::get(public_path($path));
+
+      $disk->put($path, $movieContents, 'public');
+
+      $jobitem->update([
+        'job_mov_' . $movieFlag => $movieName,
+      ]);
+
+      if ($movieFlag === 1) {
+        return view('companies.job_sheet.movie.main_movie_complete', compact('jobitem'));
+      } else {
+        return view('companies.job_sheet.movie.sub_movie_complete', compact('jobitem', 'movieFlag'));
+      }
+    } else {
+
+      if ($movieFlag === 1) {
+        return redirect()->back()->with('message_danger', '登録するメイン動画が選ばれていません');
+      } else {
+        return redirect()->back()->with('message_danger', '登録するサブ動画が選ばれていません');
       }
     }
+  }
 
-    //sub movie
-    public function getSubMovie1($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_movie_01', compact('job'));
-      }
-      $job = '';
-      return view('jobs.post.sub_movie_01', compact('job'));
+  public function deleteMovie(Request $request, JobItem $jobitem)
+  {
+    $this->authorize('view', $jobitem);
+
+    $disk = Storage::disk('s3');
+    $movieFlag = (int) $request->flag;
+
+    switch ($movieFlag) {
+      case $movieFlag === 1:
+        $movieName = $jobitem->job_mov_1;
+        break;
+      case $movieFlag === 2:
+        $movieName = $jobitem->job_mov_2;
+        break;
+      case $movieFlag === 3:
+        $movieName = $jobitem->job_mov_3;
+        break;
+      default:
+        $movieName = null;
     }
 
-    public function getSubMovie2($id='')
-    {
-      if($id) {
-        $job = JobItem::findOrFail($id);
-        return view('jobs.post.sub_movie_02', compact('job'));
-      }
-      $job = '';
-      return view('jobs.post.sub_movie_02', compact('job'));
+    $path = \Config::get('fpath.job_sheet_mov') . $movieName;
+
+    if ($disk->exists($path)) {
+      $disk->delete($path);
     }
-    
+    if (File::exists(public_path() . $path)) {
+      File::delete(public_path() . $path);
+    }
+
+    $jobitem->update([
+      'job_mov_' . $movieFlag => null
+    ]);
+
+    if ($movieFlag === 1) {
+      return redirect()->back()->with('message_success', 'メイン動画を削除しました');
+    } else {
+      return redirect()->back()->with('message_success', 'サブ動画を削除しました');
+    }
+  }
 }

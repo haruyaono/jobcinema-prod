@@ -24,14 +24,12 @@ class JobCreateStep1Request extends FormRequest
     public function rules()
     {
         return [
-            'cats_status.id' => 'required',
-            'cats_type.id' => 'required',
-            'cats_area.id' => 'required',
-            'cats_salary_p.id' => 'required',
-            'cats_salary.id' => 'required',
-            'cats_date.id' => 'required',
-           
-            
+            'data.JobSheet.categories.status.id' => 'required',
+            'data.JobSheet.categories.type.id' => 'required',
+            'data.JobSheet.categories.area.id' => 'required',
+            'data.JobSheet.categories.salary.parent_id' => 'required',
+            'data.JobSheet.categories.salary.id' => 'required',
+            'data.JobSheet.categories.date.id' => 'required',
         ];
     }
 }

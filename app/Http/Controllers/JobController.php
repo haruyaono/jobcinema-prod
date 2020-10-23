@@ -5,20 +5,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Arr;
-use App\Job\Users\Repositories\UserRepository;
 use App\Job\Profiles\Repositories\ProfileRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
-use App\Job\Companies\Company;
-use App\Job\Employers\Repositories\EmployerRepository;
 use App\Job\JobItems\Requests\JobCreateStep1Request;
-use App\Job\JobItems\Requests\JobCreateStep2Request;
-use App\Job\JobItems\Requests\JobCreateTmpSaveRequest;
-use File;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Job\JobItems\Requests\JobCreateTmpSaveOrConfirmRequest;
+use App\Job\JobItems\Requests\JobSheetUpdateCategoryRequest;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
@@ -27,7 +19,6 @@ use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
 
 class JobController extends Controller
 {
-
   /**
    * @var CategoryRepositoryInterface
    * @var JobItemRepositoryInterface
@@ -40,8 +31,6 @@ class JobController extends Controller
   private $userRepo;
   private $applyRepo;
   private $employerRepo;
-
-  private $job_form_session = 'count';
   private $JobItem;
 
   /**
@@ -175,120 +164,79 @@ class JobController extends Controller
     return redirect()->route('applicants.view');
   }
 
-  public function index()
+  public function index(Request $request)
   {
+    $list = $this->employerRepo->findJobItems($request->user())->sortBy('created_at')->all();
+    $jobitems = $this->jobItemRepo->paginateArrayResults($list, 10);
 
-    $employer = auth('employer')->user();
-    $list = $this->employerRepo->findJobItems($employer)->sortBy('created_at')->all();
-
-    $jobs = $this->jobItemRepo->paginateArrayResults($list, 10);
-    //件数表示の例外処理
-    if (Input::get('page') > $jobs->LastPage()) {
+    if (Input::get('page') > $jobitems->LastPage()) {
       abort(404);
     }
 
-
-    return view('jobs.myjob', compact('jobs'));
+    return view('companies.jobs.index', compact('jobitems'));
   }
 
-  public function edit(JobItem $jobItem)
+  public function editCategory(JobItem $jobitem, $cat_slug)
   {
-
-    $this->authorize('view', $jobItem);
-    session()->put('count', 1);
-
-    if (session()->get('data.jobId') !== $jobItem->id) {
-      session()->forget(['data']);
-    }
-
-    // 新規作成時のファイル用セッションが残っていたら削除
-    if (session()->has('data.file.image')) {
-      session()->forget('data.file.image');
-    }
-    if (session()->has('data.file.movie')) {
-      session()->forget('data.file.movie');
-    }
-    $job = $jobItem;
-
-    if (config('app.env') == 'production') {
-      $jobImageBaseUrl = config('app.s3_url');
-    } else {
-      $jobImageBaseUrl = '';
-    }
-
-    $salaryList = collect();
-
-    if (session()->has('data.form.edit_category.cats_salary')) {
-      $arr = [];
-      $salaryList['session'] = collect(session()->get('data.form.edit_category.cats_salary'));
-      foreach ($salaryList['session']['id'] as $id) {
-        array_push($arr, [
-          'id' => $id,
-          'parent_id' => $salaryList['session']['parent_id'],
-          'slug' => $salaryList['session']['slug'],
-        ]);
-      }
-      $salaryList['session'] = $arr;
-    } else {
-
-      $salaryList['saved'] = $jobItem->categories->map(function ($jCategory) {
-        $pName = $jCategory->parent->name;
-        if ($pName == '時給' || $pName == '日給' || $pName == '月給') {
-          return $this->categoryRepo->findCategoryById($jCategory->id);
-        }
-      })
-        ->reject(function ($jCategory) {
-          return is_null($jCategory);
-        });
-    }
-
-    return view('jobs.post.edit', compact('job', 'salaryList', 'jobImageBaseUrl'));
-  }
-
-  public function catEdit(JobItem $jobItem, $cat_slug)
-  {
-    $this->authorize('view', $jobItem);
+    $this->authorize('view', $jobitem);
     $categories = $this->categoryRepo->listCategoriesByslug($cat_slug);
 
-    return view('jobs.post.cat_edit', compact('jobItem', 'cat_slug', 'categories'));
+    return view('companies.job_sheet.edit_category', compact('jobitem', 'cat_slug', 'categories'));
   }
 
-  public function catUpdate(Request $request, JobItem $jobItem)
+  public function updateCategory(JobSheetUpdateCategoryRequest $request, JobItem $jobitem)
   {
-    $this->authorize('view', $jobItem);
+    $this->authorize('update', $jobitem);
     $categoryFlag = $request->input('cat_flag');
 
-    if ($categoryFlag == 'salary') {
-      $request->validate([
-        'cats_salary_p.id' => 'required',
-        'cats_salary.id' => 'required',
-      ]);
+    $jobItemRepo = new JobItemRepository($jobitem);
+
+    $saveCategoryList = $jobitem->categories()->wherePivot('ancestor_slug', $categoryFlag)->get();
+
+    if (!$saveCategoryList->isEmpty()) {
+      foreach ($saveCategoryList as $saveCategoryItem) {
+        $jobItemRepo->dissociateCategory($saveCategoryItem->id);
+      }
     }
 
-    if (session()->has('data.form.edit_category')) {
-      $edit_cat_list = session()->get('data.form.edit_category');
-    }
+    $categoryData = $request->input('data.JobSheet.categories');
+    $categorySalarySlug = [];
+    $newData = [];
 
     if ($categoryFlag == 'salary') {
-      $edit_cat_list['cats_salary_p'] = $request->input('cats_salary_p');
-      $edit_cat_list['cats_salary'] = $request->input('cats_salary');
+      foreach ($categoryData[$categoryFlag]['parent_id'] as $pIndex => $pId) {
+        if (!array_key_exists($pIndex, $categoryData[$categoryFlag]['id']) || !array_key_exists($pId, $categoryData[$categoryFlag]['parent_slug'])) {
+          continue;
+        }
+        $newData = [
+          'id' => $categoryData[$categoryFlag]['id'][$pIndex],
+          'ancestor_id' => $categoryData['salary_ancestor']['ancestor_id'],
+          'ancestor_slug' => $categoryData['salary_ancestor']['ancestor_slug'],
+          'parent_id' =>  $pId,
+          'parent_slug' => $categoryData[$categoryFlag]['parent_slug'][$pId],
+        ];
+        $jobItemRepo->associateCategory($newData);
+        array_push($categorySalarySlug, $this->categoryRepo->findCategoryById($pId)->slug);
+      }
     } else {
-      $edit_cat_list['cats_' . $categoryFlag] = $request->input('cats_' . $categoryFlag);
+      $newData = [
+        'id' => $categoryData[$categoryFlag]['id'],
+        'ancestor_id' => $categoryData[$categoryFlag]['ancestor_id'],
+        'ancestor_slug' => $categoryData[$categoryFlag]['ancestor_slug'],
+        'parent_id' => null,
+        'parent_slug' => null,
+      ];
+      $jobItemRepo->associateCategory($newData);
     }
 
+    $categories = $jobitem->categories()->wherePivot('ancestor_slug', $categoryFlag)->get();
 
-    $request->session()->put('data.form.edit_category', $edit_cat_list);
-    $request->session()->put('data.jobId', $jobItem->id);
-
-    return redirect()->route('job.edit', [$jobItem->id]);
+    return view('companies.job_sheet.edit_category_complete', compact('categories', 'categoryFlag', 'categorySalarySlug'));
   }
 
   public function createTop()
   {
-    session()->forget('data');
-    session()->forget('count');
-
-    return view('jobs.post.top_create');
+    return view('companies.job_sheet.top_create');
   }
 
   public function createStep1()
@@ -298,929 +246,163 @@ class JobController extends Controller
     if (preg_match("/iPhone|iPod|Android.*Mobile|Windows.*Phone/", $_SERVER['HTTP_USER_AGENT'])) {
       return view('jobs.post.create_step1_sp', compact('categoryList'));
     } else {
-      return view('jobs.post.create_step1', compact('categoryList'));
-    }
-  }
-
-  public function createStep2()
-  {
-
-    if (session()->get('count') === 1 || session()->get('count') === 3) {
-
-      $jobImageBaseUrl = $this->jobItemRepo->getJobImageBaseUrl();
-
-      return view('jobs.post.create_step2', compact('jobItem', 'jobImageBaseUrl'));
-    } else {
-
-      session()->forget('count');
-      return redirect()->route('job.create.step1');
+      return view('companies.job_sheet.create_step1', compact('categoryList'));
     }
   }
 
   public function storeStep1(JobCreateStep1Request $request)
   {
-    $request->session()->put('data.form.category', $request->all());
-    $request->session()->put('count', 1);
+    $employer = auth('employer')->user();
+    $company =  $employer->company;
+    $categoryData = $request->input('data.JobSheet.categories');
 
-    return redirect()->route('job.create.step2');
-  }
-
-  public function storeDraft(JobCreateTmpSaveRequest $request, $id = '')
-  {
-
-    $disk = Storage::disk('s3');
-
-    if (session()->get('count') === 1) {
-      $employer = auth('employer')->user();
-      $company = $employer->company;
-
-      $image_path_list = [];
-      $edit_image_path_list = [];
-      $movie_path_list = [];
-      $edit_movie_path_list = [];
-
-      if ($pubStartReq = $request->input('pub_start')) {
-        if ($pubStartReq === 'start_specified') {
-          $pub_start = $request->input('start_specified_date');
-        } else {
-          $pub_start = $pubStartReq;
-        }
+    foreach ($categoryData  as $key => $data) {
+      if ($key == "salary_ancestor") {
+        continue;
       }
-
-      if ($pubEndReq = $request->input('pub_end')) {
-        if ($pubEndReq === 'end_specified') {
-          $pub_end = $request->input('end_specified_date');
-        } else {
-          $pub_end = $pubEndReq;
-        }
-      }
-
-      $fileSessionKeys = config('const.FILE_SLUG');
-
-      if ($id) {
-        // edit
-        $job = $this->jobItemRepo->findAllJobItemById($id);
-        $jobItemRepo = new JobItemRepository($job);
-
-        $reqCatData = [];
-        $categorySlugList = config('const.CATEGORY_SLUG');
-
-        foreach ($categorySlugList as $categorySlug) {
-          if ($request->session()->has('data.form.edit_category.cats_' . $categorySlug)) {
-            $sCategory = $request->session()->get('data.form.edit_category.cats_' . $categorySlug);
-            if ($categorySlug == 'salary') {
-              foreach ($sCategory['id'] as $id) {
-                $reqCatData[$id] = [
-                  'slug' => $sCategory['slug'],
-                  'parent_id' => $sCategory['parent_id']
-                ];
-              }
-              continue;
-            }
-            $reqCatData[$sCategory['id']] = [
-              'slug' => $sCategory['slug'],
-              'parent_id' => $sCategory['parent_id']
-            ];
-          } else {
-
-            $categories = $job->categories()->wherePivot('slug', $categorySlug)->get();
-
-            foreach ($categories as $c) {
-              if ($c->pivot->slug == $categorySlug) {
-                $reqCatData[$c->id] = [
-                  'slug' => $c->pivot->slug,
-                  'parent_id' => $c->pivot->parent_id,
-                ];
-              }
-            }
+      $arr = [];
+      if ($key == 'salary') {
+        foreach ($data['parent_id'] as $pIndex => $pId) {
+          if (!array_key_exists($pIndex, $data['id']) || !array_key_exists($pId, $data['parent_slug'])) {
+            continue;
           }
-        }
-
-        $job->categories()->sync($reqCatData);
-
-        $savedFilePath = $this->jobItemRepo->savedDbFilePath($job);
-
-        $reqData = $request->except('_token', 'start_specified_date', 'end_specified_date');
-
-        // ディレクトリを作成
-        if (!file_exists(public_path() . \Config::get('fpath.real_img') . $job->id)) {
-          mkdir(public_path() . \Config::get('fpath.real_img') . $job->id, 0777);
-        }
-        if (!file_exists(public_path() . \Config::get('fpath.real_mov') . $job->id)) {
-          mkdir(public_path() . \Config::get('fpath.real_mov') . $job->id, 0777);
-        }
-
-        // 一時保存から本番の格納場所へ移動
-        //image upload
-        if (session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image'))) {
-
-          $edit_image_path_list = session()->get('data.file.edit_image');
-
-          foreach ($edit_image_path_list as $index => $image_path) {
-            //main
-            $jobImageDbPath = $savedFilePath['image'][$index];
-
-            if ($image_path !== '') {
-              if ($jobImageDbPath !== null && $image_path !== $jobImageDbPath && File::exists(public_path() . $jobImageDbPath)) {
-                // local
-                File::delete(public_path() . $jobImageDbPath);
-                // s3
-                if ($disk->exists($jobImageDbPath)) {
-                  $disk->delete($jobImageDbPath);
-                }
-              }
-
-              $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-              $common_path = \Config::get('fpath.real_img') . $job->id . "/";
-
-              // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
-              rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-
-              // ローカルの本番フォルダにある画像パスを変数に格納
-              $edit_image_path_list[$index] = $common_path . "real." . $file_name;
-
-              // s3の一時保存フォルダにある画像を削除
-              if ($disk->exists($image_path)) {
-                $disk->delete($image_path);
-              }
-
-              // s3の本番フォルダに保存
-              $contents = File::get(public_path() . $common_path . "real." . $file_name);
-              $disk->put($edit_image_path_list[$index], $contents, 'public');
-            } elseif ($image_path === '' && $jobImageDbPath !== null) {
-              // local
-              if (File::exists(public_path() . $jobImageDbPath)) {
-                File::delete(public_path() . $jobImageDbPath);
-              }
-              // s3
-              if ($disk->exists($jobImageDbPath)) {
-                $disk->delete($jobImageDbPath);
-              }
-            } else {
-              $edit_image_path_list[$index] = '';
-            }
-          }
-
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if (!isset($edit_image_path_list[$fileSessionKey]) && $savedFilePath['image'][$fileSessionKey] !== null) {
-              $edit_image_path_list[$fileSessionKey] = $savedFilePath['image'][$fileSessionKey];
-            } elseif (!isset($edit_image_path_list[$fileSessionKey]) && $savedFilePath['image'][$fileSessionKey] === null) {
-              $edit_image_path_list[$fileSessionKey] = null;
-            } elseif ($edit_image_path_list[$fileSessionKey] === '') {
-              $edit_image_path_list[$fileSessionKey] = null;
-            }
-          }
-        } else {
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if ($savedFilePath['image'][$fileSessionKey] !== null) {
-              $edit_image_path_list[$fileSessionKey] = $savedFilePath['image'][$fileSessionKey];
-            } else {
-              $edit_image_path_list[$fileSessionKey] = null;
-            }
-          }
-        }
-
-        //movie upload
-        if (session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie'))) {
-
-          $edit_movie_path_list = session()->get('data.file.edit_movie');
-
-          foreach ($edit_movie_path_list as $index => $movie_path) {
-            $jobMovieDbPath = $savedFilePath['movie'][$index];
-
-            if ($movie_path !== '') {
-              if ($jobMovieDbPath !== null && $movie_path !== $jobMovieDbPath && File::exists(public_path() . $jobMovieDbPath)) {
-
-                File::delete(public_path() . $jobMovieDbPath);
-                // s3
-                if ($disk->exists($jobMovieDbPath)) {
-                  $disk->delete($jobMovieDbPath);
-                }
-              }
-
-              $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-              $common_path = \Config::get('fpath.real_mov') . $job->id . "/";
-
-              // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
-              rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-
-              // ローカルの本番フォルダにある動画パスを変数に格納
-              $edit_movie_path_list[$index] = $common_path . "real." . $file_name;
-
-              // s3の一時保存フォルダにある画像を削除
-              if ($disk->exists($movie_path)) {
-                $disk->delete($movie_path);
-              }
-
-              // s3の本番フォルダに保存
-              $contents = File::get(public_path() . $common_path . "real." . $file_name);
-              $disk->put($edit_movie_path_list[$index], $contents, 'public');
-            } elseif ($movie_path === '' && $jobMovieDbPath !== null) {
-
-              // ローカルファイル削除
-              if (File::exists(public_path() . $jobMovieDbPath)) {
-                File::delete(public_path() . $jobMovieDbPath);
-              }
-              // s3にあるファイルを削除
-              if ($disk->exists($jobMovieDbPath)) {
-                $disk->delete($jobMovieDbPath);
-              }
-            } else {
-              $edit_movie_path_list[$index] = '';
-            }
-          }
-
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if (!isset($edit_movie_path_list[$fileSessionKey]) && $savedFilePath['movie'][$fileSessionKey] !== null) {
-              $edit_movie_path_list[$fileSessionKey] = $savedFilePath['movie'][$fileSessionKey];
-            } elseif (!isset($edit_movie_path_list[$fileSessionKey]) && $savedFilePath['movie'][$fileSessionKey] === null) {
-              $edit_movie_path_list[$fileSessionKey] = null;
-            } elseif ($edit_movie_path_list[$fileSessionKey] === '') {
-              $edit_movie_path_list[$fileSessionKey] = null;
-            }
-          }
-        } else {
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if ($savedFilePath['movie'][$fileSessionKey] !== null) {
-              $edit_movie_path_list[$fileSessionKey] = $savedFilePath['movie'][$fileSessionKey];
-            } else {
-              $edit_movie_path_list[$fileSessionKey] = null;
-            }
-          }
-        }
-
-        $reqData['status'] = 0;
-        $reqData['pub_start'] = $pub_start;
-        $reqData['pub_end'] = $pub_end;
-        $reqData['job_img'] = $edit_image_path_list['main'];
-        $reqData['job_img2'] = $edit_image_path_list['sub1'];
-        $reqData['job_img3'] = $edit_image_path_list['sub2'];
-        $reqData['job_mov'] = $edit_movie_path_list['main'];
-        $reqData['job_mov2'] = $edit_movie_path_list['sub1'];
-        $reqData['job_mov3'] = $edit_movie_path_list['sub2'];
-
-        $jobItemRepo->updatejobItem($reqData);
-      } else {
-
-        $reqData = $request->except('_token', 'start_specified_date', 'end_specified_date', 'cats_status', 'cats_type', 'cats_area', 'cats_salary_p', 'cats_salary_c', 'cats_date');
-        $reqData['employer_id'] = $employer->id;
-        $reqData['company_id'] = $company->id;
-        $reqData['status'] = 0;
-        $reqData['pub_start'] = $pub_start;
-        $reqData['pub_end'] = $pub_end;
-
-        $reqCatData = [];
-        $categorySlugList = config('const.CATEGORY_SLUG');
-        foreach ($categorySlugList as $categorySlug) {
-          if ($request->session()->has('data.form.category.cats_' . $categorySlug)) {
-            $sCategory = $request->session()->get('data.form.category.cats_' . $categorySlug);
-            if ($categorySlug == 'salary') {
-              $arr = [];
-              foreach ($sCategory['id'] as $id) {
-                array_push($arr, [
-                  'id' => $id,
-                  'slug' => $sCategory['slug'],
-                  'parent_id' => $sCategory['parent_id']
-                ]);
-              }
-              $reqCatData = array_merge($reqCatData, $arr);
-              continue;
-            }
-            array_push($reqCatData, $sCategory);
-          }
-        }
-
-        $created = $this->jobItemRepo->createJobItem($reqData);
-
-        $jobItemRepo = new JobItemRepository($created);
-        foreach ($reqCatData as $reqCatItem) {
-          $jobItemRepo->associateCategory($reqCatItem);
-        }
-
-        // ディレクトリを作成
-        if (!file_exists(public_path() . \Config::get('fpath.real_img') . $created->id)) {
-          mkdir(public_path() . \Config::get('fpath.real_img') . $created->id, 0777);
-        }
-        if (!file_exists(public_path() . \Config::get('fpath.real_mov') . $created->id)) {
-          mkdir(public_path() . \Config::get('fpath.real_mov') . $created->id, 0777);
-        }
-
-        // 一時保存から本番の格納場所へ移動
-        // image upload
-        if (session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
-
-          $image_path_list = session()->get('data.file.image');
-
-          foreach ($image_path_list as $index => $image_path) {
-
-            $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-            $common_path = \Config::get('fpath.real_img') . $created->id . "/";
-
-            // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
-            rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-
-            // ローカルの本番フォルダにある画像パスを変数に格納
-            $image_path_list[$index] = $common_path . "real." . $file_name;
-
-            // s3の一時保存フォルダにある画像を削除
-            if ($disk->exists($image_path)) {
-              $disk->delete($image_path);
-            }
-
-            // s3の本番フォルダに保存
-            $contents = File::get(public_path() . $common_path . "real." . $file_name);
-            $disk->put($image_path_list[$index], $contents, 'public');
-          }
-
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if (!isset($image_path_list[$fileSessionKey])) {
-              $image_path_list[$fileSessionKey] = null;
-            }
-          }
-        } else {
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            $image_path_list[$fileSessionKey] = null;
-          }
-        }
-
-        // movie upload
-        if (session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
-
-          $movie_path_list = session()->get('data.file.movie');
-
-          foreach ($movie_path_list as $index => $movie_path) {
-
-            $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-            $common_path = \Config::get('fpath.real_mov') . $created->id . "/";
-
-            // ローカルの一時保存フォルダから、ローカルの本番フォルダに移動
-            rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-
-            // ローカルの本番フォルダにある動画パスを変数に格納
-            $movie_path_list[$index] = $common_path . "real." . $file_name;
-
-            // s3の一時保存フォルダにある動画を削除
-            if ($disk->exists($movie_path)) {
-              $disk->delete($movie_path);
-            }
-
-            // s3の本番フォルダに保存
-            $contents = File::get(public_path() . $common_path . "real." . $file_name);
-            $disk->put($movie_path_list[$index], $contents, 'public');
-          }
-
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if (!isset($movie_path_list[$fileSessionKey])) {
-              $movie_path_list[$fileSessionKey] = null;
-            }
-          }
-        } else {
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            $movie_path_list[$fileSessionKey] = null;
-          }
-        }
-
-        $jobItemRepo = new JobItemRepository($created);
-        $jobItemRepo->updatejobItem([
-          'job_img' => $image_path_list['main'],
-          'job_img2' => $image_path_list['sub1'],
-          'job_img3' => $image_path_list['sub2'],
-          'job_mov' => $movie_path_list['main'],
-          'job_mov2' => $movie_path_list['sub1'],
-          'job_mov3' => $movie_path_list['sub2'],
-        ]);
-      }
-
-      session()->forget('data');
-      session()->forget('count');
-
-      return view('jobs.post.create_tmp_complete');
-    } else {
-
-      session()->forget('count');
-      return redirect()->route('job.create.top');
-    }
-  }
-
-  public function storeStep2(JobCreateStep2Request $request, $id = '')
-  {
-
-    if ($request->session()->get('count') === 1 || $request->session()->get('count') === 3) {
-
-      $request->session()->put('data.form.text', $request->all());
-
-      $request->session()->forget('count');
-      $request->session()->put('count', 2);
-
-      if ($id) {
-        $job = $this->jobItemRepo->findAllJobItemById($id);
-        $request->session()->put('data.jobId', $job->id);
-
-        if ($request->session()->has('data.file.edit_image.main') === false) {
-          if ($job->job_img === null) {
-            return redirect()->back()->with('message_danger', 'メイン画像を登録してください');
-          }
-        } elseif ($request->session()->has('data.file.edit_image.main') === true && $request->session()->get('data.file.edit_image.main') === "") {
-          return redirect()->back()->with('message_danger', 'メイン画像を登録してください');
-        }
-
-        return redirect()->route('job.create.confirm', [$job->id]);
-      } else {
-        if ($request->session()->has('data.file.image.main') === false) {
-          return redirect()->back()->with('message', 'メイン画像を登録してください');
-        }
-        return redirect()->route('job.create.confirm');
-      }
-    } else {
-
-      $request->session()->forget('count');
-      return redirect()->back();
-    }
-  }
-
-  public function createConfirm($id = '')
-  {
-    if (session()->get('count') === 2 || session()->get('count') === 3) {
-      if ($id) {
-        $job = $this->jobItemRepo->findAllJobItemById($id);
-      } else {
-        $job = '';
-      }
-
-      session()->forget('count');
-      session()->put('count', 3);
-      $jobImageBaseUrl = $this->jobItemRepo->getJobImageBaseUrl();
-
-      return view('jobs.post.confirm', compact('job', 'jobImageBaseUrl'));
-    } else {
-      return redirect()->route('job.create.step1');
-    }
-  }
-
-  public function storeComplete(Request $request, $id = '')
-  {;
-    if (session()->get('count') === 3) {
-
-      $employer = auth('employer')->user();
-      $company =  $employer->company;
-
-      $image_path_list = [];
-      $edit_image_path_list = [];
-      $movie_path_list = [];
-      $edit_movie_path_list = [];
-
-      $disk = Storage::disk('s3');
-
-      if (session()->has('data.form.text.pub_start')) {
-        $pubStartReq = session()->get('data.form.text.pub_start');
-        if ($pubStartReq === 'start_specified') {
-          $pub_start = session()->get('data.form.text.start_specified_date');
-        } else {
-          $pub_start = $pubStartReq;
-        }
-      }
-
-      if (session()->has('data.form.text.pub_end')) {
-        $pubEndReq = session()->get('data.form.text.pub_end');
-        if ($pubEndReq === 'end_specified') {
-          $pub_end = session()->get('data.form.text.end_specified_date');
-        } else {
-          $pub_end = $pubEndReq;
-        }
-      }
-
-      $reqData = $request->session()->get('data.form.text');
-      $fileSessionKeys = config('const.FILE_SLUG');
-
-      if ($id) {
-        // edit
-        $job = $this->jobItemRepo->findAllJobItemById($id);
-        $jobItemRepo = new JobItemRepository($job);
-
-        $savedFilePath = $this->jobItemRepo->savedDbFilePath($job);
-
-        foreach ($reqData as $sKey => $sValue) {
-          if ($sKey === '_token' || $sKey === 'start_specified_date' || $sKey === 'end_specified_date') {
-            unset($reqData[$sKey]);
-          }
-        }
-
-        $reqCatData = [];
-        $categorySlugList = config('const.CATEGORY_SLUG');
-        foreach ($categorySlugList as $categorySlug) {
-          if ($request->session()->has('data.form.edit_category.cats_' . $categorySlug)) {
-            $sCategory = $request->session()->get('data.form.edit_category.cats_' . $categorySlug);
-            if ($categorySlug == 'salary') {
-              foreach ($sCategory['id'] as $id) {
-                $reqCatData[$id] = [
-                  'slug' => $sCategory['slug'],
-                  'parent_id' => $sCategory['parent_id']
-                ];
-              }
-              continue;
-            }
-            $reqCatData[$sCategory['id']] = [
-              'slug' => $sCategory['slug'],
-              'parent_id' => $sCategory['parent_id']
-            ];
-          } else {
-
-            $categories = $job->categories()->wherePivot('slug', $categorySlug)->get();
-
-            foreach ($categories as $c) {
-              if ($c->pivot->slug == $categorySlug) {
-                $reqCatData[$c->id] = [
-                  'slug' => $c->pivot->slug,
-                  'parent_id' => $c->pivot->parent_id,
-                ];
-              }
-            }
-          }
-        }
-
-        $job->categories()->sync($reqCatData);
-
-        // ディレクトリを作成
-        if (!file_exists(public_path() . \Config::get('fpath.real_img') . $job->id)) {
-          mkdir(public_path() . \Config::get('fpath.real_img') . $job->id, 0777);
-        }
-        if (!file_exists(public_path() . \Config::get('fpath.real_mov') . $job->id)) {
-          mkdir(public_path() . \Config::get('fpath.real_mov') . $job->id, 0777);
-        }
-
-        // 一時保存から本番の格納場所へ移動
-        // image upload
-        if (session()->has('data.file.edit_image') && is_array(session()->get('data.file.edit_image'))) {
-
-          $edit_image_path_list = session()->get('data.file.edit_image');
-
-          foreach ($edit_image_path_list as $index => $image_path) {
-            $jobImageDbPath = $savedFilePath['image'][$index];
-
-            if ($image_path !== '') {
-              if ($jobImageDbPath != null && $image_path != $jobImageDbPath && File::exists(public_path() . $jobImageDbPath)) {
-
-                File::delete(public_path() . $jobImageDbPath);
-                // s3
-                if ($disk->exists($jobImageDbPath)) {
-                  $disk->delete($jobImageDbPath);
-                }
-              }
-
-              $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-              $common_path = \Config::get('fpath.real_img') . $job->id . "/";
-
-              rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-
-              $edit_image_path_list[$index] = $common_path . "real." . $file_name;
-
-              // s3の一時保存フォルダにある画像を削除
-              if ($disk->exists($image_path)) {
-                $disk->delete($image_path);
-              }
-
-              // s3の本番フォルダに保存
-              $contents = File::get(public_path() . $common_path . "real." . $file_name);
-              $disk->put($edit_image_path_list[$index], $contents, 'public');
-            } elseif ($image_path === '' && $jobImageDbPath !== null) {
-
-              if (File::exists(public_path() . $jobImageDbPath)) {
-                File::delete(public_path() . $jobImageDbPath);
-              }
-              // s3
-              if ($disk->exists($jobImageDbPath)) {
-                $disk->delete($jobImageDbPath);
-              }
-            } else {
-              $edit_image_path_list[$index] = '';
-            }
-          }
-
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if (!isset($edit_image_path_list[$fileSessionKey]) && $savedFilePath['image'][$fileSessionKey] !== null) {
-              $edit_image_path_list[$fileSessionKey] = $savedFilePath['image'][$fileSessionKey];
-            } elseif (!isset($edit_image_path_list[$fileSessionKey]) && $savedFilePath['image'][$fileSessionKey] === null) {
-              $edit_image_path_list[$fileSessionKey] = null;
-            } elseif ($edit_image_path_list[$fileSessionKey] === '') {
-              $edit_image_path_list[$fileSessionKey] = null;
-            }
-          }
-        } else {
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if ($savedFilePath['image'][$fileSessionKey] !== null) {
-              $edit_image_path_list[$fileSessionKey] = $savedFilePath['image'][$fileSessionKey];
-            } else {
-              $edit_image_path_list[$fileSessionKey] = null;
-            }
-          }
-        }
-
-        // movie upload
-        if (session()->has('data.file.edit_movie') && is_array(session()->get('data.file.edit_movie'))) {
-
-          $edit_movie_path_list = session()->get('data.file.edit_movie');
-
-          foreach ($edit_movie_path_list as $index => $movie_path) {
-            $jobMovieDbPath = $savedFilePath['movie'][$index];
-
-            if ($movie_path != '') {
-              if ($jobMovieDbPath != null && $movie_path != $jobMovieDbPath && File::exists(public_path() . $jobMovieDbPath)) {
-
-                File::delete(public_path() . $jobMovieDbPath);
-                // s3
-                if ($disk->exists($jobMovieDbPath)) {
-                  $disk->delete($jobMovieDbPath);
-                }
-              }
-
-              $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-              $common_path = \Config::get('fpath.real_mov') . $id . "/";
-
-              rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-
-              $edit_movie_path_list[$index] = $common_path . "real." . $file_name;
-
-              // s3の一時保存フォルダにある動画を削除
-              if ($disk->exists($movie_path)) {
-                $disk->delete($movie_path);
-              }
-
-              // s3の本番フォルダに保存
-              $contents = File::get(public_path() . $common_path . "real." . $file_name);
-              $disk->put($edit_movie_path_list[$index], $contents, 'public');
-            } elseif ($movie_path == '' && $jobMovieDbPath != null) {
-
-              if (File::exists(public_path() . $jobMovieDbPath)) {
-                File::delete(public_path() . $jobMovieDbPath);
-              }
-              // s3
-              if ($disk->exists($jobMovieDbPath)) {
-                $disk->delete($jobMovieDbPath);
-              }
-            } else {
-              $edit_movie_path_list[$index] = '';
-            }
-          }
-
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if (!isset($edit_movie_path_list[$fileSessionKey]) && $savedFilePath['movie'][$fileSessionKey] !== null) {
-              $edit_movie_path_list[$fileSessionKey] = $savedFilePath['movie'][$fileSessionKey];
-            } elseif (!isset($edit_movie_path_list[$fileSessionKey]) && $savedFilePath['movie'][$fileSessionKey] === null) {
-              $edit_movie_path_list[$fileSessionKey] = null;
-            } elseif ($edit_movie_path_list[$fileSessionKey] === '') {
-              $edit_movie_path_list[$fileSessionKey] = null;
-            }
-          }
-        } else {
-          foreach ($fileSessionKeys as $fileSessionKey) {
-            if ($savedFilePath['movie'][$fileSessionKey] !== null) {
-              $edit_movie_path_list[$fileSessionKey] = $savedFilePath['movie'][$fileSessionKey];
-            } else {
-              $edit_movie_path_list[$fileSessionKey] = null;
-            }
-          }
-        }
-
-        $reqData['status'] = 1;
-        $reqData['pub_start'] = $pub_start;
-        $reqData['pub_end'] = $pub_end;
-        $reqData['job_img'] = $edit_image_path_list['main'];
-        $reqData['job_img2'] = $edit_image_path_list['sub1'];
-        $reqData['job_img3'] = $edit_image_path_list['sub2'];
-        $reqData['job_mov'] = $edit_movie_path_list['main'];
-        $reqData['job_mov2'] = $edit_movie_path_list['sub1'];
-        $reqData['job_mov3'] = $edit_movie_path_list['sub2'];
-
-        $jobItemRepo = new JobItemRepository($job);
-        $jobItemRepo->updatejobItem($reqData);
-      } else {
-
-        foreach ($reqData as $sKey => $sValue) {
-          if ($sKey === '_token' || $sKey === 'start_specified_date' || $sKey === 'end_specified_date') {
-            unset($reqData[$sKey]);
-          }
-        }
-
-        $reqData['employer_id'] = $employer->id;
-        $reqData['company_id'] = $company->id;
-        $reqData['status'] = 1;
-        $reqData['pub_start'] = $pub_start;
-        $reqData['pub_end'] = $pub_end;
-
-        $reqCatData = [];
-        $categorySlugList = config('const.CATEGORY_SLUG');
-        foreach ($categorySlugList as $categorySlug) {
-          if ($request->session()->has('data.form.category.cats_' . $categorySlug)) {
-            $sCategory = $request->session()->get('data.form.category.cats_' . $categorySlug);
-            if ($categorySlug == 'salary') {
-              $arr = [];
-              foreach ($sCategory['id'] as $id) {
-                array_push($arr, [
-                  'id' => $id,
-                  'slug' => $sCategory['slug'],
-                  'parent_id' => $sCategory['parent_id']
-                ]);
-              }
-              $reqCatData = array_merge($reqCatData, $arr);
-              continue;
-            }
-            array_push($reqCatData, $sCategory);
-          }
-        }
-
-        $created = $this->jobItemRepo->createJobItem($reqData);
-
-        $jobItemRepo = new JobItemRepository($created);
-        foreach ($reqCatData as $reqCatItem) {
-          $jobItemRepo->associateCategory($reqCatItem);
-        }
-
-        if ($created) {
-
-          $createdId = $created->id;
-
-          // ディレクトリを作成
-          if (!file_exists(public_path() . \Config::get('fpath.real_img') . $createdId)) {
-            mkdir(public_path() . \Config::get('fpath.real_img') . $createdId, 0777);
-          }
-          if (!file_exists(public_path() . \Config::get('fpath.real_mov') . $createdId)) {
-            mkdir(public_path() . \Config::get('fpath.real_mov') . $createdId, 0777);
-          }
-
-          // 一時保存から本番の格納場所へ移動
-          // image upload
-          if (session()->has('data.file.image') && is_array(session()->get('data.file.image'))) {
-
-            $image_path_list = session()->get('data.file.image');
-
-            foreach ($image_path_list as $index => $image_path) {
-
-              $file_name = pathinfo($image_path, PATHINFO_BASENAME);
-              $common_path = \Config::get('fpath.real_img') . $createdId . "/";
-
-              rename(public_path() . $image_path, public_path() . $common_path . "real." . $file_name);
-
-              $image_path_list[$index] = $common_path . "real." . $file_name;
-
-              // s3の一時保存フォルダにある画像を削除
-              if ($disk->exists($image_path)) {
-                $disk->delete($image_path);
-              }
-
-              // s3の本番フォルダに保存
-              $contents = File::get(public_path() . $common_path . "real." . $file_name);
-              $disk->put($image_path_list[$index], $contents, 'public');
-            }
-
-            if (!isset($image_path_list['main'])) {
-              $image_path_list['main'] = null;
-            }
-            if (!isset($image_path_list['sub1'])) {
-              $image_path_list['sub1'] = null;
-            }
-            if (!isset($image_path_list['sub2'])) {
-              $image_path_list['sub2'] = null;
-            }
-          } else {
-            $image_path_list['main'] = null;
-            $image_path_list['sub1'] = null;
-            $image_path_list['sub2'] = null;
-          }
-
-          // movie upload
-          if (session()->has('data.file.movie') && is_array(session()->get('data.file.movie'))) {
-
-            $movie_path_list = session()->get('data.file.movie');
-
-            foreach ($movie_path_list as $index => $movie_path) {
-
-              $file_name = pathinfo($movie_path, PATHINFO_BASENAME);
-              $common_path = \Config::get('fpath.real_mov') . $createdId . "/";
-
-              rename(public_path() . $movie_path, public_path() . $common_path . "real." . $file_name);
-
-              $movie_path_list[$index] = $common_path . "real." . $file_name;
-
-              // s3の一時保存フォルダにある動画を削除
-              if ($disk->exists($movie_path)) {
-                $disk->delete($movie_path);
-              }
-
-              // s3の本番フォルダに保存
-              $contents = File::get(public_path() . $common_path . "real." . $file_name);
-              $disk->put($movie_path_list[$index], $contents, 'public');
-            }
-
-            if (!isset($movie_path_list['main'])) {
-              $movie_path_list['main'] = null;
-            }
-            if (!isset($movie_path_list['sub1'])) {
-              $movie_path_list['sub1'] = null;
-            }
-            if (!isset($movie_path_list['sub2'])) {
-              $movie_path_list['sub2'] = null;
-            }
-          } else {
-            $movie_path_list['main'] = null;
-            $movie_path_list['sub1'] = null;
-            $movie_path_list['sub2'] = null;
-          }
-
-          $jobItemRepo->updatejobItem([
-            'job_img' => $image_path_list['main'],
-            'job_img2' => $image_path_list['sub1'],
-            'job_img3' => $image_path_list['sub2'],
-            'job_mov' => $movie_path_list['main'],
-            'job_mov2' => $movie_path_list['sub1'],
-            'job_mov3' => $movie_path_list['sub2'],
+          array_push($arr, [
+            'id' => $data['id'][$pIndex],
+            'ancestor_id' => $categoryData['salary_ancestor']['ancestor_id'],
+            'ancestor_slug' => $categoryData['salary_ancestor']['ancestor_slug'],
+            'parent_id' =>  $pId,
+            'parent_slug' => $data['parent_slug'][$pId],
           ]);
         }
+        $categoryData = array_merge($categoryData, $arr);
+        unset($categoryData['salary_ancestor']);
+        unset($categoryData[$key]);
+        continue;
       }
-
-      session()->forget('data');
-      session()->forget('count');
-
-      return view('jobs.post.create_complete');
-    } else {
-      session()->forget('count');
-      return redirect()->route('job.create.step1');
+      $arr = [
+        'id' => $data['id'],
+        'ancestor_id' => $data['ancestor_id'],
+        'ancestor_slug' => $data['ancestor_slug'],
+        'parent_id' => null,
+        'parent_slug' => null,
+      ];
+      $categoryData[$key] = $arr;
     }
+
+    $data = [
+      'status' => 99,
+      'company_id' => $company->id
+    ];
+
+    $created = $this->jobItemRepo->createJobItem($data);
+
+    $jobItemRepo = new JobItemRepository($created);
+    foreach ($categoryData as $categoryItem) {
+      $jobItemRepo->associateCategory($categoryItem);
+    }
+
+    return redirect()->route('edit.jobsheet.step2', [$created]);
   }
 
-  public function jobFormShow(JobItem $jobitem)
+  public function editStep2(Request $request, JobItem $jobitem)
   {
     $this->authorize('view', $jobitem);
 
-    $job = $this->jobItemRepo->findAllJobItemById($jobitem->id);
+    $editFlag = (int) $request->input('edit');
+    $jobitem = $this->jobItemRepo->findAllJobItemById($jobitem->id);
+    $jobBaseUrl = $this->jobItemRepo->getJobBaseUrl();
+
+    return view('companies.job_sheet.create_step2', compact('jobitem', 'jobBaseUrl', 'editFlag'));
+  }
+
+  public function storeDraftOrConfirm(JobCreateTmpSaveOrConfirmRequest $request, JobItem $jobitem)
+  {
+    $this->authorize('update', $jobitem);
+
     $employer = auth('employer')->user();
     $company = $employer->company;
 
-    return view('jobs.post.show', compact('job', 'company'));
-  }
+    $request = $request->input('data.JobSheet');
+    $request['pub_start_flag'] = (int) $request['pub_start_flag'];
+    $request['pub_end_flag'] = (int) $request['pub_end_flag'];
 
-  public function getMyjobAppDelete(JobItem $jobitem)
-  {
-    $this->authorize('view', $jobitem);
-    $job = $this->jobItemRepo->findAllJobItemById($jobitem->id);
-
-    $jobItemRepo = new JobItemRepository($job);
-    $jobItemRepo->updateJobItem([
-      'status' => 5,
-    ]);
-
-    return redirect()->back()->with('message_success', '削除申請を受け付けました');
-  }
-
-  public function getMyjobAppDeleteCancel(JobItem $jobitem)
-  {
-    $this->authorize('view', $jobitem);
-    $job = $this->jobItemRepo->findAllJobItemById($jobitem->id);
-    if ($job->status !== 5) {
-      return redirect()->back()->with('message_alert', '削除申請されておりません');
+    if ($jobitem->id !== (int) $request['id']) {
+      return redirect()->back();
     }
 
-    $jobItemRepo = new JobItemRepository($job);
-    $jobItemRepo->updateJobItem([
-      'status' => 0,
-    ]);
+    if ($request['pushed'] === "SaveTmpJob") {
+      unset($request['pushed'], $request['id']);
 
-    return redirect()->back()->with('message_success', '削除申請を取り消しました');
+      if ($request['pub_start_flag'] === 0 && !array_key_exists('pub_start_date', $request)) {
+        $request['pub_start_date'] = null;
+      }
+      if ($request['pub_end_flag'] === 0 && !array_key_exists('pub_end_date', $request)) {
+        $request['pub_end_date'] = null;
+      }
+
+      $jobItemRepo = new JobItemRepository($jobitem);
+
+      $request['status'] = 0;
+
+      $jobItemRepo->updatejobItem($request);
+
+      return view('companies.job_sheet.create_tmp_complete');
+    } elseif ($request['pushed'] === "SaveJob") {
+
+      unset($request['pushed']);
+      session()->put('data.JobSheet', $request);
+
+      return redirect()->route('show.jobsheet.step2.confirm', compact('jobitem'));
+    }
   }
 
-  public function getMyjobAppStop(JobItem $jobitem)
+  public function showStep2Confirm(JobItem $jobitem)
   {
     $this->authorize('view', $jobitem);
-    $job = $this->jobItemRepo->findAllJobItemById($jobitem->id);
 
-    $jobItemRepo = new JobItemRepository($job);
-    $jobItemRepo->updateJobItem([
-      'status' => 4,
-    ]);
+    $data = session()->get('data.JobSheet');
 
-    return redirect()->back()->with('message_success', '公開を停止しました');
-  }
-
-  public function getMyjobAppCancel(JobItem $jobitem)
-  {
-    $this->authorize('view', $jobitem);
-    $job = $this->jobItemRepo->findAllJobItemById($jobitem->id);
-    if ($job->status !== 1) {
-      return redirect()->back()->with('message_alert', '求人は公開されておりません');
+    if (!$data || $jobitem->id !== (int) $data['id']) {
+      return redirect()->route('index.jobsheet.top');
     }
 
-    return view('jobs.myjob_app_cancel', compact('job'));
+    $jobBaseUrl = $this->jobItemRepo->getJobBaseUrl();
+    return view('companies.job_sheet.confirm', compact('jobitem', 'jobBaseUrl'));
   }
 
-  public function postMyjobAppCancel(Request $request, JobItem $jobitem)
+  public function updateStep2(Request $request, JobItem $jobitem)
+  {
+    $this->authorize('update', $jobitem);
+
+    $data = $request->session()->get('data.JobSheet');
+
+    if (!$data || $jobitem->id !== (int) $data['id']) {
+      return redirect()->route('index.company.mypage');
+    }
+
+    unset($data['id']);
+
+    $jobItemRepo = new JobItemRepository($jobitem);
+
+    if ($jobitem->status !== 2) {
+      $data['status'] = 1;
+    }
+
+    $jobItemRepo->updatejobItem($data);
+
+    $updated = $this->jobItemRepo->findAllJobItemById($jobitem->id);
+
+    $request->session()->forget('data');
+
+    return view('companies.job_sheet.create_complete', compact('updated'));
+  }
+
+  public function show(JobItem $jobitem)
   {
     $this->authorize('view', $jobitem);
-    $job = $this->jobItemRepo->findAllJobItemById($jobitem->id);
+    $company = auth('employer')->user()->company;
+    $jobBaseUrl = $this->jobItemRepo->getJobBaseUrl();
 
-    $jobItemRepo = new JobItemRepository($job);
-    $jobItemRepo->updateJobItem([
-      'status' => $request->input('status'),
-    ]);
-
-    return redirect()->route('job.edit', ['jobitem' => $job])->with('message_success', '申請を取り消しました');
+    return view('companies.job_sheet.show', compact('jobitem', 'company', 'jobBaseUrl'));
   }
 }

@@ -10,7 +10,7 @@
             <dt>履歴{{index + 1}}</dt>
             <dd class="job-hostory-name">
               <a
-                v-bind:href="'/jobs/search/all?' + params[index] "
+                v-bind:href="'/job_sheet/search/all?' + params[index] "
                 class="txt-blue-link"
               >{{ nameList['no'+index] }}</a>
             </dd>
