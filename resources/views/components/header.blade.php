@@ -12,7 +12,7 @@ if (Auth::check()) {
   <div class="inner">
     <div class="header-top">
       @if(Auth::check())
-      <a class="p-favorite-fixed-nav clearfix" id="js-favorite-fixed-nav" href="{{ route('keeplist') }}"> <i class="fas fa-star header-sp-keep-icon"></i><em class="u-font-xl" id="js-fixed-favorite-num"><span id="saveCount-pc">{{ $jobFavCount }}</span></em>&nbsp;件キープ中</a>
+      <a class="p-favorite-fixed-nav clearfix" id="js-favorite-fixed-nav" href="{{ route('index.front.job_sheet.keeplist') }}"> <i class="fas fa-star header-sp-keep-icon"></i><em class="u-font-xl" id="js-fixed-favorite-num"><span id="saveCount-pc">{{ $jobFavCount }}</span></em>&nbsp;件キープ中</a>
       @endif
       @if(Request::is('/'))
       <h1 class="logo"><a href="/"><img src="{{ asset('/uploads/images/jobcinema_rogo_re.png') }}" alt=""></a></h1>
@@ -67,8 +67,8 @@ if (Auth::check()) {
         <li><a href="{{route('index.front.job_sheet.search')}}">求人を探す</a></li>
         <li><a href="{{route('lp.get')}}" target="_blank">広告掲載をお考えの方へ</a></li>
         <li><a href="/published-contact">お祝い金申請</a></li>
-        <li><a href="{{route('keeplist')}}" class="saveWrap">キープリスト</a></li>
-        <li><a href="{{route('history.get')}}">閲覧履歴</a></li>
+        <li><a href="{{route('index.front.job_sheet.keeplist')}}" class="saveWrap">キープリスト</a></li>
+        <li><a href="{{route('index.front.job_sheet.history')}}">閲覧履歴</a></li>
       </ul>
     </nav>
     <div class="header-sp-right">
@@ -84,35 +84,9 @@ if (Auth::check()) {
       </div>
       <!-- ハンバーガー -->
       <div class="fullHeaderMenu">
-        <!-- <input id="nav-input" type="checkbox" class="nav-unshown"> -->
         <span></span>
         <span></span>
         <span></span>
-        <!-- <span class="sp-header-nav-text">メニュー</span>
-          <label class="nav-unshown" id="nav-close" for="nav-input"></label>
-          <div id="nav-content">
-            <p class="drawer-sub-ttl">サイトについて<label class="close" for="nav-input">
-              <span></span>
-            </label></p>
-            <ul class="drawer-list">
-              <li><a href="/">JOB CiNEMAトップ</a></li>
-              <li><a href="/beginners">初めての方へ</a></li>
-              <li><a href="/jobs/search/all">釧路の求人を探す</a></li>
-
-            </ul>
-            <p class="drawer-sub-ttl">仕事を探す</p>
-            <ul class="drawer-list">
-              <li><a href="{{route('allcat', ['type'])}}">職種から探す</a></li>
-              <li><a href="{{route('allcat', ['area'])}}">エリアから探す</a></li>
-              <li><a href="{{route('allcat', ['hourly_salary'])}}">時給から探す</a></li>
-            </ul>
-              <p class="drawer-sub-ttl">その他</p>
-              <ul class="drawer-list">
-              <li><a href="/lp" target="_blank">求人掲載をお考えの方はこちら</a>
-              </li>
-              <li><a href="/contact_s">お問合わせはこちら</a></li>
-              </ul>
-          </div> -->
       </div>
     </div>
 
@@ -162,7 +136,7 @@ if (Auth::check()) {
                   <p class="hamburgerLogoutMenuCount">0</p>
                 </li>
                 <li class="hamburgerLoginMyMenuLinkList">
-                  <a class="hamburgerLogoutClipJob" href="{{route('keeplist')}}">保存したお仕事</a>
+                  <a class="hamburgerLogoutClipJob" href="{{route('index.front.job_sheet.keeplist')}}">保存したお仕事</a>
                   <p id="hamburgerLogoutClipJobCount" class="hamburgerLogoutClipJobCount">{{ $jobFavCount }}</p>
                 </li>
                 @if(Auth::check())

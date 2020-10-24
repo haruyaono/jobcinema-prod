@@ -93,11 +93,11 @@ class JobController extends Controller
   }
 
   // 最近見た求人リスト
-  public function getJobHistory()
+  public function indexHistory()
   {
-    $jobs = $this->jobItemRepo->listRecentJobItemId(1);
+    $jobitems = $this->jobItemRepo->listRecentJobItemId(1);
 
-    return view('jobs.history', compact('jobs'));
+    return view('jobs.history', compact('jobitems'));
   }
 
   // 最近見た求人のリストを返す

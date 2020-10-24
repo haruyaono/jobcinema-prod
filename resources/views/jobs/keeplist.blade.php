@@ -33,66 +33,58 @@
         @if( Auth::check() )
         <div class="job-list">
           @if ($result_count > 0 )
-          @foreach ($jobs as $job)
+          @foreach ($jobitems as $jobitem)
           <div class="job-item">
-            <a href="{{ route('jobs.show', [$job->id])}}" class="job-item-link">
+            <a href="{{ route('show.front.job_sheet.detail', $jobitem)}}" class="job-item-link">
               <div class="job-item-heading only-pc">
                 <!-- カテゴリ -->
-                <span class="cat-item org">{{$job->categories()->wherePivot('slug', 'type')->first() !== null ? $job->categories()->wherePivot('slug', 'type')->first()->name : ''}}</span>
-                <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
+                <span class="cat-item org">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
+                <span class="cat-item red">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>
               </div>
               <div class="jobCassette__header">
                 <div class="jobCassette__image_wrap only-sp">
-                  @if(($job->job_img) ==! null)
-                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt="" />
+                  @if(($jobitem->job_img_1) ==! null)
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" alt="" />
+                  @else
+                  <img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif
                 </div>
                 <div class="jobCassette__title">
-                  <p class="jobCassette__jobTypeTxt"> {{$job->job_title}}</p>
-                  <h2 class="company_name_item">{{$job->company->cname}}</h2>
+                  <p class="jobCassette__jobTypeTxt">{{$jobitem->job_title}}</p>
+                  <h2 class="company_name_item">{{$jobitem->company->cname}}</h2>
                 </div>
               </div>
 
               <div class="d-flex">
                 <div class="jobCassette__image_wrap only-pc">
-                  @if(($job->job_img) ==! null)
-                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" style="width:100%;" alt="" />
+                  @if(($jobitem->job_img_1) ==! null)
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" style="width:100%;" alt="" />
                   @else
-                  <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
+                  <img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif
                 </div>
                 <div class="job-right">
                   <table class="job-table">
                     <tr>
                       <th><span class="money"><span>給与</span></span></th>
-                      <td>{{ str_limit($job->job_hourly_salary, $limit = 40, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_salary, $limit = 40, $end = '...')}}</td>
                     </tr>
                     <tr>
                       <th><span class="place"><span>勤務先</span></span></th>
-                      <td>{{ str_limit($job->job_office, $limit = 40, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_office, $limit = 40, $end = '...')}}</td>
                     </tr>
                     <tr>
                       <th><span class="work"><span>仕事内容</span></span></th>
-                      <td>{{ str_limit($job->job_desc, $limit = 80, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_desc, $limit = 80, $end = '...')}}</td>
                     </tr>
                     <tr>
                       <th><span class="time"><span>勤務時間</span></span></th>
-                      <td>{{ str_limit($job->job_time, $limit = 40, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_time, $limit = 40, $end = '...')}}</td>
                     </tr>
                   </table>
                 </div>
               </div>
-              <!-- <div class="jobitem-footer" @if(!$job->pubend_at) style="display:block; text-align:right;" @endif>
-                @if($job->pubend_at)
-                <span>{{ $job->pubend_at->format('Y年m月d日') }}に掲載終了</span>
-                @endif
-                <object>
-                  <a href="{{ route('jobs.show', [$job->id, $job->slug])}}" class="btn detail-btn"><span>詳しく見る</span></a>
-                </object>
-              </div> -->
-            </a>
           </div> <!-- newjob-item -->
-          <!-- △ ループ終了 △ -->
           @endforeach
           @else
           <p class="no-jobitem-txt">現在「キープリスト」に保存された情報はありません。</p>

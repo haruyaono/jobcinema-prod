@@ -255,12 +255,12 @@ $jobjson = json_encode($jobitem);
           <ul class="box-wrap cf">
             @foreach($recommendJobList as $recommendJob)
             <li class="wrap-items">
-              <a href="{{route('jobs.show', [$recommendJob->id])}}">
+              <a href="{{route('show.front.job_sheet.detail', $recommendJob)}}">
                 <div class="wrap-img">
-                  @if(($recommendJob->job_img) != null)
-                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$recommendJob->job_img}}@else{{$recommendJob->job_img}}@endif" style="width:100%;" alt="" />
+                  @if(($recommendJob->job_img_1) != null)
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $recommendJob->job_img_1}}" style="width:100%;" alt="" />
                   @else
-                  <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
+                  <img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif
                 </div>
                 <div class="wrap-text">

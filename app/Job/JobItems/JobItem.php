@@ -135,15 +135,6 @@ class JobItem extends Model
         return $month_list;
     }
 
-    // public function checkApplication()
-    // {
-
-    //     // $this->jobitems->get;
-
-    //     var_dump( $this->jobitems->);
-    //         return \DB::table('apply_job_item')->where('apply_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
-    // }
-
     public function scopeSearch($query, array $searchParams)
     {
         if (isset($searchParams['keyword'])) {
