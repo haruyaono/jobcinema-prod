@@ -13,6 +13,8 @@ use App\Job\JobItems\Repositories\JobItemRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Applies\Repositories\ApplyRepository;
 use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
+use App\Job\ApplyDetails\Repositories\ApplyDetailRepository;
+use App\Job\ApplyDetails\Repositories\Interfaces\ApplyDetailRepositoryInterface;
 use App\Job\Employers\Repositories\EmployerRepository;
 use App\Job\Employers\Repositories\Interfaces\EmployerRepositoryInterface;
 use App\Job\Companies\Repositories\CompanyRepository;
@@ -52,6 +54,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ApplyRepositoryInterface::class,
             ApplyRepository::class
+        );
+        $this->app->bind(
+            ApplyDetailRepositoryInterface::class,
+            ApplyDetailRepository::class
         );
         $this->app->bind(
             EmployerRepositoryInterface::class,

@@ -4,8 +4,8 @@
 @section('description', '釧路の職場を上映する求人サイト')
 
 @section('header')
-  @component('components.apply_header')
-  @endcomponent
+@component('components.apply_header')
+@endcomponent
 @endsection
 
 @section('contents')
@@ -20,7 +20,7 @@
         <section class="apply-after-job-info">
           <h2>応募先：{{$jobitem->job_office}}</h2>
           <div class="apply-after-sub">
-            <p>MYページは<a href="{{route('mypages.index')}}" class="txt-blue-link">こちら</a>です。</p>
+            <p>MYページは<a href="{{route('index.seeker.mypage')}}" class="txt-blue-link">こちら</a>です。</p>
             <p>「応募後の流れ」は応募管理からも確認できます。</p>
           </div>
           <table>
@@ -33,24 +33,24 @@
             <tr>
               <th>採用窓口</th>
               <td>
-              {{$jobitem->company->phone1}}-{{$jobitem->company->phone2}}-{{$jobitem->company->phone3}}
+                {{$jobitem->company->phone1}}-{{$jobitem->company->phone2}}-{{$jobitem->company->phone3}}
               </td>
             </tr>
             <tr>
               <th>お祝い金</th>
               <td>
-                @if($jobitem->festive_money)
-                  採用決定で<span class="text-red">5,000円</span>もらえる求人です。
+                @if($jobitem->existsCongratsMoney())
+                採用決定で<span class="text-red">{{$jobitem->getCongratsMoney()->getCostomAmountAttribute()}}</span>もらえる求人です。
                 @else
-                  お祝い金対象外の求人です。
+                お祝い金対象外の求人です。
                 @endif
-                
+
               </td>
             </tr>
             <tr>
               <th>求人ページ</th>
               <td>
-                <a href="{{route('jobs.show', ['id' => $jobitem->id])}}" class="txt-blue-link">{{route('jobs.show', ['id' => $jobitem->id])}}</a>
+                <a href="{{route('show.front.job_sheet.detail', ['jobitem' => $jobitem])}}" class="txt-blue-link">{{route('show.front.job_sheet.detail', ['jobitem' => $jobitem])}}</a>
               </td>
             </tr>
           </table>
@@ -73,14 +73,8 @@
         <div class="btn-wrap">
           <a href="/" class="btn btn-yellow">トップに戻る</a>
         </div>
-        
-
       </div>
     </div>
   </section>
 </div> <!-- main-wrap-->
-@endsection
-
-@section('js')
-  <script src="{{ asset('js/main.js') }}"></script>
 @endsection

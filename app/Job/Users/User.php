@@ -4,30 +4,26 @@ namespace App\Job\Users;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use App\Job\JobItems\JobItem;
 use App\Job\Applies\Apply;
 use App\Job\Profiles\Profile;
 use App\Notifications\EmailVerificationJa;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use  \Illuminate\Database\Eloquent\Relations\hasOne;
+use  \Illuminate\Database\Eloquent\Relations\hasMany;
+use  \Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes; 
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'last_name',
-        'first_name',
-        'email', 
-        'password',
+    protected $guarded = [
+        'id',
     ];
 
     /**
@@ -37,10 +33,9 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-         'remember_token',
+        'remember_token',
     ];
 
-    protected $dates= ['deleted_at'];
     /**
      * The attributes that should be cast to native types.
      *
@@ -50,24 +45,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function profile()
+    public function profile(): hasOne
     {
         return $this->hasOne(Profile::class);
     }
 
-    public function jobs()
-    {
-        return $this->hasMany(JobItem::class);
-    }
-
-    public function applies()
+    public function applies(): hasMany
     {
         return $this->hasMany(Apply::class);
     }
 
-    public function favourites()
+    public function favourites(): belongsToMany
     {
-            return $this->belongsToMany(JobItem::class, 'favourites', 'user_id', 'job_item_id')->as('fav')->withTimeStamps();
+        return $this->belongsToMany(JobItem::class, 'favourites', 'user_id', 'job_item_id')->as('fav')->withTimeStamps();
     }
 
     /**
@@ -89,18 +79,16 @@ class User extends Authenticatable
 
     public static function checkFavCount()
     {
-            if(Auth::check()) {
-                $loginUser = auth()->user();
-                $favedJobItems = $loginUser->favourites();
-                if(!$favedJobItems) {
-                    return 0;
-                } else {
-                    return $favedJobItems->count();
-                }
-
+        if (Auth::check()) {
+            $loginUser = auth()->user();
+            $favedJobItems = $loginUser->favourites();
+            if (!$favedJobItems) {
+                return 0;
             } else {
-                return false;
+                return $favedJobItems->count();
             }
+        } else {
+            return false;
+        }
     }
-
 }

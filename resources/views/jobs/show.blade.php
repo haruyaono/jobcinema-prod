@@ -230,7 +230,7 @@ $jobjson = json_encode($jobitem);
           <favourite-component :jobid={{$jobitem->id}} :favourited={{$jobitem->checkSaved()?'true':'false'}}></favourite-component>
           <div class="entrybtn-item">
             @if(!$existsApplied)
-            <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$jobitem->id])}}">応募する</a>
+            <a class="entry-btn apply-btn" href="{{route('show.front.entry.step1', $jobitem)}}">応募する</a>
             @else
             <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>
             @endif
@@ -238,7 +238,7 @@ $jobjson = json_encode($jobitem);
           @else
           @if(!Auth::guard('employer')->check())
           <div class="entrybtn-item">
-            <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$jobitem->id])}}">応募する</a>
+            <a class="entry-btn apply-btn" href="{{route('show.front.entry.step1', $jobitem)}}">応募する</a>
           </div>
           @endif
           @endif
@@ -297,8 +297,4 @@ $jobjson = json_encode($jobitem);
 @section('footer')
 @component('components.footer')
 @endcomponent
-@endsection
-
-@section('js')
-
 @endsection

@@ -34,7 +34,7 @@ if (Auth::check()) {
         @else
         <li>
           @if (Auth::guard()->check())
-          <a href="{{route('mypages.index') }}">
+          <a href="{{route('index.seeker.mypage') }}">
             @if(!empty(Auth::user()->last_name) && !empty(Auth::user()->first_name))
             <i class="fas fa-user mr-1"></i>{{Auth::user()->last_name}}さん <span class="caret"></span>
             @else
@@ -141,7 +141,7 @@ if (Auth::check()) {
                 </li>
                 @if(Auth::check())
                 <li class="hamburgerLoginMyMenuLinkList">
-                  <a class="hamburgerLoginApplicationMypage" href="{{route('mypages.index')}}">マイページ</a>
+                  <a class="hamburgerLoginApplicationMypage" href="{{route('index.seeker.mypage')}}">マイページ</a>
                 </li>
                 @endif
               </ul>

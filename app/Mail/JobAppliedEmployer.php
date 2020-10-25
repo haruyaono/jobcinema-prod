@@ -12,9 +12,8 @@ class JobAppliedEmployer extends Mailable
     use Queueable, SerializesModels;
 
     public $title = [];
-    public $appUser = [];
-    public $jobId = [];
-    public $jobAppData = [];
+    public $jobitem = [];
+    public $data = [];
     public $company = [];
     public $employer = [];
 
@@ -23,15 +22,13 @@ class JobAppliedEmployer extends Mailable
      *
      * @return void
      */
-    public function __construct($appUser, $jobId, $jobAppData, $company, $employer)
+    public function __construct($jobitem, $data)
     {
-        $this->title = sprintf($jobId->job_office.'に求人応募がありました！
-        ');
-        $this->appUser = $appUser;
-        $this->jobId = $jobId;
-        $this->jobAppData = $jobAppData;
-        $this->company = $company;
-        $this->employer = $employer;
+        $this->title = sprintf($jobitem->job_office . 'に求人応募がありました！');
+        $this->jobitem = $jobitem;
+        $this->data = $data;
+        $this->company = $jobitem->company;
+        $this->employer = $jobitem->company->employer;
     }
 
     /**
@@ -42,9 +39,8 @@ class JobAppliedEmployer extends Mailable
     public function build()
     {
         return $this
-        ->subject($this->title)
-        ->replyTo('official@job-cinema.com')
-        ->view('emails.employer.job_applied');
-        
+            ->subject($this->title)
+            ->replyTo(config('mail.reply.address'))
+            ->view('emails.employer.job_applied');
     }
 }

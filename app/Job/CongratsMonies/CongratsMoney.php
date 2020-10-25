@@ -28,4 +28,9 @@ class CongratsMoney extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function getCostomAmountAttribute()
+    {
+        return number_format($this->amount) . "円";
+    }
 }

@@ -36,17 +36,6 @@
     </div> <!-- wrap -->
     @yield('js')
     <script defer src="{{ asset('js/main.js') }}"></script>
-    <script>
-        $(function() {
-            $(".file-upload-form").submit(function() {
-                var self = this;
-                $(":submit", self).prop("disabled", true);
-                setTimeout(function() {
-                    $(":submit", self).prop("disabled", false);
-                }, 10000);
-            });
-        });
-    </script>
 </body>
 
 </html>

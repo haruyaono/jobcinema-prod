@@ -27,7 +27,7 @@ class AchievementReward extends Model
      *
      * @return string
      */
-    public function getAmountAttribute($value)
+    public function getCostomAmountAttribute($value)
     {
         return number_format($value) . "円(税別)";
     }
