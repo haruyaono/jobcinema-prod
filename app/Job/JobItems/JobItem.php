@@ -10,7 +10,7 @@ use App\Job\Applies\Apply;
 use App\Job\Categories\Category;
 use App\Traits\IsMobile;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JobItem extends Model
 {
@@ -75,20 +75,26 @@ class JobItem extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function applies()
+    public function applies(): HasMany
     {
-        return $this->belongsToMany(Apply::class, 'apply_job_item')
-            ->withPivot([
-                'id',
-                'apply_id',
-                'job_item_id',
-                's_status',
-                'e_status',
-                'oiwaikin',
-                'oiwaikin_status',
-                'first_attendance',
-                'no_first_attendance'
-            ])->withTimeStamps();
+        return $this->hasMany(Apply::class);
+    }
+
+    public function existsCongratsMoney()
+    {
+        return $this->categories()->wherePivot('ancestor_slug', 'status')->first()->congratsMoney()->exists();
+    }
+
+    public function getCongratsMoneyAmount()
+    {
+        $category = $this->categories()->wherePivot('ancestor_slug', 'status')->first();
+        return $category->congratsMoney()->exists() ? $category->congratsMoney->amount : 0;
+    }
+
+    public function getAchivementRewardMoneyAmount()
+    {
+        $category = $this->categories()->wherePivot('ancestor_slug', 'status')->first();
+        return $category->achievementReward()->exists() ? $category->achievementReward->amount : 0;
     }
 
     public function getAppJobList(int $num_per_page = 10, array $condition = [])
@@ -134,15 +140,6 @@ class JobItem extends Model
         }
         return $month_list;
     }
-
-    // public function checkApplication()
-    // {
-
-    //     // $this->jobitems->get;
-
-    //     var_dump( $this->jobitems->);
-    //         return \DB::table('apply_job_item')->where('apply_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
-    // }
 
     public function scopeSearch($query, array $searchParams)
     {

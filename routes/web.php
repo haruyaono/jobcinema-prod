@@ -21,24 +21,29 @@ Route::get('/jobs/info')->name('info.get');
 
 Route::namespace('Front')->group(function () {
   # 求人
-  Route::get('/', 'JobController@index')->name('top.get');
+  Route::get('/', 'JobController@index')->name('index.front.top');
   Route::group(['prefix' => 'job_sheet'], function () {
     Route::get('{jobitem}', 'JobController@show')->name('show.front.job_sheet.detail');
     Route::get('search/all', 'JobController@search')->name('index.front.job_sheet.search');
+
     Route::post('ajax_history_sheet_list', 'JobController@postJobHistory');
+    Route::post('search/SearchJobItemAjaxAction', 'JobController@realSearchJob');
   });
-  Route::get('history/jobs', 'JobController@getJobHistory')->name('history.get');
-  Route::post('search/SearchJobItemAjaxAction', 'JobController@realSearchJob');
+
+  // 閲覧履歴
+  Route::get('history', 'JobController@indexHistory')->name('index.front.job_sheet.history');
+  //お気に入り
+  Route::get('keeplist', 'FavouriteController@index')->name('index.front.job_sheet.keeplist');
+  Route::post('keeplist/save/{id}', 'FavouriteController@saveJob');
+  Route::post('keeplist/unsave/{id}', 'FavouriteController@unSaveJob');
+
   # 求人応募
-  Route::get('apply_step1/{id}', 'ApplyController@getApplyStep1')->name('apply.step1.get');
-  Route::post('apply_step1/{id}', 'ApplyController@postApplyStep1')->name('apply.step1.post');
-  Route::get('apply_step2/{id}', 'ApplyController@getApplyStep2')->name('apply.step2.get');
-  Route::post('apply_step2/{id}', 'ApplyController@postApplyStep2')->name('apply.step2.post');
-  Route::get('apply_complete/{id}', 'ApplyController@completeJobApply')->name('complete.job.apply');
-  //求人キープ機能
-  Route::get('keeplist', 'FavouriteController@index')->name('keeplist');
-  Route::post('save/{id}', 'FavouriteController@saveJob');
-  Route::post('unsave/{id}', 'FavouriteController@unSaveJob');
+  Route::get('entry/step1/{jobitem}/job_sheet', 'ApplyController@showStep1')->name('show.front.entry.step1');
+  Route::post('entry/step1/{jobitem}/job_sheet', 'ApplyController@storeStep1')->name('store.front.entry.step1');
+  Route::get('entry/step2/{jobitem}/job_sheet', 'ApplyController@showStep2')->name('show.front.entry.step2');
+  Route::post('entry/step2/{jobitem}/job_sheet', 'ApplyController@storeStep2')->name('store.front.entry.step2');
+  Route::get('entry/finish/{jobitem}/job_sheet', 'ApplyController@showFinish')->name('show.front.entry.finish');
+
   //お問い合わせ
   Route::get('contact_s', 'ContactsController@getContactSeeker')->name('contact.s.get');
   Route::get('contact_e', 'ContactsController@getContactEmployer')->name('contact.e.get');
@@ -54,7 +59,7 @@ Route::namespace('Front')->group(function () {
 
   Route::group(['middleware' => ['auth:user']], function () {
     //求職者
-    Route::get('/mypage/index', 'UserController@index')->name('mypages.index');
+    Route::get('/mypage/index', 'UserController@index')->name('index.seeker.mypage');
     Route::get('/mypage/profile_edit', 'UserProfileController@edit')->name('user.profile.get');
     Route::post('/mypage/profile_create', 'UserProfileController@update')->name('user.profile.post');
     Route::get('/mypage/career_edit', 'UserProfileController@editCareer')->name('user.career.get');

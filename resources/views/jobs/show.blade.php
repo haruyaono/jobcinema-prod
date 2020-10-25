@@ -230,7 +230,7 @@ $jobjson = json_encode($jobitem);
           <favourite-component :jobid={{$jobitem->id}} :favourited={{$jobitem->checkSaved()?'true':'false'}}></favourite-component>
           <div class="entrybtn-item">
             @if(!$existsApplied)
-            <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$jobitem->id])}}">応募する</a>
+            <a class="entry-btn apply-btn" href="{{route('show.front.entry.step1', $jobitem)}}">応募する</a>
             @else
             <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>
             @endif
@@ -238,7 +238,7 @@ $jobjson = json_encode($jobitem);
           @else
           @if(!Auth::guard('employer')->check())
           <div class="entrybtn-item">
-            <a class="entry-btn apply-btn" href="{{route('apply.step1.get', [$jobitem->id])}}">応募する</a>
+            <a class="entry-btn apply-btn" href="{{route('show.front.entry.step1', $jobitem)}}">応募する</a>
           </div>
           @endif
           @endif
@@ -255,12 +255,12 @@ $jobjson = json_encode($jobitem);
           <ul class="box-wrap cf">
             @foreach($recommendJobList as $recommendJob)
             <li class="wrap-items">
-              <a href="{{route('jobs.show', [$recommendJob->id])}}">
+              <a href="{{route('show.front.job_sheet.detail', $recommendJob)}}">
                 <div class="wrap-img">
-                  @if(($recommendJob->job_img) != null)
-                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$recommendJob->job_img}}@else{{$recommendJob->job_img}}@endif" style="width:100%;" alt="" />
+                  @if(($recommendJob->job_img_1) != null)
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $recommendJob->job_img_1}}" style="width:100%;" alt="" />
                   @else
-                  <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
+                  <img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif
                 </div>
                 <div class="wrap-text">
@@ -297,8 +297,4 @@ $jobjson = json_encode($jobitem);
 @section('footer')
 @component('components.footer')
 @endcomponent
-@endsection
-
-@section('js')
-
 @endsection

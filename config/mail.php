@@ -60,6 +60,15 @@ return [
         'name' => env('MAIL_FROM_NAME', 'JOBCiNEMA'),
     ],
 
+    'reply' => [
+        'address' => env('MAIL_REPLY_ADDRESS', 'official@job-cinema.com'),
+    ],
+
+
+    'contact' => [
+        'address' => env('MAIL_CONTACT_ADDRESS', 'official@job-cinema.com'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol

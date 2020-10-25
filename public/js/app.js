@@ -1762,7 +1762,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.startProcessing();
-      axios.post('/save/' + this.jobid).then(function (response) {
+      axios.post('/keeplist/save/' + this.jobid).then(function (response) {
         if (response.data.fav_save_status == 1) {
           _this.show = true;
 
@@ -1788,7 +1788,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (confirm('選択した求人情報を削除しますか？')) {
         this.startProcessing();
-        axios.post('/unsave/' + this.jobid).then(function (response) {
+        axios.post('/keeplist/unsave/' + this.jobid).then(function (response) {
           if (response.data.fav_del_status == 1) {
             _this2.show = false;
 

@@ -4,6 +4,7 @@ namespace App\Job\Categories;
 
 use App\Job\JobItems\JobItem;
 use App\Job\AchievementRewards\AchievementReward;
+use App\Job\CongratsMonies\CongratsMoney;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -36,5 +37,10 @@ class Category extends Model
     public function achievementReward(): HasOne
     {
         return $this->hasOne(AchievementReward::class);
+    }
+
+    public function congratsMoney(): HasOne
+    {
+        return $this->hasOne(CongratsMoney::class);
     }
 }

@@ -78,7 +78,7 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'custom_auth',
+            'driver' => 'eloquent',
             'model' => App\Job\Users\User::class,
         ],
         'employers' => [
