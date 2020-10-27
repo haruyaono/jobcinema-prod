@@ -7,12 +7,7 @@ use App\Job\Profiles\Profile;
 use App\Job\Employers\Employer;
 use App\Job\JobItems\JobItem;
 use App\Job\Companies\Company;
-use App\Job\Categories\StatusCategory;
-use App\Job\Categories\TypeCategory;
-use App\Job\Categories\HourlySalaryCategory;
-use App\Job\Categories\AreaCategory;
-use App\Job\Categories\DateCategory;
-
+use App\Job\Categories\Category;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,21 +18,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // DB::table('achievement_rewards')->truncate();
+        // DB::table('congrats_monies')->truncate();
+        // DB::table('categories')->truncate();
         $this->call(CategoryTableSeeder::class);
+        $this->call(AchievementRewardTableSeeder::class);
+        $this->call(CongratsMoneyTableSeeder::class);
+        $this->call(AdminTableSeeder::class);
         // DB::table('users')->truncate();
         // DB::table('admins')->truncate();
         // DB::table('employers')->truncate();
         // DB::table('companies')->truncate();
         // DB::table('job_items')->truncate();
-        // DB::table('status_categories')->truncate();
-        // DB::table('type_categories')->truncate();
-        // DB::table('area_categories')->truncate();
-        // DB::table('hourly_salary_categories')->truncate();
-        // DB::table('date_categories')->truncate();
         // DB::table('profiles')->truncate();
-        // DB::table('job_item_user')->truncate();
         // DB::table('favourites')->truncate();
-        
 
         // factory(User::class, 20)->create();
         // factory(Profile::class, 20)->create();
@@ -45,10 +39,5 @@ class DatabaseSeeder extends Seeder
         // factory(Employer::class)->create();
         // factory(Company::class)->create();
         // factory(JobItem::class)->create();
-        // factory(StatusCategory::class, 4)->create();
-        // factory(TypeCategory::class, 16)->create();
-        // factory(AreaCategory::class, 14)->create();
-        // factory(HourlySalaryCategory::class, 11)->create();
-        // factory(DateCategory::class, 6)->create();
     }
 }

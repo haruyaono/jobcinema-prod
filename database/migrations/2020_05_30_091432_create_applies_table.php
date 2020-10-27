@@ -14,27 +14,21 @@ class CreateAppliesTable extends Migration
     public function up()
     {
         Schema::create('applies', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('last_name');
-            $table->string('first_name');
-            $table->string('postcode')->comment('郵便番号');
-            $table->string('prefecture')->comment('都道府県');
-            $table->string('city')->comment('市町村');
-            $table->string('gender');
-            $table->string('age');
-            $table->string('phone1');
-            $table->string('phone2');
-            $table->string('phone3');
-            $table->string('occupation');
-            $table->string('final_education')->comment('最終学歴');
-            $table->string('work_start_date')->comment('勤務開始可能日');
-            $table->string('desired_salary')->comment('希望年収')->nullable();
-            $table->text('job_msg')->comment('志望動機')->nullable();
-            $table->text('job_q1')->nullable();
-            $table->text('job_q2')->nullable();
-            $table->text('job_q3')->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->foreign('user_id')->references('id')->on('users')->ondelete('SET NULL');
+            $table->unsignedBigInteger('job_item_id')->index();
+            $table->foreign('job_item_id')->references('id')->on('job_items');
+            $table->unsignedInteger('s_recruit_status')->default(0);
+            $table->unsignedInteger('e_recruit_status')->default(0);
+            $table->unsignedInteger('congrats_amount')->default(0);
+            $table->unsignedInteger('congrats_status')->default(0);
+            $table->date('s_first_attendance')->nullable();
+            $table->text('s_nofirst_attendance')->nullable();
+            $table->date('e_first_attendance')->nullable();
+            $table->text('e_nofirst_attendance')->nullable();
+            $table->unsignedInteger('recruitment_fee')->default(0);
+            $table->unsignedInteger('recruitment_status')->default(0);
             $table->timestamps();
         });
     }

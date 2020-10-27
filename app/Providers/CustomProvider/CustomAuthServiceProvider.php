@@ -17,6 +17,10 @@ class CustomAuthServiceProvider extends EloquentUserProvider implements UserProv
     {
         $user = parent::retrieveByCredentials($credentials);
 
+        if (!$user) {
+            return null;
+        }
+
         // リレーション先の権限テーブルで can_login が true を持つユーザーに制限
         if ($user->where('status', 1)->orWhere('status', 8)->exists()) {
             return $user;

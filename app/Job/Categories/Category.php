@@ -15,7 +15,7 @@ class Category extends Model
     use NodeTrait;
 
     protected $table = 'categories';
-    protected $fillable = ['name', 'slug'];
+    protected $guarded = ['id'];
     protected $dates = ['created_at', 'updated_at'];
 
     public function jobitems(): BelongsToMany

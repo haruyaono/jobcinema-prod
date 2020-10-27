@@ -1,4 +1,5 @@
 <?php
+
 use App\Job\Companies\Company;
 use App\Job\Employers\Employer;
 use Illuminate\Support\Str;
@@ -23,7 +24,7 @@ $factory->define(Company::class, function (Faker $faker) {
 
     return [
         'employer_id' => $employer->id,
-        'cname' => $name = $faker->company,
+        'cname' => $faker->company,
         'cname_katakana' => 'カブシキカイシャ〇〇',
         'website' => $faker->domainName,
         'postcode' => $faker->postcode,
@@ -37,8 +38,7 @@ $factory->define(Company::class, function (Faker $faker) {
         'description' => $faker->sentence,
         'foundation' =>  $faker->date,
         'ceo' => $faker->name,
-        'capital' => $faker->numberBetween($min=1000, $max=100000000),
-        'employee_number' => $faker->numberBetween($min=1, $max=100),
+        'capital' => $faker->numberBetween($min = 1000, $max = 100000000),
+        'employee_number' => $faker->numberBetween($min = 1, $max = 100),
     ];
 });
-

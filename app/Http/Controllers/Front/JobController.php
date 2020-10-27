@@ -5,13 +5,9 @@ namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
-use App\Job\Users\User;
-use App\Job\Users\Repositories\UserRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
-use App\Job\Companies\Company;
 use Illuminate\Support\Facades\Auth;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;

@@ -14,18 +14,16 @@ class CreateCompaniesTable extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('employer_id');
-            $table->string('cname')->comment('会社名');
-            $table->string('cname_katakana')->comment('会社名（フリガナ）')->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('employer_id')->index();
+            $table->foreign('employer_id')->references('id')->on('employers');
+            $table->string('cname');
+            $table->string('cname_katakana')->nullable();
             $table->string('website')->nullable();
-            $table->string('slug');
-            $table->string('cover_photo')->nullable();
-            $table->text('slogan')->nullable();
             $table->string('logo')->nullable();
-            $table->string('postcode')->comment('郵便番号')->nullable();
-            $table->string('prefecture')->comment('都道府県')->nullable();
-            $table->string('address')->comment('住所')->nullable();
+            $table->string('postcode')->nullable();
+            $table->string('prefecture')->nullable();
+            $table->string('address')->nullable();
             $table->string('phone1')->nullable();
             $table->string('phone2')->nullable();
             $table->string('phone3')->nullable();

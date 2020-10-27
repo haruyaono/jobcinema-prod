@@ -27,9 +27,7 @@ $jobjson = json_encode($jobitem);
     </li>
   </ol>
 </div>
-<!-- ここからメインコンテンツ -->
 <div class="main-wrap">
-  <!-- 案件個別 -->
 
   <section class="main-section invi-job-entry">
     <div class="inner">
@@ -243,7 +241,7 @@ $jobjson = json_encode($jobitem);
           @endif
           @endif
 
-        </div> <!-- entrybtn-field -->
+        </div>
 
         @if($recommendJobList != [])
         <div id="recommend-joblist" class="block-joblist">

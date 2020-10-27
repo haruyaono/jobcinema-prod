@@ -12,31 +12,28 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
 use App\Job\Applies\Apply;
 use App\Job\Users\User;
+use App\Job\JobItems\JobItem;
 
 $factory->define(Apply::class, function (Faker\Generator $faker) {
     static $password;
     $user = factory(User::class)->create();
+    $jobitem = factory(JobItem::class)->create();
 
     return [
         'user_id' => $user->id,
-        'last_name' => $faker->lastName,
-        'first_name' => $faker->firstName,
-        'postcode' => $faker->postcode,
-        'prefecture' => $faker->country,
-        'city' => $faker->city,
-        'gender' => $faker->titleMale,
-        'age' =>  $faker->numberBetween(18, 99),
-        'phone1' => '080',
-        'phone2' =>  '1122',
-        'phone3' =>  '3344',
-        'occupation' => $faker->jobTitle,
-        'final_education' => $faker->sentence,
-        'work_start_date' => $faker->sentence,
-        'job_msg' => $faker->sentence,
-        'job_q1' =>  $faker->paragraph,
-        'job_q2' => $faker->paragraph,
-        'job_q3' =>  $faker->paragraph,
+        'job_item_id' => $jobitem->id,
+        's_recruit_status' => $faker->randomElement([0, 1, 2, 8]),
+        'e_recruit_status' => $faker->randomElement([0, 1, 2, 8]),
+        'congrats_amount' => $faker->randomNumber,
+        'congrats_status' => $faker->randomElement([0, 1, 2]),
+        's_first_attendance' => $faker->date,
+        's_nofirst_attendance' => $faker->sentence,
+        'e_first_attendance' => $faker->date,
+        'e_nofirst_attendance' => $faker->sentence,
+        'recruitment_fee' =>  $faker->randomNumber,
+        'recruitment_status' => $faker->randomElement([0, 1, 2])
     ];
 });

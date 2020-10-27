@@ -85,6 +85,7 @@ $(function () {
         if ($(this).prop('checked')) {
             var select = $(this).parent().next();
             select.prop('disabled', false);
+            select.prop("selectedIndex", 0);
 
         } else {
             select.prop('disabled', true);

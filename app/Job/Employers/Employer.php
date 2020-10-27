@@ -9,20 +9,18 @@ use App\Job\JobItems\JobItem;
 use App\Notifications\EmployerPasswordResetNotification;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employer extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'last_name', 'first_name', 'last_name_kana', 'first_name_kana', 'status',
-        'phone1', 'phone2', 'phone3', 'email', 'password', 'email_verified', 'email_verify_token',
+    protected $guarded = [
+        'id',
     ];
 
     /**
@@ -35,8 +33,6 @@ class Employer extends Authenticatable
         'remember_token',
     ];
 
-    protected $dates = ['deleted_at'];
-
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -48,7 +44,7 @@ class Employer extends Authenticatable
 
     public function company(): HasOne
     {
-        return $this->hasOne(Company::class, 'employer_id');
+        return $this->hasOne(Company::class);
     }
 
     /**

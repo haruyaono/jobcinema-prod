@@ -15,7 +15,7 @@ class CreateApplyDetailsTable extends Migration
     {
         Schema::create('apply_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('apply_id')->index();
+            $table->unsignedBigInteger('apply_id')->index();
             $table->foreign('apply_id')->references('id')->on('applies')->onDelete('cascade');
             $table->string('last_name');
             $table->string('first_name');
