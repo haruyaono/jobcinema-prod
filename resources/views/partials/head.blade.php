@@ -11,6 +11,7 @@
 <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 <link href="{{ asset('css/lib/tingle.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/lib/swiper.min.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="{{ mix('css/app.css') }} ">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -29,10 +30,8 @@
 @endif
 <!-- jquery-ui -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
-
-<script type="text/javascript" src="{{ asset('js/slick.min.js') }}"></script>
+<script src="{{ asset('js/lib/swiper.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
-
 <script>
   $(function() {
 
