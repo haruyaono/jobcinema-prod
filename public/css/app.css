@@ -16471,7 +16471,7 @@ input[size="28"] {
   }
 }
 
-/* 案件一覧 */
+/* 求人一覧 */
 
 .job-entry .job-item {
   width: 100%;
@@ -16669,195 +16669,14 @@ input[size="28"] {
   content: "\F684";
 }
 
-/********** 個別ページ************/
-
-.media-wrap {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  margin: 40px 0 90px;
-  background: #f5f5f5;
-  padding: 35px 15px;
-}
-
-.full-wide-slider {
-  position: relative;
-  width: 45%;
-  margin-right: 5%;
-  transition: all 1.2s ease;
-  display: inline-block;
-}
-
-.full-wide-slider.slick-initialized {
-  opacity: 1;
-  visibility: visible;
-}
-
-.full-wide-slider .slick-list {
-  height: 100%;
-}
-
-.full-wide-slider .slick-track {
-  height: 100%;
-}
-
-.full-wide-slider .slick-slide {
-  position: relative;
-  height: 23vw;
-}
-
-.full-wide-slider .slick-slide::before {
-  background-color: #000;
-  opacity: 0.3;
-  z-index: 1;
-}
-
-.full-wide-slider .slick-slide video {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  min-height: 100%;
-  width: 100%;
-  height: auto;
-  transform: translate(-50%, -50%);
-}
-
-.full-wide-slider .slick-slide .slide-media {
-  -webkit-animation: slideOut 0.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-  animation: slideOut 0.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-}
-
-.full-wide-slider .slick-slide.slick-active {
-  z-index: 1;
-}
-
-.full-wide-slider .slick-slide.slick-active .slide-media {
-  -webkit-animation: slideIn 2.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-  animation: slideIn 2.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-}
-
-.full-wide-slider .slick-dots,
-.image3-area .slick-dots {
-  text-align: center;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  margin-top: 15px;
-}
-
-.full-wide-slider .slick-dots li,
-.image3-area .slick-dots li {
-  display: inline-block;
-  vertical-align: top;
-  margin: 0 8px;
-}
-
-.full-wide-slider .slick-dots li button,
-.image3-area .slick-dots li button {
-  width: 16px;
-  height: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 0 transparent;
-  vertical-align: middle;
-  color: #fff;
-  background-color: #b6b6b6;
-  transition: all 0.3s ease;
-  opacity: 0.4;
-  font-size: 0;
-}
-
-.full-wide-slider .slick-arrow {
-  background: transparent;
-  margin-top: 0;
-}
-
-.full-wide-slider .prev-arrow {
-  left: 0;
-  opacity: 0.7;
-}
-
-.full-wide-slider .next-arrow {
-  right: 0;
-  opacity: 0.7;
-}
-
-.full-wide-slider .prev-arrow::before,
-.full-wide-slider .next-arrow::before {
-  color: #555;
-}
-
-.full-wide-slider .slick-dots li button:focus {
-  outline: none;
-}
-
-.full-wide-slider .slick-dots li button:hover {
-  opacity: 1;
-}
-
-.full-wide-slider .slick-dots li.slick-active button,
-.image3-area .slick-dots li.slick-active button {
-  box-shadow: 0 0 0 2px #fff;
-  opacity: 1;
-  background-color: #333;
-}
-
-@-webkit-keyframes slideIn {
-  from {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
-
-  to {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
-
-  to {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
-}
-
-@-webkit-keyframes slideOut {
-  from {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
-
-  to {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
-}
-
-@keyframes slideOut {
-  from {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
-
-  to {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
-}
+/********** 求人詳細************/
 
 .invi-job-entry .pad {
   padding: 3em 3%;
 }
 
 .invi-job-entry h1 {
-  margin-bottom: 3em;
+  margin-bottom: 1em;
   padding: 0 0.5em;
   padding-bottom: 20px;
   border-bottom: 1px solid #666;
@@ -16942,27 +16761,144 @@ input[size="28"] {
   /*左端からのアイコンまでの距離*/
 }
 
-.image3-area {
-  /* margin: 3em 0 2em; */
-  width: 40%;
-  display: inline-block;
-  margin-bottom: -7px;
+.swiper-container.job-detail-movie-slider-container [class^="swiper-button-"] {
+  transition: all 0.3s ease;
 }
 
-.image3-area ul li img {
+.swiper-container.job-detail-movie-slider-container [class^="swiper-slide-shadow-"] {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.job-detail-movie-slider-bg {
+  background-image: url(/images/job_detail_movie_slider_backimage2.png?199fd05798827395f897df417b595e54);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 2em;
+}
+
+.swiper-container.job-detail-movie-slider-container {
+  max-width: 860px;
+  width: 88%;
+  height: 40vh;
+  transition: opacity 0.6s ease, transform 0.3s ease;
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container {
+    width: 80%;
+    height: 540px;
+  }
+}
+
+.swiper-container.job-detail-movie-slider-container.scale-out {
+  transform: scale(0.7);
+}
+
+.swiper-container.job-detail-movie-slider-container.scale-in {
+  transform: scale(1);
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-slide {
+  width: 100% !important;
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-slide video {
+  height: 100%;
+}
+
+.swiper-container.job-detail-movie-slider-container [class^="swiper-button-"] {
+  width: 20px;
+  color: #000;
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container [class^="swiper-button-"] {
+    width: 44px;
+  }
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev {
+  transform: translateX(-35px);
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container .swiper-button-prev {
+    transform: translateX(-80px);
+  }
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-next {
+  transform: translateX(35px);
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container .swiper-button-next {
+    transform: translateX(80px);
+  }
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-next:after,
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev:after {
+  font-size: 25px;
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container .swiper-button-next:after,
+  .swiper-container.job-detail-movie-slider-container .swiper-button-prev:after {
+    font-size: var(--swiper-navigation-size);
+  }
+}
+
+.job-detail-image-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  margin: 40px 0 60px;
+  background: #f5f5f5;
+  padding: 35px 15px;
+}
+
+.job-detail-image-container .job-detail-image {
+  width: 30%;
+  display: inline-block;
+  margin-bottom: -7px;
+  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.job-detail-image-container .job-detail-image img {
   width: 100%;
-  /* height: 100%; */
-  /* width: 250px; */
-  height: 150px;
+  height: 200px;
+  vertical-align: bottom;
   -o-object-fit: cover;
      object-fit: cover;
   -o-object-position: 50% 50%;
      object-position: 50% 50%;
 }
 
+.job-detail-image-slider-container-bg {
+  background: #f5f5f5;
+}
+
+.job-detail-image-slider-container-bg .job-detail-image-slider-container {
+  width: 80%;
+  margin: 40px auto 60px;
+  padding: 35px 0;
+}
+
+.job-detail-image-slider-container-bg .job-detail-image-slider-container .swiper-slide {
+  width: 100%;
+}
+
+.job-detail-image-slider-container-bg .job-detail-image-slider-container .swiper-slide img {
+  width: 100%;
+}
+
 .text-contents {
   max-width: 900px;
   width: 100%;
+  margin: 20px 0 40px;
 }
 
 .detail-area .newjob-table {
