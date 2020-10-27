@@ -271,6 +271,22 @@ h3 {
   }
 }
 
+.floatL {
+  float: left;
+}
+.floatR {
+  float: right;
+}
+.alignleft {
+  text-align: left;
+}
+.aligncenter {
+  text-align: center;
+}
+.alignright {
+  text-align: right;
+}
+
 select:hover {
   cursor: pointer;
 }
@@ -523,6 +539,26 @@ input {
   font-family: "Font Awesome 5 Free";
   color: #fff;
   line-height: 40px;
+}
+
+/* モーダル tingle.js */
+.tingle-modal {
+  padding: 40px;
+}
+.tingle-modal-box {
+  width: 850px;
+  max-width: 90%;
+  border-radius: 0;
+}
+.tingle-modal--visible .tingle-modal-box__footer {
+  bottom: 0;
+  text-align: center;
+  background: #fff;
+  padding: 0 40px 60px;
+
+  .btn {
+    margin: 0 20px;
+  }
 }
 
 /* スライドドット */

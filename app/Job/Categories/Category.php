@@ -3,33 +3,44 @@
 namespace App\Job\Categories;
 
 use App\Job\JobItems\JobItem;
+use App\Job\AchievementRewards\AchievementReward;
+use App\Job\CongratsMonies\CongratsMoney;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
     use NodeTrait;
 
     protected $table = 'categories';
-    protected $fillable = ['name', 'slug'];
+    protected $guarded = ['id'];
     protected $dates = ['created_at', 'updated_at'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function jobitems()
+    public function jobitems(): BelongsToMany
     {
         return $this->belongsToMany(JobItem::class, 'job_item_category')
-                    ->withPivot([
-                        'id',
-                        'job_item_id',
-                        'category_id',
-                        'parent_id',
-                    ])->withTimeStamps();
+            ->withPivot([
+                'id',
+                'job_item_id',
+                'category_id',
+                'parent_id',
+            ])->withTimeStamps();
     }
 
     public function getNameList(array $idList)
     {
         return $this->find($idList)->pluck('name');
+    }
+
+    public function achievementReward(): HasOne
+    {
+        return $this->hasOne(AchievementReward::class);
+    }
+
+    public function congratsMoney(): HasOne
+    {
+        return $this->hasOne(CongratsMoney::class);
     }
 }

@@ -26,8 +26,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->model = $user;
     }
 
-
-
     /**
      * Create the user
      *
@@ -111,23 +109,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * @param array $user
-     * @param int $jobId
+     * @param int $jobitemId
      *
      * @return bool
      */
-    public function existsAppliedJobItem(User $user, int $jobId): bool
+    public function existsAppliedJobItem(User $user, int $jobitemId): bool
     {
-
-        $applies = $this->findApplies($user);
-        $appliedJobitems = new Collection();
-
-        foreach ($applies as $apply) {
-            if ($apply->jobitems[0]->pivot->job_item_id === $jobId) {
-                $appliedJobitems->push($apply->jobitems[0]);
-            }
-        }
-
-        return $appliedJobitems->count() > 0 ? true : false;
+        return $user->applies()->where('job_item_id', $jobitemId)->exists();
     }
 
     /**

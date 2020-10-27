@@ -13,21 +13,21 @@ class FavouriteController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            
+
             $before1month = date('Y-m-d H:i:s', strtotime("-1 month"));
-            $delJobs = Auth::user()->favourites()->where('favourites.created_at','<',$before1month)->get();
-            if($delJobs) {
-                foreach($delJobs as $delJob){
+            $delJobs = Auth::user()->favourites()->where('favourites.created_at', '<', $before1month)->get();
+            if ($delJobs) {
+                foreach ($delJobs as $delJob) {
                     Auth::user()->favourites()->detach($delJob->job_item_id);
                 }
             }
-    
-            $jobs = Auth::user()->favourites()->where('favourites.created_at','>',$before1month)->limit(20)->orderBy('favourites.created_at', 'desc')->get();
 
-            $result_count = $jobs->count();
-        
-            return view('jobs.keeplist', compact('jobs', 'result_count'));
-        } 
+            $jobitems = Auth::user()->favourites()->where('favourites.created_at', '>', $before1month)->limit(20)->orderBy('favourites.created_at', 'desc')->get();
+
+            $result_count = $jobitems->count();
+
+            return view('jobs.keeplist', compact('jobitems', 'result_count'));
+        }
         return view('jobs.keeplist');
     }
 
@@ -35,7 +35,7 @@ class FavouriteController extends Controller
     {
         $jobid = JobItem::find($id);
         $user = Auth::user();
-        if($jobid->favourites()->where('user_id', $user->id)->exists()) {
+        if ($jobid->favourites()->where('user_id', $user->id)->exists()) {
             return response()->json([
                 'fav_save_status' => '0'
             ]);
@@ -51,7 +51,7 @@ class FavouriteController extends Controller
     {
         $jobid = JobItem::find($id);
         $user = Auth::user();
-        if($jobid->favourites()->where('user_id', $user->id)->exists()) {
+        if ($jobid->favourites()->where('user_id', $user->id)->exists()) {
             $jobid->favourites()->detach($user->id);
             return response()->json([
                 'fav_del_status' => '1'

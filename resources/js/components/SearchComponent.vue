@@ -1,7 +1,7 @@
 <template>
   <section class="search-section">
     <div class="inner">
-      <form id="composite-form" method="get" action="/jobs/search/all" role="form" class="cf">
+      <form id="composite-form" method="get" action="/job_sheet/search/all" role="form" class="cf">
         <div
           v-for="(category, index) in categories"
           :key="category.id"

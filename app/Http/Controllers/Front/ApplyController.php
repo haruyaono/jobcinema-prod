@@ -4,12 +4,7 @@
 namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use App\Job\Users\User;
-use App\Job\Users\Repositories\UserRepository;
-use App\Job\Profiles\Profile;
 use App\Job\JobItems\JobItem;
 use App\Job\Applies\Apply;
 use App\Mail\JobAppliedSeeker;
@@ -18,12 +13,12 @@ use Illuminate\Support\Facades\Mail;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
+use App\Job\ApplyDetails\Repositories\Interfaces\ApplyDetailRepositoryInterface;
 use App\Job\Applies\Requests\ApplyRequest;
 use App\Http\Controllers\Controller;
 
 class ApplyController extends Controller
 {
-
   /**
    * @var JobItemRepositoryInterface
    */
@@ -35,119 +30,114 @@ class ApplyController extends Controller
   private $applyRepo;
 
   /**
+   * @var ApplyDetailRepositoryInterface
+   */
+  private $applyDetailRepo;
+
+
+  /**
    * @var UserRepositoryInterface
    */
   private $userRepo;
 
-  private $job_form_session = 'count';
-
   /**
    * ApplyController constructor.
    * @param ApplyRepositoryInterface $applyRepository
+   * @param ApplyDetailRepositoryInterface $applyDetailRepository
    * @param JobItemRepositoryInterface $jobItemRepository
    * @param UserRepositoryInterface $userRepository
    */
   public function __construct(
     ApplyRepositoryInterface $applyRepository,
+    ApplyDetailRepositoryInterface $applyDetailRepository,
     JobItemRepositoryInterface $jobItemRepository,
     UserRepositoryInterface $userRepository
   ) {
     $this->applyRepo = $applyRepository;
+    $this->applyDetailRepo = $applyDetailRepository;
     $this->jobItemRepo = $jobItemRepository;
     $this->userRepo = $userRepository;
   }
 
-  public function getApplyStep1($id, Apply $apply)
+  public function showStep1(JobItem $jobitem, Apply $apply)
   {
-    $jobitem = $this->jobItemRepo->findJobItemById($id);
-
     if (Auth::check()) {
       $user = $this->userRepo->findUserById(auth()->user()->id);
     } else {
       $user = '';
     }
 
-
     if ($user) {
-      $profile = Profile::where('user_id', $user->id)->first();
-      $postcode = str_replace("-", "", $postcode = $profile['postcode']);
-      $postcode1 = substr($postcode, 0, 3);
-      $postcode2 = substr($postcode, 3);
+      $postcode = explode("-", $user->profile->postcode);
     }
 
-    return view('jobs.apply_step1', compact('user', 'jobitem', 'postcode1', 'postcode2'));
+    return view('front.applies.show_step1', compact('user', 'jobitem', 'postcode'));
   }
 
-  public function postApplyStep1(ApplyRequest $request, $id)
+  public function storeStep1(ApplyRequest $request, JobItem $jobitem)
   {
 
-    $request->session()->put('jobapp_data', $request->all());
+    $request->session()->put('front.data.entry', $request->all());
 
-    return redirect()->action('Front\ApplyController@getApplyStep2', ['id' => $id]);
+    return redirect()->route('show.front.entry.step2', ['jobitem' => $jobitem]);
   }
 
-  public function getApplyStep2($id)
+  public function showStep2(JobItem $jobitem)
   {
-
-    $jobitem = $this->jobItemRepo->findJobItemById($id);
-
-    return view('jobs.apply_step2', compact('jobitem'));
+    if (!session()->has('front.data.entry')) {
+      return redirect('/');
+    }
+    return view('front.applies.show_step2', compact('jobitem'));
   }
 
-  public function postApplyStep2(Request $request, $id)
+  public function storeStep2(Request $request, JobItem $jobitem)
   {
-
-    $jobitem = $this->jobItemRepo->findJobItemById($id);
+    if (!$request->session()->has('front.data.entry')) {
+      return redirect('/');
+    }
     $user = $this->userRepo->findUserById(auth()->user()->id);
 
-    $userRepo = new UserRepository($user);
-    $existsAppliedJob = $userRepo->existsAppliedJobItem($user, $id);
-
-    if ($existsAppliedJob) {
+    if ($user->applies()->where('job_item_id', $jobitem->id)->exists()) {
       return view('errors.custom')->with('error_name', 'NotAppliedJob');
     }
 
-    $jobAppData = $request->session()->get('jobapp_data');
-
-    $company = $jobitem->company;
-    $employer = $jobitem->employer;
-
-    $applyData = [
+    $data = [
       'user_id' => $user->id,
-      'last_name' => $jobAppData['last_name'],
-      'first_name' => $jobAppData['first_name'],
-      'postcode' => $jobAppData['zip31'] . "-" . $jobAppData['zip32'],
-      'prefecture' => $jobAppData['pref31'],
-      'city' => $jobAppData['addr31'],
-      'gender' => $jobAppData['gender'],
-      'age' => $jobAppData['age'],
-      'phone1' => $jobAppData['phone1'],
-      'phone2' => $jobAppData['phone2'],
-      'phone3' => $jobAppData['phone3'],
-      'occupation' => $jobAppData['occupation'],
-      'final_education' => $jobAppData['final_education'],
-      'work_start_date' => $jobAppData['work_start_date'],
-      'job_msg' => $jobAppData['job_msg'] ? $jobAppData['job_msg'] : null,
-      'job_q1' => array_key_exists('job_q1', $jobAppData) ? $jobAppData['job_q1'] : null,
-      'job_q2' => array_key_exists('job_q2', $jobAppData) ? $jobAppData['job_q2'] : null,
-      'job_q3' => array_key_exists('job_q3', $jobAppData) ? $jobAppData['job_q3'] : null,
+      'job_item_id' => $jobitem->id,
+      'congrats_amount' => $jobitem->getCongratsMoneyAmount(),
+      'congrats_status' => 2,
+      'recruitment_fee' => $jobitem->getAchivementRewardMoneyAmount(),
+      'recruitment_status' => 2,
     ];
 
-    $this->applyRepo->createApply($applyData, $id);
+    $created = $this->applyRepo->createApply($data);
 
-    Mail::to($user->email)->queue(new JobAppliedSeeker($jobitem, $jobAppData, $company, $employer));
-    Mail::to($employer->email)->queue(new JobAppliedEmployer($user, $jobitem, $jobAppData, $company, $employer));
+    $detailData = $request->session()->get('front.data.entry');
+    $detailData['apply_id'] = $created->id;
+    $detailData['postcode'] = $detailData['zip31'] . "-" . $detailData['zip32'];
+    $detailData['prefecture'] = $detailData['pref31'];
+    $detailData['city'] = $detailData['addr31'];
+    unset($detailData['_token'], $detailData['zip31'], $detailData['zip32'], $detailData['pref31'], $detailData['addr31']);
 
-    return redirect()->action('Front\ApplyController@completeJobApply', ['id' => $id]);
+    $this->applyDetailRepo->createApplyDetail($detailData);
+
+    $employer = $jobitem->company->employer;
+
+    $detailData['email'] = $user->email;
+
+    Mail::to($user->email)->queue(new JobAppliedSeeker($jobitem, $detailData));
+    Mail::to($employer->email)->queue(new JobAppliedEmployer($jobitem, $detailData));
+
+    return redirect()->route('show.front.entry.finish', ['jobitem' => $jobitem]);
   }
 
-  public function completeJobApply($id)
+  public function showFinish(Request $request, JobItem $jobitem)
   {
-
-    $jobitem = $this->jobItemRepo->findJobItemById($id);
-
-    return view('jobs.apply_complete', compact('jobitem'));
-
-    session()->forget('jobapp_data');
+    $user = $this->userRepo->findUserById(auth()->user()->id);
+    if (!$user->applies()->where('job_item_id', $jobitem->id)->exists()) {
+      return redirect('/');
+    }
+    $request->session()->forget('front.data.entry');
+    return view('front.applies.show_finish', compact('jobitem'));
   }
 }

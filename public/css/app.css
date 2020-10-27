@@ -13185,6 +13185,26 @@ h3 {
   }
 }
 
+.floatL {
+  float: left;
+}
+
+.floatR {
+  float: right;
+}
+
+.alignleft {
+  text-align: left;
+}
+
+.aligncenter {
+  text-align: center;
+}
+
+.alignright {
+  text-align: right;
+}
+
 select:hover {
   cursor: pointer;
 }
@@ -13474,6 +13494,29 @@ input {
   font-family: "Font Awesome 5 Free";
   color: #fff;
   line-height: 40px;
+}
+
+/* モーダル tingle.js */
+
+.tingle-modal {
+  padding: 40px;
+}
+
+.tingle-modal-box {
+  width: 850px;
+  max-width: 90%;
+  border-radius: 0;
+}
+
+.tingle-modal--visible .tingle-modal-box__footer {
+  bottom: 0;
+  text-align: center;
+  background: #fff;
+  padding: 0 40px 60px;
+}
+
+.tingle-modal--visible .tingle-modal-box__footer .btn {
+  margin: 0 20px;
 }
 
 /* スライドドット */
@@ -17759,7 +17802,7 @@ section.cat-list-section {
 }
 
 .employer-mypage-body {
-  background-color: #F5F6FB;
+  background-color: #f5f6fb;
 }
 
 .employer-mypage-body .nav-link {
@@ -17796,11 +17839,11 @@ section.cat-list-section {
 }
 
 .bread-text-color-blue {
-  color: #0368B8;
+  color: #0368b8;
 }
 
 .bread-text-color-red {
-  color: #C93A40;
+  color: #c93a40;
 }
 
 .e-mypage-card {
@@ -17836,7 +17879,7 @@ section.cat-list-section {
 }
 
 .e-mypage-right-item {
-  border: 3px solid #C93A40;
+  border: 3px solid #c93a40;
   margin: 0 2% 2%;
 }
 
@@ -17844,7 +17887,7 @@ section.cat-list-section {
   display: block;
   font-size: 21px;
   font-weight: bold;
-  color: #C93A40;
+  color: #c93a40;
   padding: 20px;
   position: relative;
 }
@@ -17861,7 +17904,7 @@ section.cat-list-section {
 
 .job-top_create_section .card-header {
   color: #fff;
-  background-color: #0368B8;
+  background-color: #0368b8;
   font-weight: bold;
 }
 
@@ -17881,7 +17924,7 @@ section.cat-list-section {
   font-size: 18px;
   font-weight: bold;
   color: #fff;
-  background-color: #0368B8;
+  background-color: #0368b8;
   border-radius: 5px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 -4px 5px -2px #6d95ce inset;
 }
@@ -17908,10 +17951,10 @@ section.cat-list-section {
   padding: 7px 10px;
   max-width: 18%;
   width: 18%;
-  color: #B6B6B6;
+  color: #b6b6b6;
   font-size: 12px;
-  background: #FFF;
-  border: solid 3px #E8E8E8;
+  background: #fff;
+  border: solid 3px #e8e8e8;
 }
 
 .job-progress ul li .job-step {
@@ -17930,7 +17973,7 @@ section.cat-list-section {
   right: -24px;
   margin-top: -12px;
   border: 12px solid transparent;
-  border-left: 12px solid #E8E8E8;
+  border-left: 12px solid #e8e8e8;
   z-index: 2;
 }
 
@@ -17957,7 +18000,7 @@ section.cat-list-section {
 
 .job-progress ul li.current-step {
   color: #de9610;
-  background: #FFF;
+  background: #fff;
   border: solid 3px #de9610;
 }
 
@@ -18014,7 +18057,7 @@ section.cat-list-section {
 
 .btn-gradient-3d-orange:hover {
   color: #fff;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .btn-gradient-3d-blue {
@@ -18029,7 +18072,7 @@ section.cat-list-section {
 
 .btn-gradient-3d-blue:hover {
   color: #fff;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .e-image-register-item {
@@ -18107,66 +18150,6 @@ input.specified_date:focus {
   font-weight: normal;
 }
 
-/* myjob */
-
-.myjob-section .card {
-  border-radius: 0px;
-  margin-top: 20px;
-}
-
-.myjob-section .card-header {
-  background-color: #d3d3d3;
-  border-radius: 0px;
-}
-
-.myjob-section .card-body {
-  padding: 0;
-}
-
-.myjob-section table {
-  margin-bottom: 0;
-  text-align: left;
-}
-
-.myjob-section table th,
-.myjob-section table td {
-  font-size: 12px;
-  vertical-align: middle;
-}
-
-.myjob-section table th {
-  background-color: #F7F7F7;
-}
-
-.myjob-section .btn {
-  width: 100%;
-  font-size: 12px;
-  border-radius: 5px;
-  margin-bottom: 8px;
-  display: inline-block;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
-}
-
-.myjob-section .btn:last-child {
-  margin-bottom: 0;
-}
-
-.myjob-section .myjob-show-btn {
-  background-color: #FCF5EA;
-}
-
-.myjob-section .myjob-edit-btn {
-  background-color: #F0F0F0;
-}
-
-.status-text {
-  font-size: 16px;
-  font-weight: bold;
-  color: #FBD1D0;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
 /* applicant */
 
 .applicant-detail-title {
@@ -18200,13 +18183,13 @@ input.specified_date:focus {
 
 .myjob-detail-section .detail-box .item-row:nth-child(1) .row-label,
 .myjob-detail-section .detail-box .item-row:nth-child(1) .row-text {
-  border-top: 1px solid #E8E8E8;
+  border-top: 1px solid #e8e8e8;
 }
 
 .emp-adopt-area {
   width: 70%;
   padding: 30px;
-  border: 2px solid #E8E8E8;
+  border: 2px solid #e8e8e8;
   text-align: center;
   margin: 60px auto 0;
 }
@@ -18234,9 +18217,39 @@ input.specified_date:focus {
   height: 250px;
 }
 
+/* ページネーション */
+
+.employer-mypage-body .pagination {
+  border-radius: 0;
+}
+
+.employer-mypage-body .page-item.active .page-link {
+  background-color: #808080;
+  border-color: #808080;
+}
+
+.employer-mypage-body .pagination > li > a,
+.employer-mypage-body .pagination > li > span {
+  color: #808080;
+}
+
+.employer-mypage-body .page-link:hover {
+  color: #808080;
+}
+
+.employer-mypage-body .pagination > .active > a,
+.employer-mypage-body .pagination > .active > a:focus,
+.employer-mypage-body .pagination > .active > a:hover,
+.employer-mypage-body .pagination > .active > span,
+.employer-mypage-body .pagination > .active > span:focus,
+.employer-mypage-body .pagination > .active > span:hover {
+  background-color: #696969;
+  border-color: #696969;
+}
+
 @media (max-width: 768px) {
   .e-mypage-right-item {
-    border: 2px solid #C93A40;
+    border: 2px solid #c93a40;
     width: 45%;
     display: inline-block;
     margin-top: 30px;
@@ -18297,7 +18310,7 @@ input.specified_date:focus {
 
   .myjob-detail-section .detail-box .item-row .row-label {
     padding: 5px 10px;
-    background: #F7F7F7;
+    background: #f7f7f7;
   }
 }
 
@@ -18428,6 +18441,155 @@ input.specified_date:focus {
   .e-image-register-item video {
     max-height: 150px;
   }
+}
+
+/***************** 企業マイページ ********************/
+
+/** 求人票リスト **/
+
+.delConfirmHeader {
+  margin: 20px 0 40px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.delConfirmHeaderMessage {
+  margin: 20px;
+  padding: 20px 0 30px;
+  background: #ffe4e1;
+}
+
+.delConfirmHeaderMessage ul {
+  list-style: decimal;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.delConfirmHeaderMessageTtl {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #c93a40;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.companyJobsheetJoblistSection {
+  border-radius: 0px;
+  margin-top: 20px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem {
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 40px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobItemHeader {
+  background-color: #bdb76b;
+  border-radius: 0px;
+  color: #fff;
+  padding: 5px 10px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobItemHeader a {
+  color: #fff;
+  font-size: 14px;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobItemHeaderTtl {
+  font-size: 20px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobItemBody {
+  padding: 0;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobitemTable {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobitemTable th,
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobitemTable td {
+  font-size: 12px;
+  vertical-align: middle;
+  border: 1px solid #c0c0c0;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJobitemTable th {
+  background-color: #dcdcdc;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .kingaku {
+  padding: 8px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .kingakuWrap .kingaku {
+  padding: 0 5px;
+  background-color: #333;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .kingakuWrap .kingaku .tanka {
+  color: #fff;
+  font-size: 18px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .kingakuWrap .kingaku .contingent_fee {
+  color: #bdb76b;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .sheetBtnBox {
+  width: 200px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .btn {
+  width: 100%;
+  font-size: 12px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  display: inline-block;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .btn:last-child {
+  margin-bottom: 0;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .statusTxt {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .statusTxt.statusTxt-0 {
+  color: #808080;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .statusTxt.statusTxt-2 {
+  color: #ff7f50;
+  /* 文字の色 */
+  letter-spacing: 4px;
+  /* 文字間 */
+  text-shadow: 2px 2px 1px #ffffff, -2px 2px 1px #ffffff, 2px -2px 1px #ffffff, -2px -2px 1px #ffffff, 2px 0px 1px #ffffff, 0px 2px 1px #ffffff, -2px 0px 1px #ffffff, 2px 4px 5px darkgrey;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJoblistBtn.joblistShowBtn {
+  background-color: #e6e6fa;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJoblistBtn.joblistEditBtn {
+  background-color: #fffacd;
+}
+
+.companyJobsheetJoblistSection .companyJobsheetJobItem .companyJobsheetJoblistBtn.joblistCancelBtn {
+  background-color: #f5f5f5;
 }
 
 /*****LPページ*******/

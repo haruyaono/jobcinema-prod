@@ -8,8 +8,6 @@ use App\Job\Categories\Category;
 
 class AchievementReward extends Model
 {
-
-
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +21,16 @@ class AchievementReward extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * get amount
+     *
+     * @return string
+     */
+    public function getCostomAmountAttribute()
+    {
+        return number_format("{$this->amount}") . "円(税別)";
+    }
 
     public function category()
     {

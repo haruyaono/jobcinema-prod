@@ -1762,7 +1762,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.startProcessing();
-      axios.post('/save/' + this.jobid).then(function (response) {
+      axios.post('/keeplist/save/' + this.jobid).then(function (response) {
         if (response.data.fav_save_status == 1) {
           _this.show = true;
 
@@ -1788,7 +1788,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (confirm('選択した求人情報を削除しますか？')) {
         this.startProcessing();
-        axios.post('/unsave/' + this.jobid).then(function (response) {
+        axios.post('/keeplist/unsave/' + this.jobid).then(function (response) {
           if (response.data.fav_del_status == 1) {
             _this2.show = false;
 
@@ -1857,7 +1857,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   headers: {
@@ -1873,7 +1872,7 @@ __webpack_require__.r(__webpack_exports__);
       itemflag: false,
       isSmartPhone: ismobilejs__WEBPACK_IMPORTED_MODULE_0__["default"].phone,
       env: document.getElementById("env_input").value,
-      baseurl: document.getElementById("s3_url_input").value
+      filePath: document.getElementById("file_path").value
     };
   },
   mounted: function mounted() {
@@ -1882,7 +1881,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     load: function load() {
       var self = this;
-      axios.post("/jobs/ajax_history_sheet_list").then(function (res) {
+      axios.post("/job_sheet/ajax_history_sheet_list").then(function (res) {
         if (res.data != "") {
           self.items = res.data;
           self.show = true;
@@ -38620,9 +38619,7 @@ var render = function() {
     [
       _vm._m(0),
       _vm._v(" "),
-      _vm.loading
-        ? _c("div", { staticClass: "loader" }, [_vm._v("Loading")])
-        : _vm._e(),
+      _vm.loading ? _c("div", { staticClass: "loader" }) : _vm._e(),
       _vm._v(" "),
       _vm.show
         ? _c(
@@ -38637,13 +38634,11 @@ var render = function() {
                   attrs: { job: item }
                 },
                 [
-                  _c("a", { attrs: { href: "/jobs/" + item.id } }, [
+                  _c("a", { attrs: { href: "/job_sheet/" + item.id } }, [
                     _c("div", { staticClass: "wrap-img" }, [
-                      _vm.env == "local"
-                        ? _c("img", { attrs: { src: item.job_img } })
-                        : _c("img", {
-                            attrs: { src: _vm.baseurl + item.job_img }
-                          })
+                      _c("img", {
+                        attrs: { src: _vm.filePath + item.job_img_1 }
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "wrap-text" }, [
@@ -38664,9 +38659,7 @@ var render = function() {
                       _c("p", [
                         _vm._v(
                           "給与: " +
-                            _vm._s(
-                              _vm._f("truncate")(item.job_hourly_salary, 10)
-                            )
+                            _vm._s(_vm._f("truncate")(item.job_salary, 10))
                         )
                       ])
                     ])
@@ -38727,7 +38720,7 @@ var render = function() {
           attrs: {
             id: "composite-form",
             method: "get",
-            action: "/jobs/search/all",
+            action: "/job_sheet/search/all",
             role: "form"
           }
         },
@@ -39071,7 +39064,9 @@ var render = function() {
                       "a",
                       {
                         staticClass: "txt-blue-link",
-                        attrs: { href: "/jobs/search/all?" + _vm.params[index] }
+                        attrs: {
+                          href: "/job_sheet/search/all?" + _vm.params[index]
+                        }
                       },
                       [_vm._v(_vm._s(_vm.nameList["no" + index]))]
                     )

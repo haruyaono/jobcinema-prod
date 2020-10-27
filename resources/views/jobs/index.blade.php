@@ -9,24 +9,13 @@
 @endsection
 
 @section('contents')
-
 <div class="main-slider-wrap">
 	<slick-top></slick-top>
 </div>
-
-<!-- ここからメインコンテンツ -->
 <div class="main-wrap">
-	<!-- @if (Auth::guard()->check())
-<p>求職者ログイン中</p>
-@endif
-@if (Auth::guard('employer')->check())
-<p>企業ログイン中</p>
-@endif -->
-	<!-- 絞り込み・検索エリア -->
 	<div class="only-pc">
 		<search-component></search-component>
 	</div>
-
 	<section class="main-section">
 		<div class="inner">
 			<div class="pad">
@@ -34,37 +23,35 @@
 					<h2 class="txt-h2 top-heading-h2 mt-0"><i class="far fa-clock font-yellow mr-2 h4"></i>釧路の新着求人</h2>
 					<div class="newjob-list-border">
 						<div class="newjob-list">
-							<!-- ▽ ループ開始 ▽ -->
-							@forelse ($topNewJobs as $job)
+							@forelse ($topNewJobs as $jobitem)
 							<div class="newjob-item">
-								<a href="{{ route('jobs.show', [$job->id])}}" class="newjob-item-link">
+								<a href="{{ route('show.front.job_sheet.detail', [$jobitem->id])}}" class="newjob-item-link">
 									<p class="joblist_jobCassette__image_wrap">
-										@if(($job->job_img) !== null)
-										<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{asset($job->job_img)}}@endif" style="width:100%;" alt="" />
+										@if(($jobitem->job_img_1) !== null)
+										<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" style="width:100%;" alt="" />
 										@else
-										<img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
+										<img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
 										@endif
 									</p>
 									<div class="txt-wrap">
 										<h3 class="txt-h3">
-											{{$job->company->cname}}
+											{{$jobitem->company->cname}}
 										</h3>
 										<div class="job-desc-list">
-											<p><span class="occupation"><span>{{ str_limit($job->job_type, $limit = 40, $end = '...')}}</p>
-											<p><span class="money"><span>{{ str_limit($job->job_hourly_salary, $limit = 40, $end = '...')}}</p>
-											<p><span class="place"><span>{{ str_limit($job->job_office_address, $limit = 40, $end = '...')}}</p>
+											<p><span class="occupation"><span>{{ str_limit($jobitem->job_type, $limit = 40, $end = '...')}}</p>
+											<p><span class="money"><span>{{ str_limit($jobitem->job_salary, $limit = 40, $end = '...')}}</p>
+											<p><span class="place"><span>{{ str_limit($jobitem->job_office_address, $limit = 40, $end = '...')}}</p>
 										</div>
 									</div>
 
 								</a>
-							</div> <!-- newjob-item -->
-							<!-- △ ループ終了 △ -->
+							</div>
 							@empty
 							<p class="my-3">新着案件がありません。</p>
 							@endforelse
-						</div> <!-- newjob-list -->
+						</div>
 						<p class="more-link">
-							<a href="{{ route('alljobs') }}">求人一覧を見る</a>
+							<a href="{{ route('index.front.job_sheet.search') }}">求人一覧を見る</a>
 						</p>
 					</div>
 				</div>
@@ -78,7 +65,6 @@
 						<p><a class="btn btn-yellow w-100 mb-3" href="/members/register">会員登録</a></p>
 						<p><a class="btn btn-outline-secondary w-100" href="/members/login">ログイン</a></p>
 					</div>
-
 				</div>
 				@endif
 
@@ -93,11 +79,9 @@
 						</div>
 					</div>
 				</div>
-
 			</div> <!-- pad -->
 		</div> <!-- inner -->
 	</section> <!-- newjob-entry -->
-
 </div> <!-- main-wrap-->
 @endsection
 
@@ -105,7 +89,6 @@
 @component('components.footer')
 @endcomponent
 @endsection
-
 
 @section('js')
 <script type="text/javascript" refer>
@@ -118,7 +101,6 @@
 				expires: 30,
 				path: '/'
 			}); //cookieの保存
-
 		});
 	});
 </script>

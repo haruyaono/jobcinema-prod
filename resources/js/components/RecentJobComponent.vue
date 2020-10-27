@@ -5,18 +5,17 @@
         <i class="far fa-clock font-yellow mr-2 h4"></i>最近見た求人
       </h3>
     </div>
-    <div class="loader" v-if="loading">Loading</div>
+    <div class="loader" v-if="loading"></div>
     <ul class="box-wrap cf" v-if="show">
       <li class="wrap-items" v-for="item in limitCount" v-bind:job="item" v-bind:key="item.id">
-        <a :href="'/jobs/' + item.id">
+        <a :href="'/job_sheet/' + item.id">
           <div class="wrap-img">
-            <img v-if="env == 'local'" :src="item.job_img" />
-            <img v-else :src="baseurl + item.job_img" />
+            <img :src="filePath + item.job_img_1" />
           </div>
           <div class="wrap-text">
             <p>勤務先: {{item.job_office | truncate(9)}}</p>
             <p>職種: {{item.job_type | truncate(10)}}</p>
-            <p>給与: {{item.job_hourly_salary | truncate(10)}}</p>
+            <p>給与: {{item.job_salary | truncate(10)}}</p>
           </div>
         </a>
       </li>
@@ -41,7 +40,7 @@ export default {
       itemflag: false,
       isSmartPhone: isMobile.phone,
       env: document.getElementById("env_input").value,
-      baseurl: document.getElementById("s3_url_input").value
+      filePath: document.getElementById("file_path").value
     };
   },
 
@@ -52,7 +51,7 @@ export default {
     load: function() {
       var self = this;
       axios
-        .post("/jobs/ajax_history_sheet_list")
+        .post("/job_sheet/ajax_history_sheet_list")
         .then(function(res) {
           if (res.data != "") {
             self.items = res.data;

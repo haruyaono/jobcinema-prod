@@ -5,13 +5,9 @@ namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
-use App\Job\Users\User;
-use App\Job\Users\Repositories\UserRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
-use App\Job\Companies\Company;
 use Illuminate\Support\Facades\Auth;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
@@ -20,7 +16,6 @@ use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
-
   /**
    * @var CategoryRepositoryInterface
    * @var JobItemRepositoryInterface
@@ -29,10 +24,7 @@ class JobController extends Controller
   private $categoryRepo;
   private $jobItemRepo;
   private $userRepo;
-
-  private $job_form_session = 'count';
   private $JobItem;
-
 
   /**
    * JobController constructor.
@@ -47,14 +39,13 @@ class JobController extends Controller
     JobItemRepositoryInterface $jobItemRepository,
     UserRepositoryInterface $userRepository
   ) {
-
     $this->JobItem = $JobItem;
     $this->categoryRepo = $categoryRepository;
     $this->jobItemRepo = $jobItemRepository;
     $this->userRepo = $userRepository;
   }
 
-  public function index(Request $request)
+  public function index()
   {
     $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
     $jobCount = $this->jobItemRepo->listJobitemCount();
@@ -63,15 +54,13 @@ class JobController extends Controller
     return view('jobs.index', compact('topNewJobs', 'jobCount', 'categoryList'));
   }
 
-  public function show(Request $request, $id)
+  public function show(Request $request, JobItem $jobitem)
   {
-
     session()->forget('jobapp_data');
 
+    $id = $jobitem->id;
     $recommendJobList = [];
-    $category = [];
-    $job = $this->jobItemRepo->findJobItemById($id);
-    $jobItemRepo = new JobItemRepository($job);
+    $jobItemRepo = new JobItemRepository($jobitem);
 
     if (Auth::check()) {
       $user = $this->userRepo->findUserById(auth()->user()->id);
@@ -90,35 +79,21 @@ class JobController extends Controller
       }
     }
 
-    // 最近見た求人リストの配列を操作
     $this->jobItemRepo->createRecentJobItemIdList($request, $id);
 
-    if ($job->status == 2) {
-      $title = $job->company->cname;
-
-      if (config('app.env') == 'production') {
-        $jobImageBaseUrl = config('app.s3_url');
-      } else {
-        $jobImageBaseUrl = '';
-      }
-
-      return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
-    } else {
-      if ($jobitem_id_list && in_array($id, $jobitem_id_list)) {
-        $index = array_search($id, $jobitem_id_list, true);
-        session()->forget("recent_jobs.$index");
-      }
+    if ($jobitem->status == 2) {
+      return view('jobs.show', compact('jobitem', 'existsApplied', 'recommendJobList'));
     }
 
     return redirect()->to('/');
   }
 
   // 最近見た求人リスト
-  public function getJobHistory()
+  public function indexHistory()
   {
-    $jobs = $this->jobItemRepo->listRecentJobItemId(1);
+    $jobitems = $this->jobItemRepo->listRecentJobItemId(1);
 
-    return view('jobs.history', compact('jobs'));
+    return view('jobs.history', compact('jobitems'));
   }
 
   // 最近見た求人のリストを返す
@@ -129,30 +104,31 @@ class JobController extends Controller
     return response()->json($jobs);
   }
 
-  public function allJobs(Request $request)
+  public function search(Request $request)
   {
     $searchParam = $request->all();
     $categoryList = $this->categoryRepo->listCategories('id', 'asc');
 
     if (array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
-
       switch ($searchParam['ks']['f']) {
         case '1':
-          $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_h')->first()->parent->id;
+          $searchParam['ks']['slug'] = 'salary';
+          $searchParam['ks']['parent'] = 'salary_h';
           break;
         case '2':
-          $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_d')->first()->parent->id;
+          $searchParam['ks'][''] = 'salary';
+          $searchParam['ks']['parent'] = 'salary_d';
           break;
         case '3':
-          $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_m')->first()->parent->id;
+          $searchParam['ks']['slug'] = 'salary';
+          $searchParam['ks']['parent'] = 'salary_';
           break;
         case '4':
-          $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('date')->first()
-            ->parent->id;
+          $searchParam['ks']['slug'] = 'date';
           $searchParam['ks']['order'] = 'asc';
           break;
         case '5':
-          $searchParam['ks']['column'] = 'oiwaikin';
+          $searchParam['ks']['slug'] = 'oiwaikin';
           break;
         default:
           break;
@@ -161,18 +137,15 @@ class JobController extends Controller
 
     $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
 
-
-
     $totalJobItem = $query->count();
-    $jobs = $query->latest()->paginate(20);
+    $jobitems = $query->paginate(20);
 
-    //件数表示の例外処理
-    if (Input::get('page') > $jobs->LastPage()) {
+    if (Input::get('page') > $jobitems->LastPage()) {
       abort(404);
     }
 
     $hash = array(
-      'jobs' => $jobs,
+      'jobitems' => $jobitems,
       'jobCount' => $totalJobItem,
       'categoryList' => $categoryList,
       'searchParam' => $searchParam

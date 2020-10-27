@@ -13,9 +13,9 @@ if ($getJobUrlPrmList !== []) {
     }
     $jobUrlString .= '&' . $key . '=' . $value;
   }
-  $jobCreateUrl = url('/jobs/search/all?') . $jobUrlString;
+  $jobCreateUrl = url('/job_sheet/search/all?') . $jobUrlString;
 } else {
-  $jobCreateUrl = url('/jobs/search/all?');
+  $jobCreateUrl = url('/job_sheet/search/all?');
 }
 ?>
 @extends('layouts.master')
@@ -29,7 +29,6 @@ if ($getJobUrlPrmList !== []) {
 @endsection
 
 @section('contents')
-<!-- パンくず -->
 <div id="breadcrumb" class="bread only-pc">
   <ol>
     <li>
@@ -44,9 +43,8 @@ if ($getJobUrlPrmList !== []) {
     </li>
   </ol>
 </div>
-<!-- ここからメインコンテンツ -->
 <div class="main-wrap">
-  <!-- 絞り込み・検索エリア -->
+
   <search-component></search-component>
 
   <section class="main-section job-entry">
@@ -54,8 +52,8 @@ if ($getJobUrlPrmList !== []) {
       <div class="pad cf">
         <h1 class="txt-h1">求人検索結果</h1>
         <div class="d-flex mb-3 p-works-count-box">
-          @if($jobs->count() !== 0)
-          <p class="search-count"><span>{{ $jobs->firstItem() }}件 〜 {{ $jobs->lastItem() }}件を表示</span></p>
+          @if($jobitems->count() !== 0)
+          <p class="search-count"><span>{{ $jobitems->firstItem() }}件 〜 {{ $jobitems->lastItem() }}件を表示</span></p>
           @endif
         </div>
         <ul class="p-works-sort-conditions">
@@ -78,33 +76,33 @@ if ($getJobUrlPrmList !== []) {
         </select>
 
         <div class="job-list">
-          <!-- ▽ ループ開始 ▽ -->
-          @if ($jobs->count() > 0 )
-          @foreach ($jobs as $job)
+          @if ($jobitems->count() > 0 )
+          @foreach ($jobitems as $jobitem)
           <div class="job-item">
-            <a href="{{ route('jobs.show', [$job->id])}}" class="job-item-link">
+            <a href="{{ route('show.front.job_sheet.detail', [$jobitem->id])}}" class="job-item-link">
               <div class="job-item-heading only-pc">
-                <!-- カテゴリ -->
-                <span class="cat-item org">{{$job->categories()->wherePivot('slug', 'type')->first() !== null ? $job->categories()->wherePivot('slug', 'type')->first()->name : ''}}</span>
-                <span class="cat-item red">{{$job->categories()->wherePivot('slug', 'status')->first() !== null ? $job->categories()->wherePivot('slug', 'status')->first()->name : ''}}</span>
+                <span class="cat-item org">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
+                <span class="cat-item red">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>
               </div>
               <div class="jobCassette__header">
                 <div class="jobCassette__image_wrap only-sp">
-                  @if(($job->job_img) ==! null)
-                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" alt="" />
+                  @if(($jobitem->job_img_1) ==! null)
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" alt="求人の写真" />
+                  @else
+                  <img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif
                 </div>
                 <div class="jobCassette__title">
-                  <p class="jobCassette__jobTypeTxt"> {{$job->job_title}}</p>
-                  <h2 class="company_name_item">{{$job->company->cname}}</h2>
+                  <p class="jobCassette__jobTypeTxt"> {{$jobitem->job_title}}</p>
+                  <h2 class="company_name_item">{{$jobitem->company->cname}}</h2>
                 </div>
 
               </div>
 
               <div class="d-flex">
                 <div class="jobCassette__image_wrap only-pc">
-                  @if(($job->job_img) ==! null)
-                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}{{$job->job_img}}@else{{$job->job_img}}@endif" style="width:100%;" alt="" />
+                  @if(($jobitem->job_img_1) ==! null)
+                  <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" style="width:100%;" alt="求人の写真" />
                   @else
                   <img src="{{ asset('uploads/images/no-image.gif')}}" style="width:100%;" alt="No image">
                   @endif
@@ -113,41 +111,32 @@ if ($getJobUrlPrmList !== []) {
                   <table class="job-table">
                     <tr>
                       <th><span class="money"><span>給与</span></span></th>
-                      <td>{{ str_limit($job->job_hourly_salary, $limit = 40, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_salary, $limit = 40, $end = '...')}}</td>
                     </tr>
                     <tr>
                       <th><span class="place"><span>勤務先</span></span></th>
-                      <td>{{ str_limit($job->job_office, $limit = 40, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_office, $limit = 40, $end = '...')}}</td>
                     </tr>
                     <tr>
                       <th><span class="work"><span>仕事内容</span></span></th>
-                      <td>{{ str_limit($job->job_desc, $limit = 80, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_desc, $limit = 80, $end = '...')}}</td>
                     </tr>
                     <tr>
                       <th><span class="time"><span>勤務時間</span></span></th>
-                      <td>{{ str_limit($job->job_time, $limit = 40, $end = '...')}}</td>
+                      <td>{{ str_limit($jobitem->job_time, $limit = 40, $end = '...')}}</td>
                     </tr>
                   </table>
                 </div>
               </div>
-              <!-- <div class="jobitem-footer" @if(!$job->pubend_at) style="display:block; text-align:right;" @endif>
-                @if($job->pubend_at)
-                <span>{{ $job->pubend_at->format('Y年m月d日') }}に掲載終了</span>
-                @endif
-                <object>
-                  <a href="{{ route('jobs.show', [$job->id, $job->slug])}}" class="btn detail-btn"><span>詳しく見る</span></a>
-                </object>
-              </div> -->
             </a>
           </div> <!-- newjob-item -->
-          <!-- △ ループ終了 △ -->
           @endforeach
           @else
           <p>条件にマッチする求人がありません。</p>
           @endif
         </div> <!-- newjob-list -->
         <div class="paginate text-center">
-          {{ $jobs->appends(Illuminate\Support\Facades\Input::except('page'))->links()}}
+          {{ $jobitems->appends(Illuminate\Support\Facades\Input::except('page'))->links()}}
         </div>
 
         <search-history-component></search-history-component>
@@ -155,8 +144,6 @@ if ($getJobUrlPrmList !== []) {
       </div> <!-- pad -->
     </div> <!-- inner -->
   </section> <!-- newjob-entry -->
-
-
 </div> <!-- main-wrap-->
 @endsection
 
@@ -166,7 +153,6 @@ if ($getJobUrlPrmList !== []) {
 @endsection
 
 @section('js')
-<script src="{{ asset('js/main.js') }}"></script>
 <script>
   $(function() {
 

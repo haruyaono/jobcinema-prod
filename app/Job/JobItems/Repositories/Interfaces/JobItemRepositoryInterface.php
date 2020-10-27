@@ -33,21 +33,7 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
 
     public function findAllJobItemById($id);
 
-    public function savedDbFilePath(JobItem $jobitem): array;
-
-    public function existJobItemImageAndDeleteOnPost(string $imageFlag, int $editFlag = 0);
-
-    public function saveJobItemImages(UploadedFile $file, string $imageFlag): string;
-
-    public function existJobItemImageAndDeleteOnDelete($imageFlag, int $editFlag = 0, $job = '');
-
-    public function existJobItemMovieAndDeleteOnPost(string $movieFlag, int $editFlag = 0);
-
-    public function saveJobItemMovies(UploadedFile $file, string $movieFlag): string;
-
-    public function existJobItemMovieAndDeleteOnDelete($movieFlag, int $editFlag = 0, $job = '');
-
-    public function getJobImageBaseUrl(): string;
+    public function getJobBaseUrl(): string;
 
     public function associateCategory(array $category);
 }

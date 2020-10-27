@@ -1,9 +1,7 @@
 <?php
 
 return [
-"tmp_img" => "/upload/jobitem/images/tmp/",
-"real_img" => "/upload/jobitem/images/real/",
-"noimage" => "/uploads/images/no-image.gif",
-"tmp_mov" => "/upload/jobitem/movies/tmp/",
-"real_mov" => "/upload/jobitem/movies/real/",
+    "job_sheet_img" => "/img/uploads/JobSheet/",
+    "noimage" => "/uploads/images/no-image.gif",
+    "job_sheet_mov" => "/mov/uploads/JobSheet/",
 ];

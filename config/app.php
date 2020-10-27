@@ -30,6 +30,9 @@ return [
 
     's3_url' => env('MIX_S3_URL', 'https://s3.job-cinema.com'),
 
+    's3_url_local' => env('MIX_S3_URL_LOCAL', 'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
