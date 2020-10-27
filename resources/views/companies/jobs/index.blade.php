@@ -78,7 +78,7 @@
                                         <td colspan="4" height="39" class="kingaku">
                                             <div class="kingakuWrap">
                                                 <div class="kingaku">
-                                                    <p class="tanka">成果報酬単価：<span class="contingent_fee">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->achievementReward->amount}}</span></p>
+                                                    <p class="tanka">成果報酬単価：<span class="contingent_fee">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->achievementReward->CostomAmount}}</span></p>
                                                 </div>
                                             </div>
                                         </td>

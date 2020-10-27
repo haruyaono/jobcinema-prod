@@ -31,7 +31,7 @@
         @elseif($item['text'] == 'お祝い金申請中')
         <span class="pull-right-container">
             <span class="label label-{{ $item['label_color'] ?? 'primary' }} pull-right">
-                {{\DB::table('job_item_user')->whereNotNull('oiwaikin')->whereNotNull('first_attendance')->count()}}
+
             </span>
         </span>
         @endif

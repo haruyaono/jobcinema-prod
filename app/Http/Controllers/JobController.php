@@ -176,9 +176,10 @@ class JobController extends Controller
     return view('companies.jobs.index', compact('jobitems'));
   }
 
-  public function editCategory(JobItem $jobitem, $cat_slug)
+  public function editCategory(Request $request, JobItem $jobitem, $cat_slug)
   {
     $this->authorize('view', $jobitem);
+
     $categories = $this->categoryRepo->listCategoriesByslug($cat_slug);
 
     return view('companies.job_sheet.edit_category', compact('jobitem', 'cat_slug', 'categories'));
@@ -187,6 +188,11 @@ class JobController extends Controller
   public function updateCategory(JobSheetUpdateCategoryRequest $request, JobItem $jobitem)
   {
     $this->authorize('update', $jobitem);
+
+    if ($jobitem->id !== (int) $request->input('data.JobSheet.id')) {
+      return redirect()->back();
+    }
+
     $categoryFlag = $request->input('cat_flag');
 
     $jobItemRepo = new JobItemRepository($jobitem);
@@ -204,27 +210,28 @@ class JobController extends Controller
     $newData = [];
 
     if ($categoryFlag == 'salary') {
-      foreach ($categoryData[$categoryFlag]['parent_id'] as $pIndex => $pId) {
-        if (!array_key_exists($pIndex, $categoryData[$categoryFlag]['id']) || !array_key_exists($pId, $categoryData[$categoryFlag]['parent_slug'])) {
-          continue;
+      foreach ($categoryData[$categoryFlag] as $key => $data) {
+        if (!array_key_exists('id', $data)) {
+          $category = $this->categoryRepo->findCategoryBySlig($data['parent_slug']);
+          $data['id'] = $category->descendants()->where('slug', 'unregistered')->first()->id;
+          $data['parent_id'] = $category->id;
         }
         $newData = [
-          'id' => $categoryData[$categoryFlag]['id'][$pIndex],
-          'ancestor_id' => $categoryData['salary_ancestor']['ancestor_id'],
-          'ancestor_slug' => $categoryData['salary_ancestor']['ancestor_slug'],
-          'parent_id' =>  $pId,
-          'parent_slug' => $categoryData[$categoryFlag]['parent_slug'][$pId],
+          'id' => $data['id'],
+          'ancestor_id' => $categoryData['salary_ancestor']['id'],
+          'ancestor_slug' => $categoryData['salary_ancestor']['slug'],
+          'parent_id' =>  $data['parent_id'],
+          'parent_slug' => $data['parent_slug'],
         ];
+
         $jobItemRepo->associateCategory($newData);
-        array_push($categorySalarySlug, $this->categoryRepo->findCategoryById($pId)->slug);
+        array_push($categorySalarySlug, $this->categoryRepo->findCategoryById($data['parent_id'])->slug);
       }
     } else {
       $newData = [
         'id' => $categoryData[$categoryFlag]['id'],
         'ancestor_id' => $categoryData[$categoryFlag]['ancestor_id'],
         'ancestor_slug' => $categoryData[$categoryFlag]['ancestor_slug'],
-        'parent_id' => null,
-        'parent_slug' => null,
       ];
       $jobItemRepo->associateCategory($newData);
     }
@@ -241,10 +248,9 @@ class JobController extends Controller
 
   public function createStep1()
   {
-    $categoryList = $this->categoryRepo->listCategories('id', 'asc');
-
+    $categoryList = $this->categoryRepo->listCategories('sort', 'asc');
     if (preg_match("/iPhone|iPod|Android.*Mobile|Windows.*Phone/", $_SERVER['HTTP_USER_AGENT'])) {
-      return view('jobs.post.create_step1_sp', compact('categoryList'));
+      return view('companies.job_sheet.create_step1_sp', compact('categoryList'));
     } else {
       return view('companies.job_sheet.create_step1', compact('categoryList'));
     }
@@ -256,35 +262,36 @@ class JobController extends Controller
     $company =  $employer->company;
     $categoryData = $request->input('data.JobSheet.categories');
 
-    foreach ($categoryData  as $key => $data) {
-      if ($key == "salary_ancestor") {
-        continue;
-      }
+    foreach ($categoryData as $key => $data) {
       $arr = [];
       if ($key == 'salary') {
-        foreach ($data['parent_id'] as $pIndex => $pId) {
-          if (!array_key_exists($pIndex, $data['id']) || !array_key_exists($pId, $data['parent_slug'])) {
-            continue;
+        foreach ($categoryData[$key] as $data) {
+          if (!array_key_exists('id', $data)) {
+            $category = $this->categoryRepo->findCategoryBySlig($data['parent_slug']);
+            $data['id'] = $category->descendants()->where('slug', 'unregistered')->first()->id;
+            $data['parent_id'] = $category->id;
           }
           array_push($arr, [
-            'id' => $data['id'][$pIndex],
-            'ancestor_id' => $categoryData['salary_ancestor']['ancestor_id'],
-            'ancestor_slug' => $categoryData['salary_ancestor']['ancestor_slug'],
-            'parent_id' =>  $pId,
-            'parent_slug' => $data['parent_slug'][$pId],
+            'id' => $data['id'],
+            'ancestor_id' => $categoryData['salary_ancestor']['id'],
+            'ancestor_slug' => $categoryData['salary_ancestor']['slug'],
+            'parent_id' =>  $data['parent_id'],
+            'parent_slug' => $data['parent_slug'],
           ]);
         }
+
         $categoryData = array_merge($categoryData, $arr);
-        unset($categoryData['salary_ancestor']);
         unset($categoryData[$key]);
+        unset($categoryData['salary_ancestor']);
+        continue;
+      }
+      if (!array_key_exists('salary_ancestor', $categoryData)) {
         continue;
       }
       $arr = [
-        'id' => $data['id'],
-        'ancestor_id' => $data['ancestor_id'],
-        'ancestor_slug' => $data['ancestor_slug'],
-        'parent_id' => null,
-        'parent_slug' => null,
+        'id' => $categoryData[$key]['id'],
+        'ancestor_id' => $categoryData[$key]['ancestor_id'],
+        'ancestor_slug' => $categoryData[$key]['ancestor_slug'],
       ];
       $categoryData[$key] = $arr;
     }

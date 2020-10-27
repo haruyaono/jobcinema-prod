@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAreaCategoriesTable extends Migration
+class CreateFavouritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateAreaCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('area_categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->softDeletes(); 
+        Schema::create('favourites', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('job_item_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unique(array('job_item_id', 'user_id'));
             $table->timestamps();
         });
-        Schema::dropIfExists('area_cats');
     }
 
     /**
@@ -29,7 +29,6 @@ class CreateAreaCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('area_categories');
-        
+        Schema::dropIfExists('favourites');
     }
 }

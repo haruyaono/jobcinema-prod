@@ -2,23 +2,17 @@
 
 namespace App\Job\JobItems\Repositories;
 
-use App\Job\Categories\Category;
 use App\Job\JobItems\JobItem;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
-use App\Job\JobItems\Exceptions\AppliedJobItemNotFoundException;
 use App\Job\JobItems\Exceptions\JobItemCreateErrorException;
 use App\Job\JobItems\Exceptions\JobItemUpdateErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
-use Image;
-use Storage;
-use File;
+
 
 class JobItemRepository extends BaseRepository implements JobItemRepositoryInterface
 {
@@ -332,8 +326,8 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         $this->model->categories()->attach($category['id'], [
             'ancestor_id' => $category['ancestor_id'],
             'ancestor_slug' => $category['ancestor_slug'],
-            'parent_id' => $category['parent_id'],
-            'parent_slug' => $category['parent_slug'],
+            'parent_id' => array_key_exists('parent_id', $category) ? $category['parent_id'] : null,
+            'parent_slug' => array_key_exists('parent_slug', $category) ? $category['parent_slug'] : null,
         ]);
     }
 

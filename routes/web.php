@@ -145,7 +145,7 @@ Route::group(['middleware' => ['auth:employer', 'confirm']], function () {
   // 求人票
   Route::get('company/jobs/create/top', 'JobController@createTop')->name('index.jobsheet.top');
   Route::get('company/jobs/create/step1', 'JobController@createStep1')->name('index.jobsheet.step1');
-  Route::post('company/jobs/step1', 'JobController@storeStep1')->name('store.jobsheet.step1');
+  Route::post('company/jobs/create/step1', 'JobController@storeStep1')->name('store.jobsheet.step1');
   Route::get('company/jobs/create/step2/{jobitem}', 'JobController@editStep2')->name('edit.jobsheet.step2');
 
   Route::put('company/jobs/create/step2/{jobitem}/draftOrConfirm', 'JobController@storeDraftOrConfirm')->name('draftOrConfirm.jobsheet.step2');
@@ -175,7 +175,8 @@ Route::group(['middleware' => ['auth:employer', 'confirm']], function () {
   Route::post('company/jobs/create/register_submovie2/{jobitem}', 'MediaController@updateMovie')->name('update.jobsheet.submovie2');
 
   Route::get('company/jobs/create/step2/{jobitem}/category/{cat_slug}', 'JobController@editCategory')->name('edit.jobsheet.category');
-  Route::post('company/jobs/create/step2/{jobitem}/category/update', 'JobController@updateCategory')->name('update.jobsheet.category');
+  Route::post('company/jobs/create/step2/{jobitem}/category', 'JobController@updateCategory')->name('update.jobsheet.category');
+  Route::get('company/jobs/create/step2/category/update/finish', 'JobController@showCategoryFinish')->name('show.jobsheet.category.finish');
 
   Route::get('company/joblist', 'JobController@index')->name('index.joblist');
   Route::get('company/joblist/{jobitem}', 'JobController@show')->name('show.joblist.detail');

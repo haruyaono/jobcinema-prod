@@ -53,14 +53,14 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform01">
-                                    <select name="cats_status[id]">
+                                    <select name="data[JobSheet][categories][status][id]">
                                         <option value="">選択してください</option>
-                                        @foreach($categoryList[0]->children as $pIndex => $statusCategory)
-                                        <option @if(intval(old('cats_status.id'))==$statusCategory->id) selected @endif value="{{ $statusCategory->id }}">{{ $statusCategory->name }}</option>
+                                        @foreach($categoryList->where('slug', 'status')->first()->children as $pIndex => $statusCategory)
+                                        <option @if(intval(old('data.JobSheet.categories.status.id'))==$statusCategory->id) selected @endif value="{{ $statusCategory->id }}">{{ $statusCategory->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="cats_status[slug]" value="{{$categoryList[0]->slug}}">
-                                    <input type="hidden" name="cats_status[parent_id]" value="{{$categoryList[0]->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][status][ancestor_slug]" value="{{$categoryList[0]->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][status][ancestor_id]" value="{{$categoryList[0]->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -69,14 +69,14 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    <select name="cats_type[id]">
+                                    <select name="data[JobSheet][categories][type][id]">
                                         <option value="">選択してください</option>
-                                        @foreach($categoryList[1]->children as $pIndex => $typeCategory)
-                                        <option @if(intval(old('cats_type.id'))==$typeCategory->id) selected @endif value="{{ $typeCategory->id }}">{{ $typeCategory->name }}</option>
+                                        @foreach($categoryList->where('slug', 'type')->first()->children as $pIndex => $typeCategory)
+                                        <option @if(intval(old('data.JobSheet.categories.type.id'))==$typeCategory->id) selected @endif value="{{ $typeCategory->id }}">{{ $typeCategory->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="cats_type[slug]" value="{{$categoryList[1]->slug}}">
-                                    <input type="hidden" name="cats_type[parent_id]" value="{{$categoryList[1]->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][type][ancestor_slug]" value="{{$categoryList[1]->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][type][ancestor_id]" value="{{$categoryList[1]->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -85,14 +85,14 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    <select name="cats_area[id]">
+                                    <select name="data[JobSheet][categories][area][id]">
                                         <option value="">選択してください</option>
-                                        @foreach($categoryList[2]->children as $pIndex => $areaCategory)
-                                        <option @if(intval(old('cats_area.id'))==$areaCategory->id) selected @endif value="{{ $areaCategory->id }}">{{ $areaCategory->name }}</option>
+                                        @foreach($categoryList->where('slug', 'area')->first()->children as $pIndex => $areaCategory)
+                                        <option @if(intval(old('data.JobSheet.categories.area.id'))==$areaCategory->id) selected @endif value="{{ $areaCategory->id }}">{{ $areaCategory->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="cats_area[slug]" value="{{$categoryList[2]->slug}}">
-                                    <input type="hidden" name="cats_area[parent_id]" value="{{$categoryList[2]->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][area][ancestor_slug]" value="{{$categoryList[2]->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][area][ancestor_id]" value="{{$categoryList[2]->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -101,21 +101,22 @@
                             <div class="card-body">
                                 <p class="mb-3">※複数選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    @foreach($categoryList[3]->children as $pIndex => $salaryCategory)
+                                    @foreach($categoryList->where('slug', 'salary')->first()->children as $pIndex => $salaryCategory)
                                     <div class="e_radio_cat_item_salary">
                                         <div class="e_radio_cat_item_p_salary">
-                                            <input id="salary_cats_{{$pIndex}}" class="jc-jsc-salary-money-selectfield" type="checkbox" name="cats_salary_p[id][]" @if(intval(old('cats_salary_p.id.' . $pIndex))===$salaryCategory->id) checked @endif value={{ $salaryCategory->id }}>
+                                            <input id="salary_cats_{{$pIndex}}" class="jc-jsc-salary-money-selectfield" type="checkbox" name="data[JobSheet][categories][salary][{{$pIndex}}][parent_id]" @if(intval(old('data.JobSheet.categories.salary.' . $pIndex . '.parent_id' ))===$salaryCategory->id) checked @endif value={{ $salaryCategory->id }}>
                                             <label for="salary_cats_{{$pIndex}}">{{ $salaryCategory->name }}</label>
+                                            <input type="hidden" name="data[JobSheet][categories][salary][{{$pIndex}}][parent_slug]" value="{{$salaryCategory->slug}}">
                                         </div>
-                                        <select name="cats_salary[id][]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
+                                        <select name="data[JobSheet][categories][salary][{{$pIndex}}][id]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
                                             @foreach($salaryCategory->children as $cIndex => $cat)
-                                            <option value="{{$cat->id}}" @if(intval(old('cats_salary.id.' . $pIndex))===$cat->id) selected @endif>{{$cat->name}}</option>
+                                            <option value="{{$cat->id}}" @if(intval(old('data.JobSheet.categories.salary.' . $pIndex . '.id' ))===$cat->id) selected @endif>{{$cat->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     @endforeach
-                                    <input type="hidden" name="cats_salary[slug]" value="{{$categoryList[3]->slug}}">
-                                    <input type="hidden" name="cats_salary[parent_id]" value="{{$categoryList[3]->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][salary_ancestor][slug]" value="{{$categoryList[3]->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][salary_ancestor][id]" value="{{$categoryList[3]->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -124,14 +125,14 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    <select name="cats_date[id]" id="">
+                                    <select name="data[JobSheet][categories][date][id]" id="">
                                         <option value="">選択してください</option>
-                                        @foreach($categoryList[4]->children as $pIndex => $dateCategory)
-                                        <option @if(intval(old('cats_date.id'))==$dateCategory->id) selected @endif value="{{ $dateCategory->id }}">{{ $dateCategory->name }}</option>
+                                        @foreach($categoryList->where('slug', 'date')->first()->children as $pIndex => $dateCategory)
+                                        <option @if(intval(old('data.JobSheet.categories.date.id'))==$dateCategory->id) selected @endif value="{{ $dateCategory->id }}">{{ $dateCategory->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="cats_date[slug]" value="{{$categoryList[4]->slug}}">
-                                    <input type="hidden" name="cats_date[parent_id]" value="{{$categoryList[4]->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][date][ancestor_slug]" value="{{$categoryList[4]->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][date][ancestor_id]" value="{{$categoryList[4]->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->

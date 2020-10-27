@@ -72,6 +72,7 @@ if (!function_exists('is_route')) {
                     <form action="{{route('update.jobsheet.category', [$jobitem->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="cat_flag" value="{{$cat_slug}}">
+                        <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId">
                         @if(is_route(['edit.jobsheet.category', $jobitem->id,'category'=>'status']))
                         <div class="card">
                             <div class="card-header">雇用形態を選んでください<span class="text-danger">＊</span></div>
@@ -83,8 +84,8 @@ if (!function_exists('is_route')) {
                                     <label for="status_cats_{{$pIndex}}">{{ $category->name }}</label><br>
                                     <br>
                                     @endforeach
-                                    <input type="hidden" name="data[JobSheet][categories][status][ancestor_slug]" value="{{$categories->first()->parent->slug}}">
-                                    <input type="hidden" name="data[JobSheet][categories][status][ancestor_id]" value="{{$categories->first()->parent->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][status][ancestor_slug]" value="{{$categories[0]->parent->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][status][ancestor_id]" value="{{$categories[0]->parent->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -102,8 +103,8 @@ if (!function_exists('is_route')) {
                                         <label for="type_cats_{{$pIndex}}">{{ $category->name }}</label>
                                     </div>
                                     @endforeach
-                                    <input type="hidden" name="data[JobSheet][categories][type][ancestor_slug]" value="{{$categories->first()->parent->slug}}">
-                                    <input type="hidden" name="data[JobSheet][categories][type][ancestor_id]" value="{{$categories->first()->parent->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][type][ancestor_slug]" value="{{$categories[0]->parent->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][type][ancestor_id]" value="{{$categories[0]->parent->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -120,8 +121,8 @@ if (!function_exists('is_route')) {
                                         <label for="area_cats_{{$pIndex}}">{{ $category->name }}</label>
                                     </div>
                                     @endforeach
-                                    <input type="hidden" name="data[JobSheet][categories][area][ancestor_slug]" value="{{$categories->first()->parent->slug}}">
-                                    <input type="hidden" name="data[JobSheet][categories][area][ancestor_id]" value="{{$categories->first()->parent->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][area][ancestor_slug]" value="{{$categories[0]->parent->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][area][ancestor_id]" value="{{$categories[0]->parent->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -142,7 +143,7 @@ if (!function_exists('is_route')) {
                                         $filteredId = '';
                                         if (!$pSalaries->isEmpty()) {
                                             $filtered = $pSalaries->filter(function ($value) use ($pCategory) {
-                                                return $value->parent->id === $pCategory->id;
+                                                return $value->parent->id === $pCategory->id && $value->slug != 'unregistered';
                                             });
                                         }
                                         if (!$filtered->isEmpty()) {
@@ -151,20 +152,20 @@ if (!function_exists('is_route')) {
 
                                         ?>
                                         <div class="e_radio_cat_item_p_salary">
-                                            <input id="salary_cats_{{$pIndex}}" class="jc-jsc-salary-money-selectfield" type="checkbox" name="data[JobSheet][categories][salary][parent_id][]" @if(!$filtered->isEmpty()) checked @endif value={{ $pCategory->id }}>
+                                            <input id="salary_cats_{{$pIndex}}" class="jc-jsc-salary-money-selectfield" type="checkbox" name="data[JobSheet][categories][salary][{{$pIndex}}][parent_id]" @if(!$filtered->isEmpty()) checked @endif value={{ $pCategory->id }}>
                                             <label for="salary_cats_{{$pIndex}}">{{ $pCategory->name }}</label>
-                                            <input type="hidden" name="data[JobSheet][categories][salary][parent_slug][{{$pCategory->id}}]" value="{{$pCategory->slug}}">
+                                            <input type="hidden" name="data[JobSheet][categories][salary][{{$pIndex}}][parent_slug]" value="{{$pCategory->slug}}">
                                         </div>
 
-                                        <select name="data[JobSheet][categories][salary][id][]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
-                                            @foreach($pCategory->children->sortBy('id') as $cIndex => $cat)
+                                        <select name="data[JobSheet][categories][salary][{{$pIndex}}][id]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
+                                            @foreach($pCategory->children->sortBy('_lft') as $cIndex => $cat)
                                             <option value="{{$cat->id}}" @if( $filteredId===$cat->id) selected @endif>{{$cat->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     @endforeach
-                                    <input type="hidden" name="data[JobSheet][categories][salary_ancestor][ancestor_slug]" value="{{$categories->first()->parent->slug}}">
-                                    <input type="hidden" name="data[JobSheet][categories][salary_ancestor][ancestor_id]" value="{{$categories->first()->parent->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][salary_ancestor][slug]" value="{{$categories[0]->parent->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][salary_ancestor][id]" value="{{$categories[0]->parent->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -182,8 +183,8 @@ if (!function_exists('is_route')) {
                                         <label for="date_cats_{{$pIndex}}">{{ $category->name }}</label>
                                     </div>
                                     @endforeach
-                                    <input type="hidden" name="data[JobSheet][categories][date][ancestor_slug]" value="{{$categories->first()->parent->slug}}">
-                                    <input type="hidden" name="data[JobSheet][categories][date][ancestor_id]" value="{{$categories->first()->parent->id}}">
+                                    <input type="hidden" name="data[JobSheet][categories][date][ancestor_slug]" value="{{$categories[0]->parent->slug}}">
+                                    <input type="hidden" name="data[JobSheet][categories][date][ancestor_id]" value="{{$categories[0]->parent->id}}">
                                 </div>
                             </div>
                         </div> <!-- card -->

@@ -24,19 +24,19 @@ class CategoryTableSeeder extends Seeder
 
                     ],
                     [
-                        'name' => '正社員',
+                        'name' => 'パート・アルバイト',
                         'sort' => 5,
                     ],
                     [
-                        'name' => 'パート・アルバイト',
+                        'name' => 'ナイトパート・アルバイト',
                         'sort' => 10,
                     ],
                     [
-                        'name' => '契約社員',
+                        'name' => '正社員',
                         'sort' => 15,
                     ],
                     [
-                        'name' => '業務委託・完全歩合制',
+                        'name' => 'ナイト正社員',
                         'sort' => 20,
                     ]
                 ],

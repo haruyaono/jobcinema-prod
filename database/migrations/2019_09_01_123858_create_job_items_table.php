@@ -14,21 +14,19 @@ class CreateJobItemsTable extends Migration
     public function up()
     {
         Schema::create('job_items', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('company_id');
-            $table->unsignedInteger('employer_id');
-            $table->unsignedInteger('status')->nullable();
-            $table->string('slug');
-            $table->string('oiwaikin')->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('company_id')->index();
+            $table->foreign('company_id')->references('id')->on('companies');
+            $table->unsignedBigInteger('status')->default(0);
             $table->string('job_title')->nullable();
-            $table->string('job_img')->nullable();
-            $table->string('job_img2')->nullable();
-            $table->string('job_img3')->nullable();
-            $table->string('job_mov')->nullable();
-            $table->string('job_mov2')->nullable();
-            $table->string('job_mov3')->nullable();
+            $table->string('job_img_1')->nullable();
+            $table->string('job_img_2')->nullable();
+            $table->string('job_img_3')->nullable();
+            $table->string('job_mov_1')->nullable();
+            $table->string('job_mov_2')->nullable();
+            $table->string('job_mov_3')->nullable();
             $table->string('job_type')->nullable();
-            $table->text('job_hourly_salary')->nullable();
+            $table->text('job_salary')->nullable();
             $table->string('job_office')->comment('勤務先の企業名・店舗名')->nullable();
             $table->text('job_office_address')->comment('勤務先の住所')->nullable();
             $table->text('job_desc')->nullable();
@@ -37,17 +35,14 @@ class CreateJobItemsTable extends Migration
             $table->text('job_time')->nullable();
             $table->text('job_target')->nullable();
             $table->text('job_treatment')->nullable();
-            $table->string('pub_start')->nullable();
-            $table->string('pub_end')->nullable();
+            $table->unsignedInteger('pub_start_flag')->default(0);
+            $table->date('pub_start_date')->nullable();
+            $table->unsignedInteger('pub_end_flag')->default(0);
+            $table->date('pub_end_date')->nullable();
             $table->text('remarks')->nullable();
             $table->string('job_q1')->nullable();
             $table->string('job_q2')->nullable();
             $table->string('job_q3')->nullable();
-            $table->unsignedInteger('status_cat_id');
-            $table->unsignedInteger('type_cat_id');
-            $table->unsignedInteger('area_cat_id');
-            $table->unsignedInteger('hourly_salary_cat_id');
-            $table->unsignedInteger('date_cat_id')->nullable();
             $table->timestamps();
         });
     }

@@ -158,6 +158,13 @@ return [
         'logo' => '「企業ロゴ」',
 
         // 求人票
+        'data.JobSheet.categories.status.id' => '雇用形態',
+        'data.JobSheet.categories.type.id' => '募集職種',
+        'data.JobSheet.categories.area.id' => '勤務地エリア',
+        'data.JobSheet.categories.salary' => '最低給与',
+        'data.JobSheet.categories.date.id' => '最低勤務日数',
+        'data.JobSheet.categories.salary.2.parent_slug' => '無効な値です',
+        'data.JobSheet.categories.date.id' => '最低勤務日数',
         'data.JobSheet.job_title' => 'キャッチコピー',
         'data.JobSheet.job_intro' => '紹介文',
         'data.JobSheet.job_office' => '勤務先名',
@@ -174,12 +181,6 @@ return [
         'data.JobSheet.pub_start_date' => '掲載開始日',
         'data.JobSheet.pub_end_date' => '掲載終了日',
         'data.JobSheet.remarks' => '備考',
-        'data.JobSheet.categories.status.id' => '雇用形態',
-        'data.JobSheet.categories.type.id' => '募集職種',
-        'data.JobSheet.categories.area.id' => '勤務地エリア',
-        'data.JobSheet.categories.salary.parent_id' => '最低給与の種類',
-        'data.JobSheet.categories.salary.id' => '最低給与',
-        'data.JobSheet.categories.date.id' => '最低勤務日数',
         'data.File.image' => '写真',
         'data.File.movie' => '動画',
 

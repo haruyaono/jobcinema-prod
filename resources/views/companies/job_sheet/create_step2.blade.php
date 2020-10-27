@@ -512,7 +512,7 @@
 
     $(function() {
         var str1 = $('#SheetHeadline').val();
-        ShowLength('inputlength1', str1, 20);
+        ShowLength('inputlength1', str1, 30);
 
         var str2 = $('#JobSheetMessage').val();
         ShowLength('inputlength2', str2, 250);
@@ -533,7 +533,6 @@
         $("#start_specified_date, #end_specified_date").datepicker({
             dateFormat: 'yy-mm-dd',
         });
-
     });
 </script>
 
