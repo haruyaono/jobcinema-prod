@@ -124,7 +124,7 @@
                 </th>
                 <td>
                   <div class="form-row m-0">
-                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('zip31') ? 'is-invalid' : '' }}" type="text" name="zip31" maxlength="3" value="@if(old('zip31')){{old('zip31')}}@elseif(Session::has('front.data.entry.zip31')){{Session::get('front.data.entry.zip31')}}@else{{$postcode[0]}}@endif" required>&nbsp;-&nbsp;<input class="form-control form-control col-4 col-md-4 {{ $errors->has('zip32') ? 'is-invalid' : '' }}" type="text" name="zip32" maxlength="4" value="@if(old('zip32')){{old('zip32')}}@elseif(Session::has('front.data.entry.zip32')){{Session::get('front.data.entry.zip32')}}@else{{$postcode[1]}}@endif" onKeyUp="AjaxZip3.zip2addr('zip31','zip32','pref31','addr31','addr31');" required>
+                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('zip31') ? 'is-invalid' : '' }}" type="text" name="zip31" maxlength="3" value="@if(old('zip31')){{old('zip31')}}@elseif(Session::has('front.data.entry.zip31')){{Session::get('front.data.entry.zip31')}}@elseif(array_key_exists(0, $postcode)){{$postcode[0]}}@endif" required>&nbsp;-&nbsp;<input class="form-control form-control col-4 col-md-4 {{ $errors->has('zip32') ? 'is-invalid' : '' }}" type="text" name="zip32" maxlength="4" value="@if(old('zip32')){{old('zip32')}}@elseif(Session::has('front.data.entry.zip32')){{Session::get('front.data.entry.zip32')}}@elseif(array_key_exists(1, $postcode)){{$postcode[1]}}@endif" onKeyUp="AjaxZip3.zip2addr('zip31','zip32','pref31','addr31','addr31');" required>
                   </div>
                 </td>
               </tr>

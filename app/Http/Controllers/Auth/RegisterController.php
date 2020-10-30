@@ -61,7 +61,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'email' => ['required', 'string', 'email', 'max:191', 'unique:users', 'unique:employers'],
+            'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'max:191', 'confirmed'],
         ]);
     }
@@ -74,6 +74,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if (array_key_exists('password_confirmation', $data)) {
+            unset($data['password_confirmation']);
+        }
         $user = $this->userRepo->createUser($data);
         $this->profileRepo->createProfile(['user_id' => $user->id]);
 

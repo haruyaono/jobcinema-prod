@@ -61,10 +61,11 @@ class ApplyController extends Controller
 
   public function showStep1(JobItem $jobitem, Apply $apply)
   {
+    $user = '';
+    $postcode = [];
+
     if (Auth::check()) {
       $user = $this->userRepo->findUserById(auth()->user()->id);
-    } else {
-      $user = '';
     }
 
     if ($user) {
@@ -104,8 +105,9 @@ class ApplyController extends Controller
     $data = [
       'user_id' => $user->id,
       'job_item_id' => $jobitem->id,
-      'congrats_amount' => $jobitem->getCongratsMoneyAmount(),
-      'congrats_status' => 2,
+      'congrats_amount' => $jobitem->existsCongratsMoney() ? $jobitem->getCongratsMoney()->amount : 0,
+      'congrats_status' => $jobitem->existsCongratsMoney() ? 1 : 0,
+      'congrats_application_status' => 0,
       'recruitment_fee' => $jobitem->getAchivementRewardMoneyAmount(),
       'recruitment_status' => 2,
     ];

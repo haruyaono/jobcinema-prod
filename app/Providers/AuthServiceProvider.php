@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Job\JobItems\JobItem;
+use App\Job\Applies\Apply;
 use App\Policies\JobItemPolicy;
+use App\Policies\ApplyPolicy;
 use App\Providers\CustomProvider\CustomAuthServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -17,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         JobItem::class => JobItemPolicy::class,
+        Apply::class => ApplyPolicy::class,
     ];
 
     /**

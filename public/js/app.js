@@ -55433,85 +55433,87 @@ __webpack_require__.r(__webpack_exports__);
     },
         jobDetailImageSwiper = new Swiper(imageSliderSelector, options);
     jobDetailImageSwiper.init();
-  } // 求人詳細の動画スライダー
+  }
 
-
-  var sliderSelector = '.job-detail-movie-slider-container',
-      isMove = false,
-      options = {
-    init: false,
-    // loop: true,
-    speed: 800,
-    // autoplay: {
-    //   delay: 3000
-    // },
-    effect: 'cube',
-    // 'cube', 'fade', 'coverflow',
-    cubeEffect: {
-      shadow: true,
-      slideShadows: true,
-      shadowOffset: 40,
-      shadowScale: 0.94
-    },
-    grabCursor: true,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev'
-    },
-    // Events
-    on: {
-      init: function init() {
-        this.autoplay.stop();
+  if ($('.job-detail-movie-slider-container').length) {
+    // 求人詳細の動画スライダー
+    var sliderSelector = '.job-detail-movie-slider-container',
+        isMove = false,
+        options = {
+      init: false,
+      // loop: true,
+      speed: 800,
+      // autoplay: {
+      //   delay: 3000
+      // },
+      effect: 'cube',
+      // 'cube', 'fade', 'coverflow',
+      cubeEffect: {
+        shadow: true,
+        slideShadows: true,
+        shadowOffset: 40,
+        shadowScale: 0.94
       },
-      touchMove: function touchMove(event) {
-        if (!isMove) {
-          this.el.classList.remove('scale-in');
-          this.el.classList.add('scale-out');
-          isMove = true;
-        }
+      grabCursor: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
       },
-      touchEnd: function touchEnd(event) {
-        this.el.classList.remove('scale-out');
-        this.el.classList.add('scale-in');
-        setTimeout(function () {
-          isMove = false;
-        }, 300);
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
       },
-      slideChangeTransitionStart: function slideChangeTransitionStart() {
-        console.log('slideChangeTransitionStart ' + this.activeIndex);
-
-        if (!isMove) {
-          this.el.classList.remove('scale-in');
-          this.el.classList.add('scale-out');
-        }
-      },
-      slideChangeTransitionEnd: function slideChangeTransitionEnd() {
-        console.log('slideChangeTransitionEnd ' + this.activeIndex);
-
-        if (!isMove) {
+      // Events
+      on: {
+        init: function init() {
+          this.autoplay.stop();
+        },
+        touchMove: function touchMove(event) {
+          if (!isMove) {
+            this.el.classList.remove('scale-in');
+            this.el.classList.add('scale-out');
+            isMove = true;
+          }
+        },
+        touchEnd: function touchEnd(event) {
           this.el.classList.remove('scale-out');
           this.el.classList.add('scale-in');
-        }
-      },
-      transitionStart: function transitionStart() {
-        console.log('transitionStart ' + this.activeIndex);
-      },
-      transitionEnd: function transitionEnd() {
-        console.log('transitionEnd ' + this.activeIndex);
-      },
-      slideChange: function slideChange() {
-        console.log('slideChange ' + this.activeIndex);
-        console.log(this);
-      }
-    }
-  },
-      mySwiper = new Swiper(sliderSelector, options); // Initialize slider
+          setTimeout(function () {
+            isMove = false;
+          }, 300);
+        },
+        slideChangeTransitionStart: function slideChangeTransitionStart() {
+          console.log('slideChangeTransitionStart ' + this.activeIndex);
 
-  mySwiper.init();
+          if (!isMove) {
+            this.el.classList.remove('scale-in');
+            this.el.classList.add('scale-out');
+          }
+        },
+        slideChangeTransitionEnd: function slideChangeTransitionEnd() {
+          console.log('slideChangeTransitionEnd ' + this.activeIndex);
+
+          if (!isMove) {
+            this.el.classList.remove('scale-out');
+            this.el.classList.add('scale-in');
+          }
+        },
+        transitionStart: function transitionStart() {
+          console.log('transitionStart ' + this.activeIndex);
+        },
+        transitionEnd: function transitionEnd() {
+          console.log('transitionEnd ' + this.activeIndex);
+        },
+        slideChange: function slideChange() {
+          console.log('slideChange ' + this.activeIndex);
+          console.log(this);
+        }
+      }
+    },
+        mySwiper = new Swiper(sliderSelector, options); // Initialize slider
+
+    mySwiper.init();
+  }
 });
 
 (function ($, window, undefined) {
