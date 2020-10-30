@@ -25,7 +25,7 @@
 						<div class="newjob-list">
 							@forelse ($topNewJobs as $jobitem)
 							<div class="newjob-item">
-								<a href="{{ route('show.front.job_sheet.detail', [$jobitem->id])}}" class="newjob-item-link">
+								<a href="{{ route('show.front.job_sheet.detail', $jobitem)}}" class="newjob-item-link">
 									<p class="joblist_jobCassette__image_wrap">
 										@if(($jobitem->job_img_1) !== null)
 										<img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" style="width:100%;" alt="" />

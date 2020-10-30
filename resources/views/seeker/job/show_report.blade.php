@@ -91,7 +91,7 @@
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="data[Apply][id]" value="{{$apply->id}}">
-                            <input type="hidden" name="data[Apply][pushed]" value="SaveUnAdoptCancelStatus" />
+                            <input type="hidden" name="data[Apply][pushed]" value="SaveUnAdoptStatus" />
                         </form>
                     </div>
                 </div>

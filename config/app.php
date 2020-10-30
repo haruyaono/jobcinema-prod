@@ -178,13 +178,12 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
-        Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
-        JeroenNoten\LaravelAdminLte\ServiceProvider::class,
+        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
+        // JeroenNoten\LaravelAdminLte\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -247,14 +246,13 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-        'Form' => Collective\Html\FormFacade::class, //add
-        'Html' => Collective\Html\HtmlFacade::class, //add
-        'Image' => Intervention\Image\Facades\Image::class, //add
-        'CustomValidator' => 'app\Library\CustomValidator', //add
-        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class, //add
-        'LineNotify' => App\Facades\LineNotify::class, //add
-
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'CustomValidator' => 'app\Library\CustomValidator',
+        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
+        'LineNotify' => App\Facades\LineNotify::class,
+        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
     ],
 
     'debug_blacklist' => [

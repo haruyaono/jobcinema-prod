@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redis;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
@@ -140,7 +139,7 @@ class JobController extends Controller
     $totalJobItem = $query->count();
     $jobitems = $query->paginate(20);
 
-    if (Input::get('page') > $jobitems->LastPage()) {
+    if (Request::get('page') > $jobitems->LastPage()) {
       abort(404);
     }
 
