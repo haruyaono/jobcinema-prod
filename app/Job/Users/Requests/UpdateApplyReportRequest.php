@@ -29,9 +29,9 @@ class UpdateApplyReportRequest extends FormRequest
 
         if ($this->flag == 'SaveAdoptStatus') {
             $data = [
-                'data.apply.year' => 'required|integer|digits:4',
-                'data.apply.month' => 'required|integer|digits:2',
-                'data.apply.date' => 'required|integer|digits:2',
+                'data.apply.year' => 'required|numeric|digits:4',
+                'data.apply.month' => 'required|numeric|digits:2',
+                'data.apply.date' => 'required|numeric|digits:2',
                 'full_date' => 'date|after_or_equal:' . today()->format('Y-m-d'),
             ];
         } elseif ($this->flag == 'SaveTmpAdoptStatus') {
@@ -49,7 +49,7 @@ class UpdateApplyReportRequest extends FormRequest
         ];
     }
 
-    protected function validationData()
+    public function validationData()
     {
         $data = parent::validationData();
         $this->flag = $data['data']['Apply']['pushed'];

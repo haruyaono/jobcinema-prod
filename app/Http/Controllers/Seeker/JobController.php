@@ -88,44 +88,57 @@ class JobController extends Controller
     {
         $this->authorize('update', $apply);
 
-        if ($apply->IsWithinHalfYear === false || $apply->s_recruit_status === 1 || $apply->s_recruit_status === 8) {
+        if ($apply->IsWithinHalfYear === false || $apply->s_recruit_status === 8) {
             return redirect()->route('index.seeker.job');
         }
 
         $data = [];
         $input = $request->input('data.apply');
 
-        // dd($request->input('data.Apply.pushed'));
-
         $applyRepo = new ApplyRepository($apply);
 
-        if ($request->input('data.Apply.pushed') == 'SaveAdoptStatus') {
-            $data = [
-                's_first_attendance' => Carbon::create(
-                    $input['year'],
-                    $input['month'],
-                    $input['date']
-                ),
-                's_recruit_status' => 1,
-                'congrats_application_status' => 1,
-            ];
-        } elseif ($request->input('data.Apply.pushed') == 'SaveTmpAdoptStatus') {
-            $data = [
-                's_nofirst_attendance' => $input['s_nofirst_attendance'],
-                's_recruit_status' => 1,
-            ];
-        } elseif ($request->input('data.Apply.pushed') == 'SaveUnAdoptCancelStatus') {
-            $data = [
-                's_recruit_status' => 2,
-            ];
-        } elseif ($request->input('data.Apply.pushed') == 'SaveReportCancelStatus') {
-            $data = [
-                's_recruit_status' => 0,
-            ];
-        } elseif ($request->input('data.Apply.pushed') == 'SaveReportDeclineStatus') {
-            $data = [
-                's_recruit_status' => 8,
-            ];
+        switch ($status = $apply->s_recruit_status) {
+            case ($status === 0 || $status === 1):
+                //初出社日が未定
+                if ($request->input('data.Apply.pushed') == 'SaveTmpAdoptStatus') {
+                    $data = [
+                        's_nofirst_attendance' => $input['s_nofirst_attendance'],
+                        's_recruit_status' => 1,
+                    ];
+                }
+                if ($status === 0 || ($status === 1 && $apply->s_nofirst_attendance != null)) {
+                    //初出社日
+                    if ($request->input('data.Apply.pushed') == 'SaveAdoptStatus') {
+                        $data = [
+                            's_first_attendance' => Carbon::create(
+                                $input['year'],
+                                $input['month'],
+                                $input['date']
+                            ),
+                            's_recruit_status' => 1,
+                            'congrats_application_status' => 1,
+                        ];
+                    }
+                } elseif ($status === 0) {
+                    //辞退もしくは不採用
+                    if ($request->input('data.Apply.pushed') == 'SaveReportDeclineStatus') {
+                        $data = [
+                            's_recruit_status' => 8,
+                        ];
+                    } elseif ($request->input('data.Apply.pushed') == 'SaveUnAdoptStatus') {
+                        $data = [
+                            's_recruit_status' => 2,
+                        ];
+                    }
+                }
+                break;
+            case 2:
+                if ($request->input('data.Apply.pushed') == 'SaveReportCancelStatus') {
+                    $data = [
+                        's_recruit_status' => 0,
+                    ];
+                }
+                break;
         }
 
         $applyRepo->update($data);

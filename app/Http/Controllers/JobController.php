@@ -4,7 +4,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Job\Profiles\Repositories\ProfileRepository;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
@@ -169,7 +168,7 @@ class JobController extends Controller
     $list = $this->employerRepo->findJobItems($request->user())->sortBy('created_at')->all();
     $jobitems = $this->jobItemRepo->paginateArrayResults($list, 10);
 
-    if (Input::get('page') > $jobitems->LastPage()) {
+    if (Request::get('page') > $jobitems->LastPage()) {
       abort(404);
     }
 

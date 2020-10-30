@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Input;
 use App\Job\JobItems\JobItem;
 use App\Job\JobItems\Repositories\JobItemRepository;
 use App\Job\Users\User;
