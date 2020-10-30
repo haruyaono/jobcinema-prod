@@ -5,11 +5,14 @@ namespace App\Job\JobItems;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
+use App\Job\Employers\Employer;
 use App\Job\Companies\Company;
 use App\Job\Applies\Apply;
 use App\Job\Categories\Category;
 use App\Traits\IsMobile;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JobItem extends Model
@@ -55,7 +58,7 @@ class JobItem extends Model
         }
     }
 
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'job_item_category')
             ->withPivot([
@@ -69,10 +72,14 @@ class JobItem extends Model
             ])->withTimeStamps();
     }
 
-
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function employer(): BelongsTo
+    {
+        return $this->company->belongsTo(Employer::class);
     }
 
     public function applies(): HasMany
@@ -85,10 +92,9 @@ class JobItem extends Model
         return $this->categories()->wherePivot('ancestor_slug', 'status')->first()->congratsMoney()->exists();
     }
 
-    public function getCongratsMoneyAmount()
+    public function getCongratsMoney()
     {
-        $category = $this->categories()->wherePivot('ancestor_slug', 'status')->first();
-        return $category->congratsMoney()->exists() ? $category->congratsMoney->amount : 0;
+        return  $this->categories()->wherePivot('ancestor_slug', 'status')->first()->congratsMoney;
     }
 
     public function getAchivementRewardMoneyAmount()
@@ -186,7 +192,7 @@ class JobItem extends Model
         }
     }
 
-    public function favourites()
+    public function favourites(): BelongsToMany
     {
         return $this->belongsToMany(JobItem::class, 'favourites', 'job_item_id', 'user_id')->as('fav')->withTimeStamps();
     }
@@ -217,10 +223,10 @@ class JobItem extends Model
         $today = date("Y-m-d");
         $jobitems = JobItem::where('status', 2)
             ->where(function ($query) use ($today) {
-                $query->orWhere('pub_end_date', '>', $today)
+                $query->orWhere('pub_end_date', '>=', $today)
                     ->orWhere('pub_end_flag', 0);
             })->where(function ($query) use ($today) {
-                $query->orWhere('pub_start_date', '<', $today)
+                $query->orWhere('pub_start_date', '<=', $today)
                     ->orWhere('pub_start_flag', 0);
             });
 

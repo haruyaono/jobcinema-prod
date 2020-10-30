@@ -56,30 +56,33 @@ Route::namespace('Front')->group(function () {
   Route::get('terms_service_e', 'PageController@getTermsServiceE');
   Route::get('ceo', 'PageController@getCeo');
   Route::get('manage_about', 'PageController@getManageAbout');
+});
 
-  Route::group(['middleware' => ['auth:user']], function () {
-    //求職者
-    Route::get('/mypage/index', 'UserController@index')->name('index.seeker.mypage');
-    Route::get('/mypage/profile_edit', 'UserProfileController@edit')->name('user.profile.get');
-    Route::post('/mypage/profile_create', 'UserProfileController@update')->name('user.profile.post');
-    Route::get('/mypage/career_edit', 'UserProfileController@editCareer')->name('user.career.get');
-    Route::post('/mypage/career_create', 'UserProfileController@updateCareer')->name('user.career.post');
-    Route::post('/mypage/resume', 'UserProfileController@Resume')->name('user.resume.post');
-    Route::delete('/mypage/resume/delete', 'UserProfileController@resumeDelete')->name('resume.delete');
+//求職者
+Route::group(['middleware' => ['auth:user']], function () {
+  Route::namespace('Seeker')->group(function () {
+    Route::group(['prefix' => 'mypage'], function () {
+      Route::get('index', 'UserController@index')->name('index.seeker.mypage');
+      Route::get('edit', 'UserProfileController@edit')->name('edit.seeker.profile');
+      Route::post('edit', 'UserProfileController@update')->name('update.seeker.profile');
+      Route::get('career_edit', 'UserProfileController@editCareer')->name('edit.seeker.career');
+      Route::post('career_edit', 'UserProfileController@updateCareer')->name('update.seeker.career');
 
-    Route::get('/mypage/application', 'UserController@jobAppManage')->name('mypage.jobapp.manage');
-    Route::get('/mypage/result_report/{apply_id}', 'UserController@getJobAppReport')->name('mypage.jobapp.report');
-    Route::get('/mypage/apply_festive_money/{id}', 'UserController@getAppFesMoney')->name('app.fesmoney.get');
-    Route::post('/mypage/apply_festive_money/{id}', 'UserController@postAppFesMoney')->name('app.fesmoney.post');
-    Route::get('/mypage/unadopt/{id}', 'UserController@unAdoptJob')->name('appjob.unadopt');
-    Route::get('/mypage/adopt_cancel/{id}', 'UserController@adoptCancelJob')->name('appjob.cancel');
-    Route::get('/mypage/adopt_decline/{id}', 'UserController@jobDecline')->name('appjob.decline');
-    Route::get('/mypage/changepassword', 'UserController@getChangePasswordForm')->name('mypage.changepassword.get');
-    Route::post('/mypage/changepassword', 'UserController@postChangePassword')->name('mypage.changepassword.post');
-    Route::get('/mypage/change_email', 'UserController@getChangeEmail')->name('mypage.changeemail.get');
-    Route::post('/mypage/change_email', 'UserController@postChangeEmail')->name('mypage.changeemail.post');
+      Route::get('application', 'JobController@index')->name('index.seeker.job');
+      Route::get('application/{apply}', 'JobController@showReport')->name('show.seeker.job');
+      Route::get('application/{apply}/report', 'JobController@editReport')->name('edit.seeker.report');
+      Route::put('application/{apply}/report', 'JobController@updateReport')->name('update.seeker.report');
+      Route::get('unadopt/{id}', 'JobController@unAdoptJob')->name('appjob.unadopt');
+      Route::get('adopt_cancel/{id}', 'JobController@adoptCancelJob')->name('appjob.cancel');
+      Route::get('adopt_decline/{id}', 'JobController@jobDecline')->name('appjob.decline');
 
-    Route::get('/mypage/delete', 'UserController@userDelete')->name('mypage.delete');
+      Route::get('changepassword', 'UserController@getChangePasswordForm')->name('mypage.changepassword.get');
+      Route::post('changepassword', 'UserController@postChangePassword')->name('mypage.changepassword.post');
+      Route::get('change_email', 'UserController@getChangeEmail')->name('mypage.changeemail.get');
+      Route::post('change_email', 'UserController@postChangeEmail')->name('mypage.changeemail.post');
+
+      Route::delete('delete', 'UserController@delete')->name('delete.seeker');
+    });
   });
 });
 

@@ -4,7 +4,6 @@
 <head>
     <title>@isset ($title) {{$title}} | @endisset @yield('title')</title>
     @include('../partials.head')
-    <script defer src="{{ mix('js/app.js') }}"></script>
 </head>
 
 <body>
@@ -16,7 +15,6 @@
         @endif
         <!-- 背景上に表示させるコンテンツ -->
         <div class="contents @if(url()->current() == url('lp')) lp-contents @endif">
-
             <div class="wide-notice-overlay">
                 <div class="wide-notice-layout">
                     <div class="notice-box">

@@ -3,7 +3,6 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
 <meta name="description" content="@yield('description')">
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" />
@@ -17,7 +16,6 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <!------ js ------>
-<!-- jquery -->
 <script src="{{ asset('js/jquery-3.5.0.min.js') }}"></script>
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
 <script src="{{ asset('js/lib/tingle.min.js') }}"></script>
@@ -30,7 +28,8 @@
 @endif
 <!-- jquery-ui -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
-<script src="{{ asset('js/lib/swiper.min.js') }}"></script>
+@yield('custom_head_js')
+<script defer src="{{ mix('js/app.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
 <script>
   $(function() {

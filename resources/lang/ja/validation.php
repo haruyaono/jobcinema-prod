@@ -107,15 +107,15 @@ return [
     */
 
     'attributes' => [
-        // common
+        // 共通
         'amount' => '金額',
         'label' => 'ラベル',
-        //user
+        // 求職者
         'email' => '「メールアドレス」',
         'password' => '「パスワード」',
         'current-password' => '「現在のパスワード」',
         'new-password' => '「新しいパスワード」',
-        //user profile
+        // 求職者プロフィール
         'last_name' => '「お名前（カナ）」',
         'first_name' => '「お名前（カナ）」',
         'phone1' => '「電話番号」',
@@ -128,8 +128,13 @@ return [
         'occupation' => '現在の職業',
         'final_education' => '最終学歴',
         'job_msg' => '志望動機・メッセージ',
-
-        //employer
+        // 求職者の応募管理
+        'data.apply.year' => '年',
+        'data.apply.month' => '月',
+        'data.apply.date' => '日',
+        'full_date' => '初出社日',
+        'data.apply.s_nofirst_attendance' => '初出社日未定',
+        // 採用担当者
         'e_last_name' => '「ご担当者様名」',
         'e_first_name' => '「ご担当者様名」',
         'e_last_name_katakana' => '「ご担当者様名（フリガナ）」',
@@ -137,7 +142,7 @@ return [
         'e_phone1' => '「ご担当者様電話番号」',
         'e_phone2' => '「ご担当者様電話番号」',
         'e_phone3' => '「ご担当者様電話番号」',
-        //company
+        // 企業
         'cname' => '「会社名」',
         'cname_katakana' => '「会社名（フリガナ）」',
         'zip31' => '「郵便番号」',
@@ -156,7 +161,6 @@ return [
         'c_phone2' => '「応募者に通知する電話番号」',
         'c_phone3' => '「応募者に通知する電話番号」',
         'logo' => '「企業ロゴ」',
-
         // 求人票
         'data.JobSheet.categories.status.id' => '雇用形態',
         'data.JobSheet.categories.type.id' => '募集職種',
@@ -183,8 +187,7 @@ return [
         'data.JobSheet.remarks' => '備考',
         'data.File.image' => '写真',
         'data.File.movie' => '動画',
-
-        //contact
+        // お問い合わせ
         'name' => '氏名',
         'name_ruby' => '氏名(フリガナ)',
         'e_name' => '担当者名',
@@ -192,14 +195,12 @@ return [
         'phone' => '電話番号',
         'content' => '内容',
         'e_name' => '「ご担当者様名」',
-
         // その他
         'year' => '西暦',
         'month' => '月',
         'date' => '日付',
         'app_oiwai_text' => '状況',
-
-        //admin
+        // 管理者
         'name' => 'ユーザー名',
     ],
 ];
