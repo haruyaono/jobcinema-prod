@@ -240,8 +240,7 @@ class DashboardController extends Controller
             $applyJobItem = $jobItem;
         }
 
-        $profileRepo = new ProfileRepository($apply->user->profile);
-        $profile = $profileRepo->getResume();
+        $profile = $apply->user->profile;
 
         return view('admin.user_detail', compact('apply', 'applyJobItem', 'profile'));
     }

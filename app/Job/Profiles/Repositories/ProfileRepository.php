@@ -25,7 +25,7 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
         $this->model = $profile;
     }
 
-      /**
+    /**
      * Create the profile
      *
      * @param array $data
@@ -33,7 +33,7 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
      * @return Profile
      * @throws CreateProfileErrorException
      */
-    public function createProfile(array $data) : Profile
+    public function createProfile(array $data): Profile
     {
         try {
             return $this->create($data);
@@ -53,69 +53,29 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
 
     /**
      * Soft delete the profile
-     * 
+     *
      * @return bool
      * @throws \Exception
      */
-    public function deleteProfile() : bool
+    public function deleteProfile(): bool
     {
         return $this->delete();
     }
 
     /**
      * Return the profile
-     * 
+     *
      * @param int $id
-     * 
+     *
      * @return Profile
      * @throws ProfileNotFoundException
      */
-    public function findProfileById(int $id) : Profile
+    public function findProfileById(int $id): Profile
     {
-        try
-        {
+        try {
             return $this->findOneOrFail($id);
-        } 
-        catch (ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             throw new ProfileNotFoundException('プロフィールが見つかりませんでした。');
         }
     }
-
-     /**
-     * Return the profile
-     * 
-     * @param int $id
-     * 
-     * @return Profile
-     * @throws ProfileNotFoundException
-     */
-    public function getResume() : Profile
-    {
-        $disk = Storage::disk('s3');
-        $resume = $this->model->getResume();
-
-        if(!is_null($resume)) {
-            if($disk->exists('resume/' . $resume)) {
-                $resumePath =  $disk->url('resume/'.$resume);
-                if(config('app.env') == 'production') {
-                    $resumePath = str_replace('s3.ap-northeast-1.amazonaws.com/', '', $resumePath);
-                } 
-            } else {
-                $resumePath = '';
-            }
-        } else {
-            $resumePath = '';
-        }
-
-        $this->model->resumePath = $resumePath;
-
-        return $this->model;
-    }
-
-
-
-
-
-   
 }

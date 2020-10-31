@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Seeker;
 
 use App\Job\Applies\Apply;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Job\Applies\Repositories\ApplyRepository;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Job\Users\Requests\UpdateApplyReportRequest;
 
@@ -145,49 +143,5 @@ class JobController extends Controller
 
         session()->flash('flash_message_success', 'ご報告ありがとうございました！');
         return redirect()->route('index.seeker.job');
-    }
-
-    public function unAdoptJob($applyJobItemId)
-    {
-
-        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
-        $applyJobItemQuery->update([
-            's_status' => 2,
-        ]);
-
-        return redirect()->route('mypage.jobapp.manage')->with('flash_message_success', 'ご報告ありがとうございました！');
-    }
-
-    public function adoptCancelJob($applyJobItemId)
-    {
-        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
-        $applyJobItemQuery->update([
-            's_status' => 0,
-        ]);
-
-        return redirect()->route('mypage.jobapp.manage')->with('flash_message_success', '報告を取り消しました。');
-    }
-
-    public function jobDecline($applyJobItemId)
-    {
-        $applyJobItemQuery = DB::table('apply_job_item')->where('id', $applyJobItemId);
-        $applyId = $applyJobItemQuery->first()->apply_id;
-
-        $apply = $this->applyRepo->findApplyById($applyId);
-
-        DB::beginTransaction();
-        try {
-
-            $applyJobItemQuery->delete();
-            $apply->delete();
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-        }
-
-
-
-        return redirect()->route('mypage.jobapp.manage')->with('flash_message_success', '応募を辞退しました');
     }
 }

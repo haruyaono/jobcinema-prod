@@ -22,28 +22,6 @@ class Profile extends Model
      */
     protected $hidden = [];
 
-    /**
-     * Get the postcode of the profile.
-     *
-     * @param null $options
-     * @return string
-     */
-    public function getPostCode($options = null)
-    {
-        $arrayCode = [];
-        $postcode1 = '';
-        $postcode2 = '';
-
-        if (!is_null($this->postcode)) {
-            list($postcode1,  $postcode2) = explode('-', $this->postcode);
-        }
-
-        array_push($arrayCode, $postcode1);
-        array_push($arrayCode, $postcode2);
-
-        return $arrayCode;
-    }
-
     public function user(): BelongsTo
     {
         return $this->BelongsTo(User::class);
