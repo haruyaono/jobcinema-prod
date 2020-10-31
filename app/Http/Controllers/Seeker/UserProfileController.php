@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Front;
+namespace App\Http\Controllers\Seeker;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\Profiles\Requests\UpdateUserProfileRequest;
+use App\Job\Profiles\Requests\UpdateUserCareerRequest;
 use App\Job\Profiles\Repositories\ProfileRepository;
 use App\Job\Profiles\Repositories\Interfaces\ProfileRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserProfileController extends Controller
@@ -19,6 +18,8 @@ class UserProfileController extends Controller
      */
     private $profileRepo;
 
+    private $user;
+
     /**
      * @param ProfileRepositoryInterface  $profileRepository
      */
@@ -26,52 +27,12 @@ class UserProfileController extends Controller
         ProfileRepositoryInterface $profileRepository
     ) {
         $this->profileRepo = $profileRepository;
-    }
 
+        $this->middleware(function ($request, $next) {
+            $this->user = \Auth::user();
 
-    /**
-     * @param CreateProfileRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(CreateProfileRequest $request)
-    {
-        $request['user_id'] = auth()->user()->id;
-
-        $this->profileRepo->createAddress($request->except('_token', '_method'));
-
-        if($request->zip31 && $request->zip32) {
-            $request['postcode'] = $request->zip31."-".$request->zip32;
-        } else {
-            $request['postcode']  = '';
-        }
-
-        DB::beginTransaction();
-
-        try {
-            Profile::where('user_id', $user->id)->update([
-
-                'phone1' => request('phone1'),
-                'phone2' => request('phone2'),
-                'phone3' => request('phone3'),
-                'age' => request('age'),
-                'gender' => request('gender'),
-                'postcode' => $postal_code,
-                'prefecture' => $request->pref31,
-                'city' => $request->addr31,
-            ]);
-            DB::table('users')->where('id', $user->id)->update([
-                'last_name' => request('last_name'),
-                'first_name' => request('first_name'),
-            ]);
-
-            DB::commit();
-
-        } catch (\PDOException $e){
-            DB::rollBack();
-            return false;
-        }
-        
-        return redirect()->back()->with('message','会員情報を更新しました');
+            return $next($request);
+        });
     }
 
     /**
@@ -79,146 +40,67 @@ class UserProfileController extends Controller
      */
     public function edit()
     {
+        $user = $this->user;
+        $profile = $user->profile;
+        $postcode = $user->profile->postcode ? explode("-", $user->profile->postcode) : [];
 
-        $profile = auth()->user()->profile;
-
-        $postCodeList = $profile->getPostCode();
-
-        $profile['postcode1'] = $postCodeList[0];
-        $profile['postcode2'] = $postCodeList[1];
-
-        $profileRepo = new ProfileRepository($profile);
-        $profile = $profileRepo->getResume();
-
-        return view('mypages.edit', compact('profile'));
+        return view('seeker.edit', compact('user', 'profile', 'postcode'));
     }
 
     /**
      * @param UpdateUserProfileRequest $request
-     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateUserProfileRequest $request)
     {
-        $user = auth()->user();
-        $profile = $user->profile;
+        $user = $this->user;
+        $uData = $request->input('data.user');
+        $pData = $request->input('data.profile');
 
-        $profileData = [
-            'phone1' => $request->phone1,
-            'phone2' => $request->phone2,
-            'phone3' => $request->phone3,
-            'age' => $request->age,
-            'gender' => $request->gender,
-            'postcode' => $request->zip31."-".$request->zip32,
-            'prefecture' => $request->pref31,
-            'city' => $request->addr31,
-        ];
-
-        $userData = [
-            'last_name' => $request->last_name,
-            'first_name' => $request->first_name,
-        ];
-
-        $profileRepo = new ProfileRepository($profile);
         $userRepo = new UserRepository($user);
+        $profileRepo = new ProfileRepository($user->profile);
+
+        $pData['postcode'] = $pData['postcode01'] && $pData['postcode02'] ? $pData['postcode01'] . "-" . $pData['postcode02'] : '';
+        unset($pData['postcode01'], $pData['postcode02']);
 
         DB::beginTransaction();
         try {
-            $profileRepo->updateProfile($profileData);
-            $userRepo->updateUser($userData);
+            $profileRepo->updateProfile($pData);
+            $userRepo->updateUser($uData);
 
             DB::commit();
-        } catch (\PDOException $e){
-
+        } catch (\PDOException $e) {
             DB::rollBack();
             return false;
         }
-        
-        return redirect()->back()->with('message','会員情報を更新しました');
+
+        return redirect()->back()->with('message', '会員情報を更新しました');
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function editCareer() 
+    public function editCareer()
     {
-        return view('mypages.career_edit');
+        $user = $this->user;
+        $profile = $user->profile;
+        return view('seeker.career_edit', compact('profile'));
     }
 
-     /**
+    /**
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateCareer(Request $request)
+    public function updateCareer(UpdateUserCareerRequest $request)
     {
-
-        $request = $request->except('_method', '_token');
-
-        $user = auth()->user();
+        $user = $this->user;
         $profile = $user->profile;
+        $data = $request->input('data.profile');
 
         $profileRepo = new ProfileRepository($profile);
-        $profileRepo->updateProfile($request);
+        $profileRepo->updateProfile($data);
 
-        return redirect()->back()->with('message','現在の状況・希望を更新しました');
+        return redirect()->back()->with('message', '現在の状況・希望を更新しました');
     }
-
-     /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function resume(Request $request)
-    {
-        $this->validate($request,[
-            'resume' => 'required | max:20000' ,
-        ]);
-
-        $user = auth()->user();
-        $profile = $user->profile;
-
-        $profileRepo = new ProfileRepository($profile);
-
-        if($profile->resume) {
-            Storage::disk('public')->delete($profile->resume);
-            Storage::disk('s3')->delete('resume/'.$profile->resume);
-        }
-
-        $filename = $request->file('resume')->hashName();
-        $path = $request->file('resume')->storeAs('public/files/'.$user->id, $filename);
-       
-        $contents = Storage::get($path);
-
-        Storage::disk('s3')->put('resume/files/'.$user->id.'/'.$filename, $contents, 'public');
-
-        $profileRepo->updateProfile(['resume' => 'files/'.$user->id.'/'.$filename]);
-
-        return redirect()->back()->with('message','履歴書を更新しました');
-    }
-
-     /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function resumeDelete(Request $request)
-    {
-        $user = auth()->user();
-        $profile = $user->profile;
-
-        $profileRepo = new ProfileRepository($profile);
-
-        if (is_null($profile->resume)) {
-            return redirect()->back()->with('error', '削除する履歴書ファイルがありません');
-        }
-
-        Storage::disk('public')->delete($profile->resume);
-        Storage::disk('s3')->delete('resume/'.$profile->resume);
-
-        $profileRepo->updateProfile(['resume' => null]);
-    
-        return redirect()->back()->with('message', '履歴書ファイルを削除しました');
-    }
-
 }

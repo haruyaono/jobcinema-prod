@@ -7,11 +7,8 @@ use Illuminate\Http\Request;
 use App\Job\Users\Repositories\UserRepository;
 use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
 use App\Job\Profiles\Repositories\ProfileRepository;
-use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
-use App\Job\Applies\Repositories\Interfaces\ApplyRepositoryInterface;
 use App\Job\Users\Requests\UpdateUserPasswordRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -21,37 +18,19 @@ class UserController extends Controller
      */
     private $userRepo;
 
-    /**
-     * @var JobItemRepositoryInterface
-     */
-    private $jobItemRepo;
-
-    /**
-     * @var ApplyRepositoryInterface
-     */
-    private $applyRepo;
-
     private $user;
-    private $isLogin;
 
     /**
      * UserController constructor.
      * @param UserRepositoryInterface $userRepository
-     * @param JobItemRepositoryInterface $jobItemRepository
-     * @param ApplyRepositoryInterface $applyRepository
      */
     public function __construct(
-        UserRepositoryInterface $userRepository,
-        JobItemRepositoryInterface $jobItemRepository,
-        ApplyRepositoryInterface $applyRepository
+        UserRepositoryInterface $userRepository
     ) {
         $this->userRepo = $userRepository;
-        $this->jobItemRepo = $jobItemRepository;
-        $this->applyRepo = $applyRepository;
 
         $this->middleware(function ($request, $next) {
             $this->user = \Auth::user();
-            $this->isLogin = \Auth::check();
 
             return $next($request);
         });
@@ -62,7 +41,6 @@ class UserController extends Controller
         return view('seeker.index', compact('user'));
     }
 
-    //mypage password change
     public function getChangePasswordForm()
     {
         return view('auth.passwords.changepassword');
@@ -104,7 +82,6 @@ class UserController extends Controller
         return redirect()->back()->with($msgData);
     }
 
-    //mypage email change
     public function getChangeEmail()
     {
         return view('auth.passwords.change_email');
@@ -116,7 +93,7 @@ class UserController extends Controller
         $userRepo = new userRepository($user);
 
         $request->validate([
-            'email' => 'required|email|string|max:191|unique:employers|unique:users',
+            'email' => 'required|email|string|max:191|unique:users',
         ]);
 
         $passData = [
@@ -140,22 +117,13 @@ class UserController extends Controller
 
     public function delete()
     {
-        $user = $this->userRepo->findUserById(auth()->user()->id);
+        $user = $this->user;
         $userRepo = new UserRepository($user);
-        $profile = new ProfileRepository($user->profile);
-
-        // $applies = $this->userRepo->findApplies($user);
-        // $appliedJobItems = $this->userRepo->listAppliedJobItem($user);
+        $profileRepo = new ProfileRepository($user->profile);
 
         DB::beginTransaction();
         try {
-            if ($user->profile->resume) {
-                Storage::disk('public')->delete($user->profile->resume);
-                Storage::disk('s3')->delete('resume/' . $user->profile->resume);
-                $profile->updateProfile(['resume' => null]);
-            }
-
-            $profile->deleteProfile();
+            $profileRepo->deleteProfile();
             $userRepo->deleteUser();
 
             DB::commit();

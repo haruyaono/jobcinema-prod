@@ -3,7 +3,6 @@
 namespace App\Job\Profiles\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateUserProfileRequest extends FormRequest
 {
@@ -25,16 +24,16 @@ class UpdateUserProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'last_name' => 'required | max:191 | kana',
-            'first_name' => 'required | max:191 | kana' ,
-            'phone1' => 'required|numeric|digits_between:2,5',
-            'phone2' => 'required|numeric|digits_between:1,4',
-            'phone3' => 'required|numeric|digits_between:3,4',
-            'age' => 'nullable|numeric|between:15,99',
-            'zip31' => 'nullable|numeric|digits:3',
-            'zip32' => 'nullable|numeric|digits:4',
-            'pref31' => 'nullable|string|max:191',
-            'addr31' => 'nullable|string|max:191',
+            'data.user.last_name' => 'required|max:191|kana',
+            'data.user.first_name' => 'required|max:191|kana',
+            'data.profile.phone1' => 'required|numeric|digits_between:2,5',
+            'data.profile.phone2' => 'required|numeric|digits_between:1,4',
+            'data.profile.phone3' => 'required|numeric|digits_between:3,4',
+            'data.profile.age' => 'nullable|numeric|between:15,99',
+            'data.profile.postcode01' => 'nullable|numeric|digits:3',
+            'data.profile.postcode02' => 'nullable|numeric|digits:4',
+            'data.profile.prefecture' => 'nullable|string|max:191',
+            'data.profile.city' => 'nullable|string|max:191',
         ];
     }
 }

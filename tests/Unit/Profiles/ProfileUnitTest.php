@@ -6,26 +6,21 @@ use App\Job\Users\User;
 use App\Job\Profiles\Profile;
 use App\Job\Profiles\Exceptions\CreateProfileErrorException;
 use App\Job\Profiles\Exceptions\ProfileNotFoundException;
-use App\Job\Profiles\Requests\UpdateUserProfileRequest;
 use App\Job\Profiles\Repositories\ProfileRepository;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class ProfileUnitTest extends TestCase
 {
+    /** @test */
+    public function it_errors_when_the_profile_is_not_found()
+    {
+        $this->expectException(ProfileNotFoundException::class);
 
+        $profile = new ProfileRepository(new Profile);
+        $profile->findProfileById(999);
+    }
 
-     /** @test */
-     public function it_errors_when_the_profile_is_not_found()
-     {
-         $this->expectException(ProfileNotFoundException::class);
- 
-         $profile = new ProfileRepository(new Profile);
-         $profile->findProfileById(999);
-     }
-
-     /** @test */
+    /** @test */
     public function it_errors_when_creating_a_profile()
     {
         $this->expectException(CreateProfileErrorException::class);
@@ -34,10 +29,9 @@ class ProfileUnitTest extends TestCase
         $profile->createProfile([]);
     }
 
-
-     /** @test */
-     public function it_can_update_the_profile()
-     {
+    /** @test */
+    public function it_can_update_the_profile()
+    {
 
         $profile = factory(Profile::class)->create();
 
@@ -58,20 +52,18 @@ class ProfileUnitTest extends TestCase
         $this->assertEquals($data['city'], $profile->city);
         $this->assertEquals($data['occupation'], $profile->occupation);
         $this->assertEquals($data['final_education'], $profile->final_education);
+    }
 
-     }
-
-     /** @test */
-     public function it_can_soft_delete_the_profile()
-     {
+    /** @test */
+    public function it_can_soft_delete_the_profile()
+    {
         $created = factory(Profile::class)->create();
 
         $profile = new ProfileRepository($created);
         $profile->deleteProfile();
 
         $this->assertDatabaseHas('profiles', ['id' => $created->id]);
-
-     }
+    }
 
     /** @test */
     public function it_can_create_the_profile()
@@ -95,17 +87,4 @@ class ProfileUnitTest extends TestCase
         $this->assertEquals($data['occupation'], $profile->occupation);
         $this->assertEquals($data['final_education'], $profile->final_education);
     }
-
-    /** @test */
-    public function it_can_get_the_resume()
-    {
-        $profile = factory(Profile::class)->create();
-
-        $profileRepo = new ProfileRepository($profile);
-        $resume = $profileRepo->getResume();
-
-        $this->assertInstanceOf(Profile::class, $resume);
-        $this->assertEquals($resume->resumePath, '');
-    }
-
 }

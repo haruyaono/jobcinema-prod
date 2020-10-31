@@ -64,9 +64,9 @@ Route::group(['middleware' => ['auth:user']], function () {
     Route::group(['prefix' => 'mypage'], function () {
       Route::get('index', 'UserController@index')->name('index.seeker.mypage');
       Route::get('edit', 'UserProfileController@edit')->name('edit.seeker.profile');
-      Route::post('edit', 'UserProfileController@update')->name('update.seeker.profile');
+      Route::put('edit', 'UserProfileController@update')->name('update.seeker.profile');
       Route::get('career_edit', 'UserProfileController@editCareer')->name('edit.seeker.career');
-      Route::post('career_edit', 'UserProfileController@updateCareer')->name('update.seeker.career');
+      Route::put('career_edit', 'UserProfileController@updateCareer')->name('update.seeker.career');
 
       Route::get('application', 'JobController@index')->name('index.seeker.job');
       Route::get('application/{apply}', 'JobController@showReport')->name('show.seeker.job');

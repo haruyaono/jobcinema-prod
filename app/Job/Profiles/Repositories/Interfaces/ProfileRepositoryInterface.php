@@ -8,15 +8,13 @@ use App\Job\Users\User;
 use Illuminate\Support\Collection;
 
 interface ProfileRepositoryInterface extends BaseRepositoryInterface
-{  
+{
 
-    public function createProfile(array $data) : Profile;
+    public function createProfile(array $data): Profile;
 
     public function updateProfile(array $data): bool;
 
-    public function deleteProfile() : bool;
+    public function deleteProfile(): bool;
 
-    public function findProfileById(int $id) : Profile;
-
-    public function getResume() : Profile;
+    public function findProfileById(int $id): Profile;
 }

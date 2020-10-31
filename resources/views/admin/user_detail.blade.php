@@ -8,10 +8,10 @@
 @section('content_header')
 <h1 style="display:inline-block">ユーザー情報</h1>
 <span><a href="javascript:void(0)" style="margin-left:10px;" onclick="history.back(); return false">Back</a></span>
-  
-    @if(Session::has('message'))
-    <div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
-    @endif
+
+@if(Session::has('message'))
+<div class="alert alert-success" style="margin-top:15px;">{{Session::get('message')}}</div>
+@endif
 @stop
 
 <!-- ページの内容を入力 -->
@@ -22,29 +22,29 @@
         @if($applyJobItem->pivot->oiwaikin)
         <div class="card-body">
             <table class="table table-bordered applicant-detail-job-table">
-                    <tr>
-                        <th>金額</th>
-                        <td>
-                            {{ $applyJobItem->pivot->oiwaikin}}円
-                        </td>
-                        <th>初出社日</th>
-                        <td>
+                <tr>
+                    <th>金額</th>
+                    <td>
+                        {{ $applyJobItem->pivot->oiwaikin}}円
+                    </td>
+                    <th>初出社日</th>
+                    <td>
                         @if($applyJobItem->pivot->oiwaikin)
-                            @if($applyJobItem->pivot->first_attendance)
-                                {{ $applyJobItem->pivot->first_attendance}}
-                            @elseif(!$applyJobItem->pivot->first_attendance && $applyJobItem->pivot->no_first_attendance)
-                                未定<br>
-                                （{{ $applyJobItem->pivot->no_first_attendance}}）
-                            @endif
-                        @else
-                            申請されていません
+                        @if($applyJobItem->pivot->first_attendance)
+                        {{ $applyJobItem->pivot->first_attendance}}
+                        @elseif(!$applyJobItem->pivot->first_attendance && $applyJobItem->pivot->no_first_attendance)
+                        未定<br>
+                        （{{ $applyJobItem->pivot->no_first_attendance}}）
                         @endif
-                        </td>
-                    </tr>
+                        @else
+                        申請されていません
+                        @endif
+                    </td>
+                </tr>
             </table>
         </div>
-        @else 
-            お祝い金対象外の求人です
+        @else
+        お祝い金対象外の求人です
         @endif
     </div>
 
@@ -52,34 +52,34 @@
     <div class="card">
         @if($applyJobItem)
         <div class="mb-2 h4">求人番号：{{$applyJobItem->id}}　<a href="{{ route('admin.job.detail', [$applyJobItem->id]) }}" target="_blank">
-                                    求人票を確認
-                                </a></div>
+                求人票を確認
+            </a></div>
         <div class="card-body">
             <table class="table table-bordered applicant-detail-job-table">
-                    <tr>
-                        <th>雇用形態</th>
-                        <td>
-                            {{$applyJobItem->categories()->wherePivot('slug', 'status')->first() !== null ? $applyJobItem->categories()->wherePivot('slug', 'status')->first()->name : ''}}
-                        </td>
-                        <th>勤務先名</th>
-                        <td>
-                            {{ $applyJobItem->job_office}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>職種</th>
-                        <td>
-                            {{$applyJobItem->categories()->wherePivot('slug', 'status')->first() !== null ? $applyJobItem->categories()->wherePivot('slug', 'status')->first()->name : ''}}
-                        </td>
-                        <th>掲載期間</th>
-                        <td>
-                            {{ $applyJobItem->pub_start}} 〜　{{ $applyJobItem->pub_end}}
-                        </td>
-                    </tr>
+                <tr>
+                    <th>雇用形態</th>
+                    <td>
+                        {{$applyJobItem->categories()->wherePivot('slug', 'status')->first() !== null ? $applyJobItem->categories()->wherePivot('slug', 'status')->first()->name : ''}}
+                    </td>
+                    <th>勤務先名</th>
+                    <td>
+                        {{ $applyJobItem->job_office}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>職種</th>
+                    <td>
+                        {{$applyJobItem->categories()->wherePivot('slug', 'status')->first() !== null ? $applyJobItem->categories()->wherePivot('slug', 'status')->first()->name : ''}}
+                    </td>
+                    <th>掲載期間</th>
+                    <td>
+                        {{ $applyJobItem->pub_start}} 〜　{{ $applyJobItem->pub_end}}
+                    </td>
+                </tr>
             </table>
         </div>
-        @else 
-            応募先の求人情報が存在しません。
+        @else
+        応募先の求人情報が存在しません。
         @endif
     </div>
 
@@ -122,35 +122,25 @@
             <div class="item-row">
                 <div class="row-label">性別</div>
                 <div class="row-text">
-                <p>{{ $apply->gender }}</p>
+                    <p>{{ $apply->gender }}</p>
                 </div>
             </div>
             <div class="item-row">
                 <div class="row-label">職業</div>
                 <div class="row-text">
-                <p>{{ $apply->occupation }}</p>
+                    <p>{{ $apply->occupation }}</p>
                 </div>
             </div>
             <div class="item-row">
                 <div class="row-label">最終学歴</div>
                 <div class="row-text">
-                <p>{{ $apply->final_education }}</p>
+                    <p>{{ $apply->final_education }}</p>
                 </div>
             </div>
             <div class="item-row">
                 <div class="row-label">勤務開始可能日</div>
                 <div class="row-text">
-                <p>{{ $apply->work_start_date }}</p>
-                </div>
-            </div>
-            <div class="item-row">
-                <div class="row-label">履歴書</div>
-                <div class="row-text">
-                    @if($profile->resumePath != '')
-                        <a href="{{ $profile->resumePath }}" target="_blank">履歴書</a>
-                    @else 
-                        <span>未登録</span>
-                    @endif
+                    <p>{{ $apply->work_start_date }}</p>
                 </div>
             </div>
         </div>
@@ -170,7 +160,7 @@
             <div class="item-row">
                 <div class="row-label">1. {{$apply->job_q1}}</div>
                 <div class="row-text">
-                {!! nl2br(e($apply->job_q1)) !!}
+                    {!! nl2br(e($apply->job_q1)) !!}
                 </div>
             </div>
             @endif
@@ -178,7 +168,7 @@
             <div class="item-row">
                 <div class="row-label">2. {{$apply->job_q2}}</div>
                 <div class="row-text">
-                {!! nl2br(e($apply->job_q2)) !!}
+                    {!! nl2br(e($apply->job_q2)) !!}
                 </div>
             </div>
             @endif
@@ -186,11 +176,11 @@
             <div class="item-row">
                 <div class="row-label">3. {{$apply->job_q3}}</div>
                 <div class="row-text">
-                {!! nl2br(e($apply->job_q3)) !!}
+                    {!! nl2br(e($apply->job_q3)) !!}
                 </div>
             </div>
             @endif
-            
+
         </div>
     </div>
     @endif
@@ -202,8 +192,8 @@
 
 <!-- 読み込ませるCSSを入力 -->
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="/css/admin.css">
+<link rel="stylesheet" href="/css/admin_custom.css">
+<link rel="stylesheet" href="/css/admin.css">
 @stop
 
 <!-- 読み込ませるJSを入力 -->
