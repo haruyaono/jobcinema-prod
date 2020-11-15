@@ -10,7 +10,8 @@
       <li class="wrap-items" v-for="item in limitCount" v-bind:job="item" v-bind:key="item.id">
         <a :href="'/job_sheet/' + item.id">
           <div class="wrap-img">
-            <img :src="filePath + item.job_img_1" />
+            <img v-if="item.job_img_1 != null" :src="filePath + item.job_img_1" />
+            <img v-else src="/img/common/no-image.gif" />
           </div>
           <div class="wrap-text">
             <p>勤務先: {{item.job_office | truncate(9)}}</p>

@@ -3,10 +3,8 @@
 namespace App\Job\JobItems\Repositories\Interfaces;
 
 use Jsdecena\Baserepo\BaseRepositoryInterface;
-use App\Job\JobItems\JobItem;
-use Illuminate\Http\UploadedFile;
+use App\Models\JobItem;
 use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 interface JobItemRepositoryInterface extends BaseRepositoryInterface
 {
@@ -20,14 +18,6 @@ interface JobItemRepositoryInterface extends BaseRepositoryInterface
     public function updateJobItem(array $data): bool;
 
     public function updateAppliedJobItem(int $applyId,  array $data): bool;
-
-    public function searchJobItem(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']): Collection;
-
-    public function listRecentJobItemId(int $historyFlag = 0);
-
-    public function createRecentJobItemIdList($req, int $id): void;
-
-    public function baseSearchJobItems(array $searchParam = []);
 
     public function findJobItemById($id);
 

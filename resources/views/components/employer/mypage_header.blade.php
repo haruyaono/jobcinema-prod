@@ -2,13 +2,13 @@
 <!-- ヘッダー -->
 <header class="header">
     <div class="inner">
-        <div class="header-top">
-            @if(Request::is('/')) {{-- ホームが表示されている場合、ブログタイトルを H1 で表示 --}}
-            <h1 class="logo"><a href="/"><img src="{{ asset('/uploads/images/jobcinema_rogo_re.png') }}" alt=""></a></h1>
-            @else
-            <div class="logo"><a href="/"><img src="{{ asset('/uploads/images/jobcinema_rogo_re.png') }}" alt=""></a></div>
-            @endif
-            <div class="emp-header-right">
+        <div class="header-top cf">
+            <div class="companyHeaderLeft floatL mt-2">
+                @if (Auth::guard('employer')->check())
+                <p class="h3 mb-0 font-white">{{ Auth::guard('employer')->user()->company->cname ?: 'ゲスト' }}様の管理ページ</p>
+                @endif
+            </div>
+            <div class="emp-header-right floatR">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -23,10 +23,10 @@
                             <a class="dropdown-item" href="{{ route('index.joblist') }}">
                                 {{ __('求人票の一覧') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('applicants.view') }}">
+                            <a class="dropdown-item" href="{{ route('index.company.application') }}">
                                 {{ __('応募者を見る') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('companies.edit') }}">
+                            <a class="dropdown-item" href="{{ route('edit.company.profile') }}">
                                 {{ __('企業データの編集') }}
                             </a>
                             <a class="dropdown-item" href="{{ route('employer.logout') }}" onclick="event.preventDefault();

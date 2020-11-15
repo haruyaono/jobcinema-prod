@@ -28,11 +28,6 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-    's3_url' => env('MIX_S3_URL', 'https://s3.job-cinema.com'),
-
-    's3_url_local' => env('MIX_S3_URL_LOCAL', 'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com'),
-
-
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -140,6 +135,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | AWS
+    |--------------------------------------------------------------------------
+    */
+
+    'bucket' => env('AWS_BUCKET'),
+
+    'tmp_bucket' => env('AWS_TMP_BUCKET'),
+
+    's3_url' => env('MIX_S3_URL', 'https://s3.job-cinema.com'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -178,11 +185,11 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Aws\Laravel\AwsServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
-        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
         // JeroenNoten\LaravelAdminLte\ServiceProvider::class,
 
         /*
@@ -195,8 +202,8 @@ return [
         App\Providers\ValidatorServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         // Prettus\Repository\Providers\RepositoryServiceProvider::class,
-        App\Providers\JobItemServiceProvider::class,
         App\Providers\LineNotifyServiceProvider::class,
+        App\Providers\ObjectStorageServiceProvider::class,
 
     ],
 
@@ -250,9 +257,9 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'CustomValidator' => 'app\Library\CustomValidator',
-        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
         'LineNotify' => App\Facades\LineNotify::class,
-        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
+
+        'AWS' => Aws\Laravel\AwsFacade::class,
     ],
 
     'debug_blacklist' => [

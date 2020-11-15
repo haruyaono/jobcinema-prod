@@ -20,6 +20,4 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
    public function deleteUser(): bool;
 
    public function findApplies(User $user): Collection;
-
-   public function existsAppliedJobItem(User $user, int $jobitemId): bool;
 }

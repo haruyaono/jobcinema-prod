@@ -43,10 +43,10 @@
                     <div class="seeker-jobapp-item">
                         <div class="jobapp-item-header">
                             <div class="header-status">
-                                {{config("const.RECRUITMENT_STATUS.{$apply->s_recruit_status}", "未定義")}}
+                                {{ config("const.RECRUITMENT_STATUS.{$apply->s_recruit_status}", "未定義") }}
                             </div>
                             <div class="header-date">
-                                応募日：{{$apply->created_at}}
+                                応募日：{{ $apply->getCreatedAtTransform('Y-m-d') }}
                             </div>
                             @if($apply->congrats_status === 1)
                             <div class="header-money">
@@ -57,7 +57,7 @@
                         <div class="jobapp-item-middle">
                             <div class="jobapp-item-img only-pc">
                                 @if($apply->jobitem->job_img_1)
-                                <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $apply->jobitem->job_img_1}}" alt="{{$apply->company->cname}}">
+                                <img src="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $apply->jobitem->job_img_1 }}" alt="{{ $apply->company->cname }}">
                                 @else
                                 <img src="{{asset('img/imacommonges/no-image.gif')}}">
                                 @endif
@@ -70,15 +70,15 @@
                                     </tr>
                                     <tr>
                                         <th>勤務先</th>
-                                        <td>{{$apply->jobitem->job_office}}</td>
+                                        <td>{{ $apply->jobitem->job_office }}</td>
                                     </tr>
                                     <tr>
                                         <th>雇用形態</th>
-                                        <td>{{$apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</td>
+                                        <td>{{ $apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>職種</th>
-                                        <td>{{$apply->jobitem->job_type}}</td>
+                                        <td>{{ $apply->jobitem->job_type }}</td>
                                     </tr>
                                 </table>
                             </div>

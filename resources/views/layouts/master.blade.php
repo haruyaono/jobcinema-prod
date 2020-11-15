@@ -28,8 +28,8 @@
             @yield('header')
             @yield('contents')
             @yield('footer')
-            <input type="hidden" id="env_input" name="env" value="{{config('app.env')}}">
-            <input type="hidden" id="file_path" name="file_path" value="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{ config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img')}}">
+            <input type="hidden" id="env_input" name="env" value="{{ config('app.env') }}">
+            <input type="hidden" id="file_path" name="file_path" value="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') }}">
         </div><!-- contents -->
     </div> <!-- wrap -->
     @yield('js')

@@ -27,7 +27,7 @@
 <div id="breadcrumb" class="e-mypage-bread only-pc">
     <ol>
         <li>
-            <a href="/company/mypage"><span class="bread-text-color-blue">企業ページ</span></a>
+            <a href="{{ route('index.company.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
         </li>
         <li>
             <span class="bread-text-color-red">求人票一覧</span>
@@ -60,19 +60,6 @@
                                 </div>
                             </div>
                             <div class="card-body companyJobsheetJobItemBody">
-                                <?php
-                                $today = date("Y-m-d");
-                                if ($jobitem->pub_end_flag !== 0) {
-                                    $target_end_day = $jobitem->pub_end_date;
-                                } else {
-                                    $target_end_day = '';
-                                }
-                                if ($jobitem->pub_start_flag !== 0) {
-                                    $target_start_day = $jobitem->pub_start_date;
-                                } else {
-                                    $target_start_day = '';
-                                }
-                                ?>
                                 <table cellspacing="0" cellpadding="0" class="table companyJobsheetJobitemTable">
                                     <tr>
                                         <td colspan="4" height="39" class="kingaku">
@@ -84,7 +71,11 @@
                                         </td>
                                         <td rowspan="3" class="sheetBtnBox">
                                             <div class="statusTxt statusTxt-{{$jobitem->status}}">
+                                                @if($jobitem->pub_start_date > date("Y-m-d", strtotime('+1 day')))
+                                                {{ '掲載待ち' }}
+                                                @else
                                                 {{config('const.EMP_JOB_STATUS.'.$jobitem->status)}}
+                                                @endif
                                             </div>
                                             <a class="btn companyJobsheetJoblistBtn joblistShowBtn" href="{{ route('show.joblist.detail', [$jobitem]) }}" target="_blank">
                                                 <i class="fas fa-desktop mr-1"></i>求人票を確認する
@@ -130,8 +121,6 @@
                                             {{ $jobitem->job_office}}
                                         </td>
                                     </tr>
-
-
                                     <tr>
                                         <th>職種</th>
                                         <td>
@@ -157,7 +146,7 @@
                     </div>
                 </div>
                 <div class="paginate text-center">
-                    {{ $jobitems->appends(Illuminate\Support\Facades\Input::except('page'))->links()}}
+                    {{ $jobitems->appends(Illuminate\Support\Facades\Request::except('page'))->links()}}
                 </div>
                 <div class="text-center mt-5">
                     <a class="btn back-btn" href="#" onclick="javascript:window.history.back(-1);return false;"><i class="fas fa-reply mr-3"></i>前に戻る</a>

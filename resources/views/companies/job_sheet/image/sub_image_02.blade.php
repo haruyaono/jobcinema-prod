@@ -40,11 +40,7 @@
                         @method('POST')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId" />
                         <input type="hidden" name="data[File][suffix]" value="3" id="FileSuffix" />
-                        @if($jobitem->job_img_3)
-                        <input type="hidden" name="data[File][currentPath]" value="@if(config('app.env') == 'production'){{ config('app.s3_url') . '/img/uploads/JobSheet/' . $jobitem->job_img_3 . '?' . date('YmdHis') }}@else{{'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/img/uploads/JobSheet/' . $jobitem->job_img_3 . '?' . date('YmdHis') }}@endif" id="FileCurrentPath">
-                        @else
-                        <input type="hidden" name="data[File][currentPath]" value="/img/common/no-image.gif" id="FileCurrentPath">
-                        @endif
+                        <input type="hidden" name="data[File][currentPath]" value="{{ $images[2] }}" id="FileCurrentPath">
 
                         <div class="card">
                             <div class="card-header">サブ写真の登録</div>
@@ -55,7 +51,7 @@
                                 </div>
                                 <p class="mb-2">現在登録されている画像</p>
                                 @if($jobitem->job_img_3)
-                                <p class="pre-main-image"><img src="@if(config('app.env') == 'production'){{ config('app.s3_url') . '/img/uploads/JobSheet/' . $jobitem->job_img_3 . '?' . date('YmdHis') }}@else{{'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/img/uploads/JobSheet/' . $jobitem->job_img_3 . '?' . date('YmdHis') }}@endif" alt="サブ写真を登録してください"></p>
+                                <p class="pre-main-image"><img src="{{ $images[2] }}" alt="サブ写真を登録してください"></p>
                                 @endif
                                 <ul class="list-unstyled">
                                     <li>画像はjpg/gif/png形式に対応しています。</li>

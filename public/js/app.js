@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@babel/runtime/regenerator/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -1688,39 +1700,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FavouriteComponent.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FavouriteComponent.vue?vue&type=script&lang=js& ***!
@@ -1857,6 +1836,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   headers: {
@@ -1933,7 +1913,17 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
 //
 //
 //
@@ -2052,25 +2042,17 @@ __webpack_require__.r(__webpack_exports__);
           salary_m: ""
         },
         date: "",
-        keyword: "",
-        count: null
+        keyword: ""
       },
       salaries: [],
       categories: [],
       searchObj: [],
-      jobs: []
+      jobs: [],
+      message: ""
     };
   },
   mounted: function mounted() {
     var self = this;
-    var sessionParam = [];
-
-    if (sessionStorage.hasOwnProperty("search-params")) {
-      sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
-    }
-
-    this.getCategory();
-    this.getJobItems();
     var urlParam = new Object();
     var pair = location.search.substring(1).split("&");
     pair = pair.filter(function (v) {
@@ -2112,19 +2094,13 @@ __webpack_require__.r(__webpack_exports__);
       self.params = Object.assign(self.params, urlParam);
     }
   },
-  watch: {
-    params: {
-      handler: function handler(val) {
-        var filterJobs = this.filterJobItems();
-
-        if (filterJobs === false) {
-          this.params.count = this.jobs.length;
-        } else {
-          this.params.count = Object.keys(filterJobs).length;
-        }
-      },
-      deep: true
+  computed: {
+    countJobs: function countJobs() {
+      return this.jobs.length;
     }
+  },
+  created: function created() {
+    this.getCategory();
   },
   updated: function updated() {
     var self = this;
@@ -2142,13 +2118,20 @@ __webpack_require__.r(__webpack_exports__);
           } else if (sVal == pSalaryCategory[2].id) {
             tmp_salaries = pSalaryCategory[2];
           } else {
-            $("#salary-child").prop("selectedIndex", 0);
+            document.getElementById("salary-child").selectedIndex = "";
           }
         }
 
         self.salaries = tmp_salaries;
       }
     });
+  },
+  watch: {
+    params: {
+      handler: "getAnswer",
+      deep: true,
+      immediate: true
+    }
   },
   methods: {
     fetchSalaries: function fetchSalaries() {
@@ -2166,136 +2149,156 @@ __webpack_require__.r(__webpack_exports__);
       } else if (self.params.salary == pSalaryCategory[2].id) {
         tmp_salaries = pSalaryCategory[2];
       } else {
-        $("#salary-child").prop("selectedIndex", 0);
+        document.getElementById("salary-child").selectedIndex = "";
       }
 
       self.salaries = tmp_salaries;
     },
     getCategory: function getCategory() {
       var self = this;
-      fetch("/api/all_category").then(function (response) {
+      var list = [];
+      return fetch("/api/categories").then(function (response) {
         return response.json();
       }).then(function (data) {
-        self.categories = data.categoryList;
+        list = data.categories;
+
+        var ite = /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+          var _loop, _ret;
+
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _loop = /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _loop() {
+                    var items;
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _loop$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            items = list.splice(0, 100);
+
+                            if (!(items.length <= 0)) {
+                              _context.next = 3;
+                              break;
+                            }
+
+                            return _context.abrupt("return", "break");
+
+                          case 3:
+                            _context.next = 5;
+                            return setTimeout(function () {
+                              for (var len = items.length, i = 0; i < len; i++) {
+                                var item = items[i];
+                                self.categories.push(item);
+                              }
+
+                              ite.next();
+                            });
+
+                          case 5:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _loop);
+                  });
+
+                case 1:
+                  if (false) {}
+
+                  return _context2.delegateYield(_loop(), "t0", 3);
+
+                case 3:
+                  _ret = _context2.t0;
+
+                  if (!(_ret === "break")) {
+                    _context2.next = 6;
+                    break;
+                  }
+
+                  return _context2.abrupt("break", 8);
+
+                case 6:
+                  _context2.next = 1;
+                  break;
+
+                case 8:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee);
+        })();
+
+        ite.next();
       })["catch"](function (error) {});
     },
-    getJobItems: function getJobItems() {
-      var self = this;
-      axios.get("/api/jobs").then(function (res) {
-        self.jobs = res.data.data;
-        self.params.count = self.jobs.length;
-      })["catch"](function (err) {
-        console.log(err.statusText);
+    getAnswer: _.debounce(function () {
+      this.message = "...";
+      var vm = this;
+      var params = this.params;
+      var path = vm.setParameter(params);
+      axios.get(path).then(function (res) {
+        vm.jobs = res.data.jobitems;
+      })["catch"](function (error) {
+        vm.message = "Error!" + error;
+        console.log(error);
+      })["finally"](function () {
+        vm.message = "";
       });
-    },
-    filterJobItems: function filterJobItems() {
-      var self = this;
-      var params = [],
-          filtered = {};
+    }, 1000),
+    setParameter: function setParameter(paramsArray) {
+      var path = "/api/job_sheets";
+      var params = paramsArray;
 
-      for (var pKey in self.params) {
-        if (pKey == "count" || pKey == "salary") {
-          continue;
-        }
-
-        if (pKey == "salary_child") {
-          for (var sItem in self.params[pKey]) {
-            if (self.params[pKey][sItem] === "") {
-              continue;
-            }
-
-            params.push(sItem);
-          }
-
-          continue;
-        }
-
-        if (self.params[pKey] !== "") {
-          params.push(pKey);
+      for (var key in paramsArray) {
+        if (key == "salary_child") {
+          params = _objectSpread(_objectSpread({}, params), params[key]);
+          delete params.salary_child;
         }
       }
 
-      if (params.length == 0) {
-        filtered = false;
-      } else {
-        if (self.jobs != null) {
-          for (var i in self.jobs) {
-            var job = self.jobs[i];
-            var cResult = [];
-
-            var _loop = function _loop(param) {
-              if (params[param] == "keyword") {
-                if (job["job_title"].indexOf(self.params[params[param]]) === -1) {
-                  if (filtered["job_id" + job.id] !== undefined) {
-                    delete filtered["job_id" + job.id];
-                  }
-
-                  return "break";
-                }
-              } else {
-                var categories = job.categories;
-                var cList = categories.filter(function (value) {
-                  if (params[param] == "salary_d" || params[param] == "salary_h" || params[param] == "salary_m") {
-                    for (var sChildParam in params[param]) {
-                      if (value.id === parseInt(self.params["salary_child"][params[param]])) {
-                        return value;
-                      }
-                    }
-                  }
-
-                  if (value.id === parseInt(self.params[params[param]])) {
-                    return value;
-                  }
-                });
-
-                if (cList.length === 1) {
-                  cResult.push(cList);
-                } else {
-                  cResult = null;
-                }
-              }
-
-              if (cResult === null) {
-                if (filtered["job_id" + job.id] !== undefined) {
-                  delete filtered["job_id" + job.id];
-                }
-
-                return "break";
-              }
-
-              if (filtered[job.id] !== undefined) return "break";
-              filtered["job_id" + job.id] = job;
-            };
-
-            for (var param in params) {
-              var _ret = _loop(param);
-
-              if (_ret === "break") break;
-            }
-          }
-        }
+      for (var _key in params) {
+        path += path.indexOf("?") == -1 ? "?" : "&";
+        path += _key + "=" + params[_key];
       }
 
-      return filtered;
+      return path;
     },
     search: function search() {
       var self = this;
       var sessionParam = [];
+      var params = self.params;
+
+      for (var key in params) {
+        if (key == "salary_child") {
+          params = _objectSpread(_objectSpread({}, params), params[key]);
+          delete params.salary_child;
+        }
+      }
+
+      for (var v in params) {
+        if (params[v] == "") delete params[v];
+      }
+
+      if (Object.keys(params).length == 0) {
+        return;
+      }
 
       if (sessionStorage.hasOwnProperty("search-params")) {
         sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
-      }
+      } // params.count = self.jobs.length;
+
 
       if (sessionParam.length >= 3) {
         sessionParam = sessionParam.slice(-2);
       }
 
-      sessionParam.push(self.params);
+      sessionParam.push(params);
       sessionStorage.setItem("search-params", JSON.stringify(sessionParam));
     }
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -2381,22 +2384,21 @@ __webpack_require__.r(__webpack_exports__);
           data.idList.push(searchItems[sItem][key]);
         }
 
-        axios.post("/api/category_namelist", data, {
+        axios.post("/api/categories/name", JSON.stringify(data), {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           }
         }).then(function (response) {
           var nl = response.data.nameList;
 
-          if (nl.length === 0 && searchItems[sItem]["keyword"] === "") {
-            nl = "条件なし";
-            self.nameList["no" + sItem] = nl;
+          if (nl.length === 0) {
+            return;
           } else {
             if (searchItems[sItem]["keyword"] !== "") {
               nl.push(searchItems[sItem]["keyword"]);
             }
 
-            self.nameList["no" + sItem] = nl.join("、");
+            self.nameList["no" + sItem] = nl.join("、").slice(0, -1);
           }
         })["catch"](function (error) {
           console.log(error);
@@ -2446,101 +2448,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickComponent.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SlickComponent.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(Vue) {/* harmony import */ var vue_slick__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-slick */ "./node_modules/vue-slick/dist/slickCarousel.esm.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-Vue.config.devtools = true; // vue-slickをインポート
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  // bladeから受け取るデータを指定
-  props: {
-    jobjson: {
-      type: Object,
-      required: true
-    }
-  },
-  // コンポーネント使用の宣言
-  components: {
-    Slick: vue_slick__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  data: function data() {
-    return {
-      // slickの設定
-      slickOptions: {
-        arrows: false,
-        dots: true,
-        speed: 200,
-        slidesToScroll: 1,
-        accessibility: true,
-        responsive: [{
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-        }]
-      },
-      env: document.getElementById('env_input').value,
-      baseurl: document.getElementById('s3_url_input').value,
-      jobImages: {
-        img1: this.jobjson.job_img,
-        img2: this.jobjson.job_img2,
-        img3: this.jobjson.job_img3
-      }
-    };
-  },
-  computed: {
-    jobImageList: function jobImageList() {
-      for (var key in this.jobImages) {
-        if (this.jobImages[key] == null) {
-          this.jobImages[key] = '/uploads/images/no-image.gif';
-        }
-      }
-
-      return this.jobImages;
-    }
-  },
-  methods: {
-    next: function next() {
-      this.$refs.slick.next();
-    },
-    prev: function prev() {
-      this.$refs.slick.prev();
-    },
-    reInit: function reInit() {
-      var _this = this;
-
-      this.$nextTick(function () {
-        _this.$refs.slick.reSlick();
-      });
-    }
-  }
-});
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js")))
 
 /***/ }),
 
@@ -2618,173 +2525,6 @@ __webpack_require__.r(__webpack_exports__);
       this.$nextTick(function () {
         _this.$refs.slick.reSlick();
       });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickVideoComponent.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SlickVideoComponent.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_slick__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-slick */ "./node_modules/vue-slick/dist/slickCarousel.esm.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// vue-slickをインポート
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  // コンポーネント使用の宣言
-  components: {
-    Slick: vue_slick__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  // bladeから受け取るデータを指定
-  props: {
-    jobjson: {
-      type: Object,
-      required: true
-    }
-  },
-  data: function data() {
-    return {
-      // slickの設定
-      slickOptions: {
-        speed: 200,
-        arrows: false,
-        dots: true,
-        accessibility: true,
-        pauseOnFocus: true
-      },
-      env: document.getElementById('env_input').value,
-      baseurl: document.getElementById('s3_url_input').value,
-      is_playing: {
-        mvideo_1: true,
-        mvideo_2: false,
-        mvideo_3: false
-      },
-      jobMovies: {
-        mov1: this.jobjson.job_mov,
-        mov2: this.jobjson.job_mov2,
-        mov3: this.jobjson.job_mov3
-      }
-    };
-  },
-  mounted: function mounted() {
-    var targetElement = this.$el;
-  },
-  computed: {
-    jobMovieList: function jobMovieList() {
-      for (var key in this.jobMovies) {
-        if (this.jobMovies[key] == null) {
-          this.jobMovies[key] = '/uploads/images/no-image.gif';
-        }
-      }
-
-      return this.jobMovies;
-    }
-  },
-  methods: {
-    reInit: function reInit() {
-      var _this = this;
-
-      this.$nextTick(function () {
-        _this.$refs.slick.reSlick();
-      });
-    },
-    videoFnc: function videoFnc(e) {
-      var currentVideo = e.currentTarget,
-          currentVideoId = currentVideo.getAttribute('id'),
-          videoSource = currentVideo.children[0].getAttribute('src');
-
-      if (videoSource != null) {
-        if (this.is_playing[currentVideoId] == false) {
-          currentVideo.play();
-          this.is_playing[currentVideoId] = true;
-        } else {
-          currentVideo.pause();
-          this.is_playing[currentVideoId] = false;
-        }
-      } else {
-        console.log('no video');
-      }
-    },
-    handleAfterChange: function handleAfterChange(event, slick, currentSlide) {
-      var vIndex = currentSlide + 1;
-      var video = document.getElementById("mvideo_" + vIndex);
-      var videoSource = video.children[0].getAttribute('src');
-
-      if (video && videoSource != null) {
-        var playPromise = video.play();
-        this.is_playing['mvideo_' + vIndex] = true;
-
-        if (playPromise !== undefined) {
-          playPromise.then(function (_) {})["catch"](function (error) {
-            video.pause();
-            throw error;
-          });
-        } else {
-          console.log('playPromise undefined');
-        }
-      } else {
-        console.log('playPromise undefined or none video');
-      }
-    },
-    handleBeforeChange: function handleBeforeChange(event, slick, currentSlide, nextSlide) {
-      var vBeforeIndex = currentSlide + 1,
-          videoBefore = document.getElementById("mvideo_" + vBeforeIndex);
-      var playPromise = videoBefore.pause();
-      this.is_playing['mvideo_' + vBeforeIndex] = false;
-    },
-    handleSwipe: function handleSwipe(event, slick, direction) {
-      var vIndex = slick.currentSlide + 1,
-          currentVideo = document.getElementById("mvideo_" + vIndex);
-
-      if (direction == 'left') {
-        if (vIndex == 1) {
-          var beforeVideoIndex = 3;
-        } else {
-          var beforeVideoIndex = vIndex - 1;
-        }
-
-        var beforeVideo = document.getElementById("mvideo_" + beforeVideoIndex);
-        beforeVideo.pause();
-        this.is_playing['mvideo_' + beforeVideoIndex] = false;
-      } else {
-        if (vIndex == 3) {
-          var beforeVideoIndex = 1;
-        } else {
-          var beforeVideoIndex = vIndex + 1;
-        }
-
-        var beforeVideo = document.getElementById("mvideo_" + beforeVideoIndex);
-        beforeVideo.pause();
-        this.is_playing['mvideo_' + beforeVideoIndex] = false;
-      }
     }
   }
 });
@@ -38224,6 +37964,746 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/regenerator-runtime/runtime.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList),
+      PromiseImpl
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : undefined
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  Function("r", "regeneratorRuntime = r")(runtime);
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -38497,53 +38977,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
-  \*******************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FavouriteComponent.vue?vue&type=template&id=df8c2c02&":
 /*!*********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FavouriteComponent.vue?vue&type=template&id=df8c2c02& ***!
@@ -38636,9 +39069,13 @@ var render = function() {
                 [
                   _c("a", { attrs: { href: "/job_sheet/" + item.id } }, [
                     _c("div", { staticClass: "wrap-img" }, [
-                      _c("img", {
-                        attrs: { src: _vm.filePath + item.job_img_1 }
-                      })
+                      item.job_img_1 != null
+                        ? _c("img", {
+                            attrs: { src: _vm.filePath + item.job_img_1 }
+                          })
+                        : _c("img", {
+                            attrs: { src: "/img/common/no-image.gif" }
+                          })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "wrap-text" }, [
@@ -38921,9 +39358,11 @@ var render = function() {
                               }
                             },
                             [
-                              _c("option", { attrs: { value: "" } }, [
-                                _vm._v("指定なし")
-                              ]),
+                              _c(
+                                "option",
+                                { attrs: { value: "", selected: "" } },
+                                [_vm._v("指定なし")]
+                              ),
                               _vm._v(" "),
                               _vm._l(_vm.salaries["children"], function(cCat) {
                                 return _c(
@@ -38987,10 +39426,15 @@ var render = function() {
           _c("div", { staticClass: "search-bottom" }, [
             _c("p", { staticClass: "search-job-result" }, [
               _vm._v("\n          検索結果\n          "),
-              _c("span", { attrs: { id: "job-count" } }, [
-                _vm._v(_vm._s(_vm.params.count))
-              ]),
-              _vm._v("件\n        ")
+              _vm.message != ""
+                ? _c("span", { attrs: { id: "job-count" } }, [
+                    _vm._v(_vm._s(_vm.message))
+                  ])
+                : _c("span", { attrs: { id: "job-count" } }, [
+                    _vm._v(_vm._s(_vm.countJobs))
+                  ]),
+              _vm._v(" "),
+              _c("span", [_vm._v("件")])
             ]),
             _vm._v(" "),
             _c(
@@ -39070,10 +39514,6 @@ var render = function() {
                       },
                       [_vm._v(_vm._s(_vm.nameList["no" + index]))]
                     )
-                  ]),
-                  _vm._v(" "),
-                  _c("dd", { staticClass: "job-hostory-count" }, [
-                    _vm._v(_vm._s(searchItem.count) + "件")
                   ])
                 ])
               ])
@@ -39095,42 +39535,6 @@ var staticRenderFns = [
     ])
   }
 ]
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickComponent.vue?vue&type=template&id=84ecea20&":
-/*!*****************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SlickComponent.vue?vue&type=template&id=84ecea20& ***!
-  \*****************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("slick", { ref: "slick", attrs: { options: _vm.slickOptions } }, [
-    _vm.env == "local"
-      ? _c("img", { attrs: { src: _vm.jobImageList.img1 } })
-      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobImageList.img1 } }),
-    _vm._v(" "),
-    _vm.env == "local"
-      ? _c("img", { attrs: { src: _vm.jobImageList.img2 } })
-      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobImageList.img2 } }),
-    _vm._v(" "),
-    _vm.env == "local"
-      ? _c("img", { attrs: { src: _vm.jobImageList.img3 } })
-      : _c("img", { attrs: { src: _vm.baseurl + _vm.jobImageList.img3 } })
-  ])
-}
-var staticRenderFns = []
 render._withStripped = true
 
 
@@ -39180,124 +39584,6 @@ var render = function() {
       })
     ])
   ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickVideoComponent.vue?vue&type=template&id=535df35f&":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SlickVideoComponent.vue?vue&type=template&id=535df35f& ***!
-  \**********************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "slick",
-    {
-      ref: "slick",
-      attrs: { options: _vm.slickOptions },
-      on: {
-        afterChange: _vm.handleAfterChange,
-        beforeChange: _vm.handleBeforeChange,
-        swipe: _vm.handleSwipe
-      }
-    },
-    [
-      _c(
-        "video",
-        {
-          staticClass: "slide-video slide-media",
-          attrs: {
-            id: "mvideo_1",
-            muted: "",
-            autoplay: "",
-            preload: "metadata",
-            poster: _vm.jobMovieList.mov1
-          },
-          domProps: { muted: true },
-          on: { click: _vm.videoFnc }
-        },
-        [
-          _vm.env == "local"
-            ? _c("source", {
-                attrs: { src: _vm.jobjson.job_mov, type: "video/mp4" }
-              })
-            : _c("source", {
-                attrs: {
-                  src: _vm.baseurl + _vm.jobjson.job_mov,
-                  type: "video/mp4"
-                }
-              })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "video",
-        {
-          staticClass: "slide-video slide-media",
-          attrs: {
-            id: "mvideo_2",
-            muted: "",
-            preload: "metadata",
-            poster: _vm.jobMovieList.mov2
-          },
-          domProps: { muted: true },
-          on: { click: _vm.videoFnc }
-        },
-        [
-          _vm.env == "local"
-            ? _c("source", {
-                attrs: { src: _vm.jobjson.job_mov2, type: "video/mp4" }
-              })
-            : _c("source", {
-                attrs: {
-                  src: _vm.baseurl + _vm.jobjson.job_mov2,
-                  type: "video/mp4"
-                }
-              })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "video",
-        {
-          staticClass: "slide-video slide-media",
-          attrs: {
-            id: "mvideo_3",
-            muted: "",
-            preload: "metadata",
-            poster: _vm.jobMovieList.mov3
-          },
-          domProps: { muted: true },
-          on: { click: _vm.videoFnc }
-        },
-        [
-          _vm.env == "local"
-            ? _c("source", {
-                attrs: { src: _vm.jobjson.job_mov3, type: "video/mp4" }
-              })
-            : _c("source", {
-                attrs: {
-                  src: _vm.baseurl + _vm.jobjson.job_mov3,
-                  type: "video/mp4"
-                }
-              })
-        ]
-      )
-    ]
-  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -54740,11 +55026,8 @@ __webpack_provided_window_dot_Vue = __webpack_require__(/*! vue */ "./node_modul
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('favourite-component', __webpack_require__(/*! ./components/FavouriteComponent.vue */ "./resources/js/components/FavouriteComponent.vue")["default"]);
 Vue.component('slick-top', __webpack_require__(/*! ./components/SlickTopComponent.vue */ "./resources/js/components/SlickTopComponent.vue")["default"]);
-Vue.component('v-slick1', __webpack_require__(/*! ./components/SlickComponent.vue */ "./resources/js/components/SlickComponent.vue")["default"]);
-Vue.component('v-slick', __webpack_require__(/*! ./components/SlickVideoComponent.vue */ "./resources/js/components/SlickVideoComponent.vue")["default"]);
 Vue.component('recent-component', __webpack_require__(/*! ./components/RecentJobComponent.vue */ "./resources/js/components/RecentJobComponent.vue")["default"]);
 Vue.component('search-component', __webpack_require__(/*! ./components/SearchComponent.vue */ "./resources/js/components/SearchComponent.vue")["default"]);
 Vue.component('search-history-component', __webpack_require__(/*! ./components/SearchHistoryComponent.vue */ "./resources/js/components/SearchHistoryComponent.vue")["default"]);
@@ -54817,75 +55100,6 @@ if (token) {
 //     encrypted: true
 // });
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
-/***/ "./resources/js/components/ExampleComponent.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/components/ExampleComponent.vue ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
-/* harmony import */ var _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/ExampleComponent.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
-  \*************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
 
 /***/ }),
 
@@ -55165,75 +55379,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/SlickComponent.vue":
-/*!****************************************************!*\
-  !*** ./resources/js/components/SlickComponent.vue ***!
-  \****************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SlickComponent_vue_vue_type_template_id_84ecea20___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SlickComponent.vue?vue&type=template&id=84ecea20& */ "./resources/js/components/SlickComponent.vue?vue&type=template&id=84ecea20&");
-/* harmony import */ var _SlickComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SlickComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/SlickComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _SlickComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _SlickComponent_vue_vue_type_template_id_84ecea20___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _SlickComponent_vue_vue_type_template_id_84ecea20___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/SlickComponent.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/SlickComponent.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/components/SlickComponent.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SlickComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/SlickComponent.vue?vue&type=template&id=84ecea20&":
-/*!***********************************************************************************!*\
-  !*** ./resources/js/components/SlickComponent.vue?vue&type=template&id=84ecea20& ***!
-  \***********************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickComponent_vue_vue_type_template_id_84ecea20___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SlickComponent.vue?vue&type=template&id=84ecea20& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickComponent.vue?vue&type=template&id=84ecea20&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickComponent_vue_vue_type_template_id_84ecea20___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickComponent_vue_vue_type_template_id_84ecea20___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/components/SlickTopComponent.vue":
 /*!*******************************************************!*\
   !*** ./resources/js/components/SlickTopComponent.vue ***!
@@ -55298,75 +55443,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickTopComponent_vue_vue_type_template_id_89a913f6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickTopComponent_vue_vue_type_template_id_89a913f6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/SlickVideoComponent.vue":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/SlickVideoComponent.vue ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SlickVideoComponent_vue_vue_type_template_id_535df35f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SlickVideoComponent.vue?vue&type=template&id=535df35f& */ "./resources/js/components/SlickVideoComponent.vue?vue&type=template&id=535df35f&");
-/* harmony import */ var _SlickVideoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SlickVideoComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/SlickVideoComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _SlickVideoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _SlickVideoComponent_vue_vue_type_template_id_535df35f___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _SlickVideoComponent_vue_vue_type_template_id_535df35f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/SlickVideoComponent.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/SlickVideoComponent.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/SlickVideoComponent.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickVideoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SlickVideoComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickVideoComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickVideoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/SlickVideoComponent.vue?vue&type=template&id=535df35f&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/components/SlickVideoComponent.vue?vue&type=template&id=535df35f& ***!
-  \****************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickVideoComponent_vue_vue_type_template_id_535df35f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SlickVideoComponent.vue?vue&type=template&id=535df35f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SlickVideoComponent.vue?vue&type=template&id=535df35f&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickVideoComponent_vue_vue_type_template_id_535df35f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SlickVideoComponent_vue_vue_type_template_id_535df35f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

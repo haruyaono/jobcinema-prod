@@ -13030,23 +13030,13 @@ q:after {
 
 a {
   text-decoration: none;
-  color: #000;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #457ab5;
 }
 
 a:hover {
   opacity: 0.7;
-  color: inherit;
+  color: #457ab5;
   text-decoration: none;
-}
-
-a.txt-blue-link {
-  color: #457ab5;
-}
-
-a.txt-blue-link:hover {
-  color: #457ab5;
 }
 
 .non-link {
@@ -13116,6 +13106,18 @@ textarea {
   font-size: 100%;
 }
 
+textarea {
+  white-space: pre-wrap;
+}
+
+button[type="submit"] {
+  border: 0;
+}
+
+.font-white {
+  color: #fff;
+}
+
 .font-yellow {
   color: #de9610;
 }
@@ -13135,6 +13137,42 @@ textarea {
 .required {
   color: #fff;
   background-color: #c93a40;
+}
+
+.font16 {
+  font-size: 16px;
+}
+
+.font18 {
+  font-size: 18px;
+}
+
+.font20 {
+  font-size: 20px;
+}
+
+.font22 {
+  font-size: 22px;
+}
+
+.font24 {
+  font-size: 24px;
+}
+
+.border-red {
+  border: 1px solid #c93a40;
+}
+
+.border-w1 {
+  border-width: 1px;
+}
+
+.border-w2 {
+  border-width: 2px;
+}
+
+.border-w3 {
+  border-width: 3px;
 }
 
 h1 {
@@ -14620,7 +14658,7 @@ input {
 }
 
 .header-top .header-widget li a:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 /* g-nav */
@@ -14640,23 +14678,23 @@ input {
 .gnav ul li {
   display: inline-block;
   width: 25%;
-  border-right: 1px solid #D16D6D;
+  border-right: 1px solid #d16d6d;
 }
 
 .gnav ul li:first-child {
-  border-left: 1px solid #D16D6D;
+  border-left: 1px solid #d16d6d;
 }
 
 .gnav ul li a {
   display: block;
   color: #fff;
   font-size: 1em;
-  padding: 0 .8em;
+  padding: 0 0.8em;
   white-space: nowrap;
 }
 
 .gnav ul li a:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 /* spログイン非表示 */
@@ -14687,12 +14725,12 @@ input {
   top: 0;
   right: 0;
   padding: 10px 10px 5px 10px;
-  background-color: #C93B40;
+  background-color: #c93b40;
   color: #fff;
   line-height: 1.2;
   text-align: center;
   transform: translateY(-100%);
-  transition: .5s;
+  transition: 0.5s;
   z-index: 99;
 }
 
@@ -14807,7 +14845,7 @@ body.jobApplyPage .header .header-top .logo img {
     width: 17px;
     border-radius: 50px;
     color: #fff;
-    font-size: .615rem;
+    font-size: 0.615rem;
     line-height: 1.308rem;
     text-align: center;
     left: 30px;
@@ -14966,7 +15004,7 @@ body.jobApplyPage .header .header-top .logo img {
 
   .hamburgerLogoutInner .hamburgerLogoutBtnList {
     border-right: 1px solid #fff;
-    width: calc( 50% - 0.5px);
+    width: calc(50% - 0.5px);
   }
 
   .hamburgerLogoutInner .hamburgerLogoutloginBtnPcList {
@@ -15048,7 +15086,7 @@ body.jobApplyPage .header .header-top .logo img {
     line-height: 10px;
     border-radius: 50px;
     text-align: center;
-    font-size: .846rem;
+    font-size: 0.846rem;
     padding: 3px 7px 4px;
     box-sizing: border-box;
   }
@@ -15063,7 +15101,7 @@ body.jobApplyPage .header .header-top .logo img {
     line-height: 10px;
     border-radius: 50px;
     text-align: center;
-    font-size: .846rem;
+    font-size: 0.846rem;
     padding: 3px 7px 4px;
     box-sizing: border-box;
   }
@@ -17787,9 +17825,110 @@ section.cat-list-section {
 }
 
 .e-mypage-card-item {
-  /* float: left; */
   width: 98%;
   margin: 0 2% 2%;
+}
+
+.sectionItem {
+  border: 1px solid #c0c0c0;
+  border-top: 0;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.sectionItemTtl {
+  padding: 5px 10px;
+  background-color: #0368b8;
+  border-radius: 5px 5px 0 0;
+}
+
+.sectionItemTtl p {
+  font-size: 16px;
+  color: #fff;
+}
+
+.sectionItemTtl p::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F35A";
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  margin-right: 5px;
+}
+
+.companyTable th,
+.companyTable td {
+  font-size: 14px;
+  vertical-align: middle;
+  border: 1px solid #c0c0c0;
+}
+
+.companyTable th {
+  background-color: #dcdcdc;
+  width: 80px;
+}
+
+.companyTable td {
+  width: 250px;
+}
+
+.companyBtn {
+  width: 130px;
+  border-radius: 3px;
+  padding: 5px;
+  letter-spacing: 2px;
+  text-align: center;
+  margin: 0 12px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 3px;
+  color: #333;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
+  box-shadow: 0 2px 2px 0 rgba(255, 255, 255, 0.1) inset, 0 2px 10px 0 rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 0 rgba(0, 0, 0, 0.1) inset;
+}
+
+.companyBtnWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.companyBtnOrange {
+  background-color: #de9610;
+  color: #fff;
+}
+
+.companyBtnOrange:hover {
+  color: #fff;
+}
+
+.companyBtnGray {
+  background-color: #dcdcdc;
+}
+
+.companyBtnGray:hover {
+  color: #333;
+}
+
+.companyBtnCyan {
+  background-color: #6cb2eb;
+  color: #fff;
+}
+
+.companyBtnCyan:hover {
+  color: #fff;
+}
+
+.companyBtnBlue {
+  background-color: #0368b8;
+  color: #fff;
+}
+
+.companyBtnBlue:hover {
+  color: #fff;
 }
 
 .e-mypage-card-item a {
@@ -18086,40 +18225,96 @@ input.specified_date:focus {
   font-weight: normal;
 }
 
-/* applicant */
+/** 応募者 **/
 
-.applicant-detail-title {
-  position: relative;
-  margin-top: 30px;
-  font-size: 18px;
-  padding-left: 8px;
-}
-
-.applicant-detail-title:before {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  content: "";
-  display: inline-block;
-  width: 3px;
-  height: 20px;
-  margin-right: 8px;
-  background: #333333;
-}
-
-.e-status-text span {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.myjob-detail-section .detail-box {
+.companyApplySection {
+  border-radius: 0px;
   margin-top: 20px;
 }
 
-.myjob-detail-section .detail-box .item-row:nth-child(1) .row-label,
-.myjob-detail-section .detail-box .item-row:nth-child(1) .row-text {
-  border-top: 1px solid #e8e8e8;
+.companyApplySection .companyApplyNote {
+  background-color: #fce7e1;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.companyApplySection .companyApplyNote .companyApplyNoteTtl {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.companyApplySection .companyApplyNote ul {
+  list-style: square;
+  margin-left: 20px;
+}
+
+.companyApplySection .companyApplyListDesc {
+  margin-bottom: 40px;
+}
+
+.companyApplySection .companyApplyListDesc .companyApplyListDescTtl {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.companyApplySection .companyApplyItem {
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 40px;
+}
+
+.companyApplySection .companyApplyItem .companyApplyItemTable {
+  margin-bottom: 0;
+  text-align: left;
+  border-top: 5px solid #0368b8;
+}
+
+.companyApplySection .companyApplyItem .kingaku {
+  font-size: 16px;
+}
+
+.companyApplySection .companyApplyItem .rightBox {
+  width: 100px;
+}
+
+.companyApplySection .companyApplyItem .companyApplyItemDetailBtn {
+  width: 100%;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 0;
+  background-color: #333;
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+.companyApplySection .companyApplyItem .applyJobitem {
+  font-size: 16px;
+}
+
+.companyApplySection .companyApplyItem .daysLeftTxt {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.companyApplySection .companyApplyItem .newNotify {
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #de9610;
+  text-align: center;
+  text-shadow: 0 0 10px #fff, 0 0 15px #fff;
+}
+
+.companyApplySection .companyApplyItem .companyApplyGavage .companyBtnBlue {
+  width: 300px;
+  padding: 10px 5px;
+}
+
+.companyApplySection .applyReportItem .companyBtn {
+  width: 240px;
 }
 
 .emp-adopt-area {
@@ -18155,8 +18350,14 @@ input.specified_date:focus {
 
 /* ページネーション */
 
+.employer-mypage-body .paginateWrap nav {
+  text-align: center;
+}
+
 .employer-mypage-body .pagination {
   border-radius: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .employer-mypage-body .page-item.active .page-link {
@@ -18167,6 +18368,7 @@ input.specified_date:focus {
 .employer-mypage-body .pagination > li > a,
 .employer-mypage-body .pagination > li > span {
   color: #808080;
+  border-radius: 0 !important;
 }
 
 .employer-mypage-body .page-link:hover {

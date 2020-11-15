@@ -41,7 +41,7 @@
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId" />
                         <input type="hidden" name="data[File][suffix]" value="3" id="FileSuffix" />
                         @if($jobitem->job_mov_3)
-                        <input type="hidden" name="data[File][currentPath]" value="@if(config('app.env') == 'production'){{ config('app.s3_url') . '/mov/uploads/JobSheet/' . $jobitem->job_mov_3 . '?' . date('YmdHis') }}@else{{'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/' . $jobitem->job_mov_3 . '?' . date('YmdHis') }}@endif" id="FileCurrentPath">
+                        <input type="hidden" name="data[File][currentPath]" value="{{ $movies[2] }}" id="FileCurrentPath">
                         @else
                         <input type="hidden" name="data[File][currentPath]" value="" id="FileCurrentPath">
                         @endif
@@ -55,7 +55,7 @@
                                 <p class="mb-2">現在登録されている動画</p>
                                 @if($jobitem->job_mov_3)
                                 <p class="pre-main-image">
-                                    <video src="@if(config('app.env') == 'production'){{ config('app.s3_url') . '/mov/uploads/JobSheet/' . $jobitem->job_mov_3 . '?' . date('YmdHis') }}@else{{'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/' . $jobitem->job_mov_3 . '?' . date('YmdHis') }}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%">
+                                    <video src="{{ $movies[2] }}" controls controlsList="nodownload" preload="none" playsinline width="100%">
                                     </video>
                                 </p>
                                 @endif

@@ -149,9 +149,9 @@ if (Auth::check()) {
             <div class="hamburgerLogoutJobWrap floatLPc">
               <p class="hamburgerLogoutJobSubheading">お仕事を探す</p>
               <ul class="hamburgerLogoutJobInner">
-                <li class="hamburgerLogoutJobItem"><a href="{{route('allcat', ['type'])}}">職種から探す</a></li>
-                <li class="hamburgerLogoutJobItem"><a href="{{route('allcat', ['area'])}}">エリアから探す</a></li>
-                <li class="hamburgerLogoutJobItem hamburgerLogoutJobItemlower"><a href="{{route('allcat', ['salary'])}}">給与から探す</a></li>
+                <li class="hamburgerLogoutJobItem"><a href="{{route('index.front.category', ['type'])}}">職種から探す</a></li>
+                <li class="hamburgerLogoutJobItem"><a href="{{route('index.front.category', ['area'])}}">エリアから探す</a></li>
+                <li class="hamburgerLogoutJobItem hamburgerLogoutJobItemlower"><a href="{{route('index.front.category', ['salary'])}}">給与から探す</a></li>
               </ul>
             </div>
           </div>

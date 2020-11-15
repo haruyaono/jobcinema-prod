@@ -58,9 +58,112 @@
   clear: both;
 }
 .e-mypage-card-item {
-  /* float: left; */
   width: 98%;
   margin: 0 2% 2%;
+}
+
+.sectionItem {
+  border: 1px solid $lightgray;
+  border-top: 0;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+.sectionItemTtl {
+  padding: 5px 10px;
+  background-color: $deepblue;
+  border-radius: 5px 5px 0 0;
+
+  p {
+    font-size: 16px;
+    color: #fff;
+  }
+
+  p::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f35a";
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    margin-right: 5px;
+  }
+}
+
+.companyTable {
+  th,
+  td {
+    font-size: 14px;
+    vertical-align: middle;
+    border: 1px solid $lightgray;
+  }
+  th {
+    background-color: $whitegray;
+    width: 80px;
+  }
+  td {
+    width: 250px;
+  }
+}
+
+.companyBtn {
+  width: 130px;
+  border-radius: 3px;
+  padding: 5px;
+  letter-spacing: 2px;
+  text-align: center;
+  margin: 0 12px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 3px;
+  color: #333;
+  background-image: -webkit-linear-gradient(
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 50%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 50%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  box-shadow: 0 2px 2px 0 rgba(255, 255, 255, 0.1) inset, 0 2px 10px 0 rgba(255, 255, 255, 0.2) inset,
+    0 -2px 2px 0 rgba(0, 0, 0, 0.1) inset;
+}
+.companyBtnWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.companyBtnOrange {
+  background-color: $yellow;
+  color: #fff;
+  &:hover {
+    color: #fff;
+  }
+}
+.companyBtnGray {
+  background-color: $whitegray;
+  &:hover {
+    color: #333;
+  }
+}
+.companyBtnCyan {
+  background-color: $cyan;
+  color: #fff;
+  &:hover {
+    color: #fff;
+  }
+}
+.companyBtnBlue {
+  background-color: $deepblue;
+  color: #fff;
+  &:hover {
+    color: #fff;
+  }
 }
 
 .e-mypage-card-item a {
@@ -318,35 +421,93 @@ input.specified_date:focus {
   font-weight: normal;
 }
 
-/* applicant */
-.applicant-detail-title {
-  position: relative;
-  margin-top: 30px;
-  font-size: 18px;
-  padding-left: 8px;
-}
-.applicant-detail-title:before {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  content: "";
-  display: inline-block;
-  width: 3px;
-  height: 20px;
-  margin-right: 8px;
-  background: #333333;
-}
-.e-status-text span {
-  font-weight: bold;
-  font-size: 16px;
-}
-.myjob-detail-section .detail-box {
+/** 応募者 **/
+.companyApplySection {
+  border-radius: 0px;
   margin-top: 20px;
-}
-.myjob-detail-section .detail-box .item-row:nth-child(1) .row-label,
-.myjob-detail-section .detail-box .item-row:nth-child(1) .row-text {
-  border-top: 1px solid #e8e8e8;
+  .companyApplyNote {
+    background-color: $lightpink;
+    padding: 20px;
+    margin-bottom: 40px;
+    .companyApplyNoteTtl {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: square;
+      margin-left: 20px;
+    }
+  }
+
+  .companyApplyListDesc {
+    margin-bottom: 40px;
+    .companyApplyListDescTtl {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  }
+
+  .companyApplyItem {
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 40px;
+    .companyApplyItemTable {
+      margin-bottom: 0;
+      text-align: left;
+      border-top: 5px solid $deepblue;
+    }
+
+    .kingaku {
+      font-size: 16px;
+    }
+    .rightBox {
+      width: 100px;
+    }
+    .companyApplyItemDetailBtn {
+      width: 100%;
+      color: #fff;
+      font-size: 16px;
+      padding: 10px 0;
+      background-color: #333;
+      background-image: -webkit-linear-gradient(
+        rgba(255, 255, 255, 0.3) 0%,
+        transparent 50%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+    }
+
+    .applyJobitem {
+      font-size: 16px;
+    }
+
+    .daysLeftTxt {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .newNotify {
+      font-size: 20px;
+      font-weight: bold;
+      background-color: $yellow;
+      text-align: center;
+      text-shadow: 0 0 10px #fff, 0 0 15px #fff;
+    }
+    .companyApplyGavage .companyBtnBlue {
+      width: 300px;
+      padding: 10px 5px;
+    }
+  }
+
+  .applyReportItem {
+    .companyBtn {
+      width: 240px;
+    }
+  }
 }
 
 .emp-adopt-area {
@@ -378,8 +539,15 @@ input.specified_date:focus {
 
 /* ページネーション */
 .employer-mypage-body {
+  .paginateWrap {
+    nav {
+      text-align: center;
+    }
+  }
   .pagination {
     border-radius: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
   .page-item.active .page-link {
     background-color: #808080;
@@ -388,6 +556,7 @@ input.specified_date:focus {
   .pagination > li > a,
   .pagination > li > span {
     color: #808080;
+    border-radius: 0 !important;
   }
   .page-link:hover {
     color: #808080;

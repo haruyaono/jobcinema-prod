@@ -23,7 +23,7 @@
             <div class="d-flex">
               <div class="job-left only-pc">
                 @if($jobitem->job_img_1)
-                <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $jobitem->job_img_1}}" style="width:100%;" alt="" />
+                <img src="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $jobitem->job_img_1 }}" style="width:100%;" alt="" />
                 @else
                 <img src="{{ asset('img/common/no-image.gif')}}" style="width:100%;" alt="No image">
                 @endif
@@ -94,7 +94,7 @@
                   <span class="apply-job-table-heading-text">郵便番号</span>
                 </th>
                 <td>
-                  {{Session::get('front.data.entry.zip31')}}&nbsp;-&nbsp;{{Session::get('front.data.entry.zip32')}}
+                  {{Session::get('front.data.entry.postcode01')}}&nbsp;-&nbsp;{{Session::get('front.data.entry.postcode02')}}
                 </td>
               </tr>
               <tr>
@@ -102,7 +102,7 @@
                   <span class="apply-job-table-heading-text">都道府県</span>
                 </th>
                 <td>
-                  {{Session::get('front.data.entry.pref31')}}
+                  {{Session::get('front.data.entry.prefecture')}}
                 </td>
               </tr>
               <tr>
@@ -110,7 +110,7 @@
                   <span class="apply-job-table-heading-text">市区町村</span>
                 </th>
                 <td>
-                  {{Session::get('front.data.entry.addr31')}}
+                  {{Session::get('front.data.entry.city')}}
                 </td>
               </tr>
             </table>

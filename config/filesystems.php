@@ -46,31 +46,14 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
-            'permissions' => [ // permissions 設定値を追記
-                'dir' => [
-                    'public'  => 0775, // public なディレクトリは775で作成 
-                ],
-                'file' => [
-                    'public' => 0664, // public なファイルは664で作成
-                ],
-            ]
         ],
 
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
-            'permissions' => [
-                'dir' => [
-                    'public'  => 0775 ,
-                ],
-                'file' => [
-                    'public' => 0664 ,
-                ],
-            ],
         ],
-
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -78,6 +61,14 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
+        ],
+
+        'tmp_movie' => [
+            'driver' => 's3',
+            'key'    => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_TMP_BUCKET'),
         ],
 
     ],

@@ -59,7 +59,7 @@
                 class="selectbox"
                 v-model="params.salary_child[salaries['slug']]"
               >
-                <option value>指定なし</option>
+                <option value selected>指定なし</option>
                 <option
                   v-for="cCat in salaries['children']"
                   :key="cCat.id"
@@ -88,7 +88,9 @@
         <div class="search-bottom">
           <p class="search-job-result">
             検索結果
-            <span id="job-count">{{params.count}}</span>件
+            <span id="job-count" v-if="message != ''">{{ message }}</span>
+            <span id="job-count" v-else>{{ countJobs }}</span>
+            <span>件</span>
           </p>
 
           <button type="submit" id="filter-search" @click="search()">
@@ -97,9 +99,7 @@
         </div>
       </form>
     </div>
-    <!-- inner -->
   </section>
-  <!-- search-section -->
 </template>
 
 <script>
@@ -118,25 +118,17 @@ export default {
           salary_m: ""
         },
         date: "",
-        keyword: "",
-        count: null
+        keyword: ""
       },
       salaries: [],
       categories: [],
       searchObj: [],
-      jobs: []
+      jobs: [],
+      message: ""
     };
   },
   mounted() {
     const self = this;
-    let sessionParam = [];
-
-    if (sessionStorage.hasOwnProperty("search-params")) {
-      sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
-    }
-
-    this.getCategory();
-    this.getJobItems();
 
     var urlParam = new Object();
     var pair = location.search.substring(1).split("&");
@@ -175,18 +167,13 @@ export default {
       self.params = Object.assign(self.params, urlParam);
     }
   },
-  watch: {
-    params: {
-      handler: function(val) {
-        var filterJobs = this.filterJobItems();
-        if (filterJobs === false) {
-          this.params.count = this.jobs.length;
-        } else {
-          this.params.count = Object.keys(filterJobs).length;
-        }
-      },
-      deep: true
+  computed: {
+    countJobs: function() {
+      return this.jobs.length;
     }
+  },
+  created() {
+    this.getCategory();
   },
   updated() {
     const self = this;
@@ -195,7 +182,6 @@ export default {
         const pSalaryCategory = self.categories[3]["children"];
         let sVal = self.params.salary,
           tmp_salaries = [];
-
         if (self.categories.length !== 0) {
           if (sVal == pSalaryCategory[0].id) {
             tmp_salaries = pSalaryCategory[0];
@@ -204,13 +190,19 @@ export default {
           } else if (sVal == pSalaryCategory[2].id) {
             tmp_salaries = pSalaryCategory[2];
           } else {
-            $("#salary-child").prop("selectedIndex", 0);
+            document.getElementById("salary-child").selectedIndex = "";
           }
         }
-
         self.salaries = tmp_salaries;
       }
     });
+  },
+  watch: {
+    params: {
+      handler: "getAnswer",
+      deep: true,
+      immediate: true
+    }
   },
   methods: {
     fetchSalaries: function() {
@@ -229,129 +221,103 @@ export default {
       } else if (self.params.salary == pSalaryCategory[2].id) {
         tmp_salaries = pSalaryCategory[2];
       } else {
-        $("#salary-child").prop("selectedIndex", 0);
+        document.getElementById("salary-child").selectedIndex = "";
       }
       self.salaries = tmp_salaries;
     },
     getCategory: function() {
       const self = this;
-      fetch("/api/all_category")
+      let list = [];
+
+      return fetch("/api/categories")
         .then(response => response.json())
         .then(data => {
-          self.categories = data.categoryList;
+          list = data.categories;
+          const ite = (function*() {
+            while (true) {
+              const items = list.splice(0, 100);
+              if (items.length <= 0) break;
+              yield setTimeout(() => {
+                for (let len = items.length, i = 0; i < len; i++) {
+                  const item = items[i];
+                  self.categories.push(item);
+                }
+                ite.next();
+              });
+            }
+          })();
+          ite.next();
         })
         .catch(error => {});
     },
-    getJobItems: function() {
-      const self = this;
+    getAnswer: _.debounce(function() {
+      this.message = "...";
+      let vm = this;
+      let params = this.params;
+      let path = vm.setParameter(params);
+
       axios
-        .get("/api/jobs")
-        .then(res => {
-          self.jobs = res.data.data;
-          self.params.count = self.jobs.length;
+        .get(path)
+        .then(function(res) {
+          vm.jobs = res.data.jobitems;
         })
-        .catch(err => {
-          console.log(err.statusText);
+        .catch(function(error) {
+          vm.message = "Error!" + error;
+          console.log(error);
+        })
+        .finally(function() {
+          vm.message = "";
         });
-    },
-    filterJobItems: function() {
-      const self = this;
-      let params = [],
-        filtered = {};
+    }, 1000),
+    setParameter: function(paramsArray) {
+      let path = "/api/job_sheets";
+      let params = paramsArray;
 
-      for (let pKey in self.params) {
-        if (pKey == "count" || pKey == "salary") {
-          continue;
-        }
-        if (pKey == "salary_child") {
-          for (let sItem in self.params[pKey]) {
-            if (self.params[pKey][sItem] === "") {
-              continue;
-            }
-            params.push(sItem);
-          }
-          continue;
-        }
-        if (self.params[pKey] !== "") {
-          params.push(pKey);
+      for (let key in paramsArray) {
+        if (key == "salary_child") {
+          params = { ...params, ...params[key] };
+          delete params.salary_child;
         }
       }
 
-      if (params.length == 0) {
-        filtered = false;
-      } else {
-        if (self.jobs != null) {
-          for (let i in self.jobs) {
-            let job = self.jobs[i];
-            const cResult = [];
-
-            for (let param in params) {
-              if (params[param] == "keyword") {
-                if (
-                  job["job_title"].indexOf(self.params[params[param]]) === -1
-                ) {
-                  if (filtered["job_id" + job.id] !== undefined) {
-                    delete filtered["job_id" + job.id];
-                  }
-                  break;
-                }
-              } else {
-                let categories = job.categories;
-                const cList = categories.filter(value => {
-                  if (
-                    params[param] == "salary_d" ||
-                    params[param] == "salary_h" ||
-                    params[param] == "salary_m"
-                  ) {
-                    for (let sChildParam in params[param]) {
-                      if (
-                        value.id ===
-                        parseInt(self.params["salary_child"][params[param]])
-                      ) {
-                        return value;
-                      }
-                    }
-                  }
-                  if (value.id === parseInt(self.params[params[param]])) {
-                    return value;
-                  }
-                });
-
-                if (cList.length === 1) {
-                  cResult.push(cList);
-                } else {
-                  cResult = null;
-                }
-              }
-
-              if (cResult === null) {
-                if (filtered["job_id" + job.id] !== undefined) {
-                  delete filtered["job_id" + job.id];
-                }
-                break;
-              }
-
-              if (filtered[job.id] !== undefined) break;
-              filtered["job_id" + job.id] = job;
-            }
-          }
-        }
+      for (let key in params) {
+        path += path.indexOf("?") == -1 ? "?" : "&";
+        path += key + "=" + params[key];
       }
-      return filtered;
+
+      return path;
     },
     search: function() {
       const self = this;
       let sessionParam = [];
+      let params = self.params;
+
+      for (let key in params) {
+        if (key == "salary_child") {
+          params = { ...params, ...params[key] };
+          delete params.salary_child;
+        }
+      }
+
+      for (let v in params) {
+        if (params[v] == "") delete params[v];
+      }
+
+      if (Object.keys(params).length == 0) {
+        return;
+      }
 
       if (sessionStorage.hasOwnProperty("search-params")) {
         sessionParam = JSON.parse(sessionStorage.getItem("search-params"));
       }
 
+      // params.count = self.jobs.length;
+
       if (sessionParam.length >= 3) {
         sessionParam = sessionParam.slice(-2);
       }
 
-      sessionParam.push(self.params);
+      sessionParam.push(params);
       sessionStorage.setItem("search-params", JSON.stringify(sessionParam));
     }
   }

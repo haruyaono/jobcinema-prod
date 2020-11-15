@@ -50,7 +50,7 @@
                         </ul>
                     </div>
                     @endif
-                    <form name="JobSheetStep2" id="jobsheet-create-form" action="{{route('draftOrConfirm.jobsheet.step2', [$jobitem])}}" class="job-create jobSaveForm file-apload-form" method="POST">
+                    <form name="JobSheetStep2" id="jobsheet-create-form" action="{{ route('draftOrConfirm.jobsheet.step2', [$jobitem]) }}" class="job-create jobSaveForm file-apload-form" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId">
@@ -67,7 +67,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{route('edit.jobsheet.category', [$jobitem->id, 'category'=>'status'])}}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'status']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>職種</th>
@@ -76,7 +76,7 @@
                                                 {{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name}}
                                             </span>
                                         </td>
-                                        <td><a href="{{route('edit.jobsheet.category', [$jobitem->id, 'category'=>'type'])}}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'type']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>勤務地エリア</th>
@@ -86,7 +86,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{route('edit.jobsheet.category', [$jobitem->id, 'category'=>'area'])}}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'area']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>最低給与</th>
@@ -98,7 +98,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{route('edit.jobsheet.category', [$jobitem->id, 'category'=>'salary'])}}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'salary']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>最低勤務日数</th>
@@ -108,7 +108,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{route('edit.jobsheet.category', [$jobitem->id, 'category'=>'date'])}}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'date']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                 </table>
                             </div>
@@ -117,33 +117,24 @@
                             <div class="card-header">写真/画像（メイン写真は必ず登録してください）<span class="text-danger">＊</span></div>
                             <div class="card-body">
                                 <div class="form-group e-image-register-area">
+                                    @foreach($imageArray as $index => $image)
+                                    <?php
+                                    $index++;
+                                    $column = "job_img_" . $index;
+                                    ?>
                                     <div class="e-image-register-item">
                                         <p class="e-image-wrap">
-                                            <img src="@if($jobitem->job_img_1) {{ $jobBaseUrl . config('fpath.job_sheet_img') . $jobitem->job_img_1 . '?' . date('YmdHis') }} @else {{asset('img/common/no-image.gif')}} @endif" alt="メイン写真を登録してください" name="photo1" id="photo1">
-                                            <input type="hidden" name="data[File][isExist1]" value="@if($jobitem->job_img_1){{1}}@else{{0}}@endif" id="FileIsExist1" />
+                                            <img src="{{ $image }}" alt="{{ $index === 0 ? 'メイン写真を登録してください' : 'サブ写真を登録してください' }}" name="photo{{ $index }}" id="photo{{ $index }}">
+                                            <input type="hidden" name="data[File][isExist{{ $index }}]" value="@if($jobitem->$column ){{ 1 }}@else{{ 0 }}@endif" id="FileIsExist{{ $index }}" />
                                         </p>
                                         <p class="text-center">
-                                            <a class="btn-gradient-3d-orange" href="{{route('edit.jobsheet.mainimage', $jobitem)}}" target="_blank">メイン写真を登録</a>
+                                            <?php
+                                            $index--;
+                                            ?>
+                                            <a class="btn-gradient-3d-orange" href="{{ $index === 0 ? route('edit.jobsheet.mainimage', $jobitem) : route('edit.jobsheet.subimage' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン写真を登録' : 'サブ写真を登録' }}</a>
                                         </p>
                                     </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap">
-                                            <img src="@if($jobitem->job_img_2) {{ $jobBaseUrl . config('fpath.job_sheet_img') . $jobitem->job_img_2 . '?' . date('YmdHis') }} @else {{asset('img/common/no-image.gif')}} @endif" alt="サブ写真を登録してください" name="photo2" id="photo2">
-                                            <input type="hidden" name="data[File][isExist2]" value="0" id="FileIsExist2" />
-                                        </p>
-                                        <p class="text-center">
-                                            <a class="btn-gradient-3d-orange" href="{{route('edit.jobsheet.subimage1', $jobitem)}}" target="_blank">サブ写真を登録</a>
-                                        </p>
-                                    </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap">
-                                            <img src="@if($jobitem->job_img_3) {{ $jobBaseUrl . config('fpath.job_sheet_img') . $jobitem->job_img_3 . '?' . date('YmdHis') }} @else {{asset('img/common/no-image.gif')}} @endif" alt="サブ写真を登録してください" name="photo3" id="photo3">
-                                            <input type="hidden" name="data[File][isExist3]" value="0" id="FileIsExist3" />
-                                        </p>
-                                        <p class="text-center">
-                                            <a class="btn-gradient-3d-orange" href="{{route('edit.jobsheet.subimage2', $jobitem)}}" target="_blank">サブ写真を登録</a>
-                                        </p>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -151,34 +142,24 @@
                             <div class="card-header">動画 (職場の雰囲気や魅力を届けましょう）</div>
                             <div class="card-body">
                                 <div oncontextmenu="return false;" class="form-group e-image-register-area">
+                                    @foreach($movieArray as $index => $movie)
+                                    <?php
+                                    $index++;
+                                    $column = "job_mov_" . $index;
+                                    ?>
                                     <div class="e-image-register-item">
                                         <p class="e-image-wrap">
-                                            <video src="@if($jobitem->job_mov_1) {{ $jobBaseUrl . config('fpath.job_sheet_mov') . $jobitem->job_mov_1 . '?' . date('YmdHis') }} @endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film1" id="film1">
+                                            <video src="{{ $movie }}" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film{{ $index }}" id="film{{ $index }}">
                                             </video>
                                         </p>
                                         <p class="text-center">
-                                            <a class="btn-gradient-3d-blue" href="{{route('edit.jobsheet.mainmovie', $jobitem)}}" target="_blank">メイン動画を登録</a>
+                                            <?php
+                                            $index--;
+                                            ?>
+                                            <a class="btn-gradient-3d-blue" href="{{ $index === 0 ? route('edit.jobsheet.mainmovie', $jobitem) : route('edit.jobsheet.submovie' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン動画を登録' : 'サブ動画を登録' }}</a>
                                         </p>
                                     </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap">
-                                            <video src="@if($jobitem->job_mov_2) {{ $jobBaseUrl . config('fpath.job_sheet_mov') . $jobitem->job_mov_2 . '?' . date('YmdHis') }}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film2" id="film2">
-                                            </video>
-                                        </p>
-                                        <p class="text-center">
-                                            <a class="btn-gradient-3d-blue" href="{{route('edit.jobsheet.submovie1', $jobitem)}}" target="_blank">サブ動画を登録</a>
-                                        </p>
-                                    </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap">
-                                            <video src="@if($jobitem->job_mov_3) {{ $jobBaseUrl . config('fpath.job_sheet_mov') . $jobitem->job_mov_3 . '?' . date('YmdHis') }}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%" name="film3" id="film3">
-                                            </video>
-                                        </p>
-                                        <p class="text-center">
-                                            <a class="btn-gradient-3d-blue" href="{{route('edit.jobsheet.submovie2', $jobitem)}}" target="_blank">サブ動画を登録</a>
-                                        </p>
-                                    </div>
-
+                                    @endforeach
                                 </div>
                             </div>
                         </div> <!-- card -->

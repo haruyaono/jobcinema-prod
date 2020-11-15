@@ -16,7 +16,6 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->ondelete('cascade');
             $table->string('postcode')->nullable();
             $table->string('prefecture')->nullable();
             $table->string('city')->nullable();
@@ -29,6 +28,9 @@ class CreateProfilesTable extends Migration
             $table->string('final_education')->comment('最終学歴')->nullable();
             $table->string('work_start_date')->comment('勤務開始可能日')->nullable();
             $table->timestamps();
+        });
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

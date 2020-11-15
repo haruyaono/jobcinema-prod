@@ -24,13 +24,6 @@
     <section class="main-section job-top_create_section">
         <div class="inner">
             <div class="pad">
-                @if (Auth::guard('employer')->check())
-                @if(!empty(Auth::guard('employer')->user()->company->cname))
-                <p class="h3">{{Auth::guard('employer')->user()->company->cname}}様の管理ページ<span class="caret"></span></p>
-                @else
-                <p class="h3">ゲスト様の管理ページ<span class="caret"></span></p>
-                @endif
-                @endif
                 <div class="row w-100 mx-0 justify-content-center mt-4">
                     <div class="col-md-11 card e-mypage-card p-0 px-0">
                         <div class="card-header">求人票をつくる</div>

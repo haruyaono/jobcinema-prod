@@ -20,7 +20,7 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ./:/var/www/html/src/
+      - ./:/var/www/html/src/:delegated
       - ./docker/supervisor/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
     restart: always
     links:

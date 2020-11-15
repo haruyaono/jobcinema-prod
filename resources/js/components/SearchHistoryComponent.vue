@@ -14,7 +14,7 @@
                 class="txt-blue-link"
               >{{ nameList['no'+index] }}</a>
             </dd>
-            <dd class="job-hostory-count">{{searchItem.count}}件</dd>
+            <!-- <dd class="job-hostory-count">{{searchItem.count}}件</dd> -->
           </dl>
         </li>
       </ul>
@@ -71,19 +71,18 @@ export default {
         }
 
         axios
-          .post("/api/category_namelist", data, {
+          .post("/api/categories/name", JSON.stringify(data), {
             headers: { "Content-Type": "application/x-www-form-urlencoded" }
           })
           .then(function(response) {
             let nl = response.data.nameList;
-            if (nl.length === 0 && searchItems[sItem]["keyword"] === "") {
-              nl = "条件なし";
-              self.nameList["no" + sItem] = nl;
+            if (nl.length === 0) {
+              return;
             } else {
               if (searchItems[sItem]["keyword"] !== "") {
                 nl.push(searchItems[sItem]["keyword"]);
               }
-              self.nameList["no" + sItem] = nl.join("、");
+              self.nameList["no" + sItem] = nl.join("、").slice(0, -1);
             }
           })
           .catch(function(error) {

@@ -2,33 +2,19 @@
 
 namespace App\Http\Controllers\Seeker;
 
+use App\Mail\Seeker\ApplyReport;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Job\Users\Repositories\UserRepository;
-use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
-use App\Job\Profiles\Repositories\ProfileRepository;
-use App\Job\Users\Requests\UpdateUserPasswordRequest;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Seeker\UpdateUserPasswordRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * @var UserRepositoryInterface
-     */
-    private $userRepo;
-
     private $user;
 
-    /**
-     * UserController constructor.
-     * @param UserRepositoryInterface $userRepository
-     */
-    public function __construct(
-        UserRepositoryInterface $userRepository
-    ) {
-        $this->userRepo = $userRepository;
-
+    public function __construct()
+    {
         $this->middleware(function ($request, $next) {
             $this->user = \Auth::user();
 
@@ -48,9 +34,7 @@ class UserController extends Controller
 
     public function postChangePassword(UpdateUserPasswordRequest $request)
     {
-
         $user = $this->user;
-        $userRepo = new userRepository($user);
         $msgData = [];
 
         //現在のパスワードが正しいかを調べる
@@ -67,7 +51,7 @@ class UserController extends Controller
             'password' => bcrypt($request->get('new-password')),
         ];
 
-        $updated = $userRepo->updateUser($passData);
+        $updated = $user->update($passData);
 
         if ($updated) {
             $msgData = [
@@ -90,7 +74,6 @@ class UserController extends Controller
     public function postChangeEmail(Request $request)
     {
         $user = $this->user;
-        $userRepo = new userRepository($user);
 
         $request->validate([
             'email' => 'required|email|string|max:191|unique:users',
@@ -100,7 +83,7 @@ class UserController extends Controller
             'email' => $request->get('email'),
         ];
 
-        $updated = $userRepo->updateUser($passData);
+        $updated = $user->update($passData);
 
         if ($updated) {
             $msgData = [
@@ -118,18 +101,15 @@ class UserController extends Controller
     public function delete()
     {
         $user = $this->user;
-        $userRepo = new UserRepository($user);
-        $profileRepo = new ProfileRepository($user->profile);
 
-        DB::beginTransaction();
-        try {
-            $profileRepo->deleteProfile();
-            $userRepo->deleteUser();
+        $user->applies->each(function ($apply) {
+            if ($apply->s_recruit_status !== 8) {
+                $apply->update(['s_recruit_status' => 8]);
+                Mail::to($apply->jobitem->company->employer->email)->queue(new ApplyReport($apply));
+            }
+        });
 
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-        }
+        $user->delete();
 
         return redirect()->to('/');
     }

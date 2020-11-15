@@ -22,13 +22,6 @@
     <section class="main-section">
         <div class="inner">
             <div class="pad">
-                @if(Auth::guard('employer')->user()->status == 8)
-                <div class="border border-danger p-3 mb-5">
-                    <p class="text-danger h3 mb-3">アカウント削除申請中</p>
-                    「アカウント削除申請を取り消す」から解除できます。
-                </div>
-                @endif
-
                 @if (Session::has('message_success'))
                 <div class="alert alert-success mt-3">
                     {!! nl2br(htmlspecialchars(Session::get('message_success'))) !!}
@@ -51,10 +44,10 @@
                             <a href="{{route('index.joblist')}}"><i class="fas fa-edit mr-3"></i>求人票の一覧<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('applicants.view')}}"><i class="fas fa-address-card mr-3"></i>応募者を見る<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{route('index.company.application')}}"><i class="fas fa-address-card mr-3"></i>応募者を見る<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('companies.edit')}}"><i class="fas fa-building mr-3"></i>企業データの編集<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{route('edit.company.profile')}}"><i class="fas fa-building mr-3"></i>企業データの編集<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
                             <a href="{{route('employer.changeemail.get')}}"><i class="fas fa-envelope mr-3"></i>メールアドレス変更<i class="fas fa-angle-double-right"></i></a>
@@ -77,18 +70,7 @@
                         <!-- <div class="e-mypage-right-item">
                             <a href="">注意事項<i class="far fa-arrow-alt-circle-right"></i></a>
                         </div> -->
-                        <div class="mt-4 text-center">
-                            @if(Auth::guard('employer')->user()->status == 8)
-                            <a href="{{route('companies.delete.cancel')}}" class="txt-blue-link">アカウント削除申請を取り消す</a>
-                            @else
-                            <a href="{{route('companies.delete')}}" class="txt-blue-link">アカウント削除申請</a>
-                            @endif
-
-                        </div>
-
                     </div>
-
-
                 </div><!-- row -->
             </div> <!-- pad -->
         </div> <!-- inner -->
@@ -100,7 +82,6 @@
 @component('components.employer.mypage_footer')
 @endcomponent
 @endsection
-
 
 @section('js')
 @endsection

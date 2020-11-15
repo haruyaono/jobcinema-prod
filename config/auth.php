@@ -79,16 +79,16 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Job\Users\User::class,
+            'model' => App\Models\User::class,
         ],
         'employers' => [
             // 'driver' => 'eloquent',
             'driver' => 'custom_auth',
-            'model' => App\Job\Employers\Employer::class,
+            'model' => App\Models\Employer::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Job\Admins\Admin::class,
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [

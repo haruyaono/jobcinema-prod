@@ -14,7 +14,6 @@
     <section class="main-section job-create-section">
         <div class="inner">
             <div class="pad">
-
                 <div class="col-md-10 mr-auto ml-auto">
                     @if(count($errors) > 0)
                     <div class="alert alert-danger">
@@ -36,13 +35,13 @@
                         {{ Session::get('message_danger') }}
                     </div>
                     @endif
-                    <form class="file-apload-form" action="{{route('update.jobsheet.mainmovie', [$jobitem])}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('update.jobsheet.mainmovie', [$jobitem])}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId" />
                         <input type="hidden" name="data[File][suffix]" value="1" id="FileSuffix" />
                         @if($jobitem->job_mov_1)
-                        <input type="hidden" name="data[File][currentPath]" value="@if(config('app.env') == 'production'){{ config('app.s3_url') . '/mov/uploads/JobSheet/' . $jobitem->job_mov_1 . '?' . date('YmdHis') }}@else{{'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/' . $jobitem->job_mov_1 . '?' . date('YmdHis') }}@endif" id="FileCurrentPath">
+                        <input type="hidden" name="data[File][currentPath]" value="{{ $movies[0] }}" id="FileCurrentPath">
                         @else
                         <input type="hidden" name="data[File][currentPath]" value="" id="FileCurrentPath">
                         @endif
@@ -56,7 +55,7 @@
                                 <p class="mb-2">現在登録されている動画</p>
                                 @if($jobitem->job_mov_1)
                                 <p class="pre-main-image">
-                                    <video src="@if(config('app.env') == 'production'){{ config('app.s3_url') . '/mov/uploads/JobSheet/' . $jobitem->job_mov_1 . '?' . date('YmdHis') }}@else{{'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/' . $jobitem->job_mov_1 . '?' . date('YmdHis') }}@endif" controls controlsList="nodownload" preload="none" playsinline width="100%">
+                                    <video id=jobitemVideo src="{{ $movies[0] }}" controls width="100%">
                                     </video>
                                 </p>
                                 @endif
@@ -71,7 +70,7 @@
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary" id="submit">登録する</button>
                             <a href="javascript:void(0);" class="btn btn-secondary" id="deleteMovie">登録されている動画を削除</a>
-                            <a class="create-image-back-btn" href="javascript:void(0);" 　class="btn btn-outline-secondary" id="close_button">戻る</a>
+                            <a class="create-image-back-btn" href="javascript:void(0);" class="btn btn-outline-secondary" id="close_button">戻る</a>
                         </div>
                     </form>
                 </div>
@@ -89,6 +88,8 @@
 
 @section('js')
 <script>
+    const env = document.getElementById('env_name');
+
     $(function() {
         var job = @json($jobitem);
         var moviePath = $('#FileCurrentPath').attr('value');
@@ -106,6 +107,18 @@
             }
         });
     });
+
+    if (env.value != 'local') {
+        var movies = @json($movies);
+        if (Hls.isSupported()) {
+            let video = document.getElementById('jobitemVideo');
+            let hls = new Hls();
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+                hls.loadSource(movies[0]);
+            });
+        }
+    }
 </script>
 
 @endsection

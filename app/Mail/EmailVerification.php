@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Job\Employers\Employer;
+use App\Models\Employer;
 
 class EmailVerification extends Mailable
 {
@@ -37,9 +37,8 @@ class EmailVerification extends Mailable
     {
         return $this
             ->subject('【JOBCiNEMA】仮登録が完了しました')
-            ->replyTo('official@job-cinema.com')
+            ->replyTo(config('mail.reply.address'))
             ->view('emails.employer.pre_register')
             ->with(['token' => $this->employer->email_verify_token]);
-        
     }
 }

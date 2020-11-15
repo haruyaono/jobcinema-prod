@@ -91,4 +91,14 @@ class User extends Authenticatable
             return false;
         }
     }
+
+    /**
+     * @param int $id
+     *
+     * @return bool
+     */
+    public function existsAppliedJobItem(int $id): bool
+    {
+        return $this->applies()->where('job_item_id', $id)->exists();
+    }
 }

@@ -1,8 +1,7 @@
 <?php
 
-use App\Job\Companies\Company;
-use App\Job\Employers\Employer;
-use Illuminate\Support\Str;
+use App\Models\Company;
+use App\Models\Employer;
 use Faker\Generator as Faker;
 use Illuminate\Http\UploadedFile;
 
