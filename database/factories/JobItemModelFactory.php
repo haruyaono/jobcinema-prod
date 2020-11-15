@@ -13,9 +13,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Job\JobItems\JobItem;
-use App\Job\Employers\Employer;
-use App\Job\Companies\Company;
+use App\Models\JobItem;
+use App\Models\Employer;
+use App\Models\Company;
 use Illuminate\Http\UploadedFile;
 
 $factory->define(JobItem::class, function (Faker\Generator $faker) {
@@ -46,10 +46,14 @@ $factory->define(JobItem::class, function (Faker\Generator $faker) {
         'job_time' => '8:00~16:00',
         'job_target' => $faker->sentence,
         'job_treatment' => $faker->sentence,
-        'pub_start_flag' => $faker->randomElement([0, 1]),
-        'pub_start_date' => $faker->date,
-        'pub_end_flag' => $faker->randomElement([0, 1]),
-        'pub_emd_date' => $faker->date,
+        // 'pub_start_flag' => $faker->randomElement([0, 1]),
+        // 'pub_start_date' => $faker->date,
+        // 'pub_end_flag' => $faker->randomElement([0, 1]),
+        // 'pub_end_date' => $faker->date,
+        'pub_start_flag' => 0,
+        // 'pub_start_date' => $faker->date,
+        'pub_end_flag' => 0,
+        // 'pub_end_date' => $faker->date,
         'remarks' => $faker->sentence,
     ];
 });

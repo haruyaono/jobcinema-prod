@@ -26,9 +26,11 @@
 @else
 <script type="text/javascript" src="{{ asset('js/vue.js') }}"></script>
 @endif
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
 <!-- jquery-ui -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
 @yield('custom_head_js')
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script defer src="{{ mix('js/app.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
 <script>

@@ -96,16 +96,13 @@
                             <div class="card-header">写真/画像</div>
                             <div class="card-body">
                                 <div class="form-group e-image-register-area">
+                                    @foreach($imageArray as $image)
                                     <div class="e-image-register-item">
-                                        <p class="e-image-wrap"><img src="@if($jobitem->job_img_1){{$jobBaseUrl . config('fpath.job_sheet_img') . $jobitem->job_img_1}}@else{{asset('img/common/no-image.gif')}}@endif" alt="写真"></p>
+                                        <p class="e-image-wrap">
+                                            <img src="{{ $image }}" alt="写真">
+                                        </p>
                                     </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap"><img src="@if($jobitem->job_img_2){{$jobBaseUrl . config('fpath.job_sheet_img') . $jobitem->job_img_2}}@else{{asset('img/common/no-image.gif')}}@endif" alt="写真"></p>
-                                    </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap"><img src="@if($jobitem->job_img_3){{$jobBaseUrl . config('fpath.job_sheet_img') . $jobitem->job_img_3}}@else{{asset('img/common/no-image.gif')}}@endif" alt="写真"></p>
-                                    </div>
-
+                                    @endforeach
                                 </div>
                             </div>
                         </div> <!-- card -->
@@ -113,28 +110,14 @@
                             <div class="card-header">動画</div>
                             <div class="card-body">
                                 <div oncontextmenu="return false;" class="form-group e-image-register-area">
+                                    @foreach($movieArray as $movie)
                                     <div class="e-image-register-item">
                                         <p class="e-image-wrap">
-                                            <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                                <source src="@if($jobitem->job_mov_1){{$jobBaseUrl . config('fpath.job_sheet_mov') . $jobitem->job_mov_1}}@endif" /></iframe>
+                                            <video src="{{ $movie }}" controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
                                             </video>
                                         </p>
                                     </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap">
-                                            <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                                <source src="@if($jobitem->job_mov_2){{$jobBaseUrl . config('fpath.job_sheet_mov') . $jobitem->job_mov_2}}@endif" /></iframe>
-                                            </video>
-                                        </p>
-                                    </div>
-                                    <div class="e-image-register-item">
-                                        <p class="e-image-wrap">
-                                            <video controls controlsList="nodownload" preload="none" playsinline width="100%" height="100%">
-                                                <source src="@if($jobitem->job_mov_3){{$jobBaseUrl . config('fpath.job_sheet_mov') . $jobitem->job_mov_3}}@endif" /></iframe>
-                                            </video>
-                                        </p>
-                                    </div>
-
+                                    @endforeach
                                 </div>
                             </div>
                         </div> <!-- card -->

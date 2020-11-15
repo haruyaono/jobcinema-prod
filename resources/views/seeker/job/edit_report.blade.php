@@ -59,7 +59,7 @@
                             {{config("const.RECRUITMENT_STATUS.{$apply->s_recruit_status}", "未定義")}}
                         </div>
                         <div class="header-date">
-                            応募日：{{ $apply->created_at }}
+                            応募日：{{ $apply->getCreatedAtTransform('Y-m-d') }}
                         </div>
                         @if($apply->congrats_status !== 0)
                         <div class="header-money">
@@ -70,7 +70,7 @@
                     <div class="jobapp-item-middle">
                         <div class="jobapp-item-img only-pc">
                             @if($apply->jobitem->job_img_1)
-                            <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $apply->jobitem->job_img_1}}" alt="{{$apply->company->cname}}">
+                            <img src="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $apply->jobitem->job_img_1 }}" alt="{{ $apply->company->cname }}">
                             @else
                             <img src="{{asset('img/common/no-image.gif')}}">
                             @endif
@@ -134,7 +134,7 @@
                                     @method('PUT')
                                     <input type="hidden" name="data[Apply][id]" value="{{$apply->id}}">
                                     <input type="hidden" name="data[Apply][pushed]" value="SaveTmpAdoptStatus" />
-                                    <textarea name="data[apply][s_nofirst_attendance]" placeholder="例）初出社日の連絡待ちです。○月上旬頃出社予定です。" class="{{ $errors->has('data.apply.s_nofirst_attendance') ? 'is-invalid' : ''}}" rows="6" required>{{old('data.apply.s_nofirst_attendance')}}</textarea>
+                                    <textarea name="data[apply][s_nofirst_attendance]" placeholder="例）初出社日の連絡待ちです。○月上旬頃出社予定です。" class="{{ $errors->has('data.apply.s_nofirst_attendance') ? 'is-invalid' : ''}}" rows="6" required>@if(old('data.apply.s_nofirst_attendance')){{ old('data.apply.s_nofirst_attendance') }}@else{{$apply->s_nofirst_attendance ?: '' }}@endif</textarea>
                                     <input type="submit" name="adopt_submit2" class="btn btn-yellow" value="報告する">
                                 </form>
                             </div>

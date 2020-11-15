@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Job\Users\User;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -36,7 +36,7 @@ class RegisteredMail extends Mailable
     {
         return $this
             ->subject('会員登録が完了しました')
-            ->replyTo('official@job-cinema.com')
+            ->replyTo(config('mail.reply.address'))
             ->view('emails.seeker.registered');
     }
 }

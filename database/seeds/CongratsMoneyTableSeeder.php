@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Job\CongratsMonies\CongratsMoney;
+use App\Models\CongratsMoney;
 
 class CongratsMoneyTableSeeder extends Seeder
 {

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
-use Illuminate\Http\Request;
-use App\Job\JobItems\JobItem;
-use App\Job\Users\User;
+use App\Models\JobItem;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
@@ -26,9 +24,9 @@ class FavouriteController extends Controller
 
             $result_count = $jobitems->count();
 
-            return view('jobs.keeplist', compact('jobitems', 'result_count'));
+            return view('front.jobs.keeplist', compact('jobitems', 'result_count'));
         }
-        return view('jobs.keeplist');
+        return view('front.jobs.keeplist');
     }
 
     public function saveJob($id)

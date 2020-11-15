@@ -1,8 +1,7 @@
 <?php
 
-use App\Job\Profiles\Profile;
-use App\Job\Users\User;
-use Illuminate\Support\Str;
+use App\Models\Profile;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 /*

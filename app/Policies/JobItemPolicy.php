@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
-use App\Job\Employers\Employer;
-use App\Job\JobItems\JobItem;
+use App\Models\Employer;
+use App\Models\JobItem;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Database\Eloquent\Builder;
 
 class JobItemPolicy
 {

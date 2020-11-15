@@ -44,7 +44,7 @@
     var job = @json($jobitem),
       imageFlag = @json($imageFlag);
 
-    data1 = $().setBaseImageUrlAndSetEnvName();
+    data1 = jQuery().setBaseImageUrlAndSetEnvName();
 
     if (imageFlag == 2) {
       window.opener.$("#photo2").attr('src', data1.base_image_url + job.job_img_2);

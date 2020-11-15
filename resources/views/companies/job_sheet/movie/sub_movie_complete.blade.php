@@ -43,12 +43,12 @@
     var job = @json($jobitem),
       movieFlag = @json($movieFlag);
 
-    data1 = $().setBaseMovieUrlAndSetEnvName();
+    data1 = jQuery().setBaseMovieUrlAndSetEnvName();
 
     if (movieFlag == 2) {
-      window.opener.$("#film2").attr('src', data1.base_movie_url + job.job_mov_2);
+      window.opener.$("#film2").attr('src', data1.base_movie_url + job.id + '/sub1/' + job.job_mov_2);
     } else if (movieFlag == 3) {
-      window.opener.$("#film3").attr('src', data1.base_movie_url + job.job_mov_3);
+      window.opener.$("#film3").attr('src', data1.base_movie_url + job.id + '/sub2/' + job.job_mov_3);
     }
   });
 </script>

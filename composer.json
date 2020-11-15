@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "haruyaono/JOBCiNEMA",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Kushiro's video-based recruiting service",
     "keywords": [
         "framework",
         "laravel"
@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "aws/aws-sdk-php": "~3.0",
+        "aws/aws-sdk-php-laravel": "~3.0",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.5",
@@ -19,13 +20,13 @@
         "kalnoy/nestedset": "^5.0",
         "laravel/framework": "^6.0",
         "laravel/helpers": "^1.3",
+        "laravel/horizon": "^4.3",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "~6.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "league/fractal": "^0.17.0",
         "monolog/monolog": "^1",
         "nicolaslopezj/searchable": "1.*",
-        "pbmedia/laravel-ffmpeg": "7.4.1",
         "predis/predis": "^1.1",
         "prettus/l5-repository": "^2.6",
         "prettus/laravel-validation": "^1.1",
@@ -59,6 +60,9 @@
             "database/seeds",
             "database/factories",
             "app/Library"
+        ],
+        "files": [
+            "app/Helpers.php"
         ]
     },
     "autoload-dev": {

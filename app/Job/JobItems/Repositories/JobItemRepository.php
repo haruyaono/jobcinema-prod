@@ -2,7 +2,7 @@
 
 namespace App\Job\JobItems\Repositories;
 
-use App\Job\JobItems\JobItem;
+use App\Models\JobItem;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
 use App\Job\JobItems\Exceptions\JobItemNotFoundException;
@@ -11,8 +11,6 @@ use App\Job\JobItems\Exceptions\JobItemUpdateErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
-
 
 class JobItemRepository extends BaseRepository implements JobItemRepositoryInterface
 {
@@ -109,138 +107,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         }
     }
 
-    /**
-     * create recent jobitems id list
-     *
-     * @param array $req
-     * @param integer $id
-     * @return void
-     */
-    public function createRecentJobItemIdList($req, int $id): void
-    {
-        if (session()->has('recent_jobs') && is_array(session()->get('recent_jobs'))) {
-
-            $historyLimit = '';
-            $jobitem_id_list = array(
-                'limit_list' => [],
-                'all_list' => []
-            );
-
-            $jobitem_id_list['limit_list'] = session()->get('recent_jobs.limit_list');
-            $jobitem_id_list['all_list'] = session()->get('recent_jobs.all_list');
-
-            $deviceFrag = $this->model->isMobile($req);
-            switch ($deviceFrag) {
-                case 'pc':
-                    $historyLimit = 5;
-                    break;
-                case 'mobile':
-                    $historyLimit = 3;
-                    break;
-                default:
-                    $historyLimit = '';
-                    break;
-            }
-
-            foreach ($jobitem_id_list as $listKey => $idList) {
-                if ($listKey === 'limit_list') {
-                    if (in_array($id, $idList) == false) {
-                        if (count($idList) >= $historyLimit) {
-                            array_shift($idList);
-                        }
-                        array_push($idList, $id);
-                    } else {
-                        while (($index = array_search($id, $idList)) !== false) {
-                            unset($idList[$index]);
-                        };
-                        array_push($idList, $id);
-                    }
-
-                    session()->put('recent_jobs.limit_list', $idList);
-                } else {
-                    if (in_array($id, $idList) == false) {
-                        session()->push('recent_jobs.all_list', $id);
-                    } else {
-                        while (($index = array_search($id, $idList)) !== false) {
-                            unset($idList[$index]);
-                        };
-                        array_push($idList, $id);
-                        session()->put('recent_jobs.all_list', $idList);
-                    }
-                }
-            }
-        } else {
-            session()->push('recent_jobs.limit_list', $id);
-            session()->push('recent_jobs.all_list', $id);
-        }
-    }
-
-    /**
-     *  list recent jobitems id
-     *
-     * @return LengthAwarePaginator|Collection|array
-     */
-    public function listRecentJobItemId(int $historyFlag = 0)
-    {
-        $jobitem_id_list = [];
-        switch ($historyFlag) {
-            case 0:
-                if (session()->has('recent_jobs.limit_list') && is_array(session()->get('recent_jobs.limit_list'))) {
-                    $jobitem_id_list = session()->get('recent_jobs.limit_list');
-                }
-                break;
-            case 1:
-                if (session()->has('recent_jobs.all_list') && is_array(session()->get('recent_jobs.all_list'))) {
-                    $jobitem_id_list = session()->get('recent_jobs.all_list');
-                }
-                break;
-        }
-
-        if ($jobitem_id_list !== []) {
-            $jobitem_id_rv_list = array_reverse($jobitem_id_list);
-            $placeholder = '';
-            foreach ($jobitem_id_rv_list as $key => $value) {
-                $placeholder .= ($key == 0) ? $value : ',' . $value;
-            }
-
-            if ($historyFlag === 0) {
-                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)", $jobitem_id_rv_list)->get();
-            } elseif ($historyFlag === 1) {
-                return $this->model->whereIn('id', $jobitem_id_rv_list)->orderByRaw("FIELD(id, $placeholder)", $jobitem_id_rv_list)->paginate(20);
-            }
-        } else {
-            return $jobitem_id_list;
-        }
-    }
-
-    /**
-     * base search the jobitems
-     *
-     * @param string $searchParam
-     * @return $query
-     */
-    public function baseSearchJobItems(array $searchParam = [])
-    {
-        $query = $this->model->activeJobitem()->with([
-            'categories'
-        ]);
-
-        $newsearchParam = $searchParam;
-
-        foreach ($newsearchParam as $key => $p) {
-            if ($p === null) {
-                unset($newsearchParam[$key]);
-            }
-        }
-
-        if ($newsearchParam !== []) {
-            $query->search($searchParam);
-        } else {
-            $query->latest();
-        }
-
-        return $query;
-    }
 
     /**
      * Find the active jobitem by ID
@@ -270,35 +136,6 @@ class JobItemRepository extends BaseRepository implements JobItemRepositoryInter
         } catch (ModelNotFoundException $e) {
             throw new JobItemNotFoundException($e);
         }
-    }
-
-    /**
-     * @param JobItem $jobitem
-     * @return array
-     */
-    public function savedDbFilePath(JobItem $jobitem): array
-    {
-        $savedFilePath = [];
-        $fileSessionKeys = config('const.FILE_SLUG');
-
-        foreach ($fileSessionKeys as $fileSessionKey) {
-            switch ($fileSessionKey) {
-                case 'main':
-                    $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img;
-                    $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov;
-                    break;
-                case 'sub1':
-                    $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img2;
-                    $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov2;
-                    break;
-                case 'sub2':
-                    $savedFilePath['image'][$fileSessionKey] = $jobitem->job_img3;
-                    $savedFilePath['movie'][$fileSessionKey] = $jobitem->job_mov3;
-                    break;
-            }
-        }
-
-        return $savedFilePath;
     }
 
     /**

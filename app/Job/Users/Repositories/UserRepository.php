@@ -109,17 +109,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * @param array $user
-     * @param int $jobitemId
-     *
-     * @return bool
-     */
-    public function existsAppliedJobItem(User $user, int $jobitemId): bool
-    {
-        return $user->applies()->where('job_item_id', $jobitemId)->exists();
-    }
-
-    /**
-     * @param array $user
      *
      * @return Collection
      */

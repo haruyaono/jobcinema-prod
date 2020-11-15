@@ -18,14 +18,4 @@ class LineNotifyServiceProvider extends ServiceProvider
             'App\Http\Components\LineNotify'
         );
     }
-
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
 }

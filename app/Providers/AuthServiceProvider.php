@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Job\JobItems\JobItem;
-use App\Job\Applies\Apply;
+use App\Models\JobItem;
+use App\Models\Apply;
 use App\Policies\JobItemPolicy;
 use App\Policies\ApplyPolicy;
 use App\Providers\CustomProvider\CustomAuthServiceProvider;

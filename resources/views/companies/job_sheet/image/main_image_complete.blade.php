@@ -41,7 +41,9 @@
 <script>
     $(function() {
         var job = @json($jobitem);
-        data1 = $().setBaseImageUrlAndSetEnvName();
+        var data1 = jQuery().setBaseImageUrlAndSetEnvName();
+
+        console.log(data1.base_image_url + job.job_img_1);
         window.opener.$("#photo1").attr('src', data1.base_image_url + job.job_img_1);
     });
 </script>

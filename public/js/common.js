@@ -1,20 +1,24 @@
 (function ($) {
     'use strict';
 
-    $.fn.setBaseImageUrlAndSetEnvName = function () {
+    $.fn.setBaseImageUrlAndSetEnvName = (function () {
 
-        var array = [];
+        var array = [],
+            env_name = '',
+            base_image_url = '';
 
         if ($('#env_name').length) {
-            var env_name = $('#env_name').attr('value');
+            env_name = $('#env_name').attr('value');
             if (env_name == 'production') {
-                var base_image_url = 'https://s3.job-cinema.com/img/uploads/JobSheet/';
+                base_image_url = 'https://s3.job-cinema.com/img/uploads/JobSheet/';
+            } else if (env_name == 'stage') {
+                base_image_url = 'https://job-cinema-stage.s3-ap-northeast-1.amazonaws.com/img/uploads/JobSheet/';
             } else {
-                var base_image_url = 'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/img/uploads/JobSheet/';
+                base_image_url = 'https://job-cinema-local.s3-ap-northeast-1.amazonaws.com/img/uploads/JobSheet/';
             }
         } else {
-            var base_image_url = '';
-            var env_name = '';
+            base_image_url = '';
+            env_name = '';
         }
 
         array = {
@@ -23,22 +27,24 @@
         }
 
         return array;
-    }
+    });
 
-    $.fn.setBaseMovieUrlAndSetEnvName = function () {
+    $.fn.setBaseMovieUrlAndSetEnvName = (function () {
 
-        var array = [];
+        var array = [],
+            base_movie_url = '',
+            env_name = '';
 
         if ($('#env_name').length) {
-            var env_name = $('#env_name').attr('value');
+            env_name = $('#env_name').attr('value');
+
             if (env_name == 'production') {
-                var base_movie_url = 'https://s3.job-cinema.com/mov/uploads/JobSheet/';
+                base_movie_url = 'https://s3.job-cinema.com/mov/uploads/JobSheet/';
+            } else if (env_name == 'stage') {
+                base_movie_url = 'https://job-cinema-stage.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/';
             } else {
-                var base_movie_url = 'https://job-cinema-dev.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/';
+                base_movie_url = 'https://job-cinema-local.s3-ap-northeast-1.amazonaws.com/mov/uploads/JobSheet/';
             }
-        } else {
-            var base_movie_url = '';
-            var env_name = '';
         }
 
         array = {
@@ -47,7 +53,7 @@
         }
 
         return array;
-    }
+    });
 
     $.fn.setSelectBoxForDate = (function () {
         /**

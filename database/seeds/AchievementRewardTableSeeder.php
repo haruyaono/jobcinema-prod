@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Job\AchievementRewards\AchievementReward;
+use App\Models\AchievementReward;
 
 class AchievementRewardTableSeeder extends Seeder
 {

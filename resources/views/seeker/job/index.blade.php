@@ -42,9 +42,9 @@
                 <div class="seeker-jobapp-list">
                     @if(!$applies->isEmpty())
                     @foreach($applies as $apply)
-                    @if($apply->e_recruit_status === 1 || $apply->e_recruit_status === 2)
+                    @if($apply->e_recruit_status !== 0)
                     <div class="status_e_to_seeker">
-                        採用結果： <span class="e-status e-status_{{$apply->e_recruit_status}}">{{config("const.RECRUITMENT_STATUS.{$apply->e_recruit_status}", "未定義")}}</span>@if($apply->e_recruit_status === 1){{'決定！'}}@elseif($apply->e_recruit_status === 2){{'となりました！'}}@endif
+                        採用通知： <span class="e-status e-status_{{$apply->e_recruit_status}}">{{config("const.RECRUITMENT_STATUS.{$apply->e_recruit_status}", "未定義")}}</span>
                     </div>
                     @endif
                     <div class="seeker-jobapp-item">
@@ -54,20 +54,20 @@
                                 {{config("const.RECRUITMENT_STATUS.{$apply->s_recruit_status}", "未定義")}}
                             </div>
                             <div class="header-date">
-                                応募日：{{$apply->created_at}}
+                                応募日：{{ $apply->getCreatedAtTransform('Y-m-d') }}
                             </div>
                             @if($apply->congrats_status === 1)
                             <div class="header-money">
-                                この企業に採用されるとお祝い金<span class="ml-2">{{$apply->congrats_amount}}!<span>
+                                この企業に採用されるとお祝い金<span class="ml-2">{{$apply->congrats_amount}}<span>
                             </div>
                             @endif
                         </div>
                         <div class="jobapp-item-middle">
                             <div class="jobapp-item-img only-pc">
                                 @if($apply->jobitem->job_img_1)
-                                <img src="@if(config('app.env') == 'production'){{config('app.s3_url')}}@else{{config('app.s3_url_local')}}@endif{{config('fpath.job_sheet_img') . $apply->jobitem->job_img_1}}" alt="{{$apply->company->cname}}">
+                                <img src="{{config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $apply->jobitem->job_img_1 }}" alt="{{ $apply->company->cname }}">
                                 @else
-                                <img src="{{asset('img/common/no-image.gif')}}">
+                                <img src="{{ asset('img/common/no-image.gif') }}">
                                 @endif
                             </div>
                             <div class="jobapp-item-text">
@@ -107,7 +107,7 @@
                                 </table>
                             </div>
                             <div class="jobapp-item-btn">
-                                <p><a href="{{route('show.front.job_sheet.detail', [$apply->jobitem->id])}}" class="btn txt-blue-link">詳細を見る</a></p>
+                                <p class="mb-3"><a href="{{ route('show.front.job_sheet.detail', [$apply->jobitem]) }}">詳細を見る</a></p>
                                 @if($apply->s_recruit_status === 0 )
                                 <p><a href="{{route('show.seeker.job', [$apply])}}" class="btn btn-yellow">結果を報告</a></p>
                                 <p>

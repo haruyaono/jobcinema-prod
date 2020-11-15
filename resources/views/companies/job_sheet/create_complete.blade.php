@@ -17,7 +17,7 @@
         <div class="col-md-10 mr-auto ml-auto">
           <div class="card">
             <div class="card-body">
-              @if($updated->status !== 2)
+              @if($jobitem->status !== 2)
               <div class="my-3">
                 <p class="after-text h3 mb-4">求人票の新規登録を受け付けました！</p>
               </div>

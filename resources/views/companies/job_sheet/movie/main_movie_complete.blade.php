@@ -42,8 +42,8 @@
 <script>
     $(function() {
         var job = @json($jobitem);
-        data1 = $().setBaseMovieUrlAndSetEnvName();
-        window.opener.$("#film1").attr('src', data1.base_movie_url + job.job_mov_1);
+        data1 = jQuery().setBaseMovieUrlAndSetEnvName();
+        window.opener.$("#film1").attr('src', data1.base_movie_url + job.id + '/main/' + job.job_mov_1);
 
     });
 </script>
