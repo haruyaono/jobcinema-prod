@@ -16067,7 +16067,7 @@ input[size="28"] {
 @media screen and (min-width: 768px) {
   .newjob-entry .newjob-list {
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
   }
 }
 

@@ -24,7 +24,7 @@ class JobAppliedSeeker extends Mailable
      */
     public function __construct($jobitem, $data)
     {
-        $this->title = sprintf($jobitem->job_office . 'への応募が完了しました！');
+        $this->title = sprintf('【JOB CiNEMA】求人応募完了のお知らせ');
         $this->jobitem = $jobitem;
         $this->data = $data;
         $this->company = $jobitem->company;

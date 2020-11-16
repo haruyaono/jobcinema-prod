@@ -71,7 +71,7 @@
                                         </td>
                                         <td rowspan="3" class="sheetBtnBox">
                                             <div class="statusTxt statusTxt-{{$jobitem->status}}">
-                                                @if($jobitem->pub_start_date > date("Y-m-d", strtotime('+1 day')))
+                                                @if($jobitem->status === 2 && $jobitem->pub_start_date > date("Y-m-d", strtotime('+1 day')))
                                                 {{ '掲載待ち' }}
                                                 @else
                                                 {{config('const.EMP_JOB_STATUS.'.$jobitem->status)}}

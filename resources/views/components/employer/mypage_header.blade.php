@@ -3,9 +3,11 @@
 <header class="header">
     <div class="inner">
         <div class="header-top cf">
-            <div class="companyHeaderLeft floatL mt-2">
+            <div class="companyHeaderLeft floatL">
                 @if (Auth::guard('employer')->check())
-                <p class="h3 mb-0 font-white">{{ Auth::guard('employer')->user()->company->cname ?: 'ゲスト' }}様の管理ページ</p>
+                <p class="h3 mb-0 font-white mt-2">{{ Auth::guard('employer')->user()->company->cname ?: 'ゲスト' }}様の管理ページ</p>
+                @else
+                <div class="logo"><a href="/"><img src="{{ asset('/uploads/images/jobcinema_rogo_re.png') }}" alt=""></a></div>
                 @endif
             </div>
             <div class="emp-header-right floatR">
