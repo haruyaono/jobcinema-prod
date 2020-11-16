@@ -88,7 +88,7 @@ Route::group(['middleware' => ['auth:user']], function () {
 
 Auth::routes(['verify' => true]);
 
-Route::namespace('Auth')->group(function () {
+Route::namespace('Seeker\Auth')->group(function () {
   Route::group(['prefix' => 'members'], function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login')->name('login.post');
@@ -108,31 +108,33 @@ Route::namespace('Auth')->group(function () {
 });
 
 Route::namespace('Employer')->group(function () {
-  Route::group(['prefix' => 'employer'], function () {
-    # ログイン
-    Route::get('login', 'LoginController@showLoginForm')->name('employer.login');
-    Route::post('login', 'LoginController@login')->name('employer.login.post');
-    # 企業 仮登録
-    Route::get('register', 'RegisterController@index')->name('employer.register.index');
-    Route::post('confirm', 'RegisterController@confirm')->name('employer.confirm');
-    Route::post('register', 'RegisterController@register')->name('employer.register');
-    Route::get('register_finish', 'RegisterController@finishRegister')->name('employer.pre_register.finish');
-    # 企業 本登録
-    Route::get('register/verify/{token}', 'RegisterController@showForm');
-    Route::post('register/main_confirm', 'RegisterController@mainConfirm')->name('employer.main.confirm');
-    Route::post('register/main_register', 'RegisterController@mainRegister')->name('employer.main.register');
-    Route::get('register/main_register_finish', 'RegisterController@finishMainRegister')->name('employer.main_register.finish');
-    # 企業 仮登録メール再送
-    Route::get('verify/resend', 'RegisterController@getVerifyResend')->name('index.mailform.resend.preregister');
-    Route::post('verify/resend', 'RegisterController@postVerifyResend')->name('store.mailform.resend.preregister');
-    # 企業 パスワード リセット
-    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('employer.password.email');
-    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('employer.password.request');
-    Route::post('password/reset', 'ResetPasswordController@reset')->name('employer.password.update');
-    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('employer.password.reset');
+  Route::namespace('Auth')->group(function () {
+    Route::group(['prefix' => 'employer'], function () {
+      # ログイン
+      Route::get('login', 'LoginController@showLoginForm')->name('employer.login');
+      Route::post('login', 'LoginController@login')->name('employer.login.post');
+      # 企業 仮登録
+      Route::get('register', 'RegisterController@index')->name('employer.register.index');
+      Route::post('confirm', 'RegisterController@confirm')->name('employer.confirm');
+      Route::post('register', 'RegisterController@register')->name('employer.register');
+      Route::get('register_finish', 'RegisterController@finishRegister')->name('employer.pre_register.finish');
+      # 企業 本登録
+      Route::get('register/verify/{token}', 'RegisterController@showForm');
+      Route::post('register/main_confirm', 'RegisterController@mainConfirm')->name('employer.main.confirm');
+      Route::post('register/main_register', 'RegisterController@mainRegister')->name('employer.main.register');
+      Route::get('register/main_register_finish', 'RegisterController@finishMainRegister')->name('employer.main_register.finish');
+      # 企業 仮登録メール再送
+      Route::get('verify/resend', 'RegisterController@getVerifyResend')->name('index.mailform.resend.preregister');
+      Route::post('verify/resend', 'RegisterController@postVerifyResend')->name('store.mailform.resend.preregister');
+      # 企業 パスワード リセット
+      Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('employer.password.email');
+      Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('employer.password.request');
+      Route::post('password/reset', 'ResetPasswordController@reset')->name('employer.password.update');
+      Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('employer.password.reset');
 
-    Route::group(['middleware' => ['auth:employer']], function () {
-      Route::post('logout',   'LoginController@logout')->name('employer.logout');
+      Route::group(['middleware' => ['auth:employer']], function () {
+        Route::post('logout',   'LoginController@logout')->name('employer.logout');
+      });
     });
   });
 

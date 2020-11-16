@@ -16,6 +16,6 @@ class ApplyRepository extends AbstractRepository
     public function getAppliedForEmployer(Employer $employer): Collection
     {
         $ids = $employer->jobitems->pluck('id')->toArray();
-        return $this->getByIds($ids);
+        return $this->getByIds($ids, 'job_item_id');
     }
 }

@@ -126,7 +126,7 @@ $conf = [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_session'
     ),
 
     /*
@@ -166,7 +166,7 @@ $conf = [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE', false),
+    'secure' => env('SESSION_SECURE_COOKIE', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -203,7 +203,7 @@ $uri = isset($SERVER['REQUEST_URI']) ? $SERVER['REQUEST_URI'] : '';
 if (strpos($uri, '/employer/') === 0 || $uri === '/employer') {
     $conf['cookie'] = env(
         'SESSIONCOOKIE_EMPLOYER',
-        str_slug(env('APPNAME', 'laravel'), '_').'_employer_session'
+        str_slug(env('APPNAME', 'laravel'), '_') . '_employer_session'
     );
 }
 return $conf;

@@ -68,7 +68,7 @@ class CompanyController extends Controller
 
         //パスワードのバリデーション。新しいパスワードは6文字以上、new-password_confirmationフィールドの値と一致しているかどうか。
         $request->validate([
-            'current-password' => 'required',
+            'current-password' => 'required|string|min:8',
             'new-password' => 'required|string|min:8|confirmed',
         ]);
 

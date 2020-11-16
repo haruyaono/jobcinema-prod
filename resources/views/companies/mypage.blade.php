@@ -27,14 +27,6 @@
                     {!! nl2br(htmlspecialchars(Session::get('message_success'))) !!}
                 </div>
                 @endif
-                @if (Auth::guard('employer')->check())
-                @if(!empty(Auth::guard('employer')->user()->company->cname))
-                <p class="h3">{{Auth::guard('employer')->user()->company->cname}}様の管理ページ<span class="caret"></span></p>
-                @else
-                <p class="h3">ゲスト様の管理ページ<span class="caret"></span></p>
-                @endif
-                @endif
-
                 <div class="row justify-content-center mt-4">
                     <div class="col-md-8 e-mypage-card">
                         <div class="e-mypage-card-item">

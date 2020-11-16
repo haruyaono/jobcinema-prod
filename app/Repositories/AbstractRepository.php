@@ -19,9 +19,9 @@ abstract class AbstractRepository
         $this->model = app($this->getModelClass());
     }
 
-    public function getByIds(array $ids): Collection
+    public function getByIds(array $ids, string $option = ''): Collection
     {
-        return $this->model->whereIn($this->model->getKeyName(), $ids)->get();
+        return $this->model->whereIn($option ?: $this->model->getKeyName(), $ids)->get();
     }
 
     public function getFirstWhere(...$params): Model
