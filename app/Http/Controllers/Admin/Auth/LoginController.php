@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
@@ -31,7 +32,7 @@ class LoginController extends Controller
     protected $maxAttempts = 10;     // ログイン試行回数（回）
     protected $decayMinutes = 10;   // ログインロックタイム（分）
 
-    protected $redirectTo = '/dashboard/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -56,21 +57,11 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $this->guard('admin')->logout();
-        // $request->session()->flush();
-        // $request->session()->regenerate();
-        return redirect()->to('/dashboard/login'); 
+        return redirect()->route('admin.login');
     }
 
-    // protected function sendFailedLoginResponse(Request $request)
-    // {
-    //     throw ValidationException::withMessages([
-    //         $this->username() => [trans('認証に失敗しました。')],
-    //     ]);
-    // }
-
     public function username()
-{
-    return 'name';
-}
-    
+    {
+        return 'name';
+    }
 }
