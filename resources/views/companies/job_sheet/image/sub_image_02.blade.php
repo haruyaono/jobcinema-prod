@@ -35,7 +35,7 @@
                         {{ Session::get('message_danger') }}
                     </div>
                     @endif
-                    <form id="JobSheetCompanyRegisterSubimageForm" action="{{route('update.jobsheet.subimage2', [$jobitem])}}" method="POST" enctype="multipart/form-data">
+                    <form id="JobSheetCompanyRegisterSubimageForm" action="{{ route('enterprise.update.jobsheet.subimage2', [$jobitem]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId" />
@@ -97,7 +97,7 @@
 
         $('#deleteImage').click(function() {
             if (window.confirm('登録されているサブ写真を削除します。よろしいですか？')) {
-                window.location.href = '/company/jobs/create/delete_image/' + job.id + '?flag=3';
+                window.location.href = '/enterprise/jobs/create/delete_image/' + job.id + '?flag=3';
                 return false;
             }
         });

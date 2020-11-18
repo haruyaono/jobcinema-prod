@@ -13,7 +13,7 @@
 <div id="breadcrumb" class="bread only-pc">
     <ol>
         <li>
-            <a href="{{route('index.seeker.mypage')}}">
+            <a href="{{ route('seeker.index.mypage') }}">
                 　マイページ
             </a>
         </li>
@@ -44,28 +44,28 @@
                     @foreach($applies as $apply)
                     @if($apply->e_recruit_status !== 0)
                     <div class="status_e_to_seeker">
-                        採用通知： <span class="e-status e-status_{{$apply->e_recruit_status}}">{{config("const.RECRUITMENT_STATUS.{$apply->e_recruit_status}", "未定義")}}</span>
+                        採用通知： <span class="e-status e-status_{{ $apply->e_recruit_status }}">{{ config("const.RECRUITMENT_STATUS.{$apply->e_recruit_status}", "未定義") }}</span>
                     </div>
                     @endif
                     <div class="seeker-jobapp-item">
 
                         <div class="jobapp-item-header">
                             <div class="header-status">
-                                {{config("const.RECRUITMENT_STATUS.{$apply->s_recruit_status}", "未定義")}}
+                                {{ config("const.RECRUITMENT_STATUS.{$apply->s_recruit_status}", "未定義") }}
                             </div>
                             <div class="header-date">
                                 応募日：{{ $apply->getCreatedAtTransform('Y-m-d') }}
                             </div>
                             @if($apply->congrats_status === 1)
                             <div class="header-money">
-                                この企業に採用されるとお祝い金<span class="ml-2">{{$apply->congrats_amount}}<span>
+                                この企業に採用されるとお祝い金<span class="ml-2">{{ $apply->congrats_amount }}<span>
                             </div>
                             @endif
                         </div>
                         <div class="jobapp-item-middle">
                             <div class="jobapp-item-img only-pc">
                                 @if($apply->jobitem->job_img_1)
-                                <img src="{{config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $apply->jobitem->job_img_1 }}" alt="{{ $apply->company->cname }}">
+                                <img src="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $apply->jobitem->job_img_1 }}" alt="{{ $apply->company->cname }}">
                                 @else
                                 <img src="{{ asset('img/common/no-image.gif') }}">
                                 @endif
@@ -74,34 +74,34 @@
                                 <table>
                                     <tr>
                                         <th>応募企業</th>
-                                        <td>{{$apply->company->cname}}</td>
+                                        <td>{{ $apply->company->cname }}</td>
                                     </tr>
                                     <tr>
                                         <th>勤務先</th>
-                                        <td>{{$apply->jobitem->job_office}}</td>
+                                        <td>{{ $apply->jobitem->job_office }}</td>
                                     </tr>
                                     <tr>
                                         <th>雇用形態</th>
-                                        <td>{{$apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</td>
+                                        <td>{{ $apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $apply->jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>職種</th>
-                                        <td>{{$apply->jobitem->job_type}}</td>
+                                        <td>{{ $apply->jobitem->job_type }}</td>
                                     </tr>
                                     <tr>
                                         <th>住所</th>
-                                        <td>{{str_limit($apply->jobitem->job_office_address, $limit = 16, $end = '...')}}</td>
+                                        <td>{{ str_limit($apply->jobitem->job_office_address, $limit = 16, $end = '...') }}</td>
                                     </tr>
                                     <tr>
                                         <th>電話番号</th>
                                         <td>
-                                            {{$apply->company->phone1}}-{{$apply->company->phone2}}-{{$apply->company->phone3}}
+                                            {{ $apply->company->phone1}}-{{$apply->company->phone2}}-{{$apply->company->phone3 }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>採用担当</th>
                                         <td>
-                                            {{$apply->jobitem->employer->last_name}}
+                                            {{ $apply->jobitem->employer->last_name }}
                                         </td>
                                     </tr>
                                 </table>
@@ -109,13 +109,13 @@
                             <div class="jobapp-item-btn">
                                 <p class="mb-3"><a href="{{ route('show.front.job_sheet.detail', [$apply->jobitem]) }}">詳細を見る</a></p>
                                 @if($apply->s_recruit_status === 0 )
-                                <p><a href="{{route('show.seeker.job', [$apply])}}" class="btn btn-yellow">結果を報告</a></p>
+                                <p><a href="{{ route('seeker.show.job', [$apply]) }}" class="btn btn-yellow">結果を報告</a></p>
                                 <p>
                                     <a id="SaveReportDeclineCancel" href="javascript:void(0)" class="btn btn-secondary jobapp-cancel-btn">選考を辞退</a>
-                                    <form id="seeker-apply-report-decline-form" action="{{route('update.seeker.report', [$apply])}}" method="POST" style="display: none;">
+                                    <form id="seeker-apply-report-decline-form" action="{{ route('seeker.update.report', [$apply]) }}" method="POST" style="display: none;">
                                         @csrf
                                         @method('PUT')
-                                        <input type="hidden" name="data[Apply][id]" value="{{$apply->id}}">
+                                        <input type="hidden" name="data[Apply][id]" value="{{ $apply->id }}">
                                         <input type="hidden" name="data[Apply][pushed]" value="SaveReportDeclineStatus" />
                                     </form>
                                 </p>
@@ -123,15 +123,15 @@
                                 <p><span class="btn btn-outline-yellow">報告済み</span></p>
                                 @if($apply->s_recruit_status === 1 )
                                 @if($apply->s_first_attendance === null)
-                                <p><a href="{{route('edit.seeker.report', [$apply])}}" class="btn btn-danger">初出勤日が未登録です
+                                <p><a href="{{ route('seeker.edit.report', [$apply]) }}" class="btn btn-danger">初出勤日が未登録です
                                     </a></p>
                                 @endif
                                 @elseif($apply->s_recruit_status === 2)
                                 <a id="SaveReportStatusCancel" href="javascript:void(0)" class="adopt-cancel-btn">報告を取り消す</a>
-                                <form id="seeker-apply-report-cancel-form" action="{{route('update.seeker.report', [$apply])}}" method="POST" style="display: none;">
+                                <form id="seeker-apply-report-cancel-form" action="{{ route('seeker.update.report', [$apply]) }}" method="POST" style="display: none;">
                                     @csrf
                                     @method('PUT')
-                                    <input type="hidden" name="data[Apply][id]" value="{{$apply->id}}">
+                                    <input type="hidden" name="data[Apply][id]" value="{{ $apply->id }}">
                                     <input type="hidden" name="data[Apply][pushed]" value="SaveReportCancelStatus" />
                                 </form>
                                 @endif

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Employer;
 use App\Models\Company;
 use App\Models\Apply;
@@ -149,11 +150,12 @@ class JobItem extends Model
 
     public function favourites(): BelongsToMany
     {
-        return $this->belongsToMany(JobItem::class, 'favourites', 'job_item_id', 'user_id')->as('fav')->withTimeStamps();
+        return $this->belongsToMany(User::class, 'favourites', 'job_item_id', 'user_id')->as('fav')->withTimeStamps();
     }
+
     public function checkSaved()
     {
-        return \DB::table('favourites')->where('user_id', auth()->user()->id)->where('job_item_id', $this->id)->exists();
+        return \DB::table('favourites')->where('user_id', auth('seeker')->user()->id)->where('job_item_id', $this->id)->exists();
     }
 
     public function scopeActiveJobitem()

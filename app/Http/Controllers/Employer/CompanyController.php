@@ -49,7 +49,7 @@ class CompanyController extends Controller
     //mypage password change
     public function getChangePasswordForm()
     {
-        return view('employer.passwords.changepassword');
+        return view('employer.auth.passwords.changepassword');
     }
 
     public function postChangePassword(Request $request)
@@ -84,7 +84,7 @@ class CompanyController extends Controller
     //mypage email change
     public function getChangeEmail()
     {
-        return view('employer.passwords.change_email');
+        return view('employer.auth.passwords.change_email');
     }
     public function postChangeEmail(Request $request)
     {

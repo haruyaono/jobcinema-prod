@@ -2,25 +2,13 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
-class EmailVerificationJa extends Notification
+class SeekerPasswordResetNotification extends ResetPasswordNotification
 {
-
-    use Queueable;
-   
-
-    /**
-    * The password reset token.
-    *   @var string 
-     * 
-     */
-
     public $token;
+    protected $title = '【JOB CiNEMA】パスワード再設定';
 
     /**
      * Create a new notification instance.
@@ -53,10 +41,13 @@ class EmailVerificationJa extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('【JOBCiNEMA】パスワード再設定')
-                   ->line('下のボタンをクリックしてパスワードを再設定してください。')
-                   ->action('パスワード再設定', url(config('app.url').route('password.reset', $this->token, false)))
-                   ->line('もし心当たりがない場合は、本メッセージは破棄してください。');
+            ->subject($this->title)
+            ->view(
+                'emails.passwordreset',
+                [
+                    'reset_url' => url(config('url') . route('seeker.password.reset', $this->token, false)),
+                ]
+            );
     }
 
     /**

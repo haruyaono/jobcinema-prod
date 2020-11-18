@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -22,7 +23,7 @@ class LoginController extends Controller
     protected $decayMinutes = 10;   // ログインロックタイム（分）
 
 
-    protected $redirectTo = '/company/mypage';
+    protected $redirectTo = RouteServiceProvider::EMPLOYER_HOME;
 
     /**
      * Create a new controller instance.
@@ -35,23 +36,20 @@ class LoginController extends Controller
         $this->middleware('confirm:employer');
     }
 
-    public function showLoginForm()
-    {
-        return view('employer.login');
-    }
-
-
     protected function guard()
     {
         return Auth::guard('employer');
     }
 
-
+    public function showLoginForm()
+    {
+        return view('employer.auth.login');
+    }
 
     public function logout(Request $request)
     {
         $this->guard('employer')->logout();
-        return redirect('employer/login');
+        return redirect(route('employer.login'));
     }
 
     protected function sendFailedLoginResponse(Request $request)
@@ -66,7 +64,7 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('employer')->attempt($credentials)) {
-            return redirect()->intended('company/mypage');
+            return redirect()->intended(RouteServiceProvider::EMPLOYER_HOME);
         }
     }
 }

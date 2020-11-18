@@ -22,11 +22,11 @@
                 <p class="text-center mt-3">申請取り消し後の求人票は一時保存ステータスに変更されます。</p>
                 <p class="text-center mb-5">編集・再掲載が可能です。</p>
               </div>
-              <form name="JobSheetstatus" action="{{route('update.jobsheet.status.apply_cancel', [$jobitem])}}" method="POST" class="text-center">
+              <form name="JobSheetstatus" action="{{ route('enterprise.update.jobsheet.status.apply_cancel', [$jobitem]) }}" method="POST" class="text-center">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="data[JobSheet][pushed]" value="updateApplyCancel">
-                <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}">
+                <input type="hidden" name="data[JobSheet][id]" value="{{ $jobitem->id }}">
                 <button type="button" class="btn btn-secondary" id="updateJobSheetStatus">申請取り消し</button>
               </form>
             </div>

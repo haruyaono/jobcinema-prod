@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Providers\RouteServiceProvider;
 
 class ResetPasswordController extends Controller
 {
@@ -18,7 +19,7 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/employer/login';
+    protected $redirectTo = RouteServiceProvider::EMPLOYER_LOGIN;
 
     /**
      * Create a new controller instance.
@@ -32,7 +33,7 @@ class ResetPasswordController extends Controller
 
     public function showResetForm(Request $request, $token = null)
     {
-        return view('employer.passwords.reset')->with(['token' => $token, 'email' => $request->email]);
+        return view('employer.auth.passwords.reset')->with(['token' => $token, 'email' => $request->email]);
     }
 
     protected function guard()

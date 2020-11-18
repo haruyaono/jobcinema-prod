@@ -8,19 +8,29 @@ use App\Http\Controllers\Controller;
 
 class FavouriteController extends Controller
 {
+    private $user;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = \Auth::guard('seeker')->user();
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        if (Auth::check()) {
+        if ($this->user) {
 
             $before1month = date('Y-m-d H:i:s', strtotime("-1 month"));
-            $delJobs = Auth::user()->favourites()->where('favourites.created_at', '<', $before1month)->get();
+            $delJobs = $this->user->favourites()->where('favourites.created_at', '<', $before1month)->get();
             if ($delJobs) {
                 foreach ($delJobs as $delJob) {
-                    Auth::user()->favourites()->detach($delJob->job_item_id);
+                    $this->user->favourites()->detach($delJob->job_item_id);
                 }
             }
 
-            $jobitems = Auth::user()->favourites()->where('favourites.created_at', '>', $before1month)->limit(20)->orderBy('favourites.created_at', 'desc')->get();
+            $jobitems = $this->user->favourites()->where('favourites.created_at', '>', $before1month)->limit(20)->orderBy('favourites.created_at', 'desc')->get();
 
             $result_count = $jobitems->count();
 
@@ -31,14 +41,13 @@ class FavouriteController extends Controller
 
     public function saveJob($id)
     {
-        $jobid = JobItem::find($id);
-        $user = Auth::user();
-        if ($jobid->favourites()->where('user_id', $user->id)->exists()) {
+        $jobitem = JobItem::find($id);
+        if ($jobitem->favourites()->where('user_id', $this->user->id)->exists()) {
             return response()->json([
                 'fav_save_status' => '0'
             ]);
         } else {
-            $jobid->favourites()->attach($user->id);
+            $jobitem->favourites()->attach($this->user->id);
             return response()->json([
                 'fav_save_status' => '1'
             ]);
@@ -47,16 +56,18 @@ class FavouriteController extends Controller
 
     public function unSaveJob($id)
     {
-        $jobid = JobItem::find($id);
-        $user = Auth::user();
-        if ($jobid->favourites()->where('user_id', $user->id)->exists()) {
-            $jobid->favourites()->detach($user->id);
+        $jobitem = JobItem::find($id);
+
+        if ($jobitem->favourites()->where('user_id', $this->user->id)->exists()) {
+            $jobitem->favourites()->detach($this->user->id);
             return response()->json([
-                'fav_del_status' => '1'
+                'fav_del_status' => '1',
+                'job' => $jobitem
             ]);
         } else {
             return response()->json([
-                'fav_del_status' => '0'
+                'fav_del_status' => '0',
+                'job' => $jobitem->favourites
             ]);
         }
     }

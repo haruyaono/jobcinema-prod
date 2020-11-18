@@ -26,7 +26,7 @@ class S3Service implements ObjectStorageInterface
         for ($i = 1; $i < self::MEDIA_COUNT + 1; $i++) {
             if ($jobitem->{'job_img_' . $i}) {
                 array_push($list, $this->s3Client->getObjectUrl(
-                    env('AWS_BUCKET'),
+                    config('app.bucket'),
                     config('jobcinema.jobitem_image_dir') . $jobitem->{'job_img_' . $i}
                 ));
             } else {
@@ -47,16 +47,16 @@ class S3Service implements ObjectStorageInterface
                 if (config('app.env') == 'production' || config('app.env') == 'stage') {
                     $path = pathinfo($jobitem->{'job_mov_' . $i});
                     $filename = $path['filename'] . '_hls.m3u8';
-                    if ($this->s3Client->doesObjectExist(env('AWS_BUCKET'), config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' .  $filename)) {
+                    if ($this->s3Client->doesObjectExist(config('app.bucket'), config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' .  $filename)) {
                         array_push($list, $this->s3Client->getObjectUrl(
-                            env('AWS_BUCKET'),
+                            config('app.bucket'),
                             config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' .  $filename
                         ));
                         continue;
                     }
                 } else {
                     array_push($list, $this->s3Client->getObjectUrl(
-                        env('AWS_BUCKET'),
+                        config('app.bucket'),
                         config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' . $jobitem->{'job_mov_' . $i}
                     ));
                     continue;
@@ -72,7 +72,7 @@ class S3Service implements ObjectStorageInterface
         try {
             $this->s3Client->putObject([
                 'ACL' => 'public-read',
-                'Bucket' => env('AWS_BUCKET'),
+                'Bucket' => config('app.bucket'),
                 'Key'    => config('jobcinema.jobitem_image_dir') . $jobitem->{"job_img_" . $flag},
                 'Body'   => $data,
                 'ContentType' => 'image/jpeg'

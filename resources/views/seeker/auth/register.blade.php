@@ -33,7 +33,7 @@
                             <div class="card register-card">
 
                                 <div class="card-body register-card-body">
-                                    <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
+                                    <form method="POST" action="{{ route('seeker.register') }}" aria-label="{{ __('Register') }}">
                                         @csrf
 
                                         <div class="form-group row">

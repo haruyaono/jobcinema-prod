@@ -33,7 +33,7 @@
                         <div class="col-12 col-sm-12 col-md-10 col-lg-8">
                             <div class="card login-card">
                                 <div class="card-body login-card-body">
-                                    <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
+                                    <form method="POST" action="{{ route('seeker.login') }}" aria-label="{{ __('Login') }}">
                                         {{ csrf_field() }}
 
                                         <div class="form-group row">
@@ -64,7 +64,7 @@
                                             </div>
                                         </div>
                                         <div class="forget-passlink-wrap" style="text-align:right">
-                                            <a class="forget-passlink" href="{{ route('password.request') }}">
+                                            <a class="forget-passlink" href="{{ route('seeker.password.request') }}">
                                                 {{ __('パスワードを忘れた方') }}
                                             </a>
                                         </div>
@@ -90,7 +90,7 @@
                                             </div>
                                         </div>
 
-                                        <p class="text-center mt-4"><a href="{{route('register')}}" class="txt-blue-link">無料会員登録はこちら</a></p>
+                                        <p class="text-center mt-4"><a href="{{route('seeker.register')}}" class="txt-blue-link">無料会員登録はこちら</a></p>
                                     </form>
                                 </div>
                             </div>

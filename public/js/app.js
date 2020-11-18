@@ -1717,15 +1717,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_processing__WEBPACK_IMPORTED_MODULE_0__["default"]],
-  props: ['jobid', 'favourited'],
+  props: ["jobid", "favourited"],
   data: function data() {
     return {
       show: true,
-      count: [document.getElementById('saveCount-pc').innerHTML, document.getElementById('saveCount-sp').innerHTML, document.getElementById('hamburgerLogoutClipJobCount').innerHTML],
-      countElm: [document.getElementById('saveCount-pc'), document.getElementById('saveCount-sp'), document.getElementById('hamburgerLogoutClipJobCount')]
+      count: [document.getElementById("saveCount-pc").innerHTML, document.getElementById("saveCount-sp").innerHTML, document.getElementById("hamburgerLogoutClipJobCount").innerHTML],
+      countElm: [document.getElementById("saveCount-pc"), document.getElementById("saveCount-sp"), document.getElementById("hamburgerLogoutClipJobCount")]
     };
   },
   mounted: function mounted() {
@@ -1741,7 +1753,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.startProcessing();
-      axios.post('/keeplist/save/' + this.jobid).then(function (response) {
+      axios.post("/keeplist/save/" + this.jobid).then(function (response) {
         if (response.data.fav_save_status == 1) {
           _this.show = true;
 
@@ -1749,15 +1761,15 @@ __webpack_require__.r(__webpack_exports__);
             _this.count[i]++;
           }
 
-          document.getElementById('saveCount-pc').innerHTML = _this.count[0];
-          document.getElementById('saveCount-sp').innerHTML = _this.count[1];
-          document.getElementById('hamburgerLogoutClipJobCount').innerHTML = _this.count[2];
-          alert('お仕事情報を保存しました。');
+          document.getElementById("saveCount-pc").innerHTML = _this.count[0];
+          document.getElementById("saveCount-sp").innerHTML = _this.count[1];
+          document.getElementById("hamburgerLogoutClipJobCount").innerHTML = _this.count[2];
+          alert("お仕事情報を保存しました。");
         } else {
-          console.log('アイテムがすでに存在');
+          console.log("アイテムがすでに存在");
         }
       })["catch"](function (error) {
-        return alert('お仕事情報の保存に失敗しました');
+        return alert("お仕事情報の保存に失敗しました");
       })["finally"](function () {
         return _this.endProcessing();
       });
@@ -1765,9 +1777,9 @@ __webpack_require__.r(__webpack_exports__);
     unsave: function unsave() {
       var _this2 = this;
 
-      if (confirm('選択した求人情報を削除しますか？')) {
+      if (confirm("選択した求人情報を削除しますか？")) {
         this.startProcessing();
-        axios.post('/keeplist/unsave/' + this.jobid).then(function (response) {
+        axios.post("/keeplist/unsave/" + this.jobid).then(function (response) {
           if (response.data.fav_del_status == 1) {
             _this2.show = false;
 
@@ -1776,18 +1788,17 @@ __webpack_require__.r(__webpack_exports__);
                 _this2.count[i]--;
               }
 
-              ;
-              document.getElementById('saveCount-pc').innerHTML = _this2.count[0];
-              document.getElementById('saveCount-sp').innerHTML = _this2.count[1];
-              document.getElementById('hamburgerLogoutClipJobCount').innerHTML = _this2.count[1];
+              document.getElementById("saveCount-pc").innerHTML = _this2.count[0];
+              document.getElementById("saveCount-sp").innerHTML = _this2.count[1];
+              document.getElementById("hamburgerLogoutClipJobCount").innerHTML = _this2.count[1];
             }
 
-            alert('削除しました。');
+            alert("削除しました。");
           } else {
-            console.log('削除するアイテムなし');
+            console.log("削除するアイテムなし");
           }
         })["catch"](function (error) {
-          return alert('お仕事情報の削除に失敗しました');
+          return alert("お仕事情報の削除に失敗しました");
         })["finally"](function () {
           return _this2.endProcessing();
         });
@@ -2157,7 +2168,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getCategory: function getCategory() {
       var self = this;
       var list = [];
-      return fetch("/api/categories").then(function (response) {
+      return fetch("/api/categories/").then(function (response) {
         return response.json();
       }).then(function (data) {
         list = data.categories;

@@ -45,7 +45,7 @@
                 @endif
 
                 <div class="col-md-12 p-0">
-                    <form class="form-horizontal" method="POST" action="{{route('employer.confirm') }}" aria-label="{{ __('Register') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('employer.confirm') }}" aria-label="{{ __('Register') }}">
                         {{ csrf_field() }}
                         <table class="table table-bordered">
                             <tbody>

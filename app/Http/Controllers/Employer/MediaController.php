@@ -22,7 +22,6 @@ class MediaController extends Controller
   ) {
     $this->mediaMetadataService = $mediaMetadataService;
     $this->s3Service = $s3Service;
-    $this->middleware(['employer']);
   }
 
   public function editMainImage(JobItem $jobitem)

@@ -30,7 +30,7 @@
     <div class="inner">
       <div class="pad">
         <h1 class="txt-h2">保存したお仕事(最大20件)</h1>
-        @if( Auth::check() )
+        @if( Auth::guard('seeker')->check() )
         <div class="job-list">
           @if ($result_count > 0 )
           @foreach ($jobitems as $jobitem)
@@ -95,17 +95,17 @@
         @else
         <div class="container">
           <p class="text-center h5 mt-5 mb-4">キープリストを使用するにはログインが必要です</p>
-          <p class="text-center">会員登録されていない方は<a href="{{ route('register') }}">こちら</a>から登録できます。</p>
+          <p class="text-center">会員登録されていない方は<a href="{{ route('seeker.register') }}">こちら</a>から登録できます。</p>
           <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
               <div class="card login-card">
 
                 <div class="card-body login-card-body">
-                  <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
+                  <form method="POST" action="{{ route('seeker.login') }}" aria-label="{{ __('Login') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group row">
-                      <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('メールアドレス') }}</label>
+                      <label for="email" class="col-12 col-md-4 col-form-label text-left text-md-right">{{ __('メールアドレス') }}</label>
 
                       <div class="col-md-6">
                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
@@ -119,7 +119,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('パスワード') }}</label>
+                      <label for="password" class="col-12 col-md-4 col-form-label text-left text-md-right">{{ __('パスワード') }}</label>
 
                       <div class="col-md-6">
                         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
@@ -150,7 +150,7 @@
                           {{ __('ログイン') }}
                         </button>
 
-                        <a class="forget-passlink" href="{{ route('password.request') }}">
+                        <a class="forget-passlink" href="{{ route('seeker.password.request') }}">
                           {{ __('パスワードを忘れた方') }}
                         </a>
                       </div>

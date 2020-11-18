@@ -18,7 +18,7 @@
             </a>
         </li>
         <li>
-            <a href="{{route('login')}}">
+            <a href="{{ route('seeker.login') }}">
                 ログイン
             </a>
         </li>
@@ -34,19 +34,28 @@
             <div class="pad">
                 <h2 class="txt-h2">パスワードの再発行</h2>
                 <div class="row justify-content-center">
+                    @if (session('status'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
+                    @endif
                     <div class="col-md-8">
                         <div class="card login-card">
+
                             <div class="card-body login-card-body">
-                                <form method="POST" action="{{ route('password.update') }}">
+
+
+                                <form method="POST" action="{{ route('seeker.password.email') }}">
                                     @csrf
+                                    <p class="h5 mb-4">ご登録のメールアドレスにパスワード再設定リンクをお送りします。</p>
+                                    <p>パスワードを再設定すると新しいパスワードになります。</p>
+                                    <p>ログイン後のマイページよりお好きなパスワードに変更することができます。</p>
 
-                                    <input type="hidden" name="token" value="{{ $token }}">
-
-                                    <div class="form-group row">
+                                    <div class="form-group row my-4">
                                         <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('メールアドレス') }}</label>
 
                                         <div class="col-md-6">
-                                            <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $email ?? old('email') }}" required autofocus>
+                                            <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
 
                                             @if ($errors->has('email'))
                                             <span class="invalid-feedback" role="alert">
@@ -56,32 +65,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
-                                        <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('パスワード') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                            @if ($errors->has('password'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('password') }}</strong>
-                                            </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('確認用パスワード') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row mb-0 mt-4">
+                                    <div class="form-group row mb-0 text-center">
                                         <div class="col-md-6 offset-md-3">
                                             <button type="submit" class="btn btn-primary">
-                                                {{ __('パスワードをリセット') }}
+                                                {{ __('パスワードを通知') }}
                                             </button>
                                         </div>
                                     </div>
@@ -90,6 +77,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

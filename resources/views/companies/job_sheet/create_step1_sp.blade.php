@@ -47,7 +47,7 @@
                         </ul>
                     </div>
                     @endif
-                    <form action="{{route('store.jobsheet.step1') }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
+                    <form action="{{route('enterprise.store.jobsheet.step1') }}" class="job-create" method="POST" enctype="multipart/form-data">@csrf
                         <div class="card">
                             <div class="card-header">雇用形態を選んでください<span class="text-danger">＊</span></div>
                             <div class="card-body">

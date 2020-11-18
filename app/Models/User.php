@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\JobItem;
 use App\Models\Apply;
 use App\Models\Profile;
-use App\Notifications\EmailVerificationJa;
+use App\Notifications\SeekerPasswordResetNotification;
 use Illuminate\Support\Facades\Auth;
 use  \Illuminate\Database\Eloquent\Relations\hasOne;
 use  \Illuminate\Database\Eloquent\Relations\hasMany;
@@ -68,7 +68,7 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new EmailVerificationJa($token));
+        $this->notify(new SeekerPasswordResetNotification($token));
     }
 
     public function getLastNameNullAttribute()
@@ -83,8 +83,8 @@ class User extends Authenticatable
 
     public static function checkFavCount()
     {
-        if (Auth::check()) {
-            $loginUser = auth()->user();
+        if (Auth::guard('seeker')->check()) {
+            $loginUser = auth('seeker')->user();
             $favedJobItems = $loginUser->favourites();
             if (!$favedJobItems) {
                 return 0;

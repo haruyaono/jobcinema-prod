@@ -59,11 +59,11 @@
 				@include('partials.type_categories')
 				@include('partials.area_categories')
 
-				@if(!Auth::check())
+				@if(!Auth::guard('seeker')->check())
 				<div class="main-section-item top-subsection-item only-sp" sty>
 					<div class="top-sp-auth-btn-wrap">
-						<p><a class="btn btn-yellow w-100 mb-3" href="{{ route('register') }}">会員登録</a></p>
-						<p><a class="btn btn-outline-secondary w-100" href="{{ route('login') }}">ログイン</a></p>
+						<p><a class="btn btn-yellow w-100 mb-3" href="{{ route('seeker.register') }}">会員登録</a></p>
+						<p><a class="btn btn-outline-secondary w-100" href="{{ route('seeker.login') }}">ログイン</a></p>
 					</div>
 				</div>
 				@endif

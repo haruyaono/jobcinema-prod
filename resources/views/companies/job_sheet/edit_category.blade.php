@@ -69,11 +69,11 @@ if (!function_exists('is_route')) {
                         </ul>
                     </div>
                     @endif
-                    <form action="{{ route('update.jobsheet.category', [$jobitem->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('enterprise.update.jobsheet.category', [$jobitem->id]) }}" class="job-create" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="cat_flag" value="{{$cat_slug}}">
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId">
-                        @if(is_route(['edit.jobsheet.category', $jobitem->id, 'status']))
+                        @if(is_route(['enterprise.edit.jobsheet.category', $jobitem->id, 'status']))
                         <div class="card">
                             <div class="card-header">雇用形態を選んでください<span class="text-danger">＊</span></div>
                             <div class="card-body">
@@ -90,7 +90,7 @@ if (!function_exists('is_route')) {
                             </div>
                         </div> <!-- card -->
                         @endif
-                        @if(is_route(['edit.jobsheet.category', $jobitem->id, 'type']))
+                        @if(is_route(['enterprise.edit.jobsheet.category', $jobitem->id, 'type']))
 
                         <div class="card">
                             <div class="card-header">募集職種を選んでください<span class="text-danger">＊</span></div>
@@ -109,7 +109,7 @@ if (!function_exists('is_route')) {
                             </div>
                         </div> <!-- card -->
                         @endif
-                        @if(is_route(['edit.jobsheet.category', $jobitem->id, 'area']))
+                        @if(is_route(['enterprise.edit.jobsheet.category', $jobitem->id, 'area']))
                         <div class="card">
                             <div class="card-header">勤務地エリアを選んでください<span class="text-danger">＊</span></div>
                             <div class="card-body">
@@ -127,7 +127,7 @@ if (!function_exists('is_route')) {
                             </div>
                         </div> <!-- card -->
                         @endif
-                        @if(is_route(['edit.jobsheet.category', $jobitem->id, 'salary']))
+                        @if(is_route(['enterprise.edit.jobsheet.category', $jobitem->id, 'salary']))
                         <div class="card">
                             <div class="card-header">最低給与を選んでください<span class="text-danger">＊</span></div>
                             <div class="card-body">
@@ -170,7 +170,7 @@ if (!function_exists('is_route')) {
                             </div>
                         </div> <!-- card -->
                         @endif
-                        @if(is_route(['edit.jobsheet.category', $jobitem->id, 'date']))
+                        @if(is_route(['enterprise.edit.jobsheet.category', $jobitem->id, 'date']))
 
                         <div class="card">
                             <div class="card-header">最低勤務日数を選んでください<span class="text-danger">＊</span></div>

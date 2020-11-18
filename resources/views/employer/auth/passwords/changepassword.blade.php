@@ -1,32 +1,30 @@
-@extends('layouts.master')
+@extends('layouts.employer_mypage_master')
 
 @section('title', 'パスワード変更 | JOB CiNEMA')
 @section('description', '釧路の職場を上映する求人サイト')
 
 @section('header')
-@component('components.header')
+@component('components.employer.mypage_header')
 @endcomponent
 @endsection
 
 @section('contents')
-<!-- パンくず -->
-<div id="breadcrumb" class="bread only-pc">
+<div id="breadcrumb" class="e-mypage-bread only-pc">
   <ol>
     <li>
-      <a href="/mypage/index">
-        マイページ
-      </a>
+      <a href="{{ route('enterprise.index.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
     </li>
     <li>
-      パスワード変更
+      <span class="bread-text-color-red">パスワード変更</span>
     </li>
   </ol>
 </div>
+
 <div class="main-wrap">
   <section class="main-section">
     <div class="inner">
       <div class="pad">
-        <h2 class="txt-h2 mb-3">パスワード変更</h2>
+        <h2 class="h3 mb-3">パスワード変更</h2>
         @if(count($errors) > 0)
         <div class="alert alert-danger">
           <ul class="list-unstyled">
@@ -52,27 +50,27 @@
         </div>
         @endif
 
-        <div class="card-body mypage-card my-5">
-          <form method="POST" action="{{route('mypage.changepassword.post')}}">
+        <div class="card-body mypage-card">
+          <form method="POST" action="{{ route('enterprise.changepassword.post') }}">
             @csrf
-            <div class="form-group text-left d-sm-flex justify-content-center">
-              <label for="current" class="col-sm-4 col-12 px-0">
+            <div class="form-group text-left d-flex justify-content-center">
+              <label for="current" class="w-25">
                 現在のパスワード
               </label>
-              <input id="current" type="password" class="form-control col-sm-6 col-12" name="current-password" required autofocus>
+              <input id="current" type="password" class="form-control w-25" name="current-password" required autofocus>
             </div>
-            <div class="form-group text-left d-sm-flex justify-content-center">
-              <label for="password" class="col-sm-4 col-12 px-0">
+            <div class="form-group text-left d-flex justify-content-center">
+              <label for="password" class="w-25">
                 新しいパスワード
               </label>
-              <input id="password" type="password" class="form-control col-sm-6 col-12" name="new-password" required>
+              <input id="password" type="password" class="form-control w-25" name="new-password" required>
 
             </div>
-            <div class="form-group text-left d-sm-flex justify-content-center">
-              <label for="confirm" class="col-sm-4 col-12 px-0">
+            <div class="form-group text-left d-flex justify-content-center">
+              <label for="confirm" class="w-25">
                 新しいパスワード（確認用）
               </label>
-              <input id="confirm" type="password" class="form-control col-sm-6 col-12" name="new-password_confirmation" required>
+              <input id="confirm" type="password" class="form-control w-25" name="new-password_confirmation" required>
             </div>
             <div class="mt-5">
               <button type="submit" class="btn">更新</button>
@@ -82,8 +80,9 @@
 
 
 
-
-        <p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="/mypage/index" class="txt-blue-link">前に戻る</a></p>
+        <div class="text-center mt-5">
+          <a class="btn back-btn" href="{{ route('enterprise.index.mypage') }"><i class="fas fa-reply mr-3"></i>前に戻る</a>
+        </div>
 
       </div>
     </div>

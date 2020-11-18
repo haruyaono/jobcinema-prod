@@ -12,13 +12,13 @@
 <div id="breadcrumb" class="e-mypage-bread only-pc">
     <ol>
         <li>
-            <a href="{{ route('index.company.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
+            <a href="{{ route('enterprise.index.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
         </li>
         <li>
-            <a href="{{ route('index.company.application') }}"><span class="bread-text-color-blue">応募一覧</span></a>
+            <a href="{{ route('enterprise.index.application') }}"><span class="bread-text-color-blue">応募一覧</span></a>
         </li>
         <li>
-            <a href="{{ route('show.company.application', $apply) }}"><span class="bread-text-color-blue">応募詳細</span></a>
+            <a href="{{ route('enterprise.show.application', $apply) }}"><span class="bread-text-color-blue">応募詳細</span></a>
         </li>
         <li>
             <span class="bread-text-color-red">不採用決定</span>
@@ -64,7 +64,7 @@
                 @endif
 
                 <div class="applyReportItem mb-5">
-                    <form action="{{route('update.company.application.report', [$apply])}}" method="POST">
+                    <form action="{{ route('enterprise.update.application.report', [$apply]) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="data[Apply][id]" value="{{$apply->id}}">

@@ -36,7 +36,7 @@
                     </div>
                     @endif
 
-                    <form id="JobSheetCompanyRegisterMainimageForm" action="{{route('update.jobsheet.mainimage', [$jobitem])}}" method="POST" enctype="multipart/form-data">
+                    <form id="JobSheetCompanyRegisterMainimageForm" action="{{ route('enterprise.update.jobsheet.mainimage', [$jobitem])}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId" />
@@ -97,7 +97,7 @@
 
         $('#deleteImage').click(function() {
             if (window.confirm('登録されているメイン写真を削除します。よろしいですか？')) {
-                window.location.href = '/company/jobs/create/delete_image/' + job.id + '?flag=1';
+                window.location.href = '/enterprise/jobs/create/delete_image/' + job.id + '?flag=1';
                 return false;
             }
         });

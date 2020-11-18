@@ -13,7 +13,7 @@
 <div id="breadcrumb" class="bread only-pc">
   <ol>
     <li>
-      <a href="/mypage/index">
+      <a href="{{ route('seeker.index.mypage') }}">
         　マイページ
       </a>
     </li>
@@ -53,7 +53,7 @@
         @endif
 
         <div class="card-body mypage-card my-5">
-          <form method="POST" action="{{route('mypage.changeemail.post')}}">
+          <form method="POST" action="{{ route('seeker.mypage.changeemail.post') }}">
             @csrf
             <div class="form-group text-left d-sm-flex justify-content-center">
               <label for="current" class="col-sm-4 col-12 px-0">
@@ -73,7 +73,7 @@
           </form>
         </div>
 
-        <p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="/mypage/index" class="txt-blue-link">前に戻る</a></p>
+        <p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="{{ route('seeker.index.mypage') }}" class="txt-blue-link">前に戻る</a></p>
 
       </div>
     </div>

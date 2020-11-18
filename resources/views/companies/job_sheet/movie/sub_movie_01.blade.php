@@ -35,7 +35,7 @@
                         {{ Session::get('message_danger') }}
                     </div>
                     @endif
-                    <form class="file-apload-form" action="{{route('update.jobsheet.submovie1', [$jobitem])}}" method="POST" enctype="multipart/form-data">
+                    <form class="file-apload-form" action="{{ route('enterprise.update.jobsheet.submovie1', [$jobitem]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId" />
@@ -101,7 +101,7 @@
 
         $('#deleteMovie').click(function() {
             if (window.confirm('登録されているサブ動画を削除します。よろしいですか？')) {
-                window.location.href = '/company/jobs/create/delete_movie/' + job.id + '?flag=2';
+                window.location.href = '/enterprise/jobs/create/delete_movie/' + job.id + '?flag=2';
                 return false;
             }
         });
