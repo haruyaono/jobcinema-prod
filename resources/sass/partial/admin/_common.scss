@@ -1,0 +1,154 @@
+// 共通スタイル
+input,
+textarea,
+select {
+  border-radius: 0;
+}
+label {
+  margin-bottom: 0;
+  margin-left: 0.1rem;
+}
+.input-group-text {
+  background-color: #fff;
+  border-radius: 0;
+}
+.custom-select {
+  border-radius: 0;
+}
+.content-header h1 {
+  font-size: 1.4rem;
+}
+
+.form-control {
+  border-radius: 0;
+}
+.form-inline {
+  .form-group {
+    margin-bottom: 1rem;
+  }
+}
+
+hr {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+table {
+  width: 100%;
+  margin-left: 0px;
+
+  th,
+  td {
+    white-space: nowrap;
+  }
+}
+
+// jQuery dataTables
+div.dataTables_wrapper div.dataTables_paginate {
+  margin-top: 20px;
+}
+
+.cf::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+// .card-body内で上余白を設定するため
+.body-box {
+  padding-top: 1.5rem;
+}
+
+// カスタム
+.system-values {
+  margin: 0 auto;
+  width: auto;
+  @include mq(large) {
+    width: 830px;
+  }
+  .system-values-flows {
+    margin-bottom: 0;
+    font-size: 0.9em;
+    @include mq(large) {
+      margin-bottom: 0.5em;
+    }
+  }
+  .system-values-list {
+    display: block;
+    text-align: left;
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+    @include mq(large) {
+      display: inline-flex;
+      flex-wrap: wrap;
+    }
+    li {
+      width: 100%;
+      padding: 0.4em 8px;
+      border: none;
+      margin-bottom: 5px;
+      list-style: none;
+      @include mq(large) {
+        border-left: solid 6px #2d8fdd;
+        margin: 0.5em 2px;
+        width: 160px;
+      }
+    }
+    .system-values-label {
+      min-width: 100px;
+      margin-bottom: 0;
+      font-weight: bold;
+      @include mq(large) {
+        margin: 0 0 5px;
+      }
+    }
+    p {
+      display: inline-block;
+      margin-bottom: 0;
+      @include mq(large) {
+        display: block;
+      }
+    }
+  }
+}
+
+// 表示・非表示
+.only-pc {
+  display: block;
+}
+.ib-only-pc {
+  display: inline-block;
+}
+.tr-only-pc {
+  display: table-row;
+}
+.td-only-pc {
+  display: table-cell;
+}
+.only-sp,
+.ib-only-sp,
+.tr-only-sp,
+.td-only-sp {
+  display: none;
+}
+@media (max-width: 768px) {
+  .only-pc,
+  .ib-only-pc,
+  .tr-only-pc,
+  .td-only-pc {
+    display: none !important;
+  }
+  .only-sp {
+    display: block;
+  }
+  .ib-only-sp {
+    display: inline-block;
+  }
+  .tr-only-sp {
+    display: table-row;
+  }
+  .td-only-sp {
+    display: table-cell;
+  }
+}

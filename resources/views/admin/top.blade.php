@@ -5,7 +5,7 @@
 
 <!-- ページの見出しを入力 -->
 @section('content_header')
-<h1>管理画面</h1>
+<h1><i class="fas fa-home mr-2"></i>ダッシュボード</h1>
 @stop
 
 <!-- ページの内容を入力 -->
@@ -14,9 +14,8 @@
 @stop
 
 <!-- 読み込ませるCSSを入力 -->
-@section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+<!-- @section('css')
+@stop -->
 
 <!-- 読み込ませるJSを入力 -->
 @section('js')

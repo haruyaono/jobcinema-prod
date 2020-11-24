@@ -10,7 +10,7 @@ class RouteServiceProvider extends ServiceProvider
     // $redirectTo not use, use the following instead.
     public const HOME = '/mypage/index';
     public const EMPLOYER_HOME = '/enterprise/mypage';
-    public const ADMIN_HOME = '/admin/top';
+    public const ADMIN_HOME = '/admin';
 
     public const REGISTER_HOME = '/members/register_complete';
     public const EMPLOYER_LOGIN = '/enterprise/login';

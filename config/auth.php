@@ -49,9 +49,9 @@ return [
             'driver' => 'session',
             'provider' => 'seekers',
         ],
-        'employer' => [ //追加
-            'driver' => 'session', //追加
-            'provider' => 'employers', //追加
+        'employer' => [
+            'driver' => 'session',
+            'provider' => 'employers',
         ],
         'admin' => [
             'driver' => 'session',

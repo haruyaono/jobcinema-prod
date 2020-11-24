@@ -34,7 +34,6 @@ class JobController extends Controller
 
   public function index()
   {
-    Log::debug('aa');
     $jobitems = $this->JobItem->activeJobitem()->get();
     $topNewJobs = $jobitems->sortBy('created_at')->take(3);
     $categories = $this->CategoryRepository->getCategories();

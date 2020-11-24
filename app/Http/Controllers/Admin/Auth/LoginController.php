@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
@@ -29,10 +30,8 @@ class LoginController extends Controller
      * @var string
      */
 
-    protected $maxAttempts = 10;     // ログイン試行回数（回）
-    protected $decayMinutes = 10;   // ログインロックタイム（分）
-
-    protected $redirectTo = '/dashboard';
+    protected $maxAttempts = 10;
+    protected $decayMinutes = 10;
 
     /**
      * Create a new controller instance.
@@ -51,7 +50,19 @@ class LoginController extends Controller
 
     protected function guard()
     {
-        return Auth::guard('admin');  //変更
+        return Auth::guard('admin');
+    }
+
+    /**
+     * ログイン後の処理
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return \Illuminate\Http\Response
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect(RouteServiceProvider::ADMIN_HOME)->with('status',  'ログインしました！');
     }
 
     public function logout(Request $request)

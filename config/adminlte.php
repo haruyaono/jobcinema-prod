@@ -188,17 +188,17 @@ return [
 
     'use_route_url' => false,
 
-    'dashboard_url' => 'dashboard',
+    'dashboard_url' => 'admin',
 
-    'logout_url' => 'dashboard/logout',
+    'logout_url' => 'admin/logout',
 
-    'login_url' => 'dashboard/login',
+    'login_url' => 'admin/login',
 
     'register_url' => '',
 
-    'password_reset_url' => 'dashboard/password/reset',
+    'password_reset_url' => '',
 
-    'password_email_url' => 'dashboard/password/email',
+    'password_email_url' => '',
 
     'profile_url' => false,
 
@@ -215,8 +215,8 @@ return [
     */
 
     'enabled_laravel_mix' => false,
-    'laravel_mix_css_path' => 'css/app.css',
-    'laravel_mix_js_path' => 'js/app.js',
+    'laravel_mix_css_path' => 'css/adminApp.css',
+    'laravel_mix_js_path' => 'js/adminApp.js',
 
     /*
     |--------------------------------------------------------------------------
@@ -237,81 +237,52 @@ return [
             'topnav' => true,
         ],
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'text'        => 'HOME',
+            'url'         => 'admin',
+            'icon'        => 'nav-icon fas fa-tachometer-alt',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text'    => '求人票テーブル',
+            'icon'    => 'nav-icon fas fa-book',
+            'url'  => 'admin/data/job_sheet',
         ],
         [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text'    => '応募管理',
+            'icon'    => 'nav-icon fas fa-tasks',
+            'url'  => '#',
         ],
         [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
+            'text'    => 'お祝い金管理',
+            'icon'    => 'nav-icon fas fa-comment-dollar',
+            'url'  => '#',
+        ],
+        [
+            'text'    => '企業テーブル',
+            'icon'    => 'nav-icon fas fa-building',
+            'url'  => '#',
+        ],
+        [
+            'text'    => 'メールチェック',
+            'icon'    => 'nav-icon fas fa-envelope',
+            'url'  => '#',
+        ],
+        [
+            'text'    => 'システム設定',
+            'icon'    => 'nav-icon fas fa-cog',
             'submenu' => [
                 [
-                    'text' => 'level_one',
+                    'text' => 'お祝い金',
                     'url'  => '#',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => '採用報酬',
+                    'url'  => '#',
                 ],
                 [
-                    'text' => 'level_one',
+                    'text' => 'カテゴリ',
                     'url'  => '#',
                 ],
             ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
         ],
     ],
 
@@ -417,6 +388,31 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'Toastr' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js',
+                ],
+            ],
+        ],
+        'Pjax' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.js',
                 ],
             ],
         ],
