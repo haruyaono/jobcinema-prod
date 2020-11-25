@@ -17,13 +17,13 @@
           <div class="card">
             <div class="card-body">
               <div class="my-3">
-                <p class="after-text h3">{{$message}}</p>
+                <p class="after-text h3">{{ $message }}</p>
               </div>
             </div>
           </div> <!-- card -->
           <div class="form-group text-center">
             @if($flag === 9)
-            <a class="btn back-btn ml-3" href="{{route('index.joblist')}}"><i class="fas fa-reply mr-3"></i>求人一覧に戻る</a>
+            <a class="btn back-btn ml-3" href="{{ route('enterprise.index.joblist') }}"><i class="fas fa-reply mr-3"></i>求人一覧に戻る</a>
             @else
             <a class="btn back-btn ml-3" href="javascript:void(0);" onClick="window.opener.location.reload(),window.close()"><i class="fas fa-reply mr-3"></i>閉じる</a>
             @endif

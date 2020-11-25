@@ -22,7 +22,7 @@
                         下記の内容でお間違いなければ、登録ボタンを押してください。
                     </div>
                     @endif
-                    <form action="{{ route('update.jobsheet.step2', [$jobitem]) }}" class="job-create file-apload-form" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('enterprise.update.jobsheet.step2', [$jobitem]) }}" class="job-create file-apload-form" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="card">

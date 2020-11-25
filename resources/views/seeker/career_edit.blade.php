@@ -13,7 +13,7 @@
 <div id="breadcrumb" class="bread only-pc">
     <ol>
         <li>
-            <a href="{{route('index.seeker.mypage')}}">
+            <a href="{{ route('seeker.index.mypage') }}">
                 マイページ
             </a>
         </li>
@@ -47,7 +47,7 @@
                         <div class="card mypage-card">
                             <div class="card-header">現在の状況・希望編集</div>
 
-                            <form action="{{ route('update.seeker.career') }}" method="POST">
+                            <form action="{{ route('seeker.update.career') }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="card-body text-left">
@@ -56,7 +56,7 @@
                                         <select name="data[profile][occupation]">
                                             <option value="0">-----</option>
                                             @foreach(config('const.OCCUPATION') as $occupation)
-                                            <option value="{{$occupation}}" @if(old('data.profile.occupation')==$occupation){{'selected'}}@elseif(!old('data.profile.occupation') && $profile->occupation == $occupation ){{'selected'}}@endif>{{$occupation}}</option>
+                                            <option value="{{ $occupation }}" @if(old('data.profile.occupation')==$occupation){{'selected'}}@elseif(!old('data.profile.occupation') && $profile->occupation == $occupation ){{ 'selected' }}@endif>{{ $occupation }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -65,16 +65,16 @@
                                         <select name="data[profile][final_education]">
                                             <option value="0">-----</option>
                                             @foreach(config('const.FINAL＿EDUCATION') as $education)
-                                            <option value="{{$education}}" @if(old('data.profile.final_education')==$education ){{'selected'}}@elseif(!old('data.profile.final_education') && $profile->final_education == $education ){{'selected'}}@endif>{{$education}}</option>
+                                            <option value="{{ $education }}" @if(old('data.profile.final_education')==$education ){{'selected'}}@elseif(!old('data.profile.final_education') && $profile->final_education == $education ){{ 'selected' }}@endif>{{ $education }}</option>
                                             @endforeach
 
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <p>勤務開始可能日</p>
-                                        <input id="allways" checked="checked" type="radio" name="data[profile][work_start_date]" value="いつでも可能" @if( old('data.profile.work_start_date')=='いつでも可能' ){{'checked'}}@elseif(!old('data.profile.work_start_date') && $profile->work_start_date == 'いつでも可能' ){{'checked'}}@endif>
+                                        <input id="allways" checked="checked" type="radio" name="data[profile][work_start_date]" value="いつでも可能" @if( old('data.profile.work_start_date')=='いつでも可能' ){{'checked'}}@elseif(!old('data.profile.work_start_date') && $profile->work_start_date == 'いつでも可能' ){{ 'checked' }}@endif>
                                         <label for="allways">いつでも可能</label>
-                                        <input id="consultation" type="radio" name="data[profile][work_start_date]" value="面接時に相談" @if( old('data.profile.work_start_date')=='面接時に相談' ){{'checked'}}@elseif(!old('data.profile.work_start_date') && $profile->work_start_date == '面接時に相談' ){{'checked'}}@endif>
+                                        <input id="consultation" type="radio" name="data[profile][work_start_date]" value="面接時に相談" @if( old('data.profile.work_start_date')=='面接時に相談' ){{'checked'}}@elseif(!old('data.profile.work_start_date') && $profile->work_start_date == '面接時に相談' ){{ 'checked' }}@endif>
                                         <label for="consultation">面接時に相談</label>
                                     </div>
                                     <div class="form-group">
@@ -90,7 +90,7 @@
                 </div>
             </div>
 
-            <p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="{{ route('index.seeker.mypage') }}" class="txt-blue-link">前に戻る</a></p>
+            <p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="{{ route('seeker.index.mypage') }}" class="txt-blue-link">前に戻る</a></p>
 
         </div>
     </div>

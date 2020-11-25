@@ -63,7 +63,7 @@ class Handler extends ExceptionHandler
         return response()->view("errors.common", ['exception' => $e], $status);
     }
 
-    public function unauthenticated($request, AuthenticationException $exception)
+    protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
             return response()->json(['message' => $exception->getMessage()], 401);
@@ -73,9 +73,9 @@ class Handler extends ExceptionHandler
             return redirect()->guest(route('employer.login'));
         }
         if (in_array('admin', $exception->guards())) {
-            return redirect()->guest('admin/login');
+            return redirect()->guest(route('admin.login'));
         }
 
-        return redirect()->guest(route('login'));
+        return redirect()->guest(route('seekder.login'));
     }
 }

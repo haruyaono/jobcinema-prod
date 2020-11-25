@@ -14,7 +14,7 @@ class UserProfileController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->user = \Auth::user();
+            $this->user = \Auth::guard('seeker')->user();
             return $next($request);
         });
     }

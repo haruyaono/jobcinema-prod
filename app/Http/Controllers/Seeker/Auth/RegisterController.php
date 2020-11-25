@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisteredMail;
+use App\Providers\RouteServiceProvider;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -20,13 +22,23 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/members/register_complete';
+    protected $redirectTo = RouteServiceProvider::REGISTER_HOME;
 
     private $hash;
 
     public function __construct(Hash $hash)
     {
         $this->hash = $hash;
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('seeker');
+    }
+
+    public function showRegistrationForm()
+    {
+        return view('seeker.auth.register');
     }
 
     /**

@@ -13,7 +13,7 @@
 <div id="breadcrumb" class="e-mypage-bread only-pc">
     <ol>
         <li>
-            <a href="{{ route('index.company.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
+            <a href="{{ route('enterprise.index.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
         </li>
         <li>
             <span class="bread-text-color-red">企業データ</span>
@@ -45,7 +45,7 @@
                 </div>
                 @endif
                 <div class="row justify-content-center">
-                    <form action="{{ route('update.company.profile') }}" method="POST" class="text-left col-md-12 p-0 file-apload-form">
+                    <form action="{{ route('enterprise.update.profile') }}" method="POST" class="text-left col-md-12 p-0 file-apload-form">
                         @csrf
                         <div class="col-md-12">
                             <div class="card">

@@ -22,7 +22,7 @@
     【採用担当】：{{ $apply->jobitem->company->employer->first_name }}<br>
     【連絡先電話番号】：{{ $apply->jobitem->company->full_phone }}</p>
 <p>※応募した求人はマイページから確認できます。<br>
-    <a href="{{ route('index.seeker.mypage') }}">{{ route('index.seeker.mypage') }}</a>
+    <a href="{{ route('seeker.index.mypage') }}">{{ route('seeker.index.mypage') }}</a>
     <br>
     <p>＜ 運営情報 ＞<br>
         JOBCiNEMA<br>

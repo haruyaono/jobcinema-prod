@@ -17,7 +17,7 @@
     【年齢】 {{ $data['age'] }}<br>
 </p>
 <p>※応募者の詳細情報は管理画面から確認できます<br>
-    <a href=" {{route('index.company.mypage') }}">{{ route('index.company.mypage') }}</a>
+    <a href="{{ route('enterprise.index.mypage') }}">{{ route('enterprise.index.mypage') }}</a>
 </p>
 <p>＜ 運営情報 ＞<br>
     JOBCiNEMA<br>

@@ -298,12 +298,12 @@ $jobjson = json_encode($jobitem);
       </div>
 
       <div class="entrybtn-field">
-        @if(Auth::guard()->check())
-        <favourite-component :jobid={{$jobitem->id}} :favourited={{$jobitem->checkSaved()?'true':'false'}}></favourite-component>
+        @if(Auth::guard('seeker')->check())
+        <favourite-component :jobid={{$jobitem->id}} :favourited={{ $jobitem->checkSaved()?'true':'false' }}></favourite-component>
         @endif
         <div class="entrybtn-item">
           @if(!$exists)
-          <a class="entry-btn apply-btn" href="{{route('show.front.entry.step1', $jobitem)}}">応募する</a>
+          <a class="entry-btn apply-btn" href="{{ route('show.front.entry.step1', $jobitem) }}">応募する</a>
           @else
           <a class="entry-btn apply-btn non-link" href="javascript:void(0)">応募済み</a>
           @endif

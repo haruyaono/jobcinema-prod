@@ -35,7 +35,7 @@ class JobController extends Controller
         $this->authorize('view', $apply);
 
         if ($apply->IsWithinHalfYear === false) {
-            return redirect()->route('index.seeker.job');
+            return redirect()->route('seeker.index.job');
         }
 
         return view('seeker.job.show_report', compact('apply'));
@@ -48,7 +48,7 @@ class JobController extends Controller
         $user =  $this->user;
 
         if ($apply->IsWithinHalfYear === false) {
-            return redirect()->route('index.seeker.job');
+            return redirect()->route('seeker.index.job');
         }
 
         return view('seeker.job.edit_report', compact('apply'));
@@ -59,7 +59,7 @@ class JobController extends Controller
         $this->authorize('update', $apply);
 
         if ($apply->IsWithinHalfYear === false || $apply->s_recruit_status === 8) {
-            return redirect()->route('index.seeker.job');
+            return redirect()->route('seeker.index.job');
         }
 
         $data = [];
@@ -111,6 +111,6 @@ class JobController extends Controller
         $apply->update($data);
 
         session()->flash('flash_message_success', 'ご報告ありがとうございました！');
-        return redirect()->route('index.seeker.job');
+        return redirect()->route('seeker.index.job');
     }
 }

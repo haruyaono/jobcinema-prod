@@ -13,8 +13,6 @@
     <section class="main-section job-create-section">
         <div class="inner">
             <div class="pad">
-
-
                 <div class="col-12 col-lg-10 col-md-10 col-sm-12 mr-auto ml-auto px-0">
                     <div class="text-center pb-3 mb-4">
                         作成された求人票の内容を確認できます。

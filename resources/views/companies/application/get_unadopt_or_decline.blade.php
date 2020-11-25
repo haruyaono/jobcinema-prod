@@ -12,10 +12,10 @@
 <div id="breadcrumb" class="e-mypage-bread only-pc">
     <ol>
         <li>
-            <a href="{{ route('index.company.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
+            <a href="{{ route('enterprise.index.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
         </li>
         <li>
-            <a href="{{ route('index.company.application') }}"><span class="bread-text-color-blue">応募一覧</span></a>
+            <a href="{{ route('enterprise.index.application') }}"><span class="bread-text-color-blue">応募一覧</span></a>
         </li>
         <li>
             <span class="bread-text-color-red">不採用・辞退一覧</span>
@@ -56,7 +56,7 @@
                             <tr>
                                 <td colspan="4" height="39" class="cf">
                                     <div class="applyJobitem floatL">
-                                        <a href="{{ route('show.joblist.detail', $apply->jobitem) }}" target="_blank"><i class="far fa-sticky-note mr-1"></i>求人票</a>
+                                        <a href="{{ route('enterprise.show.joblist.detail', $apply->jobitem) }}" target="_blank"><i class="far fa-sticky-note mr-1"></i>求人票</a>
                                     </div>
                                     @if($apply->s_recruit_status === 8)
                                     <div class="floatL ml-3">
@@ -68,7 +68,7 @@
                                     </div>
                                 </td>
                                 <td rowspan="3" class="rightBox">
-                                    <a class="btn companyApplyItemDetailBtn" href="{{ route('show.company.application', $apply) }}" target="_blank">詳細</a>
+                                    <a class="btn companyApplyItemDetailBtn" href="{{ route('enterprise.show.application', $apply) }}" target="_blank">詳細</a>
                                 </td>
                                 <td rowspan="3" class="rightBox">
 

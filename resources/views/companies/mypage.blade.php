@@ -30,22 +30,19 @@
                 <div class="row justify-content-center mt-4">
                     <div class="col-md-8 e-mypage-card">
                         <div class="e-mypage-card-item">
-                            <a href="{{route('index.jobsheet.top')}}"><i class="fas fa-edit mr-3"></i>求人票を作成<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{ route('enterprise.index.joblist') }}"><i class="fas fa-edit mr-3"></i>求人票の作成・確認<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('index.joblist')}}"><i class="fas fa-edit mr-3"></i>求人票の一覧<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{ route('enterprise.index.application') }}"><i class="fas fa-address-card mr-3"></i>応募者を見る<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('index.company.application')}}"><i class="fas fa-address-card mr-3"></i>応募者を見る<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{ route('enterprise.edit.profile') }}"><i class="fas fa-building mr-3"></i>企業データの編集<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('edit.company.profile')}}"><i class="fas fa-building mr-3"></i>企業データの編集<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{ route('enterprise.changeemail.get') }}"><i class="fas fa-envelope mr-3"></i>メールアドレス変更<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
-                            <a href="{{route('employer.changeemail.get')}}"><i class="fas fa-envelope mr-3"></i>メールアドレス変更<i class="fas fa-angle-double-right"></i></a>
-                        </div>
-                        <div class="e-mypage-card-item">
-                            <a href="{{route('employer.changepassword.get')}}"><i class="fas fa-key mr-3"></i>パスワード変更<i class="fas fa-angle-double-right"></i></a>
+                            <a href="{{ route('enterprise.changepassword.get') }}"><i class="fas fa-key mr-3"></i>パスワード変更<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
                             <a href="{{ route('employer.logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt mr-3"></i>ログアウト</a>

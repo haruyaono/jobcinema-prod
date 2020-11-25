@@ -11,6 +11,7 @@ use App\Services\JobItemService;
 use App\Services\JobItemSearchService;
 use App\Repositories\CategoryRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
 {
@@ -45,8 +46,8 @@ class JobController extends Controller
     $recommendJobList = [];
     $exists = false;
 
-    if (Auth::check()) {
-      $user = auth()->user();
+    if (Auth::guard('seeker')->check()) {
+      $user = auth('seeker')->user();
 
       Redis::command('LREM', ['Viewer:Item:' . $jobitem->id, 0, $user->id]);
       Redis::command('RPUSH', ['Viewer:Item:' . $jobitem->id, $user->id]);

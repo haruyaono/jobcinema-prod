@@ -12,10 +12,10 @@
 <div id="breadcrumb" class="e-mypage-bread only-pc">
     <ol>
         <li>
-            <a href="{{ route('index.company.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
+            <a href="{{ route('enterprise.index.mypage') }}"><span class="bread-text-color-blue">企業ページ</span></a>
         </li>
         <li>
-            <a href="{{ route('index.company.application') }}"><span class="bread-text-color-blue">応募一覧</span></a>
+            <a href="{{ route('enterprise.index.application') }}"><span class="bread-text-color-blue">応募一覧</span></a>
         </li>
         <li>
             <span class="bread-text-color-red">応募詳細</span>
@@ -125,9 +125,9 @@
                 </div>
                 <div class="sectionItem">
                     <div class="companyBtnWrap">
-                        <a href="{{ route('show.company.application.report', [$apply, 'type' => 'adopt']) }}" class="companyBtn companyBtnOrange">採用決定</a>
-                        <a href="{{ route('show.company.application.report', [$apply, 'type' => 'unadopt']) }}" class="companyBtn companyBtnGray">不採用</a>
-                        <a href="{{ route('show.company.application.report', [$apply, 'type' => 'decline']) }}" class="companyBtn companyBtnCyan">辞退</a>
+                        <a href="{{ route('enterprise.show.application.report', [$apply, 'type' => 'adopt']) }}" class="companyBtn companyBtnOrange">採用決定</a>
+                        <a href="{{ route('enterprise.show.application.report', [$apply, 'type' => 'unadopt']) }}" class="companyBtn companyBtnGray">不採用</a>
+                        <a href="{{ route('enterprise.show.application.report', [$apply, 'type' => 'decline']) }}" class="companyBtn companyBtnCyan">辞退</a>
                     </div>
                 </div>
 

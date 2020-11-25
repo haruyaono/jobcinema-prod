@@ -109,9 +109,11 @@ class JobItemService
     {
         $createData = [];
 
+
         foreach ($dataArray as $key => $data) {
             if ($key == 'salary') {
                 foreach ($dataArray[$key] as $data) {
+
                     if (!array_key_exists('id', $data)) {
                         $category = $this->CategoryRepository->getFirstWhere(['slug' => $data['parent_slug']]);
                         $data['id'] = $category->descendants()->where('slug', 'unregistered')->first()->id;

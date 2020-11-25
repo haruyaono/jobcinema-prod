@@ -20,7 +20,7 @@
         <section class="apply-after-job-info">
           <h2>応募先：{{$jobitem->job_office}}</h2>
           <div class="apply-after-sub">
-            <p>MYページは<a href="{{ route('index.seeker.mypage') }}" class="txt-blue-link">こちら</a>です。</p>
+            <p>MYページは<a href="{{ route('seeker.index.mypage') }}" class="txt-blue-link">こちら</a>です。</p>
             <p>「応募後の流れ」は応募管理からも確認できます。</p>
           </div>
           <table>
@@ -50,7 +50,7 @@
             <tr>
               <th>求人ページ</th>
               <td>
-                <a href="{{route('show.front.job_sheet.detail', [$jobitem])}}" class="txt-blue-link">{{route('show.front.job_sheet.detail', [$jobitem])}}</a>
+                <a href="{{ route('show.front.job_sheet.detail', [$jobitem]) }}" class="txt-blue-link">{{ route('show.front.job_sheet.detail', [$jobitem]) }}</a>
               </td>
             </tr>
           </table>

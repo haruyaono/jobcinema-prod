@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-
+use App\Providers\RouteServiceProvider;
 
 class LoginController extends Controller
 {
@@ -22,7 +22,7 @@ class LoginController extends Controller
     protected $maxAttempts = 10;     // ログイン試行回数（回）
     protected $decayMinutes = 10;   // ログインロックタイム（分）
 
-    protected $redirectTo = '/mypage/index';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -31,21 +31,23 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:user')->except('logout');
+        $this->middleware('guest:seeker')->except('logout');
     }
 
     protected function guard()
     {
-        return Auth::guard('user');
+        return Auth::guard('seeker');
+    }
+
+    public function showLoginForm()
+    {
+        return view('seeker.auth.login');
     }
 
     public function logout(Request $request)
     {
-        $this->guard('user')->logout();
-        // $request->session()->flush();
-        // $request->session()->regenerate();
-
-        return redirect('members/logout');
+        $this->guard('seeker')->logout();
+        return redirect(route('seeker.login'));
     }
 
     protected function sendFailedLoginResponse(Request $request)

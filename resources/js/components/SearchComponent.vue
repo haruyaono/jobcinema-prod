@@ -229,7 +229,7 @@ export default {
       const self = this;
       let list = [];
 
-      return fetch("/api/categories")
+      return fetch("/api/categories/")
         .then(response => response.json())
         .then(data => {
           list = data.categories;

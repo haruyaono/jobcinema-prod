@@ -7,7 +7,7 @@
                 @if (Auth::guard('employer')->check())
                 <p class="h3 mb-0 font-white mt-2">{{ Auth::guard('employer')->user()->company->cname ?: 'ゲスト' }}様の管理ページ</p>
                 @else
-                <div class="logo"><a href="/"><img src="{{ asset('/uploads/images/jobcinema_rogo_re.png') }}" alt=""></a></div>
+                <div class="logo"><a href="/"><img src="{{ asset('/img/common/jobcinema_rogo_re.png') }}" alt=""></a></div>
                 @endif
             </div>
             <div class="emp-header-right floatR">
@@ -19,16 +19,16 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown1">
                             @if (Auth::guard('employer')->check())
-                            <a class="dropdown-item" href="{{ route('index.jobsheet.top') }}">
+                            <a class="dropdown-item" href="{{ route('enterprise.index.joblist') }}">
                                 {{ __('求人票を作成') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('index.joblist') }}">
+                            <a class="dropdown-item" href="{{ route('enterprise.index.joblist') }}">
                                 {{ __('求人票の一覧') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('index.company.application') }}">
+                            <a class="dropdown-item" href="{{ route('enterprise.index.application') }}">
                                 {{ __('応募者を見る') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('edit.company.profile') }}">
+                            <a class="dropdown-item" href="{{ route('enterprise.edit.profile') }}">
                                 {{ __('企業データの編集') }}
                             </a>
                             <a class="dropdown-item" href="{{ route('employer.logout') }}" onclick="event.preventDefault();

@@ -13,6 +13,9 @@ abstract class AbstractMediaUploadRequest extends Request
 
     public function rules(): array
     {
+        if ($this->isArray()) {
+            return $this->getRules();
+        }
         return [
             $this->getMediaFieldName() => $this->getMediaValidateParams(),
         ];
@@ -31,4 +34,8 @@ abstract class AbstractMediaUploadRequest extends Request
     abstract protected function getMediaFieldName(): string;
 
     abstract protected function getMediaValidateParams(): array;
+
+    abstract protected function isArray(): bool;
+
+    abstract protected function getRules(): array;
 }

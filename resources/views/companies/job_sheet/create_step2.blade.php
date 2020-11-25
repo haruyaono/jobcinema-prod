@@ -50,7 +50,7 @@
                         </ul>
                     </div>
                     @endif
-                    <form name="JobSheetStep2" id="jobsheet-create-form" action="{{ route('draftOrConfirm.jobsheet.step2', [$jobitem]) }}" class="job-create jobSaveForm file-apload-form" method="POST">
+                    <form name="JobSheetStep2" id="jobsheet-create-form" action="{{ route('enterprise.draftOrConfirm.jobsheet.step2', [$jobitem]) }}" class="job-create jobSaveForm file-apload-form" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}" id="JobSheetId">
@@ -67,7 +67,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'status']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('enterprise.edit.jobsheet.category', [$jobitem, 'status']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>職種</th>
@@ -76,7 +76,7 @@
                                                 {{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name}}
                                             </span>
                                         </td>
-                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'type']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('enterprise.edit.jobsheet.category', [$jobitem, 'type']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>勤務地エリア</th>
@@ -86,7 +86,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'area']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('enterprise.edit.jobsheet.category', [$jobitem, 'area']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>最低給与</th>
@@ -98,7 +98,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'salary']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('enterprise.edit.jobsheet.category', [$jobitem, 'salary']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                     <tr>
                                         <th>最低勤務日数</th>
@@ -108,7 +108,7 @@
                                             </span>
 
                                         </td>
-                                        <td><a href="{{ route('edit.jobsheet.category', [$jobitem, 'date']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
+                                        <td><a href="{{ route('enterprise.edit.jobsheet.category', [$jobitem, 'date']) }}" class="txt-blue-link" target="_blank">変更する</a></td>
                                     </tr>
                                 </table>
                             </div>
@@ -131,7 +131,7 @@
                                             <?php
                                             $index--;
                                             ?>
-                                            <a class="btn-gradient-3d-orange" href="{{ $index === 0 ? route('edit.jobsheet.mainimage', $jobitem) : route('edit.jobsheet.subimage' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン写真を登録' : 'サブ写真を登録' }}</a>
+                                            <a class="btn-gradient-3d-orange" href="{{ $index === 0 ? route('enterprise.edit.jobsheet.mainimage', $jobitem) : route('enterprise.edit.jobsheet.subimage' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン写真を登録' : 'サブ写真を登録' }}</a>
                                         </p>
                                     </div>
                                     @endforeach
@@ -156,7 +156,7 @@
                                             <?php
                                             $index--;
                                             ?>
-                                            <a class="btn-gradient-3d-blue" href="{{ $index === 0 ? route('edit.jobsheet.mainmovie', $jobitem) : route('edit.jobsheet.submovie' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン動画を登録' : 'サブ動画を登録' }}</a>
+                                            <a class="btn-gradient-3d-blue" href="{{ $index === 0 ? route('enterprise.edit.jobsheet.mainmovie', $jobitem) : route('enterprise.edit.jobsheet.submovie' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン動画を登録' : 'サブ動画を登録' }}</a>
                                         </p>
                                     </div>
                                     @endforeach

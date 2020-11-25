@@ -20,11 +20,11 @@
               <div class="my-3">
                 <p class="after-text h3　mb-5">掲載中ですが掲載を終了してよろしいですか？</p>
               </div>
-              <form name="JobSheetstatus" action="{{route('update.jobsheet.status.postend', [$jobitem])}}" method="POST" class="text-center">
+              <form name="JobSheetstatus" action="{{ route('enterprise.update.jobsheet.status.postend', [$jobitem]) }}" method="POST" class="text-center">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="data[JobSheet][pushed]" value="updatePostend">
-                <input type="hidden" name="data[JobSheet][id]" value="{{$jobitem->id}}">
+                <input type="hidden" name="data[JobSheet][id]" value="{{ $jobitem->id }}">
                 <button type="button" class="btn btn-secondary" id="updateJobSheetStatus">掲載をやめる</button>
               </form>
             </div>

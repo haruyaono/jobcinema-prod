@@ -16,7 +16,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->user = \Auth::user();
+            $this->user = \Auth::guard('seeker')->user();
 
             return $next($request);
         });
@@ -24,12 +24,12 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('seeker.index', compact('user'));
+        return view('seeker.index')->with('user',  $this->user);
     }
 
     public function getChangePasswordForm()
     {
-        return view('auth.passwords.changepassword');
+        return view('seeker.auth.passwords.changepassword');
     }
 
     public function postChangePassword(UpdateUserPasswordRequest $request)
@@ -68,7 +68,7 @@ class UserController extends Controller
 
     public function getChangeEmail()
     {
-        return view('auth.passwords.change_email');
+        return view('seeker.auth.passwords.change_email');
     }
 
     public function postChangeEmail(Request $request)

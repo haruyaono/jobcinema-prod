@@ -16,7 +16,7 @@
     【性別・年齢】：{{ $apply->detail->gender }}　{{ $apply->detail->age }}
 </p>
 <p>※応募情報は管理画面から確認できます。<br>
-    <a href="{{ route('index.company.mypage') }}">{{ route('index.company.mypage') }}</a>
+    <a href="{{ route('enterprise.index.mypage') }}">{{ route('enterprise.index.mypage') }}</a>
     <br>
 </p>
 <p>＜ 運営情報 ＞<br>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailVerification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Providers\RouteServiceProvider;
 use App\Http\Controllers\Controller;
 
 class RegisterController extends Controller
@@ -24,11 +25,11 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/company/mypage';
+    protected $redirectTo = RouteServiceProvider::EMPLOYER_HOME;
 
     public function index()
     {
-        return view('employer.register');
+        return view('employer.auth.register');
     }
 
     public function confirm(EmpPreRegisterRequest $request)
@@ -39,7 +40,7 @@ class RegisterController extends Controller
         $data['password_mask'] = '******';
         $request->session()->put('company_form', $data);
 
-        return view('employer.confirm');
+        return view('employer.auth.confirm');
     }
 
     public function register(Request $request)
@@ -86,20 +87,20 @@ class RegisterController extends Controller
 
     public function finishRegister()
     {
-        return view('employer.registered');
+        return view('employer.auth.registered');
     }
 
     public function showForm($email_token)
     {
         // 使用可能なトークンか
         if (!Employer::where('email_verify_token', $email_token)->exists()) {
-            return view('employer.main.register')->with('message', '無効なトークンです。');
+            return view('employer.auth.main.register')->with('message', '無効なトークンです。');
         }
 
         $employer = Employer::where('email_verify_token', $email_token)->first();
         // 本登録済みユーザーか
         if ($employer->status == config('const.EMPLOYER_STATUS.REGISTER') || $employer->status == config('const.EMPLOYER_STATUS.PRE_DEACTIVE') || $employer->status == config('const.EMPLOYER_STATUS.DEACTIVE')) {
-            return view('employer.main.register')->with('message', 'すでに本登録されています。 ログインして利用してください。');
+            return view('employer.auth.main.register')->with('message', 'すでに本登録されています。 ログインして利用してください。');
         }
         // メール認証ステータス更新
         $updated = $employer->update([
@@ -112,9 +113,9 @@ class RegisterController extends Controller
             $industries = config('const.INDUSTORIES');
             $employeeNumbers = config('const.EMPLOYEE_NUMBERS');
 
-            return view('employer.main.register', compact('employer', 'industries', 'employeeNumbers', 'email_token'));
+            return view('employer.auth.main.register', compact('employer', 'industries', 'employeeNumbers', 'email_token'));
         } else {
-            return view('employer.main.register')->with('message', 'メール認証に失敗しました。再度、メールからリンクをクリックしてください。');
+            return view('employer.auth.main.register')->with('message', 'メール認証に失敗しました。再度、メールからリンクをクリックしてください。');
         }
     }
 
@@ -124,7 +125,7 @@ class RegisterController extends Controller
         $company = $employer->company;
 
         if ($employer->status == config('const.EMPLOYER_STATUS.REGISTER')) {
-            return view('employer.main.register')->with('message', 'すでに本登録されています。
+            return view('employer.auth.main.register')->with('message', 'すでに本登録されています。
        ログインして利用してください。');
         }
 
@@ -149,13 +150,13 @@ class RegisterController extends Controller
 
     public function finishMainRegister()
     {
-        return view('employer.main.registered');
+        return view('employer.auth.main.registered');
     }
 
     // 確認メール再送画面
     public function getVerifyResend()
     {
-        return view('employer.verify_resend');
+        return view('employer.auth.verify_resend');
     }
 
     //確認メール再送
@@ -170,13 +171,13 @@ class RegisterController extends Controller
         }
         if ($employer->isMainRegistered()) {
             \Session::flash('flash_message_danger', nl2br('既に、本登録が完了しています。ログインしてください。'));
-            return redirect('employer/login');
+            return redirect(route('employer.login'));
         }
 
         $email = new EmailVerification($employer);
         Mail::to($employer->email)->queue($email);
 
         \Session::flash('flash_message_success', $employer->email . 'に再送いたしました。');
-        return redirect()->guest('employer/login');
+        return redirect()->guest(route('employer.login'));
     }
 }

@@ -14,7 +14,7 @@
     <div class="inner">
       <div class="pad">
         <h1 class="txt-h1">{{ $jobitem->job_office}}への応募情報の入力</h1>
-        @if( Auth::check() )
+        @if( Auth::guard('seeker')->check() )
         <section class="apply-job-info">
           <h2>応募先企業</h2>
           <div class="job-apply-item">
@@ -73,8 +73,8 @@
                 </th>
                 <td>
                   <div class="form-row m-0">
-                    <input type="text" class="form-control col-5 col-ms-5 mr-3 {{ $errors->has('data.apply.last_name') ? 'is-invalid' : '' }}" name="data[apply][last_name]" value="@if(old('data.apply.last_name')){{old('data.apply.last_name')}}@elseif(Session::has('front.data.entry.last_name')){{Session::get('front.data.entry.last_name')}}@else{{Auth::user()->last_name}}@endif" required>
-                    <input type="text" class="form-control col-5 col-ms-5 {{ $errors->has('data.apply.first_name') ? 'is-invalid' : '' }}" name="data[apply][first_name]" value="@if(old('data.apply.first_name')){{old('data.apply.first_name')}}@elseif(Session::has('front.data.entry.first_name')){{Session::get('front.data.entry.first_name')}}@else{{Auth::user()->first_name}}@endif" required>
+                    <input type="text" class="form-control col-5 col-ms-5 mr-3 {{ $errors->has('data.apply.last_name') ? 'is-invalid' : '' }}" name="data[apply][last_name]" value="@if(old('data.apply.last_name')){{old('data.apply.last_name')}}@elseif(Session::has('front.data.entry.last_name')){{Session::get('front.data.entry.last_name')}}@else{{Auth::guard('seeker')->user()->last_name}}@endif" required>
+                    <input type="text" class="form-control col-5 col-ms-5 {{ $errors->has('data.apply.first_name') ? 'is-invalid' : '' }}" name="data[apply][first_name]" value="@if(old('data.apply.first_name')){{old('data.apply.first_name')}}@elseif(Session::has('front.data.entry.first_name')){{Session::get('front.data.entry.first_name')}}@else{{Auth::guard('seeker')->user()->first_name}}@endif" required>
                   </div>
                   <div class="text-danger">※ひらがな、もしくはカタカナでご入力下さい</div>
                 </td>
@@ -86,11 +86,11 @@
                 </th>
                 <td>
                   <div class="form-row m-0">
-                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('data.apply.phone1') ? 'is-invalid' : '' }}" maxlength="5" type="text" name="data[apply][phone1]" value="@if(old('data.apply.phone1')){{old('data.apply.phone1')}}@elseif(Session::has('front.data.entry.phone1')){{Session::get('front.data.entry.phone1')}}@else{{Auth::user()->profile->phone1}}@endif" required>
+                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('data.apply.phone1') ? 'is-invalid' : '' }}" maxlength="5" type="text" name="data[apply][phone1]" value="@if(old('data.apply.phone1')){{old('data.apply.phone1')}}@elseif(Session::has('front.data.entry.phone1')){{Session::get('front.data.entry.phone1')}}@else{{Auth::guard('seeker')->user()->profile->phone1}}@endif" required>
                     &nbsp;-&nbsp;
-                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('data.apply.phone2') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="data[apply][phone2]" value="@if(old('data.apply.phone2')){{old('data.apply.phone2')}}@elseif(Session::has('front.data.entry.phone2')){{Session::get('front.data.entry.phone2')}}@else{{Auth::user()->profile->phone2}}@endif" required>
+                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('data.apply.phone2') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="data[apply][phone2]" value="@if(old('data.apply.phone2')){{old('data.apply.phone2')}}@elseif(Session::has('front.data.entry.phone2')){{Session::get('front.data.entry.phone2')}}@else{{Auth::guard('seeker')->user()->profile->phone2}}@endif" required>
                     &nbsp;-&nbsp;
-                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('data.apply.phone3') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="data[apply][phone3]" value="@if(old('data.apply.phone3')){{old('data.apply.phone3')}}@elseif(Session::has('front.data.entry.phone3')){{Session::get('front.data.entry.phone3')}}@else{{Auth::user()->profile->phone3}}@endif" required>
+                    <input class="form-control form-control col-3 col-md-3 {{ $errors->has('data.apply.phone3') ? 'is-invalid' : '' }}" maxlength="4" type="text" name="data[apply][phone3]" value="@if(old('data.apply.phone3')){{old('data.apply.phone3')}}@elseif(Session::has('front.data.entry.phone3')){{Session::get('front.data.entry.phone3')}}@else{{Auth::guard('seeker')->user()->profile->phone3}}@endif" required>
                   </div>
                 </td>
               </tr>
@@ -101,7 +101,7 @@
                 </th>
                 <td>
                   <div class="form-row m-0">
-                    <input type="text" class="form-control w-25 {{ $errors->has('data.apply.age') ? 'is-invalid' : '' }}" name="data[apply][age]" value="@if(old('data.apply.age')){{old('data.apply.age')}}@elseif(Session::has('front.data.entry.age')){{Session::get('front.data.entry.age')}}@else{{Auth::user()->profile->age}}@endif" required> <span class="mt-2">　歳</span>
+                    <input type="text" class="form-control w-25 {{ $errors->has('data.apply.age') ? 'is-invalid' : '' }}" name="data[apply][age]" value="@if(old('data.apply.age')){{old('data.apply.age')}}@elseif(Session::has('front.data.entry.age')){{Session::get('front.data.entry.age')}}@else{{Auth::guard('seeker')->user()->profile->age}}@endif" required> <span class="mt-2">　歳</span>
                   </div>
                 </td>
               </tr>
@@ -112,8 +112,8 @@
                 </th>
                 <td>
                   <div class="form-group">
-                    <input id="1" type="radio" name="data[apply][gender]" value="男性" @if(old('data.apply.gender')=='男性' ) checked @elseif(Session::get('front.data.entry.gender')=='男性' ) checked @elseif(Auth::user()->profile->gender == "男性") checked @endif><label for="1">男性</label>
-                    <input id="2" type="radio" name="data[apply][gender]" value="女性" @if(old('data.apply.gender')=='女性' ) checked @elseif(Session::get('front.data.entry.gender')=='女性' ) checked @elseif(Auth::user()->profile->gender == "女性") checked @endif><label for="2">女性</label>
+                    <input id="1" type="radio" name="data[apply][gender]" value="男性" @if(old('data.apply.gender')=='男性' ) checked @elseif(Session::get('front.data.entry.gender')=='男性' ) checked @elseif(Auth::guard('seeker')->user()->profile->gender == "男性") checked @endif><label for="1">男性</label>
+                    <input id="2" type="radio" name="data[apply][gender]" value="女性" @if(old('data.apply.gender')=='女性' ) checked @elseif(Session::get('front.data.entry.gender')=='女性' ) checked @elseif(Auth::guard('seeker')->user()->profile->gender == "女性") checked @endif><label for="2">女性</label>
                   </div>
                 </td>
               </tr>
@@ -134,7 +134,7 @@
                   <span class="apply-job-badge required">必須</span>
                 </th>
                 <td>
-                  <input class="form-control form-control col-8 {{ $errors->has('data.apply.prefecture') ? 'is-invalid' : '' }}" type="text" name="data[apply][prefecture]" value="@if(old('data.apply.prefecture')){{old('data.apply.prefecture')}}@elseif(Session::has('front.data.entry.prefecture')){{Session::get('front.data.entry.prefecture')}}@else{{Auth::user()->profile->prefecture}}@endif" required>
+                  <input class="form-control form-control col-8 {{ $errors->has('data.apply.prefecture') ? 'is-invalid' : '' }}" type="text" name="data[apply][prefecture]" value="@if(old('data.apply.prefecture')){{old('data.apply.prefecture')}}@elseif(Session::has('front.data.entry.prefecture')){{Session::get('front.data.entry.prefecture')}}@else{{Auth::guard('seeker')->user()->profile->prefecture}}@endif" required>
                 </td>
               </tr>
               <tr>
@@ -143,7 +143,7 @@
                   <span class="apply-job-badge required">必須</span>
                 </th>
                 <td>
-                  <input class="form-control form-control form-sm-control  {{ $errors->has('data.apply.city') ? 'is-invalid' : '' }}" type="text" name="data[apply][city]" value="@if(old('data.apply.city')){{old('data.apply.city')}}@elseif(Session::has('front.data.entry.city')){{Session::get('front.data.entry.city')}}@else{{Auth::user()->profile->city}}@endif" required>
+                  <input class="form-control form-control form-sm-control  {{ $errors->has('data.apply.city') ? 'is-invalid' : '' }}" type="text" name="data[apply][city]" value="@if(old('data.apply.city')){{old('data.apply.city')}}@elseif(Session::has('front.data.entry.city')){{Session::get('front.data.entry.city')}}@else{{Auth::guard('seeker')->user()->profile->city}}@endif" required>
                   <div class="text-danger">※番地や建物名は不要です</div>
                 </td>
               </tr>
@@ -161,7 +161,7 @@
                   <select name="data[apply][occupation]">
                     <option value="0">-----</option>
                     @foreach(config('const.OCCUPATION') as $occupation)
-                    <option value="{{$occupation}}" @if(old('data.apply.occupation')==$occupation) selected @elseif(!old('data.apply.occupation') && Session::get('front.data.entry.occupation')==$occupation ) selected @elseif(!old('data.apply.occupation') && Auth::user()->profile->occupation == $occupation) selected @endif>{{$occupation}}</option>
+                    <option value="{{$occupation}}" @if(old('data.apply.occupation')==$occupation) selected @elseif(!old('data.apply.occupation') && Session::get('front.data.entry.occupation')==$occupation ) selected @elseif(!old('data.apply.occupation') && Auth::guard('seeker')->user()->profile->occupation == $occupation) selected @endif>{{$occupation}}</option>
                     @endforeach
                   </select>
                 </td>
@@ -175,7 +175,7 @@
                   <select name="data[apply][final_education]">
                     <option value="0">-----</option>
                     @foreach(config('const.FINAL＿EDUCATION') as $education)
-                    <option value="{{$education}}" @if(old('data.apply.final_education')==$education ) selected @elseif(!old('data.apply.final_education') && Session::get('front.data.entry.final_education')==$education ) selected @elseif(!old('data.apply.final_education') && Auth::user()->profile->final_education == $education) selected @endif>{{$education}}</option>
+                    <option value="{{$education}}" @if(old('data.apply.final_education')==$education ) selected @elseif(!old('data.apply.final_education') && Session::get('front.data.entry.final_education')==$education ) selected @elseif(!old('data.apply.final_education') && Auth::guard('seeker')->user()->profile->final_education == $education) selected @endif>{{$education}}</option>
                     @endforeach
 
                   </select>
@@ -188,8 +188,8 @@
                 </th>
                 <td>
                   <div class="form-group">
-                    <input id="3" type="radio" name="data[apply][work_start_date]" value="いつでも可能" @if(old('data.apply.work_start_date')=='いつでも可能' ) checked @elseif(!old('data.apply.work_start_date') && Session::get('front.data.entry.work_start_date')=='いつでも可能' ) checked @elseif(!old('data.apply.work_start_date') && Auth::user()->profile->work_start_date == "いつでも可能") checked @endif><label for="3">いつでも可能</label>
-                    <input id="4" type="radio" name="data[apply][work_start_date]" value="面接時に相談" @if(old('data.apply.work_start_date')=='面接時に相談' ) checked @elseif(!old('data.apply.work_start_date') && Session::get('front.data.entry.work_start_date')=='面接時に相談' ) checked @elseif(!old('data.apply.work_start_date') && Auth::user()->profile->work_start_date == "面接時に相談") checked @endif><label for="4">面接時に相談</label>
+                    <input id="3" type="radio" name="data[apply][work_start_date]" value="いつでも可能" @if(old('data.apply.work_start_date')=='いつでも可能' ) checked @elseif(!old('data.apply.work_start_date') && Session::get('front.data.entry.work_start_date')=='いつでも可能' ) checked @elseif(!old('data.apply.work_start_date') && Auth::guard('seeker')->user()->profile->work_start_date == "いつでも可能") checked @endif><label for="3">いつでも可能</label>
+                    <input id="4" type="radio" name="data[apply][work_start_date]" value="面接時に相談" @if(old('data.apply.work_start_date')=='面接時に相談' ) checked @elseif(!old('data.apply.work_start_date') && Session::get('front.data.entry.work_start_date')=='面接時に相談' ) checked @elseif(!old('data.apply.work_start_date') && Auth::guard('seeker')->user()->profile->work_start_date == "面接時に相談") checked @endif><label for="4">面接時に相談</label>
                   </div>
                 </td>
               </tr>
@@ -260,18 +260,18 @@
         @else
         <div class="container">
           <p class="text-center h5 mt-5 mb-4">求人応募するにはログインが必要です</p>
-          <p class="text-center">会員登録されていない方は<a href="{{route('register')}}">こちら</a>から登録できます。</p>
+          <p class="text-center">会員登録されていない方は<a href="{{ route('seeker.register') }}">こちら</a>から登録できます。</p>
           <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-12">
               <div class="card login-card">
 
                 <div class="card-body login-card-body">
-                  <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
+                  <form method="POST" action="{{ route('seeker.login') }}" aria-label="{{ __('Login') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="redirect_to" value="<?php echo $_SERVER['REQUEST_URI'] ?>">
 
                     <div class="form-group row">
-                      <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('メールアドレス') }}</label>
+                      <label for="email" class="col-12 col-md-4 col-form-label text-left text-md-right">{{ __('メールアドレス') }}</label>
 
                       <div class="col-md-6">
                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
@@ -285,7 +285,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('パスワード') }}</label>
+                      <label for="password" class="col-12 col-md-4 col-form-label text-left text-md-right">{{ __('パスワード') }}</label>
 
                       <div class="col-md-6">
                         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
@@ -316,7 +316,7 @@
                           {{ __('ログイン') }}
                         </button>
 
-                        <a class="forget-passlink" href="{{ route('password.request') }}">
+                        <a class="forget-passlink" href="{{ route('seeker.password.request') }}">
                           {{ __('パスワードを忘れた方') }}
                         </a>
                       </div>

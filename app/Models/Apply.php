@@ -68,15 +68,14 @@ class Apply extends Model
         return Carbon::now()->diffInDays($day60AfterCreated, false);
     }
 
-
-    public function getCongratsAmountAttribute($value)
+    public function getCustomCongratsAmountAttribute()
     {
-        return number_format($value) . "円";
+        return number_format($this->congrats_amount) . "円";
     }
 
-    public function getRecruitmentFeeAttribute($value)
+    public function getCustomRecruitmentFeeAttribute()
     {
-        return number_format($value) . "円(税別)";
+        return number_format($this->recruitment_fee) . "円(税別)";
     }
 
     public function getCreatedAtTransform(string $format)

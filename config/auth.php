@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'user',
-        'passwords' => 'users',
+        'guard' => 'seeker',
+        'passwords' => 'seekers',
     ],
 
     /*
@@ -43,15 +43,15 @@ return [
 
         // 'api' => [
         //     'driver' => 'token',
-        //     'provider' => 'users',
+        //     'provider' => 'seekers',
         // ],
-        'user' => [
+        'seeker' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'seekers',
         ],
-        'employer' => [ //追加
-            'driver' => 'session', //追加
-            'provider' => 'employers', //追加
+        'employer' => [
+            'driver' => 'session',
+            'provider' => 'employers',
         ],
         'admin' => [
             'driver' => 'session',
@@ -77,7 +77,7 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'seekers' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
@@ -113,8 +113,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'seekers' => [
+            'provider' => 'seekers',
             'table' => 'password_resets',
             'expire' => 60,
         ],

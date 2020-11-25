@@ -13,12 +13,12 @@
 <div id="breadcrumb" class="bread only-pc">
     <ol>
         <li>
-            <a href="{{route('index.seeker.mypage')}}">
+            <a href="{{ route('seeker.index.mypage') }}">
                 　マイページ
             </a>
         </li>
         <li>
-            <a href="{{route('index.seeker.job')}}">
+            <a href="{{route('seeker.index.job')}}">
                 応募管理
             </a>
         </li>
@@ -59,7 +59,7 @@
                                 @if($apply->jobitem->job_img_1)
                                 <img src="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') . $apply->jobitem->job_img_1 }}" alt="{{ $apply->company->cname }}">
                                 @else
-                                <img src="{{asset('img/imacommonges/no-image.gif')}}">
+                                <img src="{{ asset('img/imacommonges/no-image.gif') }}">
                                 @endif
                             </div>
                             <div class="jobapp-item-text">
@@ -85,9 +85,9 @@
                         </div>
                     </div>
                     <div class="seeker-jobapp-result-btn">
-                        <a href="{{route('edit.seeker.report', [$apply])}}" class="btn btn-yellow"><i class="far fa-circle mr-2"></i>採用</a>
+                        <a href="{{ route('seeker.edit.report', [$apply]) }}" class="btn btn-yellow"><i class="far fa-circle mr-2"></i>採用</a>
                         <a href="javascript:void(0)" class="btn btn-secondary" onclick="submit()"><i class="fas fa-times mr-2"></i>不採用</a>
-                        <form id="seeker-apply-unadopt-form" action="{{route('update.seeker.report', [$apply])}}" method="POST" style="display: none;">
+                        <form id="seeker-apply-unadopt-form" action="{{ route('seeker.update.report', [$apply]) }}" method="POST" style="display: none;">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="data[Apply][id]" value="{{$apply->id}}">

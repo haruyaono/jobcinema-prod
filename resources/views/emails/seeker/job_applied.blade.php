@@ -8,7 +8,7 @@
     【電話番号】 {{ $company['phone1'] }}-{{ $company['phone2'] }}-{{ $company['phone3'] }}
 </p>
 <p>※応募企業の情報はMyページからも確認できます<br>
-    <a href="{{ route('index.seeker.mypage') }}">{{ route('index.seeker.mypage') }}</a>
+    <a href="{{ route('seeker.index.mypage') }}">{{ route('seeker.index.mypage') }}</a>
 </p>
 <p>
     ■まずは応募先からの連絡をお待ちください。<br>

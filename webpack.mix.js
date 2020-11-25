@@ -17,4 +17,5 @@ mix.js('resources/js/app.js', 'public/js').version()
       "vue": ['Vue', 'window.Vue']
    })
    .sass('resources/sass/app.scss', 'public/css').version()
-   .sass('resources/sass/admin.scss', 'public/css').version();
+   .js('resources/js/adminApp.js', 'public/js').version()
+   .sass('resources/sass/adminApp.scss', 'public/css').version();

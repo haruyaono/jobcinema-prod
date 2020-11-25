@@ -31,7 +31,7 @@ class JobItemController extends Controller
     $this->CategoryRepository = $categoryRepository;
 
     $this->middleware(function ($request, $next) {
-      $this->employer = \Auth::user('employer');
+      $this->employer = \Auth::guard('employer')->user();
 
       return $next($request);
     });
@@ -89,11 +89,6 @@ class JobItemController extends Controller
     return view('companies.job_sheet.edit_category_complete', compact('categories', 'categoryFlag', 'categorySalarySlug'));
   }
 
-  public function createTop()
-  {
-    return view('companies.job_sheet.top_create');
-  }
-
   public function createStep1()
   {
     $categoryList = $this->CategoryRepository->getCategories();
@@ -128,7 +123,7 @@ class JobItemController extends Controller
       return $created;
     });
 
-    return redirect()->route('edit.jobsheet.step2', [$created]);
+    return redirect()->route('enterprise.edit.jobsheet.step2', [$created]);
   }
 
   public function editStep2(Request $request, JobItem $jobitem)
@@ -175,7 +170,7 @@ class JobItemController extends Controller
       unset($request['pushed']);
       session()->put('data.JobSheet', $request);
 
-      return redirect()->route('show.jobsheet.step2.confirm', compact('jobitem'));
+      return redirect()->route('enterprise.show.jobsheet.step2.confirm', compact('jobitem'));
     }
   }
 
@@ -186,7 +181,7 @@ class JobItemController extends Controller
     $data = session()->get('data.JobSheet');
 
     if (!$data || $jobitem->id !== (int) $data['id']) {
-      return redirect()->route('index.jobsheet.top');
+      return redirect()->route('enterprise.index.joblist');
     }
 
     $imageArray = $this->S3Service->getJobItemImagePublicUrl($jobitem);
@@ -201,7 +196,7 @@ class JobItemController extends Controller
     $data = $request->session()->get('data.JobSheet');
 
     if (!$data || $jobitem->id !== (int) $data['id']) {
-      return redirect()->route('index.company.mypage');
+      return redirect()->route('enterprise.index.mypage');
     }
 
     unset($data['id']);

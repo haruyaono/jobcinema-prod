@@ -17,14 +17,21 @@ use App\Http\Controllers\Controller;
 class ApplyController extends Controller
 {
 
+  private $user;
+
+  public function __construct()
+  {
+    $this->middleware(function ($request, $next) {
+      $this->user = \Auth::guard('seeker')->user();
+
+      return $next($request);
+    });
+  }
+
   public function showStep1(JobItem $jobitem, Apply $apply)
   {
-    $user = '';
     $postcode = [];
-
-    if (Auth::check()) {
-      $user = auth()->user();
-    }
+    $user = $this->user;
 
     if ($user) {
       $postcode = explode("-", $user->profile->postcode);
@@ -55,14 +62,13 @@ class ApplyController extends Controller
     if (!$request->session()->has('front.data.entry')) {
       return redirect('/');
     }
-    $user = auth()->user();
 
-    if ($user->existsAppliedJobItem($jobitem->id)) {
+    if ($this->user->existsAppliedJobItem($jobitem->id)) {
       return view('errors.custom')->with('error_name', 'NotAppliedJob');
     }
 
     $data = [
-      'user_id' => $user->id,
+      'user_id' => $this->user->id,
       'job_item_id' => $jobitem->id,
       'congrats_amount' => $jobitem->existsCongratsMoney() ? $jobitem->getCongratsMoney()->amount : 0,
       'congrats_status' => $jobitem->existsCongratsMoney() ? 1 : 0,
@@ -81,9 +87,9 @@ class ApplyController extends Controller
     ApplyDetail::create($detailData);
 
     $employer = $jobitem->company->employer;
-    $detailData['email'] = $user->email;
+    $detailData['email'] = $this->user->email;
 
-    Mail::to($user->email)->queue(new JobAppliedSeeker($jobitem, $detailData));
+    Mail::to($this->user->email)->queue(new JobAppliedSeeker($jobitem, $detailData));
     Mail::to($employer->email)->queue(new JobAppliedEmployer($jobitem, $detailData));
 
     return redirect()->route('show.front.entry.finish', ['jobitem' => $jobitem]);
@@ -91,8 +97,7 @@ class ApplyController extends Controller
 
   public function showFinish(Request $request, JobItem $jobitem)
   {
-    $user = auth()->user();
-    if (!$user->existsAppliedJobItem($jobitem->id)) {
+    if (!$this->user->existsAppliedJobItem($jobitem->id)) {
       return redirect('/');
     }
     $request->session()->forget('front.data.entry');
