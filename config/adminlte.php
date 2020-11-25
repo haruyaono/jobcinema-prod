@@ -249,7 +249,7 @@ return [
         [
             'text'    => '応募管理',
             'icon'    => 'nav-icon fas fa-tasks',
-            'url'  => '#',
+            'url'  => 'admin/data/application',
         ],
         [
             'text'    => 'お祝い金管理',

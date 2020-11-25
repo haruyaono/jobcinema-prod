@@ -28282,7 +28282,46 @@ module.exports = function(module) {
         select.prop('disabled', true);
         select.val(0);
       }
-    });
+    }); // フィルター表示・非表示
+
+    var target = $('.filter-btn');
+
+    if (target.length > 0) {
+      target.unbind('click');
+      target.click(function (e) {
+        if ($('#filter-box').is(':visible')) {
+          $('#filter-box').addClass('d-none');
+        } else {
+          if (''.length > 0) {
+            if (target.attr('disabled')) {
+              return;
+            }
+
+            if (target.hasClass('loaded')) {
+              $('#filter-box').removeClass('d-none');
+              return;
+            }
+
+            var spinner = target.attr('disabled', true).data('loading-text');
+            target.append(spinner);
+            $.ajax({
+              url: '',
+              type: "GET",
+              contentType: 'application/json;charset=utf-8',
+              success: function success(data) {
+                $('#filter-box').html($(data.html).children('form'));
+                eval(data.script);
+                target.attr('disabled', false).addClass('loaded');
+                target.find('.fa-spinner').remove();
+                $('#filter-box').removeClass('d-none');
+              }
+            });
+          } else {
+            $('#filter-box').removeClass('d-none');
+          }
+        }
+      });
+    }
   });
 })();
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))

@@ -190,43 +190,6 @@
                 "orderable": false
             }]
         });
-        let target = $('.filter-btn');
-        target.unbind('click');
-        target.click(function(e) {
-            if ($('#filter-box').is(':visible')) {
-                $('#filter-box').addClass('d-none');
-            } else {
-                if (''.length > 0) {
-                    if (target.attr('disabled')) {
-                        return;
-                    }
-                    if (target.hasClass('loaded')) {
-                        $('#filter-box').removeClass('d-none');
-                        return;
-                    }
-                    var spinner = target.attr('disabled', true).data('loading-text');
-                    target.append(spinner);
-                    $.ajax({
-                        url: '',
-                        type: "GET",
-                        contentType: 'application/json;charset=utf-8',
-                        success: function(data) {
-                            $('#filter-box').html($(data.html).children('form'));
-                            eval(data.script);
-                            target.attr('disabled', false).addClass('loaded');
-                            target.find('.fa-spinner').remove();
-                            $('#filter-box').removeClass('d-none');
-                        }
-                    });
-                } else {
-                    $('#filter-box').removeClass('d-none');
-                }
-            }
-        });
-
-        $('#select-box').select2({
-            width: 'resolve'
-        });
 
     });
 </script>
