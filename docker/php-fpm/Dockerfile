@@ -5,34 +5,35 @@ ENV DEBIAN_FRONTEND noninteractive
 ## Timezon
 ENV TZ Asia/Tokyo
 RUN echo "${TZ}" > /etc/timezone \
-   && dpkg-reconfigure -f noninteractive tzdata
+  && dpkg-reconfigure -f noninteractive tzdata
 
 COPY docker/php-fpm/php.ini /usr/local/etc/php/
 
 ## Basic Install
 RUN apt-get update \
   && apt-get install -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libmcrypt-dev \
-    libpng-dev \
-    zlib1g-dev \
-    mariadb-client \
-    git \
-    zip \
-    unzip \
-    vim \
-    libpq-dev \
-    supervisor \
-    redis-server \
-    iputils-ping \
-    net-tools \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd exif pdo_mysql pdo_pgsql \
-    && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install npm@latest -g \
-    && npm install --save-dev cross-env
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  libmcrypt-dev \
+  libpng-dev \
+  zlib1g-dev \
+  mariadb-client \
+  git \
+  zip \
+  unzip \
+  vim \
+  libpq-dev \
+  supervisor \
+  redis-server \
+  iputils-ping \
+  net-tools \
+  cron \
+  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-install -j$(nproc) gd exif pdo_mysql pdo_pgsql \
+  && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
+  && apt-get install -y nodejs \
+  && npm install npm@latest -g \
+  && npm install --save-dev cross-env
 
 COPY docker/supervisor/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 
@@ -51,7 +52,6 @@ ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer global require hirak/prestissimo
 RUN cp .env.example .env
 RUN composer install
 RUN php artisan key:generate

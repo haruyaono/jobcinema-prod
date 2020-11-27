@@ -13,6 +13,7 @@
         "aws/aws-sdk-php-laravel": "~3.0",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
+        "goldspecdigital/laravel-eloquent-uuid": "^7.0",
         "guzzlehttp/guzzle": "^6.5",
         "intervention/image": "^2.5",
         "jeroennoten/laravel-adminlte": "^3.5",

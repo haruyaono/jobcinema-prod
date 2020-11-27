@@ -48,6 +48,7 @@ return [
 
         'daily' => [
             'driver' => 'daily',
+            'handler' => Monolog\Handler\RotatingFileHandler::class,
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
             'days' => 14,
@@ -88,16 +89,6 @@ return [
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => 'debug',
-        ],
-
-        'develop' => [
-            'driver' => 'monolog',
-            'level' => 'debug',
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
-            'with' => [
-                'stream' => 'php://stderr',
-            ],
         ],
 
         'production' => [

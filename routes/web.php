@@ -26,6 +26,9 @@ Route::namespace('Front')->group(function () {
     Route::post('ajax_history_sheet_list', 'JobController@postJobHistory');
   });
 
+  Route::get('reward_request', 'RewardController@create')->name('create.front.reward');
+  Route::post('reward_request', 'RewardController@store')->name('store.front.reward');
+
   Route::get('/category/{url}', 'CategoryController@index')->name('index.front.category');
 
   // 閲覧履歴

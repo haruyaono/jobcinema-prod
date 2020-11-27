@@ -85,16 +85,18 @@ class JobController extends Controller
                             $input['date']
                         ),
                         's_recruit_status' => 1,
-                        'congrats_application_status' => 1,
+                        'congrats_application_status' => $apply->congrats_status === 0 ? 0 : 1,
                     ];
                 } elseif ($request->input('data.Apply.pushed') == 'SaveReportDeclineStatus') {
                     $data = [
                         's_recruit_status' => 8,
+                        'congrats_application_status' => 0,
                     ];
                     Mail::to($apply->jobitem->company->employer->email)->queue(new ApplyReport($apply));
                 } elseif ($request->input('data.Apply.pushed') == 'SaveUnAdoptStatus') {
                     $data = [
                         's_recruit_status' => 2,
+                        'congrats_application_status' => 0,
                     ];
                 }
                 // }
@@ -103,6 +105,7 @@ class JobController extends Controller
                 if ($request->input('data.Apply.pushed') == 'SaveReportCancelStatus') {
                     $data = [
                         's_recruit_status' => 0,
+                        'congrats_application_status' => 0,
                     ];
                 }
                 break;

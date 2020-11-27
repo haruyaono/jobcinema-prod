@@ -104,7 +104,10 @@ class UserController extends Controller
 
         $user->applies->each(function ($apply) {
             if ($apply->s_recruit_status !== 8) {
-                $apply->update(['s_recruit_status' => 8]);
+                $apply->update([
+                    's_recruit_status' => 8,
+                    'congrats_application_status' => 0,
+                ]);
                 Mail::to($apply->jobitem->company->employer->email)->queue(new ApplyReport($apply));
             }
         });
