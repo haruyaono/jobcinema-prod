@@ -3,7 +3,7 @@
 <p>下記のご応募{{ $apply->jobitem->company->cname }} にあたりお祝い金申請のご案内をいたします。</p>
 
 <p> <a href="{{ route('seeker.index.mypage') }}">マイページ</a>にログイン後、下記のお祝い金申請フォームからお祝い金の申請をして下さい。<br>
-    <!-- <a href="{{ route('create.front.reward') }}">{{ route('create.front.reward') }}</a> -->
+    <a href="{{ route('create.front.reward') }}">{{ route('create.front.reward') }}</a>
 </p>
 
 <p>既に本メールが送信済みの場合は大変申し訳ございません。</p>

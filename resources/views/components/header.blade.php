@@ -59,7 +59,7 @@ if (\Auth::guard('seeker')->check()) {
       <ul>
         <li><a href="{{ route('index.front.job_sheet.search') }}">求人を探す</a></li>
         <li><a href="{{ route('lp.get')}}" target="_blank">広告掲載をお考えの方へ</a></li>
-        <li><a href="/published-contact">お祝い金申請</a></li>
+        <li><a href="{{ route('create.front.reward') }}">お祝い金申請</a></li>
         <li><a href="{{ route('index.front.job_sheet.keeplist') }}" class="saveWrap">キープリスト</a></li>
         <li><a href="{{ route('index.front.job_sheet.history') }}">閲覧履歴</a></li>
       </ul>

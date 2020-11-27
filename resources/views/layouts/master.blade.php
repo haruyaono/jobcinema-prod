@@ -33,6 +33,11 @@
         </div><!-- contents -->
     </div> <!-- wrap -->
     @yield('js')
+    <script>
+        function submit(id, event) {
+            document.getElementById(id).submit();
+        }
+    </script>
     <script defer src="{{ asset('js/main.js') }}"></script>
 </body>
 

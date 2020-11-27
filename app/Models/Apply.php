@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\JobItem;
 use App\Models\Company;
 use App\Models\ApplyDetail;
+use App\Models\RewardBilling;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use  \Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,6 +55,11 @@ class Apply extends Model
     public function detail(): HasOne
     {
         return $this->hasOne(ApplyDetail::class);
+    }
+
+    public function reward(): HasOne
+    {
+        return $this->hasOne(RewardBilling::class);
     }
 
     public function getIsWithinHalfYearAttribute(): bool
