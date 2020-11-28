@@ -6,6 +6,7 @@
                 url: "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
             }
         });
+        jQuery.datetimepicker.setLocale('ja');
 
         if ($('#start_specified_date').length && $('#end_specified_date').length) {
             var start_specified_date = $('#start_specified_date'),
