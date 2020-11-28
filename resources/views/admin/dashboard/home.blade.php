@@ -14,7 +14,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header border-transparent">
-                <h3 class="card-title">未読メール<span class="ml-3">５件</span></h3>
+                <h3 class="card-title">未読メール<span class="ml-3"></span></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -26,7 +26,7 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table m-0">
+                    <!-- <table class="table m-0">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -61,12 +61,13 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
+                    <p class="p-5 text-center">実装準備中</p>
                 </div>
             </div>
-            <div class="card-footer clearfix">
+            <!-- <div class="card-footer clearfix">
                 <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">全ての未読メールをみる</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

@@ -209,6 +209,7 @@ Route::group(['prefix' => 'admin'], function () {
       Route::group(['prefix' => 'data'], function () {
         Route::resource('job_sheet', 'JobItemController')->except(['create', 'store', 'destroy']);
         Route::resource('application', 'ApplicationController')->except(['create', 'store', 'destroy']);
+        Route::resource('reward', 'RewardController')->except(['create', 'store', 'destroy']);
       });
 
       // Route::get('joblist/index', 'DashboardController@getAlljobs')->name('alljob.get');

@@ -254,7 +254,7 @@ return [
         [
             'text'    => 'お祝い金管理',
             'icon'    => 'nav-icon fas fa-comment-dollar',
-            'url'  => '#',
+            'url'  => 'admin/data/reward',
         ],
         [
             'text'    => '企業テーブル',
@@ -407,7 +407,7 @@ return [
             ],
         ],
         'Pjax' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',

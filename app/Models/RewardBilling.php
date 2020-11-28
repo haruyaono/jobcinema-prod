@@ -11,6 +11,10 @@ class RewardBilling extends Model
 {
     protected $guarded = ['id'];
 
+    protected $dates = [
+        'payment_date',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -19,5 +23,10 @@ class RewardBilling extends Model
     public function apply(): BelongsTo
     {
         return $this->belongsTo(Apply::class);
+    }
+
+    public function getCustomAmountAttribute()
+    {
+        return number_format($this->billing_amount) . "円";
     }
 }

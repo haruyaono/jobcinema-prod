@@ -25,10 +25,12 @@
     {{-- Base Stylesheets --}}
     @if(!config('adminlte.enabled_laravel_mix'))
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datetimepicker/jquery.datetimepicker.css') }}">
 
     {{-- Configured Stylesheets --}}
     @include('adminlte::plugins', ['type' => 'css'])
@@ -86,6 +88,7 @@
     {{-- Base Scripts --}}
     @if(!config('adminlte.enabled_laravel_mix'))
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -95,6 +98,7 @@
     <script src="{{ asset('vendor/moment/moment-with-locales.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+    <script src="{{ asset('vendor/datetimepicker/jquery.datetimepicker.full.js') }}"></script>
 
 
     {{-- Configured Scripts --}}

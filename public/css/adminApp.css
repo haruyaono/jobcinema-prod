@@ -10906,6 +10906,10 @@ a.text-dark:focus {
   }
 }
 
+body {
+  font-size: 0.9rem;
+}
+
 input,
 textarea,
 select {
