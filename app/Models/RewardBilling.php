@@ -24,4 +24,9 @@ class RewardBilling extends Model
     {
         return $this->belongsTo(Apply::class);
     }
+
+    public function getCustomAmountAttribute()
+    {
+        return number_format($this->billing_amount) . "円";
+    }
 }

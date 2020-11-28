@@ -17,15 +17,9 @@
             <div class="card-header with-border">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-flat filter-btn">フィルター</button>
-                    <!-- <button type="button" class="btn btn-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                        <span class="sr-only">ドロップダウン</span>
-                        <div class="dropdown-menu" role="menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-1px, -3px, 0px);">
-                            <a class="dropdown-item" href="#">削除済みデータ</a>
-                        </div>
-                    </button> -->
                 </div>
                 <div class="mt-4 mb-3" id="filter-box">
-                    <form action="{{ route('reward.index') }}" pjax-container="" method="get">
+                    <form action="{{ route('reward.index') }}" method="get">
                         <div class="row">
                             <div class="col-12">
                                 <div class="fields-group">
@@ -141,8 +135,8 @@
                             <td>{{ $reward->id }}</td>
                             <td>{{ $reward->created_at }}</td>
                             <td>{{ config('const.CONGRAT_PAYMENT_STATUS.' . $reward->status) }}</td>
-                            <td>{{ $reward->billing_amount }}</td>
-                            <td>{{ $reward->payment_date ?: '未払い' }}</td>
+                            <td>{{ $reward->custom_amount }}</td>
+                            <td>{{ $reward->payment_date ? $reward->payment_date->format('Y-m-d H:i') : '未払い' }}</td>
                             <td class="project-actions text-right">
                                 <a class="btn btn-primary btn-sm" href="{{ route('reward.show', $reward->id) }}">
                                     <i class="fas fa-eye">
@@ -152,10 +146,6 @@
                                     <i class="fas fa-pencil-alt">
                                     </i>
                                 </a>
-                                <!-- <a class="btn btn-danger btn-sm" href="#">
-                                    <i class="fas fa-trash">
-                                    </i>
-                                </a> -->
                             </td>
                         </tr>
                         @endforeach

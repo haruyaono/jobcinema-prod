@@ -17,15 +17,9 @@
             <div class="card-header with-border">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-flat filter-btn">フィルター</button>
-                    <!-- <button type="button" class="btn btn-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                        <span class="sr-only">ドロップダウン</span>
-                        <div class="dropdown-menu" role="menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-1px, -3px, 0px);">
-                            <a class="dropdown-item" href="#">削除済みデータ</a>
-                        </div>
-                    </button> -->
                 </div>
                 <div class="mt-4 mb-3" id="filter-box">
-                    <form action="{{ route('job_sheet.index') }}" class="form-horizontal" pjax-container="" method="get">
+                    <form action="{{ route('job_sheet.index') }}" class="form-horizontal" method="get">
                         <div class="row form-inline">
                             <div class="col-md-12">
                                 <div class="fields-group">

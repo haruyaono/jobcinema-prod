@@ -28,11 +28,6 @@
                             <i class="fa fa-edit"></i><span class="hidden-xs"> 編集</span>
                         </a>
                     </div>
-                    <!-- <div class="btn-group" style="margin-right: 5px">
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger 5fba2c4c996fa-delete" title="削除">
-                            <i class="fa fa-trash"></i><span class="hidden-xs"> 削除</span>
-                        </a>
-                    </div> -->
                 </div>
             </div>
             <div class="card-body">
@@ -43,7 +38,7 @@
                         <ul class="system-values-list">
                             <li>
                                 <p class="system-values-label">ID</p>
-                                <p class="system-values-item">{{ $jobitem->id }}</p>
+                                <p class="system-values-item">{{ $reward->id }}</p>
                             </li>
                             <li>
                                 <p class="system-values-label">応募者</p>
@@ -70,9 +65,15 @@
                             </div>
                         </div>
                         <div class="row">
+                            <label class="col-sm-2 text-sm-right">金額</label>
+                            <div class="col-sm-8">
+                                <p>{{ $reward->custom_amount }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
                             <label class="col-sm-2 text-sm-right">支払日</label>
                             <div class="col-sm-8">
-                                {{ $reward->payment_date ?: '未払い' }}
+                                <p>{{ $reward->payment_date ? $reward->payment_date->format('Y-m-d H:i') : '未払い' }}</p>
                             </div>
                         </div>
                     </div>

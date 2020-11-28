@@ -28,11 +28,6 @@
                             <i class="fa fa-list"></i><span class="hidden-xs"> 一覧</span>
                         </a>
                     </div>
-                    <!-- <div class="btn-group" style="margin-right: 5px">
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger 5fba2c4c996fa-delete" title="削除">
-                            <i class="fa fa-trash"></i><span class="hidden-xs"> 削除</span>
-                        </a>
-                    </div> -->
                 </div>
             </div>
             <div class="card-body">

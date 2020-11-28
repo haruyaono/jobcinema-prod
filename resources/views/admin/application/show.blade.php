@@ -28,11 +28,6 @@
                             <i class="fa fa-edit"></i><span class="hidden-xs"> 編集</span>
                         </a>
                     </div>
-                    <!-- <div class="btn-group" style="margin-right: 5px">
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger 5fba2c4c996fa-delete" title="削除">
-                            <i class="fa fa-trash"></i><span class="hidden-xs"> 削除</span>
-                        </a>
-                    </div> -->
                 </div>
             </div>
             <div class="card-body">
@@ -47,11 +42,11 @@
                             </li>
                             <li>
                                 <p class="system-values-label">応募者</p>
-                                <p class="system-values-item"><a href="javascript:void(0);" data-widgetmodal_url="https://demo-jp.exment.net/admin/data/user/1?modal=1" data-toggle="tooltip" title="データ確認"><span class="d-inline-block user-avatar-block">#{{ $apply->user_id ?: '退会済み'}}<br>{{ $apply->detail->full_name }}</span></a></p>
+                                <p class="system-values-item"><a href="javascript:void(0);" data-toggle="tooltip" title="データ確認"><span class="d-inline-block user-avatar-block">#{{ $apply->user_id ?: '退会済み'}}<br>{{ $apply->detail->full_name }}</span></a></p>
                             </li>
                             <li>
                                 <p class="system-values-label">応募求人</p>
-                                <p class="system-values-item"><a href="javascript:void(0);" data-widgetmodal_url="https://demo-jp.exment.net/admin/data/user/1?modal=1" data-toggle="tooltip" title="データ確認"><span class="d-inline-block user-avatar-block">#{{ $apply->jobitem->id }} {{ $apply->jobitem->company->cname }}</span></a></p>
+                                <p class="system-values-item"><a href="javascript:void(0);" data-toggle="tooltip" title="データ確認"><span class="d-inline-block user-avatar-block">#{{ $apply->jobitem->id }} {{ $apply->jobitem->company->cname }}</span></a></p>
                             </li>
                             <li>
                                 <p class="system-values-label">応募日</p>
