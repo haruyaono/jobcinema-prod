@@ -7,7 +7,7 @@ class ImageUploadRequest extends AbstractMediaUploadRequest
     private $data;
     private $option;
 
-    public function __construct(array $data, array $option = [])
+    public function __construct(array $data = [], array $option = [])
     {
         $this->data = $data;
         $this->option = $option;
