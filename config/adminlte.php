@@ -259,7 +259,7 @@ return [
         [
             'text'    => '企業テーブル',
             'icon'    => 'nav-icon fas fa-building',
-            'url'  => '#',
+            'url'  => 'admin/data/enterprise',
         ],
         [
             'text'    => 'メールチェック',
