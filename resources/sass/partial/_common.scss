@@ -350,6 +350,7 @@ select:hover {
 
   a {
     display: flex;
+    color: #333;
     @include mq(medium) {
       display: block;
     }
@@ -399,6 +400,11 @@ select:hover {
   width: 66%;
   @include mq(medium) {
     width: 100%;
+  }
+
+  p {
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
 .nav-link {
@@ -1135,6 +1141,12 @@ input {
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 5px;
+  // &.isDetail {
+  //   display: none !important;
+  //   @include mq(medium) {
+  //     display: block;
+  //   }
+  // }
 }
 .to-top i {
   font-size: 32px;

@@ -49,7 +49,8 @@ class FavouriteController extends Controller
         } else {
             $jobitem->favourites()->attach($this->user->id);
             return response()->json([
-                'fav_save_status' => '1'
+                'fav_save_status' => '1',
+                'count' => $this->user->favourites()->count(),
             ]);
         }
     }
@@ -62,12 +63,11 @@ class FavouriteController extends Controller
             $jobitem->favourites()->detach($this->user->id);
             return response()->json([
                 'fav_del_status' => '1',
-                'job' => $jobitem
+                'count' => $this->user->favourites()->count(),
             ]);
         } else {
             return response()->json([
                 'fav_del_status' => '0',
-                'job' => $jobitem->favourites
             ]);
         }
     }

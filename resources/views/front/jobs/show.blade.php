@@ -16,6 +16,7 @@
 
 <?php
 $jobjson = json_encode($jobitem);
+
 ?>
 
 <!-- パンくず -->
@@ -39,10 +40,28 @@ $jobjson = json_encode($jobitem);
         {{ Session::get('message') }}
       </div>
       @endif
-      <h1 class="txt-h1">{{$jobitem->company->cname}}の求人情報</h1>
-      <!-- カテゴリ -->
-      <span class="cat-item org">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
-      <span class="cat-item red">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>
+      @php
+      $target = '';
+
+      $sf = $jobitem->pub_start_flag;
+      if($sf) {
+      $target = $jobitem->pub_start_date ?: '';
+      } else {
+      $target = $jobitem->created_at;
+      }
+      if($target) {
+      $target = new \Carbon\Carbon($target);
+      $targetEnd = $target->addDay(10);
+      }
+
+      $today = new \Carbon\Carbon();
+
+      @endphp
+      <h1 class="txt-h1">
+        @if($target && $targetEnd > $today ) <span class="job-lst-ico">NEW</span>@endif
+        {{$jobitem->company->cname}}の求人情報 </h1> <!-- カテゴリ -->
+      <span class="cat-item org ib-only-pc">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
+      <span class="cat-item red ib-only-pc">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>
     </div>
   </div>
 
@@ -50,27 +69,18 @@ $jobjson = json_encode($jobitem);
   <div class="job-detail-movie-slider-bg">
     <div class="swiper-container job-detail-movie-slider-container">
       <div class="swiper-wrapper">
+        @foreach($movieArray as $index => $movie)
         <div class="swiper-slide">
-          <video id="mvideo_1" class="w-100 entity-mov" muted autoplay preload="metadata" poster="{{ asset('img/common/no-image.gif') }}">
-            @if($jobitem->job_mov_1)
-            <source src="{{ config('app.s3_url') . config('jobcinema.jobitem_movie_dir') . $jobitem->job_mov_1 }}" type="video/mp4" />
+          @php
+          $index++
+          @endphp
+          <video id="mvideo_{{ $index }}" class="w-100 entity-mov" muted controls preload="metadata">
+            @if($jobitem->{'job_mov_'. $index})
+            <source src="{{ $movie }}" type="video/mp4" />
             @endif
           </video>
         </div>
-        <div class="swiper-slide">
-          <video id="mvideo_2" class="w-100 entity-mov " muted autoplay preload="metadata" poster="{{ asset('img/common/no-image.gif') }}">
-            @if($jobitem->job_mov_2)
-            <source src="{{ config('app.s3_url') . config('jobcinema.jobitem_movie_dir') . $jobitem->job_mov_2 }}" type="video/mp4" />
-            @endif
-          </video>
-        </div>
-        <div class="swiper-slide">
-          <video id="mvideo_3" class="w-100 entity-mov" muted autoplay preload="metadata" poster="{{ asset('img/common/no-image.gif') }}">
-            @if($jobitem->job_mov_3)
-            <source src="{{ config('app.s3_url') . config('jobcinema.jobitem_movie_dir') . $jobitem->job_mov_3 }}" type="video/mp4" />
-            @endif
-          </video>
-        </div>
+        @endforeach
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
@@ -351,4 +361,8 @@ $jobjson = json_encode($jobitem);
 @section('footer')
 @component('components.footer')
 @endcomponent
+@endsection
+
+@section('footer_bottom')
+@include('partials.jobdetail_fixbox')
 @endsection

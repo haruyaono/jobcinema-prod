@@ -1,29 +1,74 @@
 $(function () {
 
-  var topBtn = $('.to-top');
-  //ボタンを非表示にする
-  topBtn.hide();
-  //スクロールしてページトップから100に達したらボタンを表示
-  $(window).scroll(function () {
-    if ($(this).scrollTop() > 500) {
-      //フェードインで表示
-      topBtn.fadeIn();
-    } else {
-      //フェードアウトで非表示
-      topBtn.fadeOut();
-    }
-  });
-  //スクロールしてトップへ戻る
-  topBtn.click(function () {
-    $('body,html').animate({
-      scrollTop: 0
-    }, 200);
-    return false;
-  });
+  (function () {
+    const topBtn = $('.to-top');
+    let isSp = false,
+      isDetali = topBtn.hasClass('isDetail'),
+      displayFlag = false;
 
-  var t = 200;
-  var $element = $('#js-favorite-fixed-nav');
-  var isTransform = typeof $('body').css('transform') === 'string';
+    detailFollowingArea = $('#js-detailFollowingArea');
+
+    topBtn.hide();
+    detailFollowingArea.hide();
+
+    topBtn.click(function () {
+      $('body,html').animate({
+        scrollTop: 0
+      }, 200);
+      return false;
+    });
+
+    // 画面下位置を取得
+    let bottomPos = $(document).height() - $(window).height() - 500;
+    $(window).scroll(function () {
+      if ($(this).scrollTop() >= bottomPos) {
+        if (displayFlag == true) {
+          displayFlag = false;
+        }
+      } else {
+        if (!displayFlag) {
+          displayFlag = true;
+        }
+      }
+    });
+
+    $(window).on('load resize', function () {
+      let windowWidth = $(window).width();
+      if (windowWidth >= 768) {
+        isSp = false;
+      } else {
+        isSp = true;
+      }
+
+      $(window).scroll(function () {
+
+        if ($(this).scrollTop() > 500) {
+          if (isDetali && isSp) {
+            topBtn.fadeOut();
+          } else {
+            topBtn.fadeIn();
+          }
+        } else {
+          topBtn.fadeOut();
+        }
+
+        if ($(this).scrollTop() > 300) {
+          if (displayFlag) {
+            detailFollowingArea.fadeIn();
+          } else {
+            detailFollowingArea.fadeOut();
+          }
+        } else {
+          detailFollowingArea.fadeOut();
+        }
+      });
+    });
+
+  })();
+
+  let t = 200;
+  let $element = $('#js-favorite-fixed-nav');
+  let isTransform = typeof $('body').css('transform') === 'string';
 
   if (isTransform) {
     $element.show();
@@ -40,7 +85,7 @@ $(function () {
 
   // 求人詳細の画像スライダー
   if ($('.job-detail-image-slider-container').length) {
-    var imageSliderSelector = '.job-detail-image-slider-container',
+    let imageSliderSelector = '.job-detail-image-slider-container',
       options = {
         init: false,
         loop: true,
@@ -61,7 +106,7 @@ $(function () {
   if ($('.job-detail-movie-slider-container').length) {
 
     // 求人詳細の動画スライダー
-    var sliderSelector = '.job-detail-movie-slider-container',
+    let sliderSelector = '.job-detail-movie-slider-container',
       isMove = false,
       options = {
         init: false,

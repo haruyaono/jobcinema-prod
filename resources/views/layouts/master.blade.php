@@ -30,6 +30,7 @@
             @yield('footer')
             <input type="hidden" id="env_input" name="env" value="{{ config('app.env') }}">
             <input type="hidden" id="file_path" name="file_path" value="{{ config('app.s3_url') . config('jobcinema.jobitem_image_dir') }}">
+            @yield('footer_bottom')
         </div><!-- contents -->
     </div> <!-- wrap -->
     @yield('js')

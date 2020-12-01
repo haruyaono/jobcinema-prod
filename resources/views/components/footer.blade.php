@@ -1,4 +1,8 @@
 @section('footer')
+<?php
+$routeName = Route::currentRouteName();
+$isDetail = $routeName === 'show.front.job_sheet.detail' ? true : false;
+?>
 <footer class="footer">
 
   <div class="inner">
@@ -55,7 +59,7 @@
   </div>
 
 </footer><!-- /footer -->
-<div class="to-top"><i class="fas fa-angle-up"></i></div>
+<div class="to-top {{ $isDetail ? 'isDetail' : '' }}"><i class="fas fa-angle-up"></i></div>
 
 
 @endsection
