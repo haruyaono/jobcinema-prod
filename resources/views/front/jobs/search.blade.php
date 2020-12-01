@@ -50,7 +50,9 @@ if ($getJobUrlPrmList !== []) {
   <section class="main-section job-entry">
     <div class="inner">
       <div class="pad cf">
-        <h1 class="txt-h1">求人検索結果</h1>
+        <h1 class="txt-h1">
+          求人検索結果
+        </h1>
         <div class="d-flex mb-3 p-works-count-box">
           @if($jobitems->count() > 0)
           <p class="search-count"><span>{{ $jobitems->firstItem() }}件 〜 {{ $jobitems->lastItem() }}件を表示</span></p>
@@ -80,9 +82,10 @@ if ($getJobUrlPrmList !== []) {
           @foreach ($jobitems as $jobitem)
           <div class="job-item">
             <a href="{{ route('show.front.job_sheet.detail', [$jobitem]) }}" class="job-item-link">
-              <div class="job-item-heading only-pc">
-                <span class="cat-item org">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : '' }}</span>
-                <span class="cat-item red">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : '' }}</span>
+              <div class="job-item-heading">
+                @if($jobitem->isNew() ) <span class="job-lst-ico job-lst-ico-for-list">NEW</span>@endif
+                <span class="cat-item org ib-only-pc">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : '' }}</span>
+                <span class="cat-item red ib-only-pc">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : '' }}</span>
               </div>
               <div class="jobCassette__header">
                 <div class="jobCassette__image_wrap only-sp">

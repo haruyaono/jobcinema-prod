@@ -104,6 +104,26 @@ class JobItem extends Model
         return $category->achievementReward()->exists() ? $category->achievementReward->amount : 0;
     }
 
+    public function isNew()
+    {
+        $target = '';
+
+        $sf = $this->pub_start_flag;
+        if ($sf) {
+            $target = $this->pub_start_date ?: '';
+        } else {
+            $target = $this->created_at;
+        }
+        if ($target) {
+            $target = new Carbon($target);
+            $targetEnd = $target->addDay(10);
+        }
+
+        $today = new Carbon();
+
+        return $target && $targetEnd > $today;
+    }
+
     public function getAppJobList(int $num_per_page = 10, array $condition = [])
     {
         // パラメータの取得

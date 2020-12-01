@@ -34,11 +34,13 @@
           @if ($jobitems !== [])
           @foreach ($jobitems as $jobitem)
           <div class="job-item">
+
             <a href="{{ route('show.front.job_sheet.detail', $jobitem) }}" class="job-item-link">
-              <div class="job-item-heading only-pc">
+              <div class="job-item-heading">
                 <!-- カテゴリ -->
-                <span class="cat-item org">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : '' }}</span>
-                <span class="cat-item red">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : '' }}</span>
+                @if($jobitem->isNew() ) <span class="cat-item job-lst-ico job-lst-ico-for-list">NEW</span>@endif
+                <span class="cat-item org ib-only-pc">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : '' }}</span>
+                <span class="cat-item red ib-only-pc">{{ $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : '' }}</span>
               </div>
               <div class="jobCassette__header">
                 <div class="jobCassette__image_wrap only-sp">

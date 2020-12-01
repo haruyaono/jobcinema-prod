@@ -58,7 +58,7 @@ $jobjson = json_encode($jobitem);
 
       @endphp
       <h1 class="txt-h1">
-        @if($target && $targetEnd > $today ) <span class="job-lst-ico">NEW</span>@endif
+        @if($jobitem->isNew() ) <span class="job-lst-ico">NEW</span>@endif
         {{$jobitem->company->cname}}の求人情報 </h1> <!-- カテゴリ -->
       <span class="cat-item org ib-only-pc">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
       <span class="cat-item red ib-only-pc">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>

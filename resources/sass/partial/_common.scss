@@ -1065,11 +1065,11 @@ input {
 
 .cat-item {
   display: inline-block;
-  top: 0;
-  left: 0;
   padding: 3px 6px;
   color: #fff;
-  margin-right: 20px;
+  font-size: 14px;
+  margin-right: 10px;
+  border-radius: 3px;
 }
 .cat-item.org {
   background: #de9610;
