@@ -51,27 +51,18 @@ $jobjson = json_encode($jobitem);
   <div class="job-detail-movie-slider-bg">
     <div class="swiper-container job-detail-movie-slider-container">
       <div class="swiper-wrapper">
+        @foreach($movieArray as $index => $movie)
         <div class="swiper-slide">
-          <video id="mvideo_1" class="w-100 entity-mov" muted autoplay preload="metadata" poster="{{ asset('img/common/no-image.gif') }}">
-            @if($jobitem->job_mov_1)
-            <source src="{{ config('app.s3_url') . config('jobcinema.jobitem_movie_dir') . $jobitem->job_mov_1 }}" type="video/mp4" />
+          @php
+          $index++
+          @endphp
+          <video id="mvideo_{{ $index }}" class="w-100 entity-mov" muted controls preload="metadata">
+            @if($jobitem->{'job_mov_'. $index})
+            <source src="{{ $movie }}" type="video/mp4" />
             @endif
           </video>
         </div>
-        <div class="swiper-slide">
-          <video id="mvideo_2" class="w-100 entity-mov " muted autoplay preload="metadata" poster="{{ asset('img/common/no-image.gif') }}">
-            @if($jobitem->job_mov_2)
-            <source src="{{ config('app.s3_url') . config('jobcinema.jobitem_movie_dir') . $jobitem->job_mov_2 }}" type="video/mp4" />
-            @endif
-          </video>
-        </div>
-        <div class="swiper-slide">
-          <video id="mvideo_3" class="w-100 entity-mov" muted autoplay preload="metadata" poster="{{ asset('img/common/no-image.gif') }}">
-            @if($jobitem->job_mov_3)
-            <source src="{{ config('app.s3_url') . config('jobcinema.jobitem_movie_dir') . $jobitem->job_mov_3 }}" type="video/mp4" />
-            @endif
-          </video>
-        </div>
+        @endforeach
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>

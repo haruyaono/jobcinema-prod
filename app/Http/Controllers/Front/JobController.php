@@ -8,26 +8,29 @@ use Illuminate\Support\Facades\Redis;
 use App\Models\JobItem;
 use Illuminate\Support\Facades\Auth;
 use App\Services\JobItemService;
+use App\Services\S3Service;
 use App\Services\JobItemSearchService;
 use App\Repositories\CategoryRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
 {
   private $JobItem;
   private $JobItemService;
+  private $S3Service;
   private $JobItemSearchService;
   private $CategoryRepository;
 
   public function __construct(
     JobItem $JobItem,
     JobItemService $jobItemService,
+    S3Service $s3Service,
     JobItemSearchService $jobItemSearchService,
     CategoryRepository $categoryRepository
   ) {
     $this->JobItem = $JobItem;
     $this->JobItemService = $jobItemService;
+    $this->S3Service = $s3Service;
     $this->JobItemSearchService = $jobItemSearchService;
     $this->CategoryRepository = $categoryRepository;
   }
@@ -64,8 +67,11 @@ class JobController extends Controller
 
     $this->JobItemService->createRecentJobItemIdList($jobitem->id);
 
+    $imageArray = $this->S3Service->getJobItemImagePublicUrl($jobitem);
+    $movieArray = $this->S3Service->getJobItemMoviePublicUrl($jobitem);
+
     if ($jobitem->status == 2) {
-      return view('front.jobs.show', compact('jobitem', 'exists', 'recommendJobList'));
+      return view('front.jobs.show', compact('jobitem', 'exists', 'recommendJobList', 'imageArray', 'movieArray'));
     }
 
     return redirect()->to('/');
