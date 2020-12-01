@@ -7,7 +7,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        favourite,
-        favouriteCount
+        favourite, favouriteCount
     }
 });

@@ -13260,6 +13260,7 @@ select:hover {
 
 .box-wrap .wrap-items a {
   display: flex;
+  color: #333;
 }
 
 @media screen and (min-width: 768px) {
@@ -13325,6 +13326,11 @@ select:hover {
   .box-wrap .wrap-items .wrap-text {
     width: 100%;
   }
+}
+
+.box-wrap .wrap-items .wrap-text p {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .nav-link {
@@ -16653,6 +16659,76 @@ input[size="28"] {
   content: "\F684";
 }
 
+.job-lst-ico,
+.job-detail-ico {
+  background: #fff;
+  border: 1px solid #c93a40;
+  border-radius: 3px;
+  color: #c93a40;
+  line-height: 1;
+  font-weight: 700;
+  margin-right: 3px;
+  padding-top: 3px;
+  padding-right: 5px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  position: relative;
+  top: -10px;
+  text-align: center;
+  display: inline-block;
+}
+
+@media screen and (min-width: 768px) {
+  .job-lst-ico,
+  .job-detail-ico {
+    font-size: 18px;
+  }
+}
+
+.job-lst-ico:after,
+.job-lst-ico:before,
+.job-detail-ico:after,
+.job-detail-ico:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.job-lst-ico:after,
+.job-lst-ico:before,
+.job-detail-ico:after,
+.job-detail-ico:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.job-lst-ico:before,
+.job-detail-ico:before {
+  border-color: rgba(246, 107, 52, 0);
+  border-top-color: #c93a40;
+  border-width: 6px;
+  left: 50%;
+  margin-left: -11px;
+}
+
+.job-lst-ico:after,
+.job-detail-ico:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-top-color: #fff;
+  border-width: 5px;
+  left: 50%;
+  margin-left: -10px;
+}
+
 /********** 求人詳細************/
 
 .invi-job-entry .pad {
@@ -16660,11 +16736,16 @@ input[size="28"] {
 }
 
 .invi-job-entry h1 {
-  margin-bottom: 1em;
-  font-size: 1.7rem;
-  padding: 0 0.5em;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #666;
+  font-size: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .invi-job-entry h1 {
+    margin-bottom: 1em;
+    padding: 0 0.5em;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #666;
+  }
 }
 
 .invi-job-entry h2 {
@@ -16756,18 +16837,30 @@ input[size="28"] {
 }
 
 .job-detail-movie-slider-bg {
-  background-image: url(/images/job_detail_movie_slider_backimage2.png?199fd05798827395f897df417b595e54);
+  background-image: url(/images/job_detail_movie_slider_backimage.png?33fc2dbd32a95fb2d659da2b46e0b514);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  margin-top: 2em;
+  margin-top: 0.5em;
+}
+
+@media screen and (min-width: 768px) {
+  .job-detail-movie-slider-bg {
+    margin-top: 2em;
+  }
 }
 
 .swiper-container.job-detail-movie-slider-container {
   max-width: 860px;
   width: 88%;
-  height: 40vh;
+  height: 45vh;
   transition: opacity 0.6s ease, transform 0.3s ease;
+}
+
+@media screen and (min-width: 568px) {
+  .swiper-container.job-detail-movie-slider-container {
+    height: 65vh;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -16790,22 +16883,25 @@ input[size="28"] {
 }
 
 .swiper-container.job-detail-movie-slider-container .swiper-slide video {
-  height: 100%;
+  height: 90%;
+  margin-top: 3%;
 }
 
 .swiper-container.job-detail-movie-slider-container [class^="swiper-button-"] {
   width: 20px;
+  height: 20px;
   color: #000;
 }
 
 @media screen and (min-width: 768px) {
   .swiper-container.job-detail-movie-slider-container [class^="swiper-button-"] {
     width: 44px;
+    height: 44px;
   }
 }
 
 .swiper-container.job-detail-movie-slider-container .swiper-button-prev {
-  transform: translateX(-35px);
+  transform: translateX(-30px);
 }
 
 @media screen and (min-width: 768px) {
@@ -16815,7 +16911,7 @@ input[size="28"] {
 }
 
 .swiper-container.job-detail-movie-slider-container .swiper-button-next {
-  transform: translateX(35px);
+  transform: translateX(30px);
 }
 
 @media screen and (min-width: 768px) {
@@ -16824,16 +16920,70 @@ input[size="28"] {
   }
 }
 
-.swiper-container.job-detail-movie-slider-container .swiper-button-next:after,
-.swiper-container.job-detail-movie-slider-container .swiper-button-prev:after {
-  font-size: 25px;
+.swiper-container.job-detail-movie-slider-container .swiper-button-next,
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev {
+  position: absolute;
+  z-index: 10;
+  margin-top: 0;
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-next.swiper-button-disabled,
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: auto;
+  pointer-events: none;
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev::after,
+.swiper-container.job-detail-movie-slider-container .swiper-button-next::after {
+  position: relative;
+  font-family: "Font Awesome 5 Free", sans-serif;
+  opacity: 1;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  line-height: 20px;
+  color: #fff;
+  background: #000;
+  border-radius: 50%;
+  text-align: center;
 }
 
 @media screen and (min-width: 768px) {
-  .swiper-container.job-detail-movie-slider-container .swiper-button-next:after,
-  .swiper-container.job-detail-movie-slider-container .swiper-button-prev:after {
-    font-size: var(--swiper-navigation-size);
+  .swiper-container.job-detail-movie-slider-container .swiper-button-prev::after,
+  .swiper-container.job-detail-movie-slider-container .swiper-button-next::after {
+    font-size: 46px;
+    line-height: 44px;
   }
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev::after {
+  padding-right: 2px;
+  content: "\F0D9";
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container .swiper-button-prev::after {
+    padding-right: 4px;
+  }
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-next::after {
+  padding-left: 2px;
+  content: "\F0DA";
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container.job-detail-movie-slider-container .swiper-button-next::after {
+    padding-left: 4px;
+  }
+}
+
+.swiper-container.job-detail-movie-slider-container .swiper-button-prev:hover:after,
+.swiper-container.job-detail-movie-slider-container .swiper-button-next:hover:after {
+  color: #fff;
 }
 
 .job-detail-image-container {
@@ -16841,7 +16991,6 @@ input[size="28"] {
   align-items: flex-end;
   justify-content: space-around;
   margin: 40px 0 60px;
-  background: #f5f5f5;
   padding: 35px 15px;
 }
 
@@ -16862,14 +17011,17 @@ input[size="28"] {
      object-position: 50% 50%;
 }
 
-.job-detail-image-slider-container-bg {
-  background: #f5f5f5;
-}
-
 .job-detail-image-slider-container-bg .job-detail-image-slider-container {
   width: 80%;
-  margin: 40px auto 60px;
-  padding: 35px 0;
+  margin: 0 auto 20px;
+  padding: 15px 0 35px;
+}
+
+@media screen and (min-width: 768px) {
+  .job-detail-image-slider-container-bg .job-detail-image-slider-container {
+    margin: 40px auto 60px;
+    padding: 35px 0;
+  }
 }
 
 .job-detail-image-slider-container-bg .job-detail-image-slider-container .swiper-slide {
@@ -17016,8 +17168,6 @@ input[size="28"] {
 
 #recent-joblist .wrap-text p {
   margin-bottom: 5px;
-  font-size: 12px;
-  color: #333;
   letter-spacing: 0;
 }
 
@@ -17078,10 +17228,6 @@ section.cat-list-section {
 
   .invi-job-entry .pad {
     padding: 2em 1%;
-  }
-
-  .invi-job-entry h1 {
-    margin-bottom: 2em;
   }
 
   .cat-item {
@@ -17223,11 +17369,6 @@ section.cat-list-section {
   .job-entry .job-table th span::before {
     display: block;
     padding-right: 0;
-  }
-
-  .invi-job-entry h1 {
-    font-size: 16px;
-    margin-bottom: 1em;
   }
 
   .invi-job-entry h2 {

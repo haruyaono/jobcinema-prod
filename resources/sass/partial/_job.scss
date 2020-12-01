@@ -206,17 +206,83 @@
   content: "\f684";
 }
 
+.job-lst-ico,
+.job-detail-ico {
+  background: #fff;
+  border: 1px solid $red;
+  border-radius: 3px;
+  color: $red;
+  line-height: 1;
+  font-weight: 700;
+  margin-right: 3px;
+  padding-top: 3px;
+  padding-right: 5px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  position: relative;
+  top: -10px;
+
+  text-align: center;
+  display: inline-block;
+  @include mq(medium) {
+    font-size: 18px;
+  }
+}
+
+.job-lst-ico:after,
+.job-lst-ico:before,
+.job-detail-ico:after,
+.job-detail-ico:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.job-lst-ico:after,
+.job-lst-ico:before,
+.job-detail-ico:after,
+.job-detail-ico:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.job-lst-ico:before,
+.job-detail-ico:before {
+  border-color: rgba(246, 107, 52, 0);
+  border-top-color: $red;
+  border-width: 6px;
+  left: 50%;
+  margin-left: -11px;
+}
+.job-lst-ico:after,
+.job-detail-ico:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-top-color: #fff;
+  border-width: 5px;
+  left: 50%;
+  margin-left: -10px;
+}
+
 /********** 求人詳細************/
 .invi-job-entry .pad {
   padding: 3em 3%;
 }
 
 .invi-job-entry h1 {
-  margin-bottom: 1em;
-  font-size: 1.7rem;
-  padding: 0 0.5em;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #666;
+  font-size: 1rem;
+  @include mq(medium) {
+    margin-bottom: 1em;
+    padding: 0 0.5em;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #666;
+  }
 }
 
 .invi-job-entry h2 {
@@ -297,17 +363,24 @@
   -webkit-backface-visibility: hidden;
 }
 .job-detail-movie-slider-bg {
-  background-image: url(../uploads/images/job_detail_movie_slider_backimage2.png);
+  background-image: url(../img/common/job_detail_movie_slider_backimage.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  margin-top: 2em;
+  margin-top: 0.5em;
+  @include mq(medium) {
+    margin-top: 2em;
+  }
 }
 .swiper-container.job-detail-movie-slider-container {
   max-width: 860px;
   width: 88%;
-  height: 40vh;
+  height: 45vh;
   transition: opacity 0.6s ease, transform 0.3s ease;
+
+  @include mq(small) {
+    height: 65vh;
+  }
 
   @include mq(medium) {
     width: 80%;
@@ -325,7 +398,8 @@
     width: 100% !important;
 
     video {
-      height: 100%;
+      height: 90%;
+      margin-top: 3%;
     }
   }
   [class^="swiper-slide-shadow-"] {
@@ -333,30 +407,75 @@
   }
   [class^="swiper-button-"] {
     width: 20px;
+    height: 20px;
     color: #000;
     @extend %transition_all_03s;
     @include mq(medium) {
       width: 44px;
+      height: 44px;
     }
   }
   .swiper-button-prev {
-    transform: translateX(-35px);
+    transform: translateX(-30px);
     @include mq(medium) {
       transform: translateX(-80px);
     }
   }
   .swiper-button-next {
-    transform: translateX(35px);
+    transform: translateX(30px);
     @include mq(medium) {
       transform: translateX(80px);
     }
   }
-  .swiper-button-next:after,
-  .swiper-button-prev:after {
-    font-size: 25px;
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: absolute;
+    z-index: 10;
+    margin-top: 0;
+  }
+  .swiper-button-next.swiper-button-disabled,
+  .swiper-button-prev.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: auto;
+    pointer-events: none;
+  }
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    position: relative;
+    font-family: "Font Awesome 5 Free", sans-serif;
+    opacity: 1;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    line-height: 20px;
+    color: #fff;
+    background: #000;
+    border-radius: 50%;
+    text-align: center;
     @include mq(medium) {
-      font-size: var(--swiper-navigation-size);
+      font-size: 46px;
+      line-height: 44px;
     }
+  }
+  .swiper-button-prev::after {
+    padding-right: 2px;
+    content: "\f0d9";
+    @include mq(medium) {
+      padding-right: 4px;
+    }
+  }
+  .swiper-button-next::after {
+    padding-left: 2px;
+    content: "\f0da";
+    @include mq(medium) {
+      padding-left: 4px;
+    }
+  }
+  .swiper-button-prev:hover:after,
+  .swiper-button-next:hover:after {
+    color: #fff;
   }
 }
 
@@ -366,7 +485,6 @@
   align-items: flex-end;
   justify-content: space-around;
   margin: 40px 0 60px;
-  background: #f5f5f5;
   padding: 35px 15px;
 
   .job-detail-image {
@@ -387,11 +505,14 @@
 }
 // 求人詳細画像スライダー
 .job-detail-image-slider-container-bg {
-  background: #f5f5f5;
   .job-detail-image-slider-container {
     width: 80%;
-    margin: 40px auto 60px;
-    padding: 35px 0;
+    margin: 0 auto 20px;
+    padding: 15px 0 35px;
+    @include mq(medium) {
+      margin: 40px auto 60px;
+      padding: 35px 0;
+    }
     .swiper-slide {
       width: 100%;
       img {
@@ -521,8 +642,6 @@
 
 #recent-joblist .wrap-text p {
   margin-bottom: 5px;
-  font-size: 12px;
-  color: #333;
   letter-spacing: 0;
 }
 
@@ -587,9 +706,6 @@ section.cat-list-section {
 
   .invi-job-entry .pad {
     padding: 2em 1%;
-  }
-  .invi-job-entry h1 {
-    margin-bottom: 2em;
   }
   .cat-item {
     font-size: 2vw;
@@ -714,11 +830,6 @@ section.cat-list-section {
       display: block;
       padding-right: 0;
     }
-  }
-
-  .invi-job-entry h1 {
-    font-size: 16px;
-    margin-bottom: 1em;
   }
   .invi-job-entry h2 {
     font-size: 16px;

@@ -40,10 +40,28 @@ $jobjson = json_encode($jobitem);
         {{ Session::get('message') }}
       </div>
       @endif
-      <h1 class="txt-h1">{{$jobitem->company->cname}}の求人情報</h1>
-      <!-- カテゴリ -->
-      <span class="cat-item org">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
-      <span class="cat-item red">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>
+      @php
+      $target = '';
+
+      $sf = $jobitem->pub_start_flag;
+      if($sf) {
+      $target = $jobitem->pub_start_date ?: '';
+      } else {
+      $target = $jobitem->created_at;
+      }
+      if($target) {
+      $target = new \Carbon\Carbon($target);
+      $targetEnd = $target->addDay(10);
+      }
+
+      $today = new \Carbon\Carbon();
+
+      @endphp
+      <h1 class="txt-h1">
+        @if($target && $targetEnd > $today ) <span class="job-lst-ico">NEW</span>@endif
+        {{$jobitem->company->cname}}の求人情報 </h1> <!-- カテゴリ -->
+      <span class="cat-item org ib-only-pc">{{$jobitem->categories()->wherePivot('ancestor_slug', 'type')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'type')->first()->name : ''}}</span>
+      <span class="cat-item red ib-only-pc">{{$jobitem->categories()->wherePivot('ancestor_slug', 'status')->first() !== null ? $jobitem->categories()->wherePivot('ancestor_slug', 'status')->first()->name : ''}}</span>
     </div>
   </div>
 
