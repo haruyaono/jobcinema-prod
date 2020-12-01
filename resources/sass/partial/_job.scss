@@ -213,6 +213,7 @@
 
 .invi-job-entry h1 {
   margin-bottom: 1em;
+  font-size: 1.7rem;
   padding: 0 0.5em;
   padding-bottom: 20px;
   border-bottom: 1px solid #666;
@@ -452,6 +453,64 @@
   font-weight: 900;
   margin-right: 8px;
   color: #fff;
+}
+
+// 求人詳細スクロール追尾
+.comparison-JC-detailFollowingArea {
+  position: fixed;
+  right: 50%;
+  transform: translateX(50%);
+  bottom: 5px;
+  width: 95%;
+  transition: bottom 0.5s, transform 0.5s;
+  z-index: 201;
+  @include mq(medium) {
+    transform: translateX(0);
+    background-color: #fff;
+    border: 3px solid #e8e8e8;
+    border-radius: 3px;
+    width: 430px;
+    padding: 4px 0;
+    bottom: 15px;
+    right: 137px;
+  }
+  .detail-btn-lst-box-inner {
+    display: flex;
+    justify-content: space-between;
+    @include mq(medium) {
+      justify-content: center;
+    }
+
+    & > li {
+      width: 49%;
+      display: inline-block;
+      vertical-align: bottom;
+      border-radius: 3px;
+      @include mq(medium) {
+        width: 45%;
+        margin-left: 15px;
+      }
+
+      a {
+        display: block;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+  .btn-web-entry {
+    background-color: $yellow;
+    color: #ffffff;
+  }
+  .btn-web-register,
+  .btn-web-keep {
+    background-color: #f5f5f5;
+    border: 1px solid #e8e8e8;
+  }
 }
 
 .d-flex {

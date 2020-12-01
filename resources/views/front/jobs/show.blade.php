@@ -16,6 +16,7 @@
 
 <?php
 $jobjson = json_encode($jobitem);
+
 ?>
 
 <!-- パンくず -->
@@ -351,4 +352,8 @@ $jobjson = json_encode($jobitem);
 @section('footer')
 @component('components.footer')
 @endcomponent
+@endsection
+
+@section('footer_bottom')
+@include('partials.jobdetail_fixbox')
 @endsection

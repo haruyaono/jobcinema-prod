@@ -89,38 +89,6 @@
   display: none;
 }
 
-.p-favorite-fixed-nav {
-  display: block;
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 10px 10px 5px 10px;
-  background-color: #c93b40;
-  color: #fff;
-  line-height: 1.2;
-  text-align: center;
-  transform: translateY(-100%);
-  transition: 0.5s;
-  z-index: 99;
-}
-.p-favorite-fixed-nav.is-nav-show {
-  transform: translate(0);
-}
-.p-favorite-fixed-nav em {
-  font-size: 16px;
-}
-.p-favorite-fixed-nav img {
-  display: inline-block;
-  float: left;
-  width: 20px;
-  height: auto;
-  margin-right: 5px;
-  margin-top: -3px;
-}
-.p-favorite-fixed-nav:hover {
-  color: #fff;
-}
-
 body.jobApplyPage {
   .header {
     height: 65px;

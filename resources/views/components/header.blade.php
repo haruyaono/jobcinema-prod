@@ -10,9 +10,6 @@ if (\Auth::guard('seeker')->check()) {
 <header class="header">
   <div class="inner">
     <div class="header-top">
-      @if(Auth::guard('seeker')->check())
-      <a class="p-favorite-fixed-nav clearfix" id="js-favorite-fixed-nav" href="{{ route('index.front.job_sheet.keeplist') }}"> <i class="fas fa-star header-sp-keep-icon"></i><em class="u-font-xl" id="js-fixed-favorite-num"><span id="saveCount-pc">{{ $jobFavCount }}</span></em>&nbsp;件キープ中</a>
-      @endif
       @if(Request::is('/'))
       <h1 class="logo"><a href="/"><img src="{{ asset('/img/common/jobcinema_rogo_re.png') }}" alt=""></a></h1>
       @else
@@ -71,7 +68,7 @@ if (\Auth::guard('seeker')->check()) {
           <i class="fas fa-star star floatL"></i>
           <div class="saveWrap floatL">
             <span class="save">保存</span>
-            <span id="saveCount-sp" class="saveCount">{{ $jobFavCount }}</span>
+            <favourite-count-component :count={{ $jobFavCount }} place="header"></favourite-count-component>
           </div>
         </a>
       </div>
@@ -131,7 +128,7 @@ if (\Auth::guard('seeker')->check()) {
                 </li>
                 <li class="hamburgerLoginMyMenuLinkList">
                   <a class="hamburgerLogoutClipJob" href="{{ route('index.front.job_sheet.keeplist') }}">保存したお仕事</a>
-                  <p id="hamburgerLogoutClipJobCount" class="hamburgerLogoutClipJobCount">{{ $jobFavCount }}</p>
+                  <favourite-count-component :count={{ $jobFavCount }} place="hamburger"></favourite-count-component>
                 </li>
                 @if(Auth::guard('seeker')->check())
                 <li class="hamburgerLoginMyMenuLinkList">

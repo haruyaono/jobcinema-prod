@@ -1135,6 +1135,12 @@ input {
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 5px;
+  // &.isDetail {
+  //   display: none !important;
+  //   @include mq(medium) {
+  //     display: block;
+  //   }
+  // }
 }
 .to-top i {
   font-size: 32px;
