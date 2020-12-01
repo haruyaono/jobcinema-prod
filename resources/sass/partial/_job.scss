@@ -133,9 +133,11 @@
   }
 
   .job-item-heading {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1em;
+    @include mq(medium) {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1em;
+    }
   }
   .company_name_item {
     font-size: 14px;
@@ -221,9 +223,22 @@
   padding-left: 5px;
   position: relative;
   top: -10px;
-
   text-align: center;
   display: inline-block;
+
+  &.job-lst-ico-for-list {
+    position: absolute;
+    left: -10px;
+    @include mq(medium) {
+      position: unset;
+      padding: 3px 6px;
+      margin-right: 10px;
+      font-size: 14px;
+      line-height: normal;
+      line-height: unset;
+      letter-spacing: 0.1rem;
+    }
+  }
   @include mq(medium) {
     font-size: 18px;
   }
@@ -706,10 +721,6 @@ section.cat-list-section {
 
   .invi-job-entry .pad {
     padding: 2em 1%;
-  }
-  .cat-item {
-    font-size: 2vw;
-    margin-right: 10px;
   }
 
   .entrybtn-field .apply-btn,
