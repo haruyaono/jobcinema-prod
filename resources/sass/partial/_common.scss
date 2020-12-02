@@ -428,6 +428,44 @@ select:hover {
   content: "";
   display: table;
 }
+
+.help-btn {
+  display: inline-block;
+  font-size: 12px;
+  color: #333;
+  .help-mark {
+    display: inline-block;
+    background: $whitegray;
+    border-radius: 50% !important;
+    border: 1px solid $lightgray;
+    font-size: 11px;
+    line-height: 18px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    text-align: center;
+  }
+  .help-txt {
+    display: inline-block;
+
+    &.link {
+      text-decoration: underline;
+    }
+  }
+}
+
+// bootstrap modal
+.modal-title {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.modal-btn {
+  &.yellow {
+    border: 1px solid $yellow;
+    color: $yellow;
+  }
+}
 /* ここからメインです */
 
 .wrap {
