@@ -1927,6 +1927,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "search-component",
   data: function data() {
@@ -39402,6 +39464,8 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
           _c("div", { staticClass: "search-bottom" }, [
             _c("p", { staticClass: "search-job-result" }, [
               _vm._v("\n          検索結果\n          "),
@@ -39435,7 +39499,9 @@ var render = function() {
         ],
         2
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(2)
   ])
 }
 var staticRenderFns = [
@@ -39446,6 +39512,188 @@ var staticRenderFns = [
     return _c("div", { staticClass: "composite-left" }, [
       _c("p", [_vm._v("キーワード")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-right mb-2" }, [
+      _c(
+        "a",
+        {
+          staticClass: "help-btn",
+          attrs: {
+            href: "javascript:void(0)",
+            "data-toggle": "modal",
+            "data-target": "#helpModal"
+          }
+        },
+        [
+          _c("span", { staticClass: "help-txt link" }, [
+            _vm._v("カテゴリについて")
+          ])
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "helpModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "helpModalLabel"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h4",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "helpModalLabel" }
+                  },
+                  [_vm._v("カテゴリについて")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("h4", { staticClass: "h4" }, [_vm._v("■エリア")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("新橋大通り周辺")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v("東川町・治水町・暁町・豊川町")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("柳町公園付近")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v("中園町・柳町・光陽町・花園町")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("釧路駅裏")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v("若松町・松浦町・新富町・白金町")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("新橋大通り周辺")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v(
+                    "川端町・新川町・若草町・若竹町・新栄町・中島町・駒場町・住之江町"
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("イオン釧路店周辺")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v(
+                    "豊美・北都・雁来・富原・睦・桂木・木場・光和・新開・北見団地・黒誉・若葉・曙・桂"
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("南大通周辺")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v("宮本・弥生・浦見・大町・入舟・港町・米町・知人町")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("釧路ガス周辺")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v("寿・仲浜町・海運・浪花町・南浜町・宝町")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("市役所周辺")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [_vm._v("黒金町・錦町")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("ナイトスポット")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [_vm._v("末広町・栄町")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("遠矢・別保方面")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [_vm._v("中央・東陽西")]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("h4", { staticClass: "h4" }, [_vm._v("■雇用形態")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v("ナイト")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "pl-2" }, [
+                  _vm._v("深夜営業の居酒屋を含むバーやスナックの業態")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn modal-btn yellow",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("閉じる")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
   }
 ]
 render._withStripped = true

@@ -85,6 +85,19 @@
             />
           </div>
         </div>
+        <!-- Button trigger modal -->
+        <div class="text-right mb-2">
+          <a
+            href="javascript:void(0)"
+            class="help-btn"
+            data-toggle="modal"
+            data-target="#helpModal"
+          >
+            <!-- <span class="help-mark">?</span> -->
+            <span class="help-txt link">カテゴリについて</span>
+          </a>
+        </div>
+
         <div class="search-bottom">
           <p class="search-job-result">
             検索結果
@@ -98,6 +111,55 @@
           </button>
         </div>
       </form>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="helpModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="helpModalLabel"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="helpModalLabel">カテゴリについて</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h4">■エリア</h4>
+            <p class="font-weight-bold">新橋大通り周辺</p>
+            <p class="pl-2">東川町・治水町・暁町・豊川町</p>
+            <p class="font-weight-bold">柳町公園付近</p>
+            <p class="pl-2">中園町・柳町・光陽町・花園町</p>
+            <p class="font-weight-bold">釧路駅裏</p>
+            <p class="pl-2">若松町・松浦町・新富町・白金町</p>
+            <p class="font-weight-bold">新橋大通り周辺</p>
+            <p class="pl-2">川端町・新川町・若草町・若竹町・新栄町・中島町・駒場町・住之江町</p>
+            <p class="font-weight-bold">イオン釧路店周辺</p>
+            <p class="pl-2">豊美・北都・雁来・富原・睦・桂木・木場・光和・新開・北見団地・黒誉・若葉・曙・桂</p>
+            <p class="font-weight-bold">南大通周辺</p>
+            <p class="pl-2">宮本・弥生・浦見・大町・入舟・港町・米町・知人町</p>
+            <p class="font-weight-bold">釧路ガス周辺</p>
+            <p class="pl-2">寿・仲浜町・海運・浪花町・南浜町・宝町</p>
+            <p class="font-weight-bold">市役所周辺</p>
+            <p class="pl-2">黒金町・錦町</p>
+            <p class="font-weight-bold">ナイトスポット</p>
+            <p class="pl-2">末広町・栄町</p>
+            <p class="font-weight-bold">遠矢・別保方面</p>
+            <p class="pl-2">中央・東陽西</p>
+            <hr />
+            <h4 class="h4">■雇用形態</h4>
+            <p class="font-weight-bold">ナイト</p>
+            <p class="pl-2">深夜営業の居酒屋を含むバーやスナックの業態</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn modal-btn yellow" data-dismiss="modal">閉じる</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>

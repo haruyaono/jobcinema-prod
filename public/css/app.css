@@ -13357,6 +13357,43 @@ select:hover {
   display: table;
 }
 
+.help-btn {
+  display: inline-block;
+  font-size: 12px;
+  color: #333;
+}
+
+.help-btn .help-mark {
+  display: inline-block;
+  background: #dcdcdc;
+  border-radius: 50% !important;
+  border: 1px solid #c0c0c0;
+  font-size: 11px;
+  line-height: 18px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  text-align: center;
+}
+
+.help-btn .help-txt {
+  display: inline-block;
+}
+
+.help-btn .help-txt.link {
+  text-decoration: underline;
+}
+
+.modal-title {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.modal-btn.yellow {
+  border: 1px solid #de9610;
+  color: #de9610;
+}
+
 /* ここからメインです */
 
 .wrap {
