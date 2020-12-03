@@ -276,7 +276,7 @@ return [
                 ],
                 [
                     'text' => '採用報酬',
-                    'url'  => '#',
+                    'url'  => 'admin/setting/recruit_reward',
                 ],
                 [
                     'text' => 'カテゴリ',
