@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'JOB CiNEMA | お祝い金管理')
+@section('title', 'JOB CiNEMA | お祝い金設定')
 
 @section('content_header')
-<h1><i class="fas fa-edit mr-2"></i>お祝い金管理</h1>
+<h1><i class="fas fa-edit mr-2"></i>お祝い金設定</h1>
 @stop
 
 @section('content_bread')
-<li class="breadcrumb-item"><a href="{{ route('reward.index') }}">お祝い金管理</a></li>
+<li class="breadcrumb-item"><a href="{{ route('reward.index') }}">お祝い金設定</a></li>
 <li class="breadcrumb-item active">編集</li>
 @stop
 
@@ -28,6 +28,11 @@
                             <i class="fa fa-list"></i><span class="hidden-xs"> 一覧</span>
                         </a>
                     </div>
+                    <div class="btn-group pull-right" style="margin-right: 5px">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger {{ $reward->id }}-delete" title="削除">
+                            <i class="fa fa-trash"></i><span class="hidden-xs"> 削除</span>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -45,15 +50,11 @@
                                     <p class="system-values-item">{{ $reward->id }}</p>
                                 </li>
                                 <li>
-                                    <p class="system-values-label">応募者</p>
-                                    <p class="system-values-item"><a href="javascript:void(0);" data-toggle="tooltip" title="データ確認"><span class="d-inline-block">#{{ $reward->user_id ?: '退会済み'}}<br>{{ $reward->user->full_name }}</span></a></p>
+                                    <p class="system-values-label">作成日時</p>
+                                    <p class="system-values-item">{{ $reward->created_at }}</p>
                                 </li>
                                 <li>
-                                    <p class="system-values-label">応募データ</p>
-                                    <p class="system-values-item"><a href="javascript:void(0);" data-toggle="tooltip" title="データ確認"><span class="d-inline-block">#{{ $reward->apply->id }}</span></a></p>
-                                </li>
-                                <li>
-                                    <p class="system-values-label">申請日</p>
+                                    <p class="system-values-label">更新日時</p>
                                     <p class="system-values-item">{{ $reward->created_at }}</p>
                                 </li>
                             </ul>
@@ -73,12 +74,22 @@
                     <div class="body-box">
                         <div class="form-group">
                             <div class="row">
-                                <label class="col-sm-2 text-sm-right">ステータス</label>
+                                <label class="col-sm-2 text-sm-right">金額</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        <select class="custom-select" name="data[Reward][status]" required="1">
-                                            @foreach(config('const.CONGRAT_PAYMENT_STATUS') as $key => $value)
-                                            <option value="{{ $key }}" @if(old('data.Reward.status')===(string) $key){{ 'selected' }}@else{{ !old('data.Reward.status') && old('data.Reward.status') !== '0' && $key === $reward->status ? 'selected' : ''}}@endif>{{ $value }}</option>
+                                        <input type="text" id="amount" name="data[Reward][amount]" class="form-control" value="@if(old('data.Reward.amount')){{ old('data.Reward.amount') }}@else{{ $reward->amount ? $reward->amount : '' }}@endif" placeholder="入力　金額" required><span class="mt-1 ml-2">円</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">カテゴリ</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <select class="custom-select" name="data[Reward][category_id]" required>
+                                            @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" @if(old('data.Reward.category_id')===(string) $category->id){{ 'selected' }}@else{{ !old('data.Reward.category_id') && old('data.Reward.category_id') !== '0' && $category->id === $reward->category_id ? 'selected' : ''}}@endif>{{ $category->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -86,22 +97,13 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-2 text-sm-right">金額</label>
+                            <label class="col-sm-2 text-sm-right">ラベル</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <input type="text" id="billing_amount" name="data[Reward][billing_amount]" class="form-control" value="@if(old('data.Reward.billing_amount')){{ old('data.Reward.billing_amount') }}@else{{ $reward->billing_amount ? $reward->billing_amount : '' }}@endif" placeholder="入力　金額"><span class="mt-1 ml-2">円</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2 text-sm-right">支払日</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <input type="text" id="payment_date" name="data[Reward][payment_date]" class="form-control" value="@if(old('data.Reward.payment_date')){{ old('data.Reward.payment_date') }}@else{{ $reward->payment_date ?  $reward->payment_date->format('Y-m-d H:i'): '' }}@endif" placeholder="入力　支払日">
+                                    <input type="text" id="label" name="data[Reward][label]" class="form-control" value="@if(old('data.Reward.label')){{ old('data.Reward.label') }}@else{{ $reward->label ?: '' }}@endif" placeholder="入力　ラベル">
                                 </div>
                             </div>
                         </div>
@@ -125,9 +127,10 @@
 @section('js')
 <script>
     $(function() {
-        $('#payment_date').datetimepicker({
-            format: 'Y-m-d H:i'
+        $('.{{$reward->id}}-delete').click(function(event) {
+            deleteItem('/admin/setting/reward/', '{{$reward->id}}', '/admin/setting/reward');
         });
+
     });
 </script>
 @stop

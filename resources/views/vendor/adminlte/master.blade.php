@@ -110,6 +110,51 @@
     @endif
     <script src="{{ mix('js/adminApp.js') }}"></script>
 
+    <script>
+        function deleteItem(url, id, redirect) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            swal.fire({
+                title: "本当に削除しますか？",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "確認",
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                cancelButtonText: "取消",
+                preConfirm: function() {
+                    $('.swal2-cancel').hide();
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                            method: 'post',
+                            url: url + id,
+                            data: {
+                                _method: 'delete',
+                            },
+                            success: function(data) {
+                                resolve(data);
+                            }
+                        });
+                    });
+                }
+            }).then(function(result) {
+                var data = result.value;
+                if (typeof data === 'object') {
+                    if (data.status) {
+                        swal.fire(data.message, '', 'success');
+                        window.location.href = redirect;
+                    } else {
+                        swal.fire(data.message, '', 'error');
+                    }
+
+                }
+            });
+        }
+    </script>
     {{-- Livewire Script --}}
     @if(config('adminlte.livewire'))
     @if(app()->version() >= 7)

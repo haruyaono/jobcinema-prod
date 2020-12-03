@@ -272,7 +272,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'お祝い金',
-                    'url'  => '#',
+                    'url'  => 'admin/setting/reward',
                 ],
                 [
                     'text' => '採用報酬',
@@ -367,7 +367,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

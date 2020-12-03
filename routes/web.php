@@ -213,6 +213,12 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('enterprise', 'EnterpriseController')->except(['create', 'store', 'destroy']);
       });
 
+      Route::group(['prefix' => 'setting'], function () {
+        Route::namespace('Setting')->group(function () {
+          Route::resource('reward', 'RewardController');
+        });
+      });
+
       // Route::get('joblist/index', 'DashboardController@getAlljobs')->name('alljob.get');
       // Route::get('joblist/sort', 'DashboardController@jobsSort')->name('alljob.sort');
       // Route::get('joblist/show/{id}', 'DashboardController@getJobDetail')->name('admin.job.detail');
