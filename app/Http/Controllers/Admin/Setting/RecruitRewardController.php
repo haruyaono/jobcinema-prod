@@ -25,7 +25,6 @@ class RecruitRewardController extends Controller
      */
     public function index()
     {
-        // $categories = DB::table('categories')->where('slug', 'status')->first()->children();
         $categories = collect($this->categoryRepository->getCategoriesByslug('status'));
         $non_attach_categories = $categories->filter(function ($value) {
             return $value->achievementReward == null;
@@ -59,7 +58,7 @@ class RecruitRewardController extends Controller
     public function store(StoreRecruitRewardRequest $request)
     {
         AchievementReward::create($request->input('data.RecruitReward'));
-        return redirect()->back()->with('status', '作成しました！');
+        return redirect()->route('recruit_reward.index')->with('status', '作成しました！');
     }
 
     /**
@@ -101,7 +100,7 @@ class RecruitRewardController extends Controller
         $reward = AchievementReward::find($id);
         $reward->update(Arr::except($request->input('data.RecruitReward'), ['id']));
 
-        return redirect()->back()->with('status', '保存しました！');
+        return redirect()->route('recruit_reward.index')->with('status', '保存しました！');
     }
 
     /**

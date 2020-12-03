@@ -25,8 +25,14 @@ class RewardController extends Controller
      */
     public function index()
     {
+        $categories = collect($this->categoryRepository->getCategoriesByslug('status'));
+        $non_attach_categories = $categories->filter(function ($value) {
+            return $value->congratsMoney == null;
+        });
+
         return view('admin.setting.reward.index', [
-            'rewards' => CongratsMoney::orderBy('amount', 'asc')->get()
+            'rewards' => CongratsMoney::orderBy('amount', 'asc')->get(),
+            'non_attach_categories' => $non_attach_categories
         ]);
     }
 
@@ -52,7 +58,7 @@ class RewardController extends Controller
     public function store(StoreRewardRequest $request)
     {
         CongratsMoney::create($request->input('data.Reward'));
-        return redirect()->back()->with('status', '作成しました！');
+        return redirect()->route('reward.index')->with('status', '作成しました！');
     }
 
     /**
@@ -94,7 +100,7 @@ class RewardController extends Controller
         $reward = CongratsMoney::find($id);
         $reward->update(Arr::except($request->input('data.Reward'), ['id']));
 
-        return redirect()->back()->with('status', '保存しました！');
+        return redirect()->route('reward.index')->with('status', '保存しました！');
     }
 
     /**

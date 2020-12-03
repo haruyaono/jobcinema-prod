@@ -22,6 +22,16 @@
                 </div>
             </div>
             <div class="card-body">
+                @if(!$non_attach_categories->isEmpty())
+                <div class="alert alert-warning">
+                    <strong><i class="fas fa-exclamation-circle mb-2"></i>以下のカテゴリにお祝い金が設定されていません</strong><br>
+                    <ul>
+                        @foreach($non_attach_categories as $c)
+                        <li>{{ $c->name }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <table id="tableReward" class="table table-bordered">
                     <thead>
                         <tr>
