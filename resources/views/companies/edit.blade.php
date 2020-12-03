@@ -193,6 +193,27 @@
                             </div><!-- card -->
                         </div>
 
+                        <div class="col-md-12 mt-3">
+                            <div class="card">
+                                <div class="card-header">お支払い設定</div>
+                                <div class="card-body">
+                                    <table class="table table-bordered text-left">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">
+                                                    <label class="col-form-label col-form-label-sm">振込人名義（カタカナ）</label><span class="text-danger ml-1">*</span>
+                                                </th>
+                                                <td>
+                                                    <input size="28" type="text" class="form-control form-control-sm {{ $errors->has('company_form.company.transfer_person_name') ? ' is-invalid' : '' }}" name="company_form[company][transfer_person_name]" value="{{ old('company_form.company.transfer_person_name') ?: $employer->company->transfer_person_name }}">
+                                                    <p class="mt-2">※成果報酬お振込の確認に使用します</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div><!-- card -->
+                        </div>
+
                         <div class="form-group mt-3 text-center">
                             <button class="btn btn-success" type="submit">更新</button>
                         </div>
