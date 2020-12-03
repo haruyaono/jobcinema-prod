@@ -245,6 +245,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">振込人名義（カタカナ）</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
+                                        </div>
+                                        <input name="data[Enterprise][transfer_person_name]" class="form-control" placeholder="入力 振込人名義" value="{{ old('data.Enterprise.transfer_person_name') ?: $enterprise->transfer_person_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-2">
                             </div>

@@ -48,6 +48,7 @@ class EmpMainRegisterRequest extends FormRequest
             'company_form.company.phone1' => 'required|numeric|digits_between:2,5',
             'company_form.company.phone2' => 'required|numeric|digits_between:1,4',
             'company_form.company.phone3' => 'required|numeric|digits_between:3,4',
+            'company_form.company.transfer_person_name' => 'required|string|max:191|katakana',
         ];
     }
 
@@ -78,6 +79,7 @@ class EmpMainRegisterRequest extends FormRequest
             'company_form.company.phone1' => '求職者が連絡する電話番号1',
             'company_form.company.phone2' => '求職者が連絡する電話番号2',
             'company_form.company.phone3' => '求職者が連絡する電話番号3',
+            'company_form.company.transfer_person_name' => '振込人名義（カタカナ）',
         ];
     }
 }

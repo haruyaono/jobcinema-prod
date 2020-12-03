@@ -39,6 +39,7 @@ class UpdateEnterpriseRequest extends FormRequest
             'data.Enterprise.phone1' => 'nullable|numeric|digits_between:2,5|required_with:data.Enterprise.phone2,data.Enterprise.phone3',
             'data.Enterprise.phone2' => 'nullable|numeric|digits_between:1,4|required_with:data.Enterprise.phone1,data.Enterprise.phone3',
             'data.Enterprise.phone3' => 'nullable|numeric|digits_between:3,4|required_with:data.Enterprise.phone1,data.Enterprise.phone2',
+            'data.Enterprise.transfer_person_name' => 'required|string|max:191|katakana',
         ];
     }
 
@@ -62,6 +63,7 @@ class UpdateEnterpriseRequest extends FormRequest
             'data.Enterprise.phone1' => '求職者が連絡する電話番号1',
             'data.Enterprise.phone2' => '求職者が連絡する電話番号2',
             'data.Enterprise.phone3' => '求職者が連絡する電話番号3',
+            'data.Enterprise.transfer_person_name' => '振込人名義（カタカナ）',
         ];
     }
     public function withValidator($validator)
