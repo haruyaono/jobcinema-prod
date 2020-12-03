@@ -106,12 +106,12 @@ class JobController extends Controller
           $searchParam['ks']['parent'] = 'salary_h';
           break;
         case '2':
-          $searchParam['ks'][''] = 'salary';
+          $searchParam['ks']['slug'] = 'salary';
           $searchParam['ks']['parent'] = 'salary_d';
           break;
         case '3':
           $searchParam['ks']['slug'] = 'salary';
-          $searchParam['ks']['parent'] = 'salary_';
+          $searchParam['ks']['parent'] = 'salary_m';
           break;
         case '4':
           $searchParam['ks']['slug'] = 'date';
