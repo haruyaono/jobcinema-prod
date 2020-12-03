@@ -151,6 +151,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2 text-sm-right">振込人名義</label>
+                            <div class="col-sm-8">
+                                {{ $enterprise->transfer_person_name }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
