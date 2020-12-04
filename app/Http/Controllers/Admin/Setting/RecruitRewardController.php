@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Setting;
 
-use App\Models\CongratsMoney;
-use Illuminate\Http\Request;
-use App\Http\Requests\Admin\Setting\Reward\StoreRewardRequest;
-use App\Http\Requests\Admin\Setting\Reward\UpdateRewardRequest;
+use App\Models\AchievementReward;
+use App\Http\Requests\Admin\Setting\RecruitMent\StoreRecruitRewardRequest;
+use App\Http\Requests\Admin\Setting\RecruitMent\UpdateRecruitRewardRequest;
 use Illuminate\Support\Arr;
 use App\Repositories\CategoryRepository;
 use App\Http\Controllers\Controller;
+use DB;
 
-class RewardController extends Controller
+class RecruitRewardController extends Controller
 {
     private $categoryRepository;
 
@@ -27,11 +27,11 @@ class RewardController extends Controller
     {
         $categories = collect($this->categoryRepository->getCategoriesByslug('status'));
         $non_attach_categories = $categories->filter(function ($value) {
-            return $value->congratsMoney == null;
+            return $value->achievementReward == null;
         });
 
-        return view('admin.setting.reward.index', [
-            'rewards' => CongratsMoney::orderBy('amount', 'asc')->get(),
+        return view('admin.setting.recruit_reward.index', [
+            'rewards' => AchievementReward::orderBy('amount', 'asc')->get(),
             'non_attach_categories' => $non_attach_categories
         ]);
     }
@@ -43,7 +43,7 @@ class RewardController extends Controller
      */
     public function create()
     {
-        return view('admin.setting.reward.create', [
+        return view('admin.setting.recruit_reward.create', [
             'categories' => $this->categoryRepository->getCategoriesByslug('status')
         ]);
     }
@@ -55,10 +55,10 @@ class RewardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRewardRequest $request)
+    public function store(StoreRecruitRewardRequest $request)
     {
-        CongratsMoney::create($request->input('data.Reward'));
-        return redirect()->route('reward.index')->with('status', '作成しました！');
+        AchievementReward::create($request->input('data.RecruitReward'));
+        return redirect()->route('recruit_reward.index')->with('status', '作成しました！');
     }
 
     /**
@@ -69,8 +69,8 @@ class RewardController extends Controller
      */
     public function show(int $id)
     {
-        return view('admin.setting.reward.show', [
-            'reward' =>  CongratsMoney::find($id)
+        return view('admin.setting.recruit_reward.show', [
+            'reward' =>  AchievementReward::find($id)
         ]);
     }
 
@@ -82,8 +82,8 @@ class RewardController extends Controller
      */
     public function edit(int $id)
     {
-        return view('admin.setting.reward.edit', [
-            'reward' => CongratsMoney::find($id),
+        return view('admin.setting.recruit_reward.edit', [
+            'reward' => AchievementReward::find($id),
             'categories' => $this->categoryRepository->getCategoriesByslug('status')
         ]);
     }
@@ -95,12 +95,12 @@ class RewardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRewardRequest $request, int $id)
+    public function update(UpdateRecruitRewardRequest $request, int $id)
     {
-        $reward = CongratsMoney::find($id);
-        $reward->update(Arr::except($request->input('data.Reward'), ['id']));
+        $reward = AchievementReward::find($id);
+        $reward->update(Arr::except($request->input('data.RecruitReward'), ['id']));
 
-        return redirect()->route('reward.index')->with('status', '保存しました！');
+        return redirect()->route('recruit_reward.index')->with('status', '保存しました！');
     }
 
     /**
@@ -111,7 +111,7 @@ class RewardController extends Controller
      */
     public function destroy(int $id)
     {
-        $reward = CongratsMoney::find($id);
+        $reward = AchievementReward::find($id);
         $status = 0;
 
         // 紐ずくカテゴリが既に求人票と紐付いている場合はエラー返す

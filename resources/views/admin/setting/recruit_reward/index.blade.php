@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'JOB CiNEMA | お祝い金設定')
+@section('title', 'JOB CiNEMA | 採用報酬設定')
 
 @section('content_header')
-<h1><i class="fas fa-home mr-2"></i>お祝い金設定</h1>
+<h1><i class="fas fa-home mr-2"></i>採用報酬設定</h1>
 @stop
 
 @section('content_bread')
-<li class="breadcrumb-item active">お祝い金設定</li>
+<li class="breadcrumb-item active">採用報酬設定</li>
 @stop
 
 @section('content')
@@ -16,7 +16,7 @@
         <div class="card">
             <div class="card-header with-border">
                 <div class="btn-group float-right">
-                    <a href="{{ route('reward.create') }}" class="btn btn-sm btn-success">
+                    <a href="{{ route('recruit_reward.create') }}" class="btn btn-sm btn-success">
                         <i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;&nbsp;新規</span>
                     </a>
                 </div>
@@ -24,7 +24,7 @@
             <div class="card-body">
                 @if(!$non_attach_categories->isEmpty())
                 <div class="alert alert-warning">
-                    <strong><i class="fas fa-exclamation-circle mb-2"></i>以下のカテゴリにお祝い金が設定されていません</strong><br>
+                    <strong><i class="fas fa-exclamation-circle mb-2"></i>以下のカテゴリに採用報酬が設定されていません</strong><br>
                     <ul>
                         @foreach($non_attach_categories as $c)
                         <li>{{ $c->name }}</li>
@@ -51,11 +51,11 @@
                             <td>{{ $reward->category->name }}</td>
                             <td>{{ $reward->label }}</td>
                             <td class="project-actions text-right">
-                                <a class="btn btn-primary btn-sm" href="{{ route('reward.show', $reward->id) }}">
+                                <a class="btn btn-primary btn-sm" href="{{ route('recruit_reward.show', $reward->id) }}">
                                     <i class="fas fa-eye">
                                     </i>
                                 </a>
-                                <a class="btn btn-info btn-sm" href="{{ route('reward.edit', $reward->id) }}">
+                                <a class="btn btn-info btn-sm" href="{{ route('recruit_reward.edit', $reward->id) }}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
                                 </a>
@@ -98,7 +98,7 @@
 
         $('.grid-row-delete').unbind('click').click(function() {
             let id = $(this).data('id');
-            deleteItem('/admin/setting/reward/', id, '/admin/setting/reward');
+            deleteItem('/admin/setting/recruit_reward/', id, '/admin/setting/recruit_reward');
         });
 
     });
