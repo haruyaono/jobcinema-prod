@@ -85,7 +85,7 @@
                                         @endif
                                     </div>
                                     <div class="kingaku floatR">
-                                        <p class="tanka">【成果報酬額】<span class="contingent_fee">{{ $apply->recruitment_fee }}</span></p>
+                                        <p class="tanka">【成果報酬額】<span class="contingent_fee">{{ $apply->custom_recruitment_fee }}</span></p>
                                     </div>
                                 </td>
                                 <td rowspan="3" class="rightBox">
