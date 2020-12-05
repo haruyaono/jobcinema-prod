@@ -13,6 +13,7 @@ abstract class AbstractMediaUploadRequest extends Request
 
     public function rules(): array
     {
+
         if ($this->isArray()) {
             return $this->getRules();
         }

@@ -84,11 +84,11 @@ class S3Service implements ObjectStorageInterface
 
     public function uploadJobItemMovie(JobItem $jobitem, $data, string $flag, string $identifier): void
     {
-        $bucket = config('app.env') == 'production' || config('app.env') == 'stage' ? config('app.tmp_bucket') : config('app.bucket');
+        // $bucket = config('app.env') == 'production' || config('app.env') == 'stage' ? config('app.tmp_bucket') : config('app.bucket');
         try {
             $this->s3Client->putObject([
                 'ACL' => 'public-read',
-                'Bucket' =>  $bucket,
+                'Bucket' =>  config('app.bucket'),
                 'Key'    => config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' .  $jobitem->{"job_mov_" . $flag},
                 'Body'   => $data,
                 'ContentType' => 'video/mp4'
@@ -100,34 +100,34 @@ class S3Service implements ObjectStorageInterface
 
     public function deleteJobItemMovie(JobItem $jobitem, string $flag, string $identifier): void
     {
-        $bucket = config('app.env') == 'production' || config('app.env') == 'stage' ? config('app.tmp_bucket') : config('app.bucket');
+        // $bucket = config('app.env') == 'production' || config('app.env') == 'stage' ? config('app.tmp_bucket') : config('app.bucket');
 
         try {
-            if ($this->s3Client->doesObjectExist($bucket, config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' . $jobitem->{"job_mov_" . $flag})) {
+            if ($this->s3Client->doesObjectExist(config('app.bucket'), config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' . $jobitem->{"job_mov_" . $flag})) {
                 $objects = $this->s3Client->listObjects([
-                    'Bucket' =>  $bucket,
-                    'Prefix' => config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier
-                ]);
-                foreach ($objects['Contents'] as $object) {
-                    $this->s3Client->deleteObject([
-                        'Bucket' =>  $bucket,
-                        'Key' => $object['Key']
-                    ]);
-                }
-            }
-
-            if (config('app.env') != 'local') {
-                $objects2 = $this->s3Client->listObjects([
                     'Bucket' =>  config('app.bucket'),
                     'Prefix' => config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier
                 ]);
-                foreach ($objects2['Contents'] as $object) {
+                foreach ($objects['Contents'] as $object) {
                     $this->s3Client->deleteObject([
                         'Bucket' =>  config('app.bucket'),
                         'Key' => $object['Key']
                     ]);
                 }
             }
+
+            // if (config('app.env') != 'local') {
+            //     $objects2 = $this->s3Client->listObjects([
+            //         'Bucket' =>  config('app.bucket'),
+            //         'Prefix' => config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier
+            //     ]);
+            //     foreach ($objects2['Contents'] as $object) {
+            //         $this->s3Client->deleteObject([
+            //             'Bucket' =>  config('app.bucket'),
+            //             'Key' => $object['Key']
+            //         ]);
+            //     }
+            // }
         } catch (Exception $e) {
             $this->logger->error($e);
         }
