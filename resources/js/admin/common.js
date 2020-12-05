@@ -8,6 +8,14 @@
         });
         jQuery.datetimepicker.setLocale('ja');
 
+        $("form").submit(function () {
+            var self = this;
+            $(":submit", self).prop("disabled", true);
+            setTimeout(function () {
+                $(":submit", self).prop("disabled", false);
+            }, 10000);
+        });
+
         if ($('#start_specified_date').length && $('#end_specified_date').length) {
             var start_specified_date = $('#start_specified_date'),
                 end_specified_date = $('#end_specified_date');
