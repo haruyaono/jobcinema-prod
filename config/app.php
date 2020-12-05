@@ -28,8 +28,6 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-    's3_url' => env('MIX_S3_URL', 'https://s3.job-cinema.com'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -127,6 +125,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Line Notify
+    |--------------------------------------------------------------------------
+    */
+
+    'line_notify' => [
+        'token' => env('LINE_NOTIFY_TOKEN'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Log
+    |--------------------------------------------------------------------------
+    */
+    'log' => env('APP_LOG', 'single'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | AWS
+    |--------------------------------------------------------------------------
+    */
+
+    'bucket' => env('AWS_BUCKET'),
+
+    'tmp_bucket' => env('AWS_TMP_BUCKET'),
+
+    's3_url' => env('MIX_S3_URL', 'https://s3.job-cinema.com'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -165,13 +192,12 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
+        Aws\Laravel\AwsServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
-        Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
-        JeroenNoten\LaravelAdminLte\ServiceProvider::class,
+        // JeroenNoten\LaravelAdminLte\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -180,10 +206,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ValidatorServiceProvider::class, 
+        App\Providers\ValidatorServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         // Prettus\Repository\Providers\RepositoryServiceProvider::class,
-        App\Providers\JobItemServiceProvider::class
+        App\Providers\LineNotifyServiceProvider::class,
+        App\Providers\ObjectStorageServiceProvider::class,
 
     ],
 
@@ -233,23 +260,21 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'CustomValidator' => 'app\Library\CustomValidator',
+        'LineNotify' => App\Facades\LineNotify::class,
 
-        'Form' => Collective\Html\FormFacade::class, //add
-        'Html' => Collective\Html\HtmlFacade::class, //add
-        'Image' => Intervention\Image\Facades\Image::class, //add
-
-        'CustomValidator' => 'app\Library\CustomValidator', //add
-
-        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class
-
+        'AWS' => Aws\Laravel\AwsFacade::class,
     ],
 
     'debug_blacklist' => [
         '_ENV' => [
             'APP_KEY',
-        'URL' => Illuminate\Support\Facades\URL::class,
+            'URL' => Illuminate\Support\Facades\URL::class,
             'AMAZON_API_SECRET_KEY',
-        'Config' => Illuminate\Support\Facades\Config::class,
+            'Config' => Illuminate\Support\Facades\Config::class,
             'SENDGRID_API_KEY',
             'MAIL_FROM_ADDRESS',
             'FACEBOOK_APP_ID',

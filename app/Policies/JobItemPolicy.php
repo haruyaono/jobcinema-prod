@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
-use App\Job\Employers\Employer;
-use App\Job\JobItems\JobItem;
+use App\Models\Employer;
+use App\Models\JobItem;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Database\Eloquent\Builder;
 
 class JobItemPolicy
 {
@@ -23,6 +22,16 @@ class JobItemPolicy
 
     public function view(Employer $employer, JobItem $jobitem)
     {
-        return $employer->id === $jobitem->employer_id;
+        return $employer->id === $jobitem->company->employer_id;
+    }
+
+    public function update(Employer $employer, JobItem $jobitem)
+    {
+        return $employer->id === $jobitem->company->employer_id;
+    }
+
+    public function delete(Employer $employer, JobItem $jobitem)
+    {
+        return $employer->id === $jobitem->company->employer_id;
     }
 }

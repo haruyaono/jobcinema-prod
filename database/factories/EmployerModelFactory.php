@@ -1,5 +1,6 @@
 <?php
-use App\Job\Employers\Employer;
+
+use App\Models\Employer;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -18,16 +19,17 @@ $factory->define(Employer::class, function (Faker $faker) {
     static $password;
 
     return [
+        'email' => $faker->unique()->safeEmail,
         'last_name' => $faker->lastName,
         'first_name' => $faker->firstName,
         'last_name_katakana' => $faker->lastKanaName,
         'first_name_katakana' => $faker->firstKanaName,
-        'status' => 1,
-        'email' => $faker->unique()->safeEmail,
+        'phone1' => '080',
+        'phone2' => '1111',
+        'phone3' => '2222',
+        'status' => $faker->randomElement([0, 1, 2, 8, 9]),
         'email_verified_at' => now(),
-        'password' => $password ?:$password = bcrypt('secret'),
+        'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => Str::random(10),
     ];
 });
-
-

@@ -1,123 +1,92 @@
 .header {
-    width: 100%;
-    height: 160px;
-    text-align: center;
-    background: #c93a40;
-  }
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-  }
-  .header-top .logo {
-    margin-top: 20px;
-    width: 30%;
-    display: inline-block;
-    font-size: 1em;
-  }
-  .header .logo a {
-    display: block;
-  }
-  .header .logo img {
-   width: 100%;
-  }
-  
-  .header-top .header-widget {
-    width: 65%;
-    display: inline-block;
-    text-align: right;
-    padding-right: 40px;
-    margin-top: 60px;
-  }
-  .header-top .header-widget li {
-    display: inline-block;
-    list-style: none;
-    padding: 5px 10px;
-  }
-  .header-top .header-widget li a {
-    display: block;
-    color: #fff;
-  }
-  .header-top .header-widget li a:hover {
-    opacity: .8;
-  }
-  /* g-nav */
-  .gnav {
-    margin: 1.8em 0 0;
-    width: 100%;
-  }
-  
-  .gnav ul {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-  }
-  .gnav ul li{
-    display: inline-block;
-    width: 25%;
-    border-right: 1px solid #D16D6D;
-  }
-  .gnav ul li:first-child{
-    border-left: 1px solid #D16D6D;
-  }
-  .gnav ul li a {
-    display: block;
-    color: #fff;
-    font-size: 1em;
-    padding: 0 .8em;
-    white-space: nowrap;
-  }
-  .gnav ul li a:hover {
-    opacity: .8;;
-  }
-
-  /* spログイン非表示 */
-  .header-sp-login {
-    display: none;
-   }
-   /* spキープリスト非表示 */
-   .header-sp-keep {
-    display: none;
-   }
-  /* spハンバーガー非表示 */
-  .fullHeaderMenu {
-    display: none;
-  }
-  .hamburgerLogoutlayer {
-    display: none;
-  }
-
-
-  .p-favorite-fixed-nav {
-    display: block;
-    position: fixed;
-    top: 0;
-    right: 0;
-    padding: 10px 10px 5px 10px;
-    background-color: #C93B40;
-    color: #fff;
-    line-height: 1.2;
-    text-align: center;
-    transform: translateY(-100%);
-    transition: .5s;
-    z-index: 99;
+  width: 100%;
+  height: 160px;
+  text-align: center;
+  background: #c93a40;
 }
-.p-favorite-fixed-nav.is-nav-show {
-  transform: translate(0);
+.header-top {
+  display: flex;
+  justify-content: space-between;
 }
-.p-favorite-fixed-nav em {
-  font-size: 16px;
-}
-.p-favorite-fixed-nav img {
+.header-top .logo {
+  margin-top: 20px;
+  width: 30%;
   display: inline-block;
- float: left;
-  width: 20px;
-  height: auto;
-  margin-right: 5px;
-  margin-top: -3px;
+  font-size: 1em;
 }
-.p-favorite-fixed-nav:hover{
+.companyHeaderLeft {
+}
+.header .logo a {
+  display: block;
+}
+.header .logo img {
+  width: 100%;
+}
+
+.header-top .header-widget {
+  width: 65%;
+  display: inline-block;
+  text-align: right;
+  padding-right: 40px;
+  margin-top: 60px;
+}
+.header-top .header-widget li {
+  display: inline-block;
+  list-style: none;
+  padding: 5px 10px;
+}
+.header-top .header-widget li a {
+  display: block;
   color: #fff;
+}
+.header-top .header-widget li a:hover {
+  opacity: 0.8;
+}
+/* g-nav */
+.gnav {
+  margin: 1.8em 0 0;
+  width: 100%;
+}
+
+.gnav ul {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+.gnav ul li {
+  display: inline-block;
+  width: 25%;
+  border-right: 1px solid #d16d6d;
+}
+.gnav ul li:first-child {
+  border-left: 1px solid #d16d6d;
+}
+.gnav ul li a {
+  display: block;
+  color: #fff;
+  font-size: 1em;
+  padding: 0 0.8em;
+  white-space: nowrap;
+}
+.gnav ul li a:hover {
+  opacity: 0.8;
+}
+
+/* spログイン非表示 */
+.header-sp-login {
+  display: none;
+}
+/* spキープリスト非表示 */
+.header-sp-keep {
+  display: none;
+}
+/* spハンバーガー非表示 */
+.fullHeaderMenu {
+  display: none;
+}
+.hamburgerLogoutlayer {
+  display: none;
 }
 
 body.jobApplyPage {
@@ -150,13 +119,12 @@ body.jobApplyPage {
         @include mq(medium) {
           width: 100%;
         }
-        
       }
     }
   }
-} 
+}
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .header {
     height: auto;
     padding: 5px 10px;
@@ -192,7 +160,7 @@ body.jobApplyPage {
       font-size: 14px;
       line-height: 1.2;
       color: #fff;
-    } 
+    }
     .saveWrap .saveCount {
       position: absolute;
       display: block;
@@ -201,13 +169,12 @@ body.jobApplyPage {
       width: 17px;
       border-radius: 50px;
       color: #fff;
-      font-size: .615rem;
+      font-size: 0.615rem;
       line-height: 1.308rem;
       text-align: center;
       left: 30px;
       top: -7px;
     }
-
   }
   .header .logo {
     line-height: unset;
@@ -221,14 +188,14 @@ body.jobApplyPage {
     display: none;
   }
   .header-top .header-widget {
-      display: none!important;
+    display: none !important;
   }
 
   /* spログイン */
   .header-sp-login {
     display: block;
     margin-left: auto;
-    margin-right: 20px
+    margin-right: 20px;
   }
   .header-sp-login-link {
     border: 1px solid #fff;
@@ -240,11 +207,11 @@ body.jobApplyPage {
   .header-sp-login-link:hover {
     color: #fff;
   }
-  
+
   /* spキープ */
   .header-sp-keep {
     display: block;
-    margin-right: 10px
+    margin-right: 10px;
   }
   .header-sp-keep-link {
     display: block;
@@ -287,9 +254,7 @@ body.jobApplyPage {
       &:nth-of-type(3) {
         bottom: 0;
       }
-
     }
-
   }
   .hamburgerLogoutlayer {
     display: none;
@@ -299,15 +264,15 @@ body.jobApplyPage {
     right: 0;
     bottom: 0;
     z-index: 9999;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
     overflow: hidden;
     overflow-y: auto;
     line-height: 1.3;
   }
   .hamburgerLogoutlayer ::-webkit-scrollbar {
     width: 17px;
-  } 
-  
+  }
+
   .hamburgerLogout .on {
     display: block;
   }
@@ -328,7 +293,7 @@ body.jobApplyPage {
       height: 50px;
       position: relative;
     }
-  
+
     .hamburgerLogoutBtn {
       color: #fff;
       font-size: 18px;
@@ -347,7 +312,7 @@ body.jobApplyPage {
     }
     .hamburgerLogoutBtnList {
       border-right: 1px solid #fff;
-      width: calc( 50% - 0.5px);  
+      width: calc(50% - 0.5px);
     }
     .hamburgerLogoutloginBtnPcList {
       width: calc(50% - 0.5px);
@@ -426,7 +391,7 @@ body.jobApplyPage {
       line-height: 10px;
       border-radius: 50px;
       text-align: center;
-      font-size: .846rem;
+      font-size: 0.846rem;
       padding: 3px 7px 4px;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
@@ -441,20 +406,20 @@ body.jobApplyPage {
       line-height: 10px;
       border-radius: 50px;
       text-align: center;
-      font-size: .846rem;
+      font-size: 0.846rem;
       padding: 3px 7px 4px;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
     }
-   
+
     .hamburgerLoginMyMenuLinkList {
       border-bottom: 1px solid #d8d8d8;
       position: relative;
     }
     .hamburgerLogoutMyMenuLink li:last-child {
-      border-bottom: none!important;
+      border-bottom: none !important;
     }
-   
+
     .hamburgerLoginApplicationMypage {
       padding: 16px 0 16px 8px;
       display: block;
@@ -501,9 +466,6 @@ body.jobApplyPage {
       text-decoration: underline;
       display: inline-block;
     }
-
-   
- 
   }
 
   /* 閉じるボタン */
@@ -577,7 +539,9 @@ body.jobApplyPage {
     width: 25px;
     height: 20px;
   }
-  #nav-open span, #nav-open span:before, #nav-open span:after {
+  #nav-open span,
+  #nav-open span:before,
+  #nav-open span:after {
     height: 1px;
   }
   #nav-open span:before {

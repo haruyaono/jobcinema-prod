@@ -3,42 +3,28 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use App\Job\JobItems\JobItem;
-use App\Job\Categories\Category;
-use App\Job\Categories\Repositories\CategoryRepository;
-use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Models\Category;
+use App\Repositories\CategoryRepository;
 use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
-    /**
-    *  @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
-    private $category;
+    private $CategoryRepository;
 
-    /**
-     * CategoryController constructor.
-     * @param Category $category
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
     public function __construct(
-        Category $category,
-        CategoryRepositoryInterface $categoryRepository
-    ){
-        $this->category = $category;
-        $this->categoryRepo = $categoryRepository;
+        CategoryRepository $categoryRepository
+    ) {
+        $this->CategoryRepository = $categoryRepository;
     }
 
-    public function getAllCategory()
+    public function index()
     {
-    
-        return response()->json(['categoryList' => $this->categoryRepo->listCategories('id', 'asc')]);
+        return response()->json(['categories' => $this->CategoryRepository->getCategories()]);
     }
 
-    public function getCategoryNameList(Request $request)
+    public function getNameList(Request $request)
     {
         $content = $request->json()->all();
-        return response()->json(['nameList' => $this->category->getNameList($content['idList'])]);
+        return response()->json(['nameList' => Category::find($content['idList'])->pluck('name')]);
     }
 }

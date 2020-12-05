@@ -25,7 +25,7 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
         $this->model = $employer;
     }
 
-     /**
+    /**
      * List all the employers
      *
      * @param string $order
@@ -34,9 +34,9 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
      * @param string $active
      * @return Collection
      */
-    public function listEmployers(string $order = 'id', string $sort = 'desc', array $columns = ['*']) : Collection
+    public function listEmployers(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection
     {
-            return $this->all($columns, $order, $sort);
+        return $this->all($columns, $order, $sort);
     }
 
     /**
@@ -46,7 +46,7 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
      * @return Employer
      * @throws CreateEmployerInvalidArgumentException
      */
-    public function createEmployer(array $params) : Employer
+    public function createEmployer(array $params): Employer
     {
         try {
             $data = collect($params)->except('password')->all();
@@ -69,14 +69,14 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
 
     /**
      * Update the employer
-     * 
+     *
      * @param array $params
-     * 
+     *
      * @return bool
-     * 
+     *
      * @throws UpdateEmployerInvalidArgumentException
      */
-    public function updateEmployer(array $params) : bool
+    public function updateEmployer(array $params): bool
     {
         try {
             return $this->model->update($params);
@@ -93,7 +93,7 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
      * @return Employer
      * @throws EmployerNotFoundException
      */
-    public function findEmployerById(int $id) : Employer
+    public function findEmployerById(int $id): Employer
     {
         try {
             return $this->findOneOrFail($id);
@@ -102,23 +102,23 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
         }
     }
 
-    /** 
-     * Delete a employer 
-     * 
+    /**
+     * Delete a employer
+     *
      * @return  bool
      * @throws \Exception
      */
-    public function deleteEmployer() :bool
+    public function deleteEmployer(): bool
     {
         return $this->delete();
     }
-    
+
     /**
      * @param array $employer
      *
      * @return mixed
      */
-    public function findCompanies(Employer $employer) : Collection
+    public function findCompanies(Employer $employer): Collection
     {
         return $employer->company;
     }
@@ -128,16 +128,16 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
      *
      * @return mixed
      */
-    public function findJobItems(Employer $employer) : Collection
+    public function findJobItems(Employer $employer): Collection
     {
-        return $employer->jobs;
+        return $employer->jobitems->whereNotIn('status', [8, 9, 99]);
     }
 
-        /**
+    /**
      * @param array $data
      * @return mixed
      */
-    public function searchEmployer(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']) : Collection
+    public function searchEmployer(array $data = [], string $orderBy = 'created_at', string $sortBy = 'desc', $columns = ['*']): Collection
     {
         if ($data !== []) {
             return $this->queryBy($this->model::query(), $data)->orderBy($orderBy, $sortBy)->get($columns);
@@ -145,5 +145,4 @@ class EmployerRepository extends BaseRepository implements EmployerRepositoryInt
             return $this->listEmployers('created_at');
         }
     }
-   
 }

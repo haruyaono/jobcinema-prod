@@ -5,16 +5,12 @@ namespace App\Job\Categories\Repositories;
 use App\Job\Categories\Category;
 use App\Job\Categories\Exceptions\CategoryNotFoundException;
 use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
-use App\Job\JobItems\JobItem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Jsdecena\Baserepo\BaseRepository;
 
 class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
-
     /**
      * CategoryRepository constructor.
      * @param Category $category
@@ -23,6 +19,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function __construct(
         Category $category
     ) {
+        parent::__construct($category);
         $this->model = $category;
     }
 
@@ -36,7 +33,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      */
     public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection
     {
-        return $this->all($columns, $order, $sort)->toTree();
+        return $this->model->where('slug', '!=', 'unregistered')->orWhereNull('slug')->orderBy($order, $sort)->get($columns)->toTree();
     }
 
     /**
@@ -44,15 +41,15 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      *
      *  @param string $childSlug
      * @param string $parentSlug
-     * @return Collection
+     * @return array
      */
-    public function listCategoriesByslug(string $parentSlug, string $childSlug = ''): Collection
+    public function listCategoriesByslug(string $parentSlug, string $childSlug = ''): array
     {
         $categories = $this->listCategories();
         if ($childSlug !== '') {
-            return $categories->where('slug', $parentSlug)->first()->children->where('slug', $childSlug)->first()->children->sortKeysDesc()->values();
+            return $categories->where('slug', $parentSlug)->first()->children->where('slug', $childSlug)->first()->children->orderBy('sort', 'asc')->get();
         }
-        return $categories->where('slug', $parentSlug)->first()->children->sortKeysDesc()->values();
+        return $categories->where('slug', $parentSlug)->first()->children->sortBy('_lft')->all();
     }
 
     /**
@@ -75,6 +72,22 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     {
         try {
             return $this->findOneOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            throw new CategoryNotFoundException($e);
+        }
+    }
+
+    /**
+     * Find the category by slug
+     *
+     * @param string $slug
+     * @return Category
+     * @throws CategoryNotFoundException : Category
+     */
+    public function findCategoryBySlig(string $slug)
+    {
+        try {
+            return $this->model->where('slug', $slug)->first();
         } catch (ModelNotFoundException $e) {
             throw new CategoryNotFoundException($e);
         }

@@ -8,7 +8,7 @@
 
 require('./bootstrap');
 require('./main');
-
+import store from './store'
 window.Vue = require('vue');
 
 /**
@@ -22,11 +22,10 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('favourite-component', require('./components/FavouriteComponent.vue').default);
+Vue.component('favourite-component', require('./components/favourite/FavouriteComponent.vue').default);
+Vue.component('favourite-follow-fixed-component', require('./components/favourite/FavouriteFollowFixedComponent.vue').default);
+Vue.component('favourite-count-component', require('./components/favourite/FavouriteCountComponent.vue').default);
 Vue.component('slick-top', require('./components/SlickTopComponent.vue').default);
-Vue.component('v-slick1', require('./components/SlickComponent.vue').default);
-Vue.component('v-slick', require('./components/SlickVideoComponent.vue').default);
 Vue.component('recent-component', require('./components/RecentJobComponent.vue').default);
 Vue.component('search-component', require('./components/SearchComponent.vue').default);
 Vue.component('search-history-component', require('./components/SearchHistoryComponent.vue').default);
@@ -39,4 +38,5 @@ Vue.component('search-history-component', require('./components/SearchHistoryCom
 
 const app = new Vue({
     el: '#app',
+    store
 });

@@ -1,18 +1,18 @@
 export default {
-    data() {
-      return {
-        processing: false
-      }
+  data() {
+    return {
+      processing: false
+    }
+  },
+  methods: {
+    startProcessing: function () {
+      this.processing = true
     },
-    methods: {
-      startProcessing() {
-        this.processing = true
-      },
-      endProcessing() {
-        this.processing = false
-      },
-      isProcessing: function () {
-        return this.processing
-      }
+    endProcessing: function () {
+      this.processing = false
+    },
+    isProcessing: function () {
+      return this.processing
     }
   }
+}

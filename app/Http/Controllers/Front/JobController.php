@@ -4,192 +4,153 @@
 namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
-use App\Job\Users\User;
-use App\Job\Users\Repositories\UserRepository;
-use App\Job\JobItems\JobItem;
-use App\Job\JobItems\Repositories\JobItemRepository;
-use App\Job\Companies\Company;
+use App\Models\JobItem;
 use Illuminate\Support\Facades\Auth;
-use App\Job\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
-use App\Job\JobItems\Repositories\Interfaces\JobItemRepositoryInterface;
-use App\Job\Users\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\JobItemService;
+use App\Services\S3Service;
+use App\Services\JobItemSearchService;
+use App\Repositories\CategoryRepository;
 use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
+  private $JobItem;
+  private $JobItemService;
+  private $S3Service;
+  private $JobItemSearchService;
+  private $CategoryRepository;
 
-    /**
-     * @var CategoryRepositoryInterface
-     * @var JobItemRepositoryInterface
-    *  @var UserRepositoryInterface
-     */
-    private $categoryRepo;
-    private $jobItemRepo;
-    private $userRepo;
+  public function __construct(
+    JobItem $JobItem,
+    JobItemService $jobItemService,
+    S3Service $s3Service,
+    JobItemSearchService $jobItemSearchService,
+    CategoryRepository $categoryRepository
+  ) {
+    $this->JobItem = $JobItem;
+    $this->JobItemService = $jobItemService;
+    $this->S3Service = $s3Service;
+    $this->JobItemSearchService = $jobItemSearchService;
+    $this->CategoryRepository = $categoryRepository;
+  }
 
-    private $job_form_session = 'count';
-    private $JobItem;
-    
-  
-     /**
-     * JobController constructor.
-     * @param JobItem $JobItem
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param JobItemRepositoryInterface $jobItemRepository
-     * @param UserRepositoryInterface $userRepository
-     */
-    public function __construct(
-      JobItem $JobItem, 
-      CategoryRepositoryInterface $categoryRepository,
-      JobItemRepositoryInterface $jobItemRepository,
-      UserRepositoryInterface $userRepository
-    ) {
+  public function index()
+  {
+    $jobitems = $this->JobItem->activeJobitem()->get();
+    $topNewJobs = $jobitems->sortBy('created_at')->take(3);
+    $categories = $this->CategoryRepository->getCategories();
 
-      $this->JobItem = $JobItem;
-      $this->categoryRepo = $categoryRepository;
-      $this->jobItemRepo = $jobItemRepository;
-      $this->userRepo = $userRepository;
-    }
+    return view('front.index', compact('jobitems', 'topNewJobs', 'categories'));
+  }
 
-    public function index(Request $request)
-    {
-      $topNewJobs = $this->JobItem->activeJobitem()->latest()->limit(3)->get();
-      $jobCount = $this->jobItemRepo->listJobitemCount();
-      $categoryList = $this->categoryRepo->listCategories('id', 'asc');
+  public function show(Request $request, JobItem $jobitem)
+  {
+    $recommendJobList = [];
+    $exists = false;
 
-      return view('jobs.index', compact('topNewJobs', 'jobCount', 'categoryList'));
-    }
+    if (Auth::guard('seeker')->check()) {
+      $user = auth('seeker')->user();
 
-    public function show(Request $request, $id)
-    {
+      Redis::command('LREM', ['Viewer:Item:' . $jobitem->id, 0, $user->id]);
+      Redis::command('RPUSH', ['Viewer:Item:' . $jobitem->id, $user->id]);
+      Redis::command('LTRIM', ['Viewer:Item:' . $jobitem->id, 0, 999]);
 
-      session()->forget('jobapp_data');
- 
-      $recommendJobList = [];
-      $category = [];
-      $job = $this->jobItemRepo->findJobItemById($id);
-      $jobItemRepo = new JobItemRepository($job);
+      $this->JobItem->calcRecommend();
+      $recommendJobIds = $this->JobItem->getRecommendJobList($jobitem->id);
 
-      if(Auth::check()) {
-        $user = $this->userRepo->findUserById(auth()->user()->id);
-
-        Redis::command('LREM', ['Viewer:Item:'.$id, 0, $user->id]);
-        Redis::command('RPUSH', ['Viewer:Item:'.$id, $user->id]);
-        Redis::command('LTRIM', ['Viewer:Item:'.$id, 0, 999]);
-
-        $existsApplied = $this->userRepo->existsAppliedJobItem($user, $id);
-  
-        $this->JobItem->calcRecommend();
-        $recommendJobIds = $this->JobItem->getRecommendJobList($id, $request);
-
-        if($recommendJobIds != []) {
-          $recommendJobList = $this->jobItemRepo->find($recommendJobIds);
-        }
+      if ($recommendJobIds != []) {
+        $recommendJobList = $this->JobItem->find($recommendJobIds);
       }
+      $exists = $user->existsAppliedJobItem($jobitem->id);
+    }
 
-      // 最近見た求人リストの配列を操作
-      $this->jobItemRepo->createRecentJobItemIdList($request, $id);
+    $this->JobItemService->createRecentJobItemIdList($jobitem->id);
 
-      if($job->status == 2) {
-        $title = $job->company->cname;
+    $imageArray = $this->S3Service->getJobItemImagePublicUrl($jobitem);
+    $movieArray = $this->S3Service->getJobItemMoviePublicUrl($jobitem);
 
-        if(config('app.env') == 'production') {
-          $jobImageBaseUrl = config('app.s3_url');
-        } else {
-          $jobImageBaseUrl = '';
-        }
+    if ($jobitem->status == 2) {
+      return view('front.jobs.show', compact('jobitem', 'exists', 'recommendJobList', 'imageArray', 'movieArray'));
+    }
 
-        return view('jobs.show', compact('job', 'title', 'jobImageBaseUrl', 'existsApplied', 'recommendJobList'));
-      } else {
-        if($jobitem_id_list && in_array($id, $jobitem_id_list) ) {
-          $index = array_search( $id, $jobitem_id_list, true );
-          session()->forget("recent_jobs.$index");
-        } 
+    return redirect()->to('/');
+  }
+
+  // 最近見た求人リスト
+  public function indexHistory()
+  {
+    $jobitems = $this->JobItemService->listRecentJobItemId(1);
+
+    return view('front.jobs.history', compact('jobitems'));
+  }
+
+  // 最近見た求人のリストを返す
+  public function postJobHistory(Request $request)
+  {
+    $jobs = $this->JobItemService->listRecentJobItemId(0);
+
+    return response()->json($jobs);
+  }
+
+  public function search(Request $request)
+  {
+
+    $searchParam = $request->all();
+    $categories = $this->CategoryRepository->getCategories();
+
+    if (array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
+      switch ($searchParam['ks']['f']) {
+        case '1':
+          $searchParam['ks']['slug'] = 'salary';
+          $searchParam['ks']['parent'] = 'salary_h';
+          break;
+        case '2':
+          $searchParam['ks']['slug'] = 'salary';
+          $searchParam['ks']['parent'] = 'salary_d';
+          break;
+        case '3':
+          $searchParam['ks']['slug'] = 'salary';
+          $searchParam['ks']['parent'] = 'salary_m';
+          break;
+        case '4':
+          $searchParam['ks']['slug'] = 'date';
+          $searchParam['ks']['order'] = 'asc';
+          break;
+        case '5':
+          $searchParam['ks']['slug'] = 'oiwaikin';
+          break;
+        default:
+          break;
       }
-
-      return redirect()->to('/');
     }
 
-     // 最近見た求人リスト
-     public function getJobHistory() 
-     {
-      $jobs = $this->jobItemRepo->listRecentJobItemId(1);
-   
-      return view('jobs.history', compact('jobs'));
-     }
+    $query = $this->JobItemSearchService->search($searchParam);
 
-    // 最近見た求人のリストを返す
-    public function postJobHistory(Request $request) 
-    {
-      $jobs = $this->jobItemRepo->listRecentJobItemId(0);
-      
-      return response()->json($jobs);
+    $totalJobItem = $query->count();
+    $jobitems = $query->paginate(20);
+
+    if ($request->get('page') > $jobitems->LastPage()) {
+      abort(404);
     }
 
-    public function allJobs(Request $request)
-    {
-      $searchParam = $request->all();
-      $categoryList = $this->categoryRepo->listCategories('id', 'asc');
+    $hash = array(
+      'jobitems' => $jobitems,
+      'jobCount' => $totalJobItem,
+      'categories' => $categories,
+      'searchParam' => $searchParam
+    );
 
-      if(array_key_exists('ks', $searchParam) && $searchParam['ks'] != '') {
+    return view('front.jobs.search')->with($hash);
+  }
 
-        switch ($searchParam['ks']['f']) {
-          case '1':
-            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_h')->first()->parent->id;
-            break;
-          case '2':
-            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_d')->first()->parent->id;
-            break;
-          case '3':
-            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('salary', 'salary_m')->first()->parent->id;
-            break;
-          case '4':
-            $searchParam['ks']['c_id'] = $this->categoryRepo->listCategoriesByslug('date')->first()
-            ->parent->id;
-            $searchParam['ks']['order'] = 'asc';
-            break;
-          case '5':
-            $searchParam['ks']['column'] = 'oiwaikin';
-            break;
-          default:
-            break;
-        }
-      }
+  // public function realSearchJob(Request $request)
+  // {
+  //   $searchParam = $request->all();
+  //   $query = $this->JobItemSearchService->search($searchParam);
 
-      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
+  //   $jobCount = $query->count();
 
-
-      
-      $totalJobItem = $query->count();
-      $jobs = $query->latest()->paginate(20);
-
-      //件数表示の例外処理
-      if( Input::get('page') > $jobs->LastPage()) {
-        abort(404);
-      }
-
-      $hash = array(
-          'jobs' => $jobs,
-          'jobCount' => $totalJobItem,
-          'categoryList' => $categoryList,
-          'searchParam' => $searchParam
-      );
-
-       return view('jobs.alljobs')->with($hash);
-
-    }
-
-    public function realSearchJob(Request $request)
-    {
-
-      $searchParam = $request->all(); 
-      $query = $this->jobItemRepo->baseSearchJobItems($searchParam);
-
-      $jobCount = $query->count();
-
-      return response()->json($jobCount);
-    }
+  //   return response()->json($jobCount);
+  // }
 }

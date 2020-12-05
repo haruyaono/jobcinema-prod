@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
@@ -17,17 +18,12 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            if ($guard == 'employer') {
-                if ($request->path() == 'employer/login') {
-                    return redirect('/company/mypage');
-                }
-            }
-            if ($guard == '') {
-                if ($request->url() == 'members/login') {
-                    return redirect('/mypage/index');
-                }
-            }
+        if (Auth::guard($guard)->check() && $guard === 'seeker') {
+            return redirect(RouteServiceProvider::HOME);
+        } elseif (Auth::guard($guard)->check() && $guard === 'employer') {
+            return redirect(RouteServiceProvider::EMPLOYER_HOME);
+        } elseif (Auth::guard($guard)->check() && $guard === 'admin') {
+            return redirect(RouteServiceProvider::ADMIN_HOME);
         }
 
         return $next($request);

@@ -1,23 +1,23 @@
-
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import './configs/variables', "./configs/mixins";
+@import "./configs/variables", "./configs/mixins";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
-@import './partial/common';
-@import './partial/header';
-@import './partial/footer';
-@import './partial/login';
-@import './partial/register';
-@import './partial/top';
-@import './partial/job_apply';
-@import './partial/job';
-@import './partial/user';
-@import './partial/company';
-@import './partial/lp';
-@import './partial/contact';
-@import './partial/page';
+@import "./partial/common";
+@import "./partial/header";
+@import "./partial/footer";
+@import "./partial/login";
+@import "./partial/register";
+@import "./partial/top";
+@import "./partial/job_apply";
+@import "./partial/job";
+@import "./partial/user";
+@import "./partial/company/company";
+@import "./partial/company/job_sheet/joblist";
+@import "./partial/lp";
+@import "./partial/contact";
+@import "./partial/page";

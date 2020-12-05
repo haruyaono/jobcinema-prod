@@ -1,40 +1,27 @@
 <p>求人サイト JOBCiNEMA</p>
-<br>
-
-<p>{{$jobAppData['last_name']}} {{$jobAppData['first_name']}} 様</p>
-<br>
-
-<p>企業から電話で連絡がありますのでご注意ください。</p>
-<br>
-
-<p>■応募先情報</p>
-<p>【企業名】：{{$company['cname']}}</p>
-<p>【勤務先名】：{{$jobId['job_office']}}</p>
-<p>【担 当 名】：{{$employer['last_name']}}</p>
-<p>【電話番号】：{{$employer['phone1']}}-{{$employer['phone2']}}-{{$employer['phone3']}}</p>
-<br>
-
-<p>※応募企業の情報はMyページからも確認できます</p>
-<a href="{{route('mypages.index')}}">{{route('mypages.index')}}</a>
-<br>
-
-@if($jobId['festive_money'])
-<p>■採用お祝い金プレゼント</p>
-<p>採用された方には、JOBCiNEMAより採用お祝い金をプレゼントします！</p>
-<br>
-<p>★こんな場合も対象になります</p>
-<p>・辞退・不採用の連絡後改めて採用された場合</p>
-<p>・応募した企業から別のお仕事（会社）を紹介された場合</p>
-<p>・応募した職種・勤務地以外に採用された場合</p>
-<p>※初出社には研修期間（試用期間）も含みます。</p>
-<p><※採用お祝い金は、JOBCiNEMAよりプレゼントします。/p>
-<p>採用企業様より直接お渡しすることはありません。</p>
-<p>※退会した場合はお祝い金はもらえません。</p>
-<br>
-@endif
-
-<p>＜ 運営情報 ＞</p>
-<p>JOBCiNEMA</p>
-<p>お問い合わせ：customer@jobcinema.com</p>
-<a href="{{url('/')}}">{{url('/')}}</a>
-
+<p>{{ $data['last_name'] }} {{ $data['first_name'] }} 様</p>
+<p>ご応募が完了しました。<br>企業から電話で連絡がありますのでご注意ください。</p>
+<p>■応募企業情報
+    【企業名】 {{ $company['cname'] }}<br>
+    【勤務先名】 {{ $jobitem['job_office'] }}<br>
+    【担 当 名】 {{ $employer['last_name'] }}<br>
+    【電話番号】 {{ $company['phone1'] }}-{{ $company['phone2'] }}-{{ $company['phone3'] }}
+</p>
+<p>※応募企業の情報はMyページからも確認できます<br>
+    <a href="{{ route('seeker.index.mypage') }}">{{ route('seeker.index.mypage') }}</a>
+</p>
+<p>
+    ■まずは応募先からの連絡をお待ちください。<br>
+    <br>
+    電話、メールで連絡があります。<br>
+    ・採用結果が分かりましたら、マイページ応募管理より採用報告をして下さい。<br>
+    ・知らない番号からの電話にも出て下さい。<br>
+    ・留守電をONにして下さい。<br>
+    ・迷惑メールボックスも確認して下さい。<br>
+    ※数日たっても応募先から連絡が無い場合は、電話で応募先に問い合わせて下さい。
+</p>
+<p>＜ 運営情報 ＞<br>
+    JOBCiNEMA<br>
+    お問い合わせ : {{ config('mail.contact.address') }}<br>
+    サイトURL : <a href="{{ url('/') }}">{{ url('/') }}</a>
+</p>

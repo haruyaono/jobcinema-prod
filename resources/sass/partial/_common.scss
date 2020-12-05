@@ -144,22 +144,14 @@ q:after {
 }
 a {
   text-decoration: none;
-  color: #000;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: $lightblue;
+  // cursor: pointer;
+  // -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 a:hover {
   opacity: 0.7;
-  color: inherit;
-  text-decoration: none;
-}
-
-a.txt-blue-link {
   color: $lightblue;
-
-  &:hover {
-    color: $lightblue;
-  }
+  text-decoration: none;
 }
 
 .non-link {
@@ -217,7 +209,16 @@ textarea {
   font-family: inherit;
   font-size: 100%;
 }
+textarea {
+  white-space: pre-wrap;
+}
+button[type="submit"] {
+  border: 0;
+}
 
+.font-white {
+  color: #fff;
+}
 .font-yellow {
   color: #de9610;
 }
@@ -225,7 +226,7 @@ textarea {
   color: #c93a40;
 }
 .font-blue {
-  color: #0368b8;
+  color: $deepblue;
 }
 .font-bold {
   font-weight: bold;
@@ -233,6 +234,39 @@ textarea {
 .required {
   color: #fff;
   background-color: #c93a40;
+}
+
+.font16 {
+  font-size: 16px;
+}
+.font18 {
+  font-size: 18px;
+}
+.font20 {
+  font-size: 20px;
+}
+.font22 {
+  font-size: 22px;
+}
+.font24 {
+  font-size: 24px;
+}
+
+.border-red {
+  border: 1px solid $red;
+}
+.border-gold {
+  border: 1px solid $gold;
+}
+
+.border-w1 {
+  border-width: 1px;
+}
+.border-w2 {
+  border-width: 2px;
+}
+.border-w3 {
+  border-width: 3px;
 }
 
 h1 {
@@ -271,6 +305,22 @@ h3 {
   }
 }
 
+.floatL {
+  float: left;
+}
+.floatR {
+  float: right;
+}
+.alignleft {
+  text-align: left;
+}
+.aligncenter {
+  text-align: center;
+}
+.alignright {
+  text-align: right;
+}
+
 select:hover {
   cursor: pointer;
 }
@@ -300,6 +350,7 @@ select:hover {
 
   a {
     display: flex;
+    color: #333;
     @include mq(medium) {
       display: block;
     }
@@ -350,6 +401,11 @@ select:hover {
   @include mq(medium) {
     width: 100%;
   }
+
+  p {
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 .nav-link {
   padding-bottom: 0;
@@ -371,6 +427,44 @@ select:hover {
   clear: both;
   content: "";
   display: table;
+}
+
+.help-btn {
+  display: inline-block;
+  font-size: 12px;
+  color: #333;
+  .help-mark {
+    display: inline-block;
+    background: $whitegray;
+    border-radius: 50% !important;
+    border: 1px solid $lightgray;
+    font-size: 11px;
+    line-height: 18px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    text-align: center;
+  }
+  .help-txt {
+    display: inline-block;
+
+    &.link {
+      text-decoration: underline;
+    }
+  }
+}
+
+// bootstrap modal
+.modal-title {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.modal-btn {
+  &.yellow {
+    border: 1px solid $yellow;
+    color: $yellow;
+  }
 }
 /* ここからメインです */
 
@@ -523,6 +617,26 @@ input {
   font-family: "Font Awesome 5 Free";
   color: #fff;
   line-height: 40px;
+}
+
+/* モーダル tingle.js */
+.tingle-modal {
+  padding: 40px;
+}
+.tingle-modal-box {
+  width: 850px;
+  max-width: 90%;
+  border-radius: 0;
+}
+.tingle-modal--visible .tingle-modal-box__footer {
+  bottom: 0;
+  text-align: center;
+  background: #fff;
+  padding: 0 40px 60px;
+
+  .btn {
+    margin: 0 20px;
+  }
 }
 
 /* スライドドット */
@@ -989,11 +1103,11 @@ input {
 
 .cat-item {
   display: inline-block;
-  top: 0;
-  left: 0;
   padding: 3px 6px;
   color: #fff;
-  margin-right: 20px;
+  font-size: 14px;
+  margin-right: 10px;
+  border-radius: 3px;
 }
 .cat-item.org {
   background: #de9610;
@@ -1065,6 +1179,12 @@ input {
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 5px;
+  // &.isDetail {
+  //   display: none !important;
+  //   @include mq(medium) {
+  //     display: block;
+  //   }
+  // }
 }
 .to-top i {
   font-size: 32px;

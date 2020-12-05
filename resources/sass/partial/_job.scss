@@ -39,7 +39,7 @@
     width: auto;
   }
 }
-/* 案件一覧 */
+/* 求人一覧 */
 
 .job-entry {
   .job-item {
@@ -133,9 +133,11 @@
   }
 
   .job-item-heading {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1em;
+    @include mq(medium) {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1em;
+    }
   }
   .company_name_item {
     font-size: 14px;
@@ -206,179 +208,96 @@
   content: "\f684";
 }
 
-/********** 個別ページ************/
-.media-wrap {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  margin: 40px 0 90px;
-  background: #f5f5f5;
-  padding: 35px 15px;
-}
-
-.full-wide-slider {
+.job-lst-ico,
+.job-detail-ico {
+  background: #fff;
+  border: 1px solid $red;
+  border-radius: 3px;
+  color: $red;
+  line-height: 1;
+  font-weight: 700;
+  margin-right: 3px;
+  padding-top: 3px;
+  padding-right: 5px;
+  padding-bottom: 3px;
+  padding-left: 5px;
   position: relative;
-  width: 45%;
-  // max-height: 300px;
-  // height: 28vw;
-  // min-height: 8vw;
-  margin-right: 5%;
-  transition: all 1.2s ease;
-  display: inline-block;
-}
-.full-wide-slider.slick-initialized {
-  opacity: 1;
-  visibility: visible;
-}
-.full-wide-slider .slick-list {
-  height: 100%;
-}
-.full-wide-slider .slick-track {
-  height: 100%;
-}
-
-.full-wide-slider .slick-slide {
-  position: relative;
-  height: 23vw;
-}
-.full-wide-slider .slick-slide::before {
-  background-color: #000;
-  opacity: 0.3;
-  z-index: 1;
-}
-.full-wide-slider .slick-slide video {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  min-height: 100%;
-  width: 100%;
-  height: auto;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
-.full-wide-slider .slick-slide .slide-media {
-  -webkit-animation: slideOut 0.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-  animation: slideOut 0.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-}
-.full-wide-slider .slick-slide.slick-active {
-  z-index: 1;
-}
-.full-wide-slider .slick-slide.slick-active .slide-media {
-  -webkit-animation: slideIn 2.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-  animation: slideIn 2.4s cubic-bezier(0.4, 0.29, 0.01, 1);
-}
-
-.full-wide-slider .slick-dots,
-.image3-area .slick-dots {
+  top: -10px;
   text-align: center;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  margin-top: 15px;
-}
-.full-wide-slider .slick-dots li,
-.image3-area .slick-dots li {
   display: inline-block;
-  vertical-align: top;
-  margin: 0 8px;
-}
-.full-wide-slider .slick-dots li button,
-.image3-area .slick-dots li button {
-  width: 16px;
-  height: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 0 transparent;
-  vertical-align: middle;
-  color: #fff;
-  background-color: #b6b6b6;
-  transition: all 0.3s ease;
-  opacity: 0.4;
-  font-size: 0;
-}
-.full-wide-slider .slick-arrow {
-  background: transparent;
-  margin-top: 0;
-}
-.full-wide-slider .prev-arrow {
-  left: 0;
-  opacity: 0.7;
-}
-.full-wide-slider .next-arrow {
-  right: 0;
-  opacity: 0.7;
-}
-.full-wide-slider .prev-arrow::before,
-.full-wide-slider .next-arrow::before {
-  color: #555;
-}
-.full-wide-slider .slick-dots li button:focus {
-  outline: none;
-}
-.full-wide-slider .slick-dots li button:hover {
-  opacity: 1;
-}
-.full-wide-slider .slick-dots li.slick-active button,
-.image3-area .slick-dots li.slick-active button {
-  box-shadow: 0 0 0 2px #fff;
-  opacity: 1;
-  background-color: #333;
-}
 
-@-webkit-keyframes slideIn {
-  from {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
+  &.job-lst-ico-for-list {
+    position: absolute;
+    left: -10px;
+    @include mq(medium) {
+      position: unset;
+      padding: 3px 6px;
+      margin-right: 10px;
+      font-size: 14px;
+      line-height: normal;
+      line-height: unset;
+      letter-spacing: 0.1rem;
+    }
   }
-  to {
-    -webkit-filter: blur(0);
-    filter: blur(0);
+  @include mq(medium) {
+    font-size: 18px;
   }
 }
 
-@keyframes slideIn {
-  from {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
-  to {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
+.job-lst-ico:after,
+.job-lst-ico:before,
+.job-detail-ico:after,
+.job-detail-ico:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
 }
-@-webkit-keyframes slideOut {
-  from {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
-  to {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
+.job-lst-ico:after,
+.job-lst-ico:before,
+.job-detail-ico:after,
+.job-detail-ico:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
 }
-@keyframes slideOut {
-  from {
-    -webkit-filter: blur(0);
-    filter: blur(0);
-  }
-  to {
-    -webkit-filter: blur(15px);
-    filter: blur(15px);
-  }
+.job-lst-ico:before,
+.job-detail-ico:before {
+  border-color: rgba(246, 107, 52, 0);
+  border-top-color: $red;
+  border-width: 6px;
+  left: 50%;
+  margin-left: -11px;
+}
+.job-lst-ico:after,
+.job-detail-ico:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-top-color: #fff;
+  border-width: 5px;
+  left: 50%;
+  margin-left: -10px;
 }
 
+/********** 求人詳細************/
 .invi-job-entry .pad {
   padding: 3em 3%;
 }
 
 .invi-job-entry h1 {
-  margin-bottom: 3em;
-  padding: 0 0.5em;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #666;
+  font-size: 1rem;
+  @include mq(medium) {
+    margin-bottom: 1em;
+    padding: 0 0.5em;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #666;
+  }
 }
 
 .invi-job-entry h2 {
@@ -450,25 +369,178 @@
   left: 0.5em; /*左端からのアイコンまでの距離*/
 }
 
-.image3-area {
-  /* margin: 3em 0 2em; */
-  width: 40%;
-  display: inline-block;
-  margin-bottom: -7px;
+//求人詳細の動画スライダー
+%transition_all_03s {
+  transition: all 0.3s ease;
+}
+%backface_visibility_hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.job-detail-movie-slider-bg {
+  background-image: url(../img/common/job_detail_movie_slider_backimage.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 0.5em;
+  @include mq(medium) {
+    margin-top: 2em;
+  }
+}
+.swiper-container.job-detail-movie-slider-container {
+  max-width: 860px;
+  width: 88%;
+  height: 45vh;
+  transition: opacity 0.6s ease, transform 0.3s ease;
+
+  @include mq(small) {
+    height: 65vh;
+  }
+
+  @include mq(medium) {
+    width: 80%;
+    height: 540px;
+  }
+
+  &.scale-out {
+    transform: scale(0.7);
+  }
+  &.scale-in {
+    transform: scale(1);
+  }
+
+  .swiper-slide {
+    width: 100% !important;
+
+    video {
+      height: 90%;
+      margin-top: 3%;
+    }
+  }
+  [class^="swiper-slide-shadow-"] {
+    @extend %backface_visibility_hidden;
+  }
+  [class^="swiper-button-"] {
+    width: 20px;
+    height: 20px;
+    color: #000;
+    @extend %transition_all_03s;
+    @include mq(medium) {
+      width: 44px;
+      height: 44px;
+    }
+  }
+  .swiper-button-prev {
+    transform: translateX(-30px);
+    @include mq(medium) {
+      transform: translateX(-80px);
+    }
+  }
+  .swiper-button-next {
+    transform: translateX(30px);
+    @include mq(medium) {
+      transform: translateX(80px);
+    }
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: absolute;
+    z-index: 10;
+    margin-top: 0;
+  }
+  .swiper-button-next.swiper-button-disabled,
+  .swiper-button-prev.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: auto;
+    pointer-events: none;
+  }
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    position: relative;
+    font-family: "Font Awesome 5 Free", sans-serif;
+    opacity: 1;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    line-height: 20px;
+    color: #fff;
+    background: #000;
+    border-radius: 50%;
+    text-align: center;
+    @include mq(medium) {
+      font-size: 46px;
+      line-height: 44px;
+    }
+  }
+  .swiper-button-prev::after {
+    padding-right: 2px;
+    content: "\f0d9";
+    @include mq(medium) {
+      padding-right: 4px;
+    }
+  }
+  .swiper-button-next::after {
+    padding-left: 2px;
+    content: "\f0da";
+    @include mq(medium) {
+      padding-left: 4px;
+    }
+  }
+  .swiper-button-prev:hover:after,
+  .swiper-button-next:hover:after {
+    color: #fff;
+  }
 }
 
-.image3-area ul li img {
-  width: 100%;
-  /* height: 100%; */
-  /* width: 250px; */
-  height: 150px;
-  object-fit: cover;
-  object-position: 50% 50%;
+// 求人詳細画像
+.job-detail-image-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  margin: 40px 0 60px;
+  padding: 35px 15px;
+
+  .job-detail-image {
+    width: 30%;
+    display: inline-block;
+    margin-bottom: -7px;
+    box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.2);
+
+    img {
+      width: 100%;
+      height: 200px;
+      vertical-align: bottom;
+      object-fit: cover;
+
+      object-position: 50% 50%;
+    }
+  }
+}
+// 求人詳細画像スライダー
+.job-detail-image-slider-container-bg {
+  .job-detail-image-slider-container {
+    width: 80%;
+    margin: 0 auto 20px;
+    padding: 15px 0 35px;
+    @include mq(medium) {
+      margin: 40px auto 60px;
+      padding: 35px 0;
+    }
+    .swiper-slide {
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }
+  }
 }
 
 .text-contents {
   max-width: 900px;
   width: 100%;
+  margin: 20px 0 40px;
 }
 
 .detail-area .newjob-table {
@@ -519,6 +591,64 @@
   color: #fff;
 }
 
+// 求人詳細スクロール追尾
+.comparison-JC-detailFollowingArea {
+  position: fixed;
+  right: 50%;
+  transform: translateX(50%);
+  bottom: 5px;
+  width: 95%;
+  transition: bottom 0.5s, transform 0.5s;
+  z-index: 201;
+  @include mq(medium) {
+    transform: translateX(0);
+    background-color: #fff;
+    border: 3px solid #e8e8e8;
+    border-radius: 3px;
+    width: 430px;
+    padding: 4px 0;
+    bottom: 15px;
+    right: 137px;
+  }
+  .detail-btn-lst-box-inner {
+    display: flex;
+    justify-content: space-between;
+    @include mq(medium) {
+      justify-content: center;
+    }
+
+    & > li {
+      width: 49%;
+      display: inline-block;
+      vertical-align: bottom;
+      border-radius: 3px;
+      @include mq(medium) {
+        width: 45%;
+        margin-left: 15px;
+      }
+
+      a {
+        display: block;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+  .btn-web-entry {
+    background-color: $yellow;
+    color: #ffffff;
+  }
+  .btn-web-register,
+  .btn-web-keep {
+    background-color: #f5f5f5;
+    border: 1px solid #e8e8e8;
+  }
+}
+
 .d-flex {
   display: flex;
   align-items: center;
@@ -527,8 +657,6 @@
 
 #recent-joblist .wrap-text p {
   margin-bottom: 5px;
-  font-size: 12px;
-  color: #333;
   letter-spacing: 0;
 }
 
@@ -593,13 +721,6 @@ section.cat-list-section {
 
   .invi-job-entry .pad {
     padding: 2em 1%;
-  }
-  .invi-job-entry h1 {
-    margin-bottom: 2em;
-  }
-  .cat-item {
-    font-size: 2vw;
-    margin-right: 10px;
   }
 
   .entrybtn-field .apply-btn,
@@ -720,11 +841,6 @@ section.cat-list-section {
       display: block;
       padding-right: 0;
     }
-  }
-
-  .invi-job-entry h1 {
-    font-size: 16px;
-    margin-bottom: 1em;
   }
   .invi-job-entry h2 {
     font-size: 16px;

@@ -26,8 +26,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->model = $user;
     }
 
-
-
     /**
      * Create the user
      *
@@ -35,7 +33,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @return User
      * @throws CreateUserInvalidArgumentException
      */
-    public function createUser(array $params) : User
+    public function createUser(array $params): User
     {
         try {
             $data = collect($params)->except('password')->all();
@@ -55,14 +53,14 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * Update the user
-     * 
+     *
      * @param array $params
-     * 
+     *
      * @return bool
-     * 
+     *
      * @throws UpdateUserInvalidArgumentException
      */
-    public function updateUser(array $params) : bool
+    public function updateUser(array $params): bool
     {
         try {
             return $this->model->update($params);
@@ -79,7 +77,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @return User
      * @throws UserNotFoundException
      */
-    public function findUserById(int $id) : User
+    public function findUserById(int $id): User
     {
         try {
             return $this->findOneOrFail($id);
@@ -88,69 +86,44 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
     }
 
-    /** 
-     * Delete a user 
-     * 
+    /**
+     * Delete a user
+     *
      * @return  bool
      * @throws \Exception
      */
-    public function deleteUser() :bool
+    public function deleteUser(): bool
     {
         return $this->delete();
     }
-    
+
     /**
      * @param array $user
      *
      * @return mixed
      */
-    public function findApplies(User $user) : Collection
+    public function findApplies(User $user): Collection
     {
         return $user->applies;
     }
 
-     /**
-    * @param array $user
-     * @param int $jobId
-     *
-     * @return bool
-     */
-    public function existsAppliedJobItem(User $user, int $jobId) : bool
-    {
-
-        $applies = $this->findApplies($user);
-        $appliedJobitems = new Collection();
-
-        foreach($applies as $apply) {
-            foreach($apply->jobitems as $jobitem) {
-                if($jobitem->pivot->job_item_id === $jobId) {
-                    $appliedJobitems->push($jobitem);
-                }
-            }
-        }
-
-        return $appliedJobitems->count() > 0 ? true : false;
-    }
-
     /**
-     * @param array $user 
+     * @param array $user
      *
      * @return Collection
      */
-    public function listAppliedJobItem(User $user) : Collection
+    public function listAppliedJobItem(User $user): Collection
     {
-        
+
         $applies = $this->findApplies($user);
         $appliedJobitems = new Collection();
 
-        foreach($applies as $apply) {
-            foreach($apply->jobitems as $jobitem) {
-                    $appliedJobitems->push($jobitem);
+        foreach ($applies as $apply) {
+            foreach ($apply->jobitems as $jobitem) {
+                $appliedJobitems->push($jobitem);
             }
         }
 
         return $appliedJobitems->sortBy('created_at');
     }
-
-   
 }

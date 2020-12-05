@@ -5,18 +5,17 @@ namespace App\Job\Companies;
 use App\Job\Employers\Employer;
 use App\Job\JobItems\JobItem;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Company extends Model
 {
-    use softDeletes; 
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -25,16 +24,13 @@ class Company extends Model
      */
     protected $hidden = [];
 
-    protected $dates= ['deleted_at'];
-
-    public function jobs()
+    public function jobs(): HasMany
     {
         return $this->hasMany(JobItem::class, 'company_id');
     }
 
-    public function employer()
+    public function employer(): belongsTo
     {
         return $this->belongsTo(Employer::class);
     }
-
 }

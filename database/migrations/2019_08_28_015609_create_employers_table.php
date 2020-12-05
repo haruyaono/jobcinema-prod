@@ -14,22 +14,21 @@ class CreateEmployersTable extends Migration
     public function up()
     {
         Schema::create('employers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->string('email')->unique();
             $table->string('last_name');
             $table->string('first_name');
             $table->string('last_name_katakana')->nullable();
             $table->string('first_name_katakana')->nullable();
-            $table->string('phone1')->nullable();
-            $table->string('phone2')->nullable();
-            $table->string('phone3')->nullable();
-            $table->string('email')->unique();
+            $table->string('phone1');
+            $table->string('phone2');
+            $table->string('phone3');
+            $table->unsignedInteger('status')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->tinyInteger('email_verified')->default(0);
-            $table->tinyInteger('status')->default(0);
             $table->string('email_verify_token')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

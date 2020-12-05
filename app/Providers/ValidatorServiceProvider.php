@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use app\Library\CustomValidator; //add
+use app\Library\CustomValidator;
 
 class ValidatorServiceProvider extends ServiceProvider
 {
@@ -24,15 +24,8 @@ class ValidatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Validator::extend('hurigana', function ($attribute, $value, $parameters, $validator) {
-        //     return preg_match('/[^ぁ-んー]/u', $value) === 0;
-        // });
-        // Validator::extend('katakana', function ($attribute, $value, $parameters, $validator) {
-        //     return preg_match('/^[ァ-ヾ 　〜ー−]+$/u', $value) === 0;
-        // });
-
-        \Validator::resolver(function ($translator, $data, $rules, $messages) {
-            return new CustomValidator($translator, $data, $rules, $messages);
+        \Validator::resolver(function ($translator, $data, $rules, $messages, $attributes) {
+            return new CustomValidator($translator, $data, $rules, $messages, $attributes);
         });
     }
 }

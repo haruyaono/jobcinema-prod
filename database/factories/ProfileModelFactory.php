@@ -1,7 +1,7 @@
 <?php
-use App\Job\Profiles\Profile;
-use App\Job\Users\User;
-use Illuminate\Support\Str;
+
+use App\Models\Profile;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 /*
@@ -25,7 +25,7 @@ $factory->define(Profile::class, function (Faker $faker) {
         'postcode' => $faker->postcode,
         'prefecture' => $faker->prefecture,
         'city' => $faker->city,
-        'gender' => $password ?:$password = bcrypt('secret'),
+        'gender' => $faker->randomElement(['男性', '女性']),
         'age' => $faker->numberBetween(18, 99),
         'phone1' => '080',
         'phone2' => '1111',
@@ -33,7 +33,6 @@ $factory->define(Profile::class, function (Faker $faker) {
         'occupation' => $faker->jobTitle,
         'final_education' => $faker->sentence,
         'work_start_date' => $faker->sentence,
-        'desired_salary' => $faker->sentence,
     ];
 });
 
@@ -45,5 +44,3 @@ $factory->define(Profile::class, function (Faker $faker) {
 //         'remember_token' => Str::random(10),
 //     ];
 // });
-
-

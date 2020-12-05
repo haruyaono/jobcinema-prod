@@ -5,11 +5,13 @@ namespace App\Job\Applies;
 
 use App\Job\Users\User;
 use App\Job\JobItems\JobItem;
+use App\Job\Companies\Company;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use  \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Apply extends Model
 {
-
     protected $table = 'applies';
 
     /**
@@ -17,26 +19,8 @@ class Apply extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id',
-        'last_name',
-        'first_name',
-        'postcode',
-        'prefecture',
-        'city',
-        'gender',
-        'age',
-        'phone1',
-        'phone2',
-        'phone3',
-        'occupation',
-        'final_education',
-        'work_start_date',
-        'desired_salary',
-        'job_msg',
-        'job_q1',
-        'job_q2',
-        'job_q3'
+    protected $guarded = [
+        'id',
     ];
 
     /**
@@ -46,31 +30,34 @@ class Apply extends Model
      */
     protected $hidden = [];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function jobitems()
+    public function jobitem(): BelongsTo
     {
-        return $this->belongsToMany(JobItem::class, 'apply_job_item')
-                    ->withPivot([
-                        'id',
-                        'job_item_id',
-                        's_status',
-                        'e_status',
-                        'oiwaikin',
-                        'oiwaikin_status',
-                        'first_attendance',
-                        'no_first_attendance'
-                    ])->withTimeStamps();
+        return $this->belongsTo(JobItem::class, 'job_item_id');
     }
 
-
-    /**
-     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    public function company(): BelongsTo
+    {
+        return $this->jobitem->belongsTo(Company::class);
+    }
+
+    public function getIsWithinHalfYearAttribute(): bool
+    {
+        $before6month = date("Y-m-d H:i:s", strtotime("-6 month"));
+        return $this->created_at > $before6month;
+    }
+
+    public function getCongratsAmountAttribute($value)
+    {
+        return number_format($value) . "円";
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d');
+    }
 }

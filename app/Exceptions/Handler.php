@@ -3,9 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Http\Request;//この追加を忘れないで
-use Illuminate\Http\Response;//この追加を忘れないで
-use Illuminate\Auth\AuthenticationException; //この追加を忘れないで
+use Throwable;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -35,7 +34,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -47,7 +46,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         return parent::render($request, $exception);
     }
@@ -55,28 +54,28 @@ class Handler extends ExceptionHandler
     /**
      * 共通エラーページ
      */
-    protected function renderHttpException(\Symfony\Component\HttpKernel\Exception\HttpException $e)
+    protected function renderHttpException(\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e)
     {
         $status = $e->getStatusCode();
-        if(auth('employer')->check()) {
+        if (auth('employer')->check()) {
             return response()->view("errors.employer.common", ['exception' => $e], $status);
         }
         return response()->view("errors.common", ['exception' => $e], $status);
     }
 
-    public function unauthenticated($request, AuthenticationException $exception)
+    protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if($request->expectsJson()){
+        if ($request->expectsJson()) {
             return response()->json(['message' => $exception->getMessage()], 401);
         }
- 
+
         if (in_array('employer', $exception->guards())) {
             return redirect()->guest(route('employer.login'));
         }
-        if(in_array('admin', $exception->guards())){
-            return redirect()->guest('admin/login');
+        if (in_array('admin', $exception->guards())) {
+            return redirect()->guest(route('admin.login'));
         }
- 
-        return redirect()->guest(route('login'));
+
+        return redirect()->guest(route('seekder.login'));
     }
 }

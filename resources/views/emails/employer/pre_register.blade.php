@@ -16,7 +16,7 @@ JOBCiNEMAへの会員仮登録が完了しましたので<br>
 <br>
 ■以下のURLからログインして、本登録を完了させてください。<br>
 -------------------------------------<br><br>
-<a href="{{url('/employer/register/verify/'.$token)}}">{{url('/employer/register/verify/'.$token)}}</a><br>
+<a href="{{ url('/enterprise/register/verify/'.$token) }}">{{ url('/enterprise/register/verify/'.$token) }}</a><br>
 -------------------------------------<br>
 1）URLにアクセス<br>
 2）企業データの入力<br>
@@ -25,7 +25,7 @@ JOBCiNEMAへの会員仮登録が完了しましたので<br>
 <br>
 ■企業用ログインページ<br>
 -------------------------------------<br>
-<a href="{{url('/employer/login')}}">{{url('/employer/login')}}</a><br>
+<a href="{{ route('employer.login') }}">{{ route('employer.login') }}</a><br>
 
 -------------------------------------<br>
 ※本登録が終わるまでログインできません。<br>
@@ -37,14 +37,7 @@ JOBCiNEMAへの会員仮登録が完了しましたので<br>
 また、応募者からの問合せや応募者への連絡につきましても誠実にご対応いただくようお願いします。<br>
 <br>
 <br>
-【運営会社】<br>
-------------------------------------<br>
-JOBCiNEMA：{{url('/')}}<br>
-〒000-0000<br>
-〇〇市〇〇　〇-〇-〇〇　〇〇ビル〇階<br>
-メールアドレス：：<br>
-受付時間：<br>
-電話番号：000-0000-0000（平日9時～17時）<br>
-FAX：0120-415-715<br>
-------------------------------------<br>
-<br>
+<p>＜ 運営情報 ＞</p>
+<p>JOBCiNEMA</p>
+<p>お問い合わせ：{{ config('mail.contact.address') }}</p>
+<a href="{{ url('/') }}">{{ url('/') }}</a>

@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,13 +11,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::group(['namespace' => 'API'], function () {
-    Route::get('/all_category', 'CategoryController@getAllCategory');
-    Route::post('/category_namelist', 'CategoryController@getCategoryNameList');
-    Route::get('/jobs', 'JobController@index');
-    // Route::get('/job_search', 'JobController@searchJobItem');
+    Route::get('/categories', 'CategoryController@index');
+    Route::post('/categories/name', 'CategoryController@getNameList');
+    Route::get('/job_sheets', 'JobItemController@index');
 });
-

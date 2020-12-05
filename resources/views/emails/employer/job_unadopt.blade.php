@@ -17,11 +17,10 @@
 <br>
 
 <p>※求人票の閲覧・編集は企業マイページからも確認できます</p>
-<a href="{{route('company.mypage')}}">{{route('company.mypage')}}</a>
+<a href="{{ route('enterprise.index.mypage') }}">{{ route('enterprise.index.mypage') }}</a>
 <br>
 
 <p>＜ 運営情報 ＞</p>
 <p>JOBCiNEMA</p>
-<p>お問い合わせ：customer@jobcinema.com</p>
-<a href="{{url('/')}}">{{url('/')}}</a>
-
+<p>お問い合わせ：{{ config('mail.contact.address') }}</p>
+<a href="{{ url('/') }}">{{ url('/') }}</a>
