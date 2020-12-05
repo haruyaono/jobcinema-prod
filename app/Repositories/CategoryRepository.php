@@ -14,7 +14,7 @@ class CategoryRepository extends AbstractRepository
 
     public function getCategories(): Collection
     {
-        return Category::where('slug', '!=', 'unregistered')->orWhereNull('slug')->get()->toTree();
+        return Category::withDepth()->where('slug', '!=', 'unregistered')->orWhereNull('slug')->get()->toTree();
     }
 
     public function getCategoriesByslug(string $parentSlug, string $childSlug = ''): array

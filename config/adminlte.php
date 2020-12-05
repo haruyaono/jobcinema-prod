@@ -280,7 +280,7 @@ return [
                 ],
                 [
                     'text' => 'カテゴリ',
-                    'url'  => '#',
+                    'url'  => 'admin/setting/category',
                 ],
             ],
         ],

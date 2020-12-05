@@ -217,6 +217,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::namespace('Setting')->group(function () {
           Route::resource('reward', 'RewardController');
           Route::resource('recruit_reward', 'RecruitRewardController');
+          Route::resource('category', 'CategoryController');
         });
       });
 
