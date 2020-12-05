@@ -40,7 +40,7 @@
               <th>お祝い金</th>
               <td>
                 @if($jobitem->existsCongratsMoney())
-                採用決定で<span class="text-red">{{$jobitem->getCongratsMoney()->CostomAmount}}</span>もらえる求人です。
+                採用決定で<span class="text-red">{{$jobitem->getCongratsMoney()->custom_amount}}</span>もらえる求人です。
                 @else
                 お祝い金対象外の求人です。
                 @endif

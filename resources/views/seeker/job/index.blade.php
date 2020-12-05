@@ -58,7 +58,7 @@
                             </div>
                             @if($apply->congrats_status === 1)
                             <div class="header-money">
-                                この企業に採用されるとお祝い金<span class="ml-2">{{ $apply->congrats_amount }}<span>
+                                この企業に採用されるとお祝い金<span class="ml-2">{{ $apply->custom_congrats_amount }}<span>
                             </div>
                             @endif
                         </div>

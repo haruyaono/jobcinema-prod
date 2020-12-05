@@ -75,7 +75,7 @@
                 <div class="applyReportItem my-5">
                     <div class="text-center">
                         <p class="font22 font-yellow font-bold">
-                            <span>採用成果報酬額 : {{ $apply->recruitment_fee }}</span>
+                            <span>採用成果報酬額 : {{ $apply->custom_recruitment_fee }}</span>
                         </p>
                         <p class="font16 font-bold">※応募時点で設定されていた金額となります。</p>
                     </div>

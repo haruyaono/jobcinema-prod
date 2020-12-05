@@ -261,11 +261,11 @@ return [
             'icon'    => 'nav-icon fas fa-building',
             'url'  => 'admin/data/enterprise',
         ],
-        [
-            'text'    => 'メールチェック',
-            'icon'    => 'nav-icon fas fa-envelope',
-            'url'  => '#',
-        ],
+        // [
+        //     'text'    => 'メールチェック',
+        //     'icon'    => 'nav-icon fas fa-envelope',
+        //     'url'  => '#',
+        // ],
         [
             'text'    => 'システム設定',
             'icon'    => 'nav-icon fas fa-cog',

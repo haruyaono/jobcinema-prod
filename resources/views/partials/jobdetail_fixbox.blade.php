@@ -4,7 +4,12 @@
             <img src="{{ asset('imm/common/') }}" alt="ロゴ">
         </li> -->
         <li>
-            <a href="{{ route('seeker.register') }}" class="btn btn-web-entry"><i class="fab fa-telegram-plane mr-2"></i>応募する</a>
+            @if(!$exists)
+            <a href="{{ route('show.front.entry.step1', $jobitem) }}" class="btn btn-web-entry"><i class="fab fa-telegram-plane mr-2"></i>応募する</a>
+            @else
+            <a class="btn btn-web-entry non-link" href="javascript:void(0)">応募済み</a>
+            @endif
+
         </li>
         @if(Auth::guard('seeker')->check())
         <li>
