@@ -1,0 +1,2 @@
+# cron
+* * * * * cd /var/www/html/src && /usr/local/bin/php artisan schedule:run >> /var/www/html/src/storage/logs/task.log 2>&1
