@@ -19620,20 +19620,41 @@ a.form-app:hover::after {
   }
 }
 
-/********** 固定ページ************/
+/********** 静的ページ************/
 
-.page-section p {
-  margin-bottom: .5em;
+.static-page {
+  margin-top: 0;
 }
 
-.page-section h1 {
-  font-size: 24px;
+.static-page .inner {
+  padding: 0;
+}
+
+.page-section p {
+  margin-bottom: 0.5em;
+}
+
+.static-page h1 {
+  font-size: 18px;
+  line-height: 1.7;
   font-weight: bold;
   margin: 16px 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .static-page h1 {
+    font-size: 24px;
+  }
+}
+
+.static-page h1::before,
+.static-page h1::after {
+  display: none !important;
 }
 
 .page-section h2 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin: 16px 0;
 }
@@ -19675,7 +19696,7 @@ a.form-app:hover::after {
   position: relative;
   left: 0;
   top: 0;
-  margin-left: .5em;
+  margin-left: 0.5em;
   list-style-type: none;
   counter-increment: cnt;
 }
@@ -19689,89 +19710,63 @@ a.form-app:hover::after {
 
 /*JOB CiNEMAとは？ページ  */
 
-.about-entry h1 {
-  font-size: 50px;
-  margin-bottom: 0;
+.about-page .beginners-intr {
+  width: 100%;
 }
 
-.about-entry .pad {
-  padding: 1em 4em 5em;
+@media screen and (min-width: 768px) {
+  .about-page .beginners-intr {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+  }
 }
 
-.about-entry .beginners-intr {
-  width: 80%;
-  margin: 0 auto;
-  text-align: center;
+section .beginners-section h2 {
+  font-size: 16px;
+  margin-top: 50px;
+  margin-bottom: 25px;
 }
 
-.about-entry .sub-title {
-  font-size: 24px;
-  text-align: center;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.beginners-section h2 {
-  position: relative;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2em;
-  margin-top: 80px;
-  margin-bottom: 50px;
-  letter-spacing: 1.2px;
-  border: 0;
-}
-
-.beginners-section h2 span {
-  font-size: 18px;
-  color: #a29b93;
-  font-weight: normal;
-  font-family: 'arial';
-  display: block;
-  letter-spacing: 2px;
-  line-height: 1.8em;
-}
-
-.beginners-section h2::after {
-  content: '';
-  display: inline-block;
-  position: absolute;
-  width: 30px;
-  border-bottom: 1px solid #333;
-  bottom: -5px;
-  margin-left: -15px;
+@media screen and (min-width: 768px) {
+  section .beginners-section h2 {
+    font-size: 20px;
+    margin-bottom: 40px;
+  }
 }
 
 .flow-btn-wrap {
-  text-align: center;
+  display: flex;
 }
 
 .flow-btn {
   display: inline-block;
-  max-width: 180px;
-  text-align: left;
-  border: 2px solid #de9610;
-  font-size: 16px;
+  width: 50%;
+  border: 1px solid #de9610;
+  border-bottom: 0;
+  font-size: 14px;
   color: #de9610;
-  text-decoration: none;
   font-weight: bold;
-  padding: 8px 16px;
-  border-radius: 4px;
-  margin: 0 10px;
+  padding: 6px 0;
+  text-align: center;
   cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .flow-btn {
+    font-size: 16px;
+    padding: 6px 16px;
+  }
 }
 
 .tab-current {
   background-color: #de9610;
-  color: #FFF;
+  color: #fff;
 }
 
 .beginners-flow-text {
-  border: 3px solid #bfbfbf;
-  border-radius: 3px;
+  border: 1px solid #de9610;
   padding: 16px;
-  margin-top: 40px;
   display: none;
 }
 
@@ -19779,32 +19774,90 @@ a.form-app:hover::after {
   display: block;
 }
 
-.beginners-flow-text h3 {
+.beginners-flow-text {
+  text-align: left;
+}
+
+.beginners-flow-text li {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.beginners-flow-text li .left {
+  width: 20%;
+  margin-right: 20px;
+  text-align: center;
+}
+
+.beginners-flow-text li .left .step {
   display: inline-block;
-  margin: 0;
-  padding: 2px 8px;
-  font-weight: 400;
-  background-color: rgba(222, 150, 16, 0.1);
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-.beginners-flow-text h3 span {
-  padding-right: 5px;
+@media screen and (min-width: 768px) {
+  .beginners-flow-text li .left .step {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+}
+
+.beginners-flow-text li .left .image {
+  font-size: 40px;
+  line-height: 1;
   color: #de9610;
+  display: block;
+  text-align: center;
 }
 
-.beginners-flow-text p {
-  margin: 12px 12px 24px;
+@media screen and (min-width: 768px) {
+  .beginners-flow-text li .left .image {
+    font-size: 50px;
+  }
 }
 
-.feature-text-span {
+.beginners-flow-text li .right {
+  width: 80%;
+  align-self: center;
+}
+
+.beginners-flow-text li .right p.ttl {
   font-size: 16px;
   font-weight: bold;
-  margin-left: -12px;
+  margin-bottom: 8px;
 }
 
-.beginners-flow p {
-  margin-left: 12px;
+.beginners-flow-text li .right p.desc {
+  font-size: 14px;
+}
+
+@media screen and (min-width: 768px) {
+  .beginners-feature .feature-wrap {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.beginners-feature .feature {
+  text-align: left;
+  width: 100%;
+  border: 1px solid #c0c0c0;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .beginners-feature .feature {
+    width: 49%;
+    margin-bottom: 0;
+  }
+}
+
+.beginners-feature .feature .ttl {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 @media (max-width: 768px) {
@@ -19816,75 +19869,6 @@ a.form-app:hover::after {
 
   .page-section ul {
     margin-left: 10px;
-  }
-
-  /*JOB CiNEMAとは？ページ  */
-
-  .page-template-beginners .main-wrap {
-    padding: 0;
-  }
-
-  .about-entry h1 {
-    font-size: 30px;
-  }
-
-  .about-entry .pad {
-    padding: 1em 1em;
-  }
-
-  .about-entry .beginners-intr {
-    width: 90%;
-  }
-
-  .about-entry .sub-title {
-    font-size: 18px;
-    margin-top: 15px;
-  }
-
-  .beginners-section h2 {
-    font-size: 18px;
-    margin-top: 50px;
-    margin-bottom: 40px;
-  }
-
-  .beginners-section h2 span {
-    font-size: 14px;
-  }
-
-  .beginners-section h2::after {
-    width: 20px;
-    margin-left: -10px;
-  }
-
-  .beginners-flow-text {
-    border: 2px solid #bfbfbf;
-    padding: 16px 8px;
-    margin-top: 20px;
-  }
-
-  .beginners-flow-text h3 {
-    font-size: 16px !important;
-    width: auto !important;
-    display: inline-block;
-  }
-
-  .beginners-flow-text h3 span {
-    padding-right: 5px;
-    color: #de9610;
-  }
-
-  .beginners-flow-text p {
-    margin: 12px 12px 24px;
-  }
-
-  .feature-text-span {
-    font-size: 16px;
-    font-weight: bold;
-    margin-left: -12px;
-  }
-
-  .beginners-flow p {
-    margin-left: 12px;
   }
 }
 
