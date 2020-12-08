@@ -68,7 +68,7 @@ if ($getJobUrlPrmList !== []) {
           <li><a href="{{$jobCreateUrl . '&ks[f]=4'}}">勤務日数が少ない</a></li>
           <li><a href="{{$jobCreateUrl . '&ks[f]=5'}}">お祝い金額</a></li>
         </ul>
-        <select name="job-sort-sp" id="job-sort-sp" data-url="{{$jobCreateUrl}}">
+        <select name="job-sort-sp" class="custom-select" id="job-sort-sp" data-url="{{$jobCreateUrl}}">
           <option value="0" @if($jobCreateUrl=='' ) selected @endif>新着順</option>
           <option value="1" @if($jobCreateUrl=='' ) selected @endif>時給</option>
           <option value="2" @if($jobCreateUrl=='' ) selected @endif>日給</option>

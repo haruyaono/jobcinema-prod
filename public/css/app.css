@@ -13316,6 +13316,15 @@ select:hover {
 
 .box-wrap .wrap-items .wrap-img img {
   width: 100%;
+  height: 100px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+@media screen and (min-width: 768px) {
+  .box-wrap .wrap-items .wrap-img img {
+    height: 120px;
+  }
 }
 
 .box-wrap .wrap-items .wrap-text {
@@ -15489,7 +15498,7 @@ body.jobApplyPage .header .header-top .logo img {
 
 .forget-passlink {
   display: block;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
   color: #c93a40;
 }
@@ -15507,7 +15516,7 @@ body.jobApplyPage .header .header-top .logo img {
   display: inline-block;
   padding: 20px 30px;
   color: #fff;
-  background: #1359CA;
+  background: #0368b8;
   font-size: 16px;
   border-radius: 3px;
 }
@@ -16562,6 +16571,8 @@ input[size="28"] {
   margin: auto;
   max-height: 79px;
   max-width: 101px;
+  -o-object-fit: cover;
+     object-fit: cover;
   width: 100%;
   position: absolute;
   right: 0;
@@ -17090,6 +17101,9 @@ input[size="28"] {
 
 .job-detail-image-slider-container-bg .job-detail-image-slider-container .swiper-slide img {
   width: 100%;
+  height: 200px;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .text-contents {

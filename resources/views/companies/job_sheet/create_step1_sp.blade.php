@@ -53,7 +53,7 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform01">
-                                    <select name="data[JobSheet][categories][status][id]">
+                                    <select class="custom-select" name="data[JobSheet][categories][status][id]">
                                         <option value="">選択してください</option>
                                         @foreach($categoryList->where('slug', 'status')->first()->children as $pIndex => $statusCategory)
                                         <option @if(intval(old('data.JobSheet.categories.status.id'))==$statusCategory->id) selected @endif value="{{ $statusCategory->id }}">{{ $statusCategory->name }}</option>
@@ -69,7 +69,7 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    <select name="data[JobSheet][categories][type][id]">
+                                    <select class="custom-select" name="data[JobSheet][categories][type][id]">
                                         <option value="">選択してください</option>
                                         @foreach($categoryList->where('slug', 'type')->first()->children as $pIndex => $typeCategory)
                                         <option @if(intval(old('data.JobSheet.categories.type.id'))==$typeCategory->id) selected @endif value="{{ $typeCategory->id }}">{{ $typeCategory->name }}</option>
@@ -85,7 +85,7 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    <select name="data[JobSheet][categories][area][id]">
+                                    <select class="custom-select" name="data[JobSheet][categories][area][id]">
                                         <option value="">選択してください</option>
                                         @foreach($categoryList->where('slug', 'area')->first()->children as $pIndex => $areaCategory)
                                         <option @if(intval(old('data.JobSheet.categories.area.id'))==$areaCategory->id) selected @endif value="{{ $areaCategory->id }}">{{ $areaCategory->name }}</option>
@@ -108,7 +108,7 @@
                                             <label for="salary_cats_{{$pIndex}}">{{ $salaryCategory->name }}</label>
                                             <input type="hidden" name="data[JobSheet][categories][salary][{{$pIndex}}][parent_slug]" value="{{$salaryCategory->slug}}">
                                         </div>
-                                        <select name="data[JobSheet][categories][salary][{{$pIndex}}][id]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
+                                        <select class="custom-select" name="data[JobSheet][categories][salary][{{$pIndex}}][id]" id="e_radio_cat_item_c_salary_{{$pIndex}}" class="e_radio_cat_item_c_salary">
                                             @foreach($salaryCategory->children as $cIndex => $cat)
                                             <option value="{{$cat->id}}" @if(intval(old('data.JobSheet.categories.salary.' . $pIndex . '.id' ))===$cat->id) selected @endif>{{$cat->name}}</option>
                                             @endforeach
@@ -125,7 +125,7 @@
                             <div class="card-body">
                                 <p class="mb-3">※ひとつだけ選択できます</p>
                                 <div class="form-group e-radioform e-radioform02">
-                                    <select name="data[JobSheet][categories][date][id]" id="">
+                                    <select class="custom-select" name="data[JobSheet][categories][date][id]" id="">
                                         <option value="">選択してください</option>
                                         @foreach($categoryList->where('slug', 'date')->first()->children as $pIndex => $dateCategory)
                                         <option @if(intval(old('data.JobSheet.categories.date.id'))==$dateCategory->id) selected @endif value="{{ $dateCategory->id }}">{{ $dateCategory->name }}</option>
