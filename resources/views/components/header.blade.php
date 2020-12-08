@@ -113,9 +113,8 @@ if (\Auth::guard('seeker')->check()) {
           </div>
           @else
           <ul class="hamburgerLogoutKaiinLoginBtnWrap overflowH">
-            <a href="{{ route('seeker.logout') }}" onclick="event.preventDefault();
-            <li class=" hamburgerLogoutBtnList floatL"><a class="hamburgerLogoutBtn" href="{{ route('seeker.register') }}">会員登録</a></li>
-              <li class="hamburgerLogoutloginBtnPcList floatL"><a class="hamburgerLogoutloginBtnPc" href="{{ route('seeker.login') }}">ログイン</a></li>
+            <li class="hamburgerLogoutBtnList floatL"><a class="hamburgerLogoutBtn" href="{{ route('seeker.register') }}">会員登録</a></li>
+            <li class="hamburgerLogoutloginBtnPcList floatL"><a class="hamburgerLogoutloginBtnPc" href="{{ route('seeker.login') }}">ログイン</a></li>
           </ul>
           @endif
           <div class="hamburgerLogoutMyMenuAreaWrap overflowH">

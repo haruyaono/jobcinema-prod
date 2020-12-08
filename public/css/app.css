@@ -13316,6 +13316,15 @@ select:hover {
 
 .box-wrap .wrap-items .wrap-img img {
   width: 100%;
+  height: 100px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+@media screen and (min-width: 768px) {
+  .box-wrap .wrap-items .wrap-img img {
+    height: 120px;
+  }
 }
 
 .box-wrap .wrap-items .wrap-text {
@@ -15306,7 +15315,7 @@ body.jobApplyPage .header .header-top .logo img {
 .footer-bottom {
   padding-top: 10px;
   margin-top: 10px;
-  border-top: 1px solid #D16D6D;
+  border-top: 1px solid #d16d6d;
 }
 
 .footer-bottom-left {
@@ -15315,6 +15324,7 @@ body.jobApplyPage .header .header-top .logo img {
   justify-content: center;
   width: 100%;
   margin: 0 auto;
+  margin-bottom: 10px;
 }
 
 .footer-bottom img {
@@ -15352,7 +15362,7 @@ body.jobApplyPage .header .header-top .logo img {
 }
 
 .footer-bottom-right ul li a:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .footer-bottom-lp {
@@ -15371,7 +15381,7 @@ body.jobApplyPage .header .header-top .logo img {
 }
 
 #pagetop:hover {
-  opacity: .8;
+  opacity: 0.8;
   cursor: pointer;
 }
 
@@ -15408,13 +15418,13 @@ body.jobApplyPage .header .header-top .logo img {
   }
 
   .footer-top-item-sp ul li a:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 
   .footer-item-title {
     text-align: left;
     font-weight: bold;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
 
   .footer-bottom {
@@ -15425,6 +15435,7 @@ body.jobApplyPage .header .header-top .logo img {
   .footer-bottom-left {
     justify-content: center;
     width: 100%;
+    margin-top: 10px;
   }
 
   .footer-bottom img {
@@ -15433,7 +15444,7 @@ body.jobApplyPage .header .header-top .logo img {
   }
 
   .footer-bottom-lp {
-    border-top: 1px solid #D16D6D;
+    border-top: 1px solid #d16d6d;
   }
 }
 
@@ -15449,7 +15460,7 @@ body.jobApplyPage .header .header-top .logo img {
   }
 
   .footer-sns {
-    margin: .5em 0 1em;
+    margin: 0.5em 0 1em;
     padding: 0;
   }
 
@@ -15487,7 +15498,7 @@ body.jobApplyPage .header .header-top .logo img {
 
 .forget-passlink {
   display: block;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
   color: #c93a40;
 }
@@ -15505,7 +15516,7 @@ body.jobApplyPage .header .header-top .logo img {
   display: inline-block;
   padding: 20px 30px;
   color: #fff;
-  background: #1359CA;
+  background: #0368b8;
   font-size: 16px;
   border-radius: 3px;
 }
@@ -16560,6 +16571,8 @@ input[size="28"] {
   margin: auto;
   max-height: 79px;
   max-width: 101px;
+  -o-object-fit: cover;
+     object-fit: cover;
   width: 100%;
   position: absolute;
   right: 0;
@@ -17088,6 +17101,9 @@ input[size="28"] {
 
 .job-detail-image-slider-container-bg .job-detail-image-slider-container .swiper-slide img {
   width: 100%;
+  height: 200px;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .text-contents {
@@ -18919,8 +18935,14 @@ input.specified_date:focus {
 /*****LPページ*******/
 
 .lp-contents .header {
-  height: 115px;
+  height: 60px;
   color: #fff;
+}
+
+@media screen and (min-width: 768px) {
+  .lp-contents .header {
+    height: 75px;
+  }
 }
 
 .lp-contents .header .inner {
@@ -18935,7 +18957,13 @@ input.specified_date:focus {
 }
 
 .lp-contents .logo {
-  width: 25%;
+  width: 40%;
+}
+
+@media screen and (min-width: 768px) {
+  .lp-contents .logo {
+    width: 25%;
+  }
 }
 
 .lp-contents .logo img {
@@ -18948,12 +18976,12 @@ input.specified_date:focus {
 }
 
 .contact p {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: bold;
 }
 
 .contact p.number {
-  font-size: 21px;
+  font-size: 1rem;
 }
 
 .contact p.number:before {
@@ -18970,25 +18998,16 @@ a.form-app {
   float: left;
   color: #fff;
   display: inline-block;
-  padding: .5em 2em;
-  font-size: 24px;
-  border: 2px solid #fff;
-  border-radius: 40px;
-  margin-right: 20px;
+  padding: 0.5em 1em;
+  font-size: 0.8rem;
+  border: 1px solid #fff;
 }
 
-a.form-app::after {
-  display: inline-block;
-  font-family: "Font Awesome 5 Free";
-  content: "\F0A6";
-  font-weight: 900;
-  padding-left: 5px;
-  /*文字との隙間*/
-  transition: all .3s;
-}
-
-a.form-app:hover::after {
-  transform: translateY(-5px);
+@media screen and (min-width: 768px) {
+  a.form-app {
+    padding: 0.5em 2em;
+    font-size: 1rem;
+  }
 }
 
 .header-right::after {
@@ -19001,7 +19020,6 @@ a.form-app:hover::after {
 
 .main-lp .inner {
   text-align: center;
-  padding: 0 3%;
 }
 
 .lp-main-image {
@@ -19009,38 +19027,31 @@ a.form-app:hover::after {
 }
 
 .main-lp h1 {
-  font-size: 24px;
+  font-size: 1rem;
   text-align: center;
-  margin: 60px 0 60px;
-  position: relative;
+  margin: 40px 0 30px;
   display: inline-block;
   padding: 0 45px;
 }
 
-.main-lp h1:before,
-.main-lp h1:after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  display: inline-block;
-  width: 44px;
-  height: 2px;
-  background-color: black;
-  transform: rotate(-60deg);
-}
-
-.main-lp h1:before {
-  transform: rotate(60deg);
-  left: 0;
-}
-
-.main-lp h1:after {
-  right: 0;
+@media screen and (min-width: 768px) {
+  .main-lp h1 {
+    font-size: 1.3rem;
+    margin: 60px 0 60px;
+    padding: 0 45px;
+  }
 }
 
 .main-lp section h2 {
-  font-size: 36px;
-  margin: 80px 0 40px;
+  font-size: 1rem;
+  margin: 40px 0 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .main-lp section h2 {
+    font-size: 1.4rem;
+    margin: 80px 0 40px;
+  }
 }
 
 .main-lp section h2 i {
@@ -19050,36 +19061,71 @@ a.form-app:hover::after {
 }
 
 .lp-contents section p {
-  font-size: 18px;
+  font-size: 0.8rem;
+}
+
+@media screen and (min-width: 768px) {
+  .lp-contents section p {
+    font-size: 0.9rem;
+  }
 }
 
 .lp-contents .section1-p1 {
-  font-size: 32px;
-  color: #DE9610;
+  font-size: 0.8rem;
+  color: #de9610;
   font-weight: bold;
   margin-bottom: 0;
 }
 
+@media screen and (min-width: 768px) {
+  .lp-contents .section1-p1 {
+    font-size: 1.5rem;
+  }
+}
+
 .lp-contents .section1-p1 span {
-  font-size: 40px;
+  font-size: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .lp-contents .section1-p1 span {
+    font-size: 2rem;
+  }
 }
 
 .lp-contents .section1-p2 {
-  font-size: 24px;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .lp-contents .section1-p2 {
+    font-size: 1rem;
+  }
 }
 
 .plan {
-  width: 90%;
+  width: 100%;
   background-color: rgba(58, 171, 210, 0.1);
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 50px;
+  padding: 0 2%;
   padding-bottom: 40px;
+}
+
+@media screen and (min-width: 768px) {
+  .plan {
+    width: 90%;
+    padding-bottom: 40px;
+    margin-top: 80px;
+  }
 }
 
 .plan .plan-title {
   margin-top: -50px;
-  font-size: 36px;
-  color: #C93A40;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #c93a40;
   font-weight: bold;
   display: inline-block;
   padding: 10px 30px;
@@ -19087,8 +19133,14 @@ a.form-app:hover::after {
   border-radius: 40px;
 }
 
+@media screen and (min-width: 768px) {
+  .plan .plan-title {
+    font-size: 1.4rem;
+  }
+}
+
 .plan1 p {
-  font-size: 21px;
+  font-size: 1.2rem;
 }
 
 .plan1 p:nth-child(2) {
@@ -19116,9 +19168,15 @@ a.form-app:hover::after {
   padding-left: 30px;
   line-height: 1.5em;
   padding: 0.5em 0.5em 0.5em 30px;
-  font-size: 24px;
+  font-size: 0.8rem;
   font-weight: bold;
-  color: #DE9610;
+  color: #de9610;
+}
+
+@media screen and (min-width: 768px) {
+  .plan1 ol li {
+    font-size: 1.2rem;
+  }
 }
 
 .plan1 ol li:before {
@@ -19128,70 +19186,124 @@ a.form-app:hover::after {
   content: counter(number);
   /*以下数字のデザイン変える*/
   display: inline-block;
-  background: #DE9610;
+  background: #de9610;
   color: white;
-  font-family: 'Avenir','Arial Black','Arial',sans-serif;
+  font-family: "Avenir", "Arial Black", "Arial", sans-serif;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 0.8rem;
   border-radius: 50%;
   left: 0;
-  width: 25px;
-  height: 25px;
-  line-height: 25px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
   text-align: center;
   top: 50%;
   transform: translateY(-50%);
+}
+
+@media screen and (min-width: 768px) {
+  .plan1 ol li:before {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+  }
 }
 
 .plan2 p {
   font-weight: bold;
 }
 
-.plan2 .d-flex {
+.plan2 .plan-list {
+  display: flex;
+  align-items: center;
   justify-content: space-around;
 }
 
 .plan2 .plan-cost {
   position: relative;
-  width: 200px;
-  height: 200px;
-  line-height: 200px;
+  width: 130px;
+  height: 130px;
+  line-height: 130px;
   border-radius: 50%;
   background: #fff;
   -webkit-filter: drop-shadow(3px 3px rgba(0, 0, 0, 0.1));
           filter: drop-shadow(3px 3px rgba(0, 0, 0, 0.1));
 }
 
+@media screen and (min-width: 768px) {
+  .plan2 .plan-cost {
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
+  }
+}
+
 .plan2 .plan-cost p:nth-child(1) {
   width: 100%;
   display: inline-block;
   position: absolute;
-  top: -45%;
+  top: -50%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
+  font-size: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .plan2 .plan-cost p:nth-child(1) {
+    top: -45%;
+    font-size: 1.3rem;
+  }
 }
 
 .plan2 .plan-cost p:nth-child(2) {
-  font-size: 21px;
+  font-size: 0.8rem;
+}
+
+@media screen and (min-width: 768px) {
+  .plan2 .plan-cost p:nth-child(2) {
+    font-size: 1.2rem;
+  }
 }
 
 .plan2 .plan-cost p:nth-child(2) span {
-  font-size: 40px;
-  color: #DE9610;
+  font-size: 1rem;
+  color: #de9610;
 }
 
-.section2 .d-flex {
-  align-items: flex-start;
+@media screen and (min-width: 768px) {
+  .plan2 .plan-cost p:nth-child(2) span {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .section2 .point-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 .section2 .point {
-  width: 29%;
-  margin: 0 2%;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .section2 .point {
+    margin-bottom: 0;
+    margin: 0 2%;
+    width: 29%;
+  }
 }
 
 .section2 .point img {
-  width: 50%;
+  width: 15%;
+}
+
+@media screen and (min-width: 768px) {
+  .section2 .point img {
+    width: 30%;
+  }
 }
 
 .section3 .flow {
@@ -19204,12 +19316,18 @@ a.form-app:hover::after {
 }
 
 .section3 .flow p {
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 
 .section3 .flow p:first-child {
-  font-size: 24px;
+  font-size: 0.8rem;
   font-weight: bold;
+}
+
+@media screen and (min-width: 768px) {
+  .section3 .flow p:first-child {
+    font-size: 1.2rem;
+  }
 }
 
 .section3 .flow p:last-child {
@@ -19219,12 +19337,12 @@ a.form-app:hover::after {
 
 .section3 .flow p:first-child span {
   display: inline-block;
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background: #fff;
   text-align: center;
-  line-height: 35px;
+  line-height: 25px;
   margin-right: 10px;
 }
 
@@ -19234,31 +19352,43 @@ a.form-app:hover::after {
 }
 
 .section3 .app-concept {
-  margin: 60px 0 40px;
-  font-size: 28px;
+  margin: 40px 0 20px;
+  font-size: 0.8rem;
   font-weight: bold;
+}
+
+@media screen and (min-width: 768px) {
+  .section3 .app-concept {
+    font-size: 1.2rem;
+    margin: 40px 0 20px;
+  }
 }
 
 .section3 .app-concept span {
-  font-size: 40px;
+  font-size: 1rem;
   display: inline-block;
-  background: linear-gradient(transparent 60%, #E15E64 90%);
+  background: linear-gradient(transparent 60%, #e15e64 90%);
+}
+
+@media screen and (min-width: 768px) {
+  .section3 .app-concept span {
+    font-size: 2rem;
+  }
 }
 
 .section3 a.form-app {
-  color: #C93A40;
-  border: 2px solid #C93A40;
+  color: #c93a40;
+  border: 1px solid #c93a40;
   font-weight: bold;
   float: none;
-  font-size: 24px;
+  font-size: 0.8rem;
+  letter-spacing: 0.1rem;
 }
 
-.section3 .contact {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  margin-right: 0;
-  float: none;
+@media screen and (min-width: 768px) {
+  .section3 a.form-app {
+    font-size: 1rem;
+  }
 }
 
 .section3 .number {
@@ -19281,9 +19411,9 @@ a.form-app:hover::after {
 
 .section4 .q-a .q::before {
   content: "Q";
-  color: #3893B5;
+  color: #3893b5;
   padding-right: 10px;
-  font-size: 28px;
+  font-size: 1.2rem;
 }
 
 .section4 .q-a .a {
@@ -19294,143 +19424,12 @@ a.form-app:hover::after {
 
 .section4 .q-a .a span {
   font-weight: bold;
-  color: #DE9610;
+  color: #de9610;
 }
 
 .lp-contents footer .logo {
   margin: 0 auto;
   width: 15%;
-}
-
-@media (max-width: 768px) {
-  /****** LPページ ************/
-
-  .lp-contents .header {
-    height: auto;
-  }
-
-  .lp-contents .header .logo img {
-    width: 100%;
-  }
-
-  .contact {
-    margin-right: 20px;
-  }
-
-  .contact p {
-    font-size: 2.3vw;
-  }
-
-  .contact p.number {
-    font-size: 2.7vw;
-  }
-
-  a.form-app {
-    padding: .5em 2em;
-    font-size: 3.1vw;
-    border: 2px solid #fff;
-    border-radius: 40px;
-    margin-right: 10px;
-  }
-
-  .main-lp .inner {
-    padding: 0 2%;
-  }
-
-  .main-lp h1 {
-    font-size: 3.5vw;
-    margin: 40px 0 40px;
-    padding: 0 35px;
-  }
-
-  .main-lp section h2 {
-    font-size: 4.3vw;
-    margin: 40px 0 20px;
-  }
-
-  .lp-contents .section1-p1 {
-    font-size: 3.5vw;
-  }
-
-  .lp-contents .section1-p1 span {
-    font-size: 4.3vw;
-  }
-
-  .lp-contents .section1-p2 {
-    font-size: 3.1vw;
-  }
-
-  .plan {
-    width: 100%;
-    padding: 0 2%;
-    padding-bottom: 40px;
-  }
-
-  .plan .plan-title {
-    font-size: 4.6vw;
-  }
-}
-
-@media (max-width: 568px) {
-  /****** LPページ ************/
-
-  .lp-contents .header {
-    height: 60px;
-  }
-
-  .lp-contents .header .contact {
-    margin-right: 10px;
-  }
-
-  .lp-contents .header a.form-app {
-    padding: .2em 1em;
-  }
-
-  .lp-contents section p {
-    font-size: 3.2vw;
-  }
-
-  .plan1 ol li {
-    padding: 0.5em 0.5em 0.5em 30px;
-    font-size: 4.2vw;
-  }
-
-  .plan2 .plan-cost {
-    width: 130px;
-    height: 130px;
-    line-height: 130px;
-  }
-
-  .plan2 .plan-cost p:nth-child(1) {
-    top: -50%;
-    font-size: 4.2vw;
-  }
-
-  .plan2 .plan-cost p:nth-child(2) {
-    font-size: 3.7vw;
-  }
-
-  .plan2 .plan-cost p:nth-child(2) span {
-    font-size: 7vw;
-  }
-
-  .section3 .flow p:first-child {
-    font-size: 4.2vw;
-    font-weight: bold;
-  }
-
-  .section3 .app-concept {
-    margin: 40px 0 20px;
-    font-size: 4.5vw;
-  }
-
-  .section3 .app-concept span {
-    font-size: 6vw;
-  }
-
-  .section3 a.form-app {
-    font-size: 3.5vw;
-  }
 }
 
 .contact-section h1 {
@@ -19624,14 +19623,34 @@ a.form-app:hover::after {
 
 .static-page {
   margin-top: 0;
+  /* 利用規約 */
 }
 
 .static-page .inner {
   padding: 0;
 }
 
-.page-section p {
+.static-page p {
+  font-size: 12px;
   margin-bottom: 0.5em;
+}
+
+@media screen and (min-width: 768px) {
+  .static-page p {
+    font-size: 0.9rem;
+  }
+}
+
+.static-page ol,
+.static-page ul {
+  margin-left: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .static-page ol,
+  .static-page ul {
+    margin-left: 0;
+  }
 }
 
 .static-page h1 {
@@ -19653,46 +19672,59 @@ a.form-app:hover::after {
   display: none !important;
 }
 
-.page-section h2 {
+.static-page h2 {
   font-size: 18px;
   font-weight: bold;
   margin: 16px 0;
 }
 
-.page-section .page-subtitle {
+.static-page .page-subtitle {
   font-size: 16px;
   font-weight: bold;
 }
 
-.page-section-close-btn {
+.static-page .page-section-close-btn {
   margin-top: 40px;
   text-align: center;
 }
 
-.page-thum-wrap {
+.static-page .page-thum-wrap {
   margin-right: 16px;
   margin-bottom: 16px;
   width: 40%;
   float: left;
 }
 
-.page-thum-wrap img {
+.static-page .page-thum-wrap img {
   width: 100%;
 }
 
-/* 利用規約 */
-
-.page-section .agree-box {
-  padding: 8px 16px 16px;
+.static-page .agree-box {
+  font-size: 12px;
+  padding: 8px 0 16px;
 }
 
-.page-section .list-decimal {
-  list-style-type: decimal;
-  padding: 4px 16px;
+@media screen and (min-width: 768px) {
+  .static-page .agree-box {
+    font-size: 0.9rem;
+    padding: 8px 16px 16px;
+  }
+}
+
+.static-page .list-decimal {
+  padding: 4px 8px;
   padding-right: 0;
+  list-style-type: decimal;
 }
 
-.page-section .list-decimal.round-brackets li {
+@media screen and (min-width: 768px) {
+  .static-page .list-decimal {
+    padding: 4px 16px;
+    padding-right: 0;
+  }
+}
+
+.static-page .list-decimal.round-brackets li {
   position: relative;
   left: 0;
   top: 0;
@@ -19701,14 +19733,14 @@ a.form-app:hover::after {
   counter-increment: cnt;
 }
 
-.page-section .list-decimal.round-brackets li:before {
+.static-page .list-decimal.round-brackets li:before {
   display: marker;
   content: "(" counter(cnt) ") ";
   position: absolute;
   left: -1.75em;
 }
 
-/*JOB CiNEMAとは？ページ  */
+/*JOB CiNEMAとは？ */
 
 .about-page .beginners-intr {
   width: 100%;
@@ -19722,24 +19754,24 @@ a.form-app:hover::after {
   }
 }
 
-section .beginners-section h2 {
+.about-page .beginners-section h2 {
   font-size: 16px;
   margin-top: 50px;
   margin-bottom: 25px;
 }
 
 @media screen and (min-width: 768px) {
-  section .beginners-section h2 {
+  .about-page .beginners-section h2 {
     font-size: 20px;
     margin-bottom: 40px;
   }
 }
 
-.flow-btn-wrap {
+.about-page .flow-btn-wrap {
   display: flex;
 }
 
-.flow-btn {
+.about-page .flow-btn {
   display: inline-block;
   width: 50%;
   border: 1px solid #de9610;
@@ -19753,43 +19785,43 @@ section .beginners-section h2 {
 }
 
 @media screen and (min-width: 768px) {
-  .flow-btn {
+  .about-page .flow-btn {
     font-size: 16px;
     padding: 6px 16px;
   }
 }
 
-.tab-current {
+.about-page .tab-current {
   background-color: #de9610;
   color: #fff;
 }
 
-.beginners-flow-text {
+.about-page .beginners-flow-text {
   border: 1px solid #de9610;
   padding: 16px;
   display: none;
 }
 
-.content-current {
+.about-page .content-current {
   display: block;
 }
 
-.beginners-flow-text {
+.about-page .beginners-flow-text {
   text-align: left;
 }
 
-.beginners-flow-text li {
+.about-page .beginners-flow-text li {
   display: flex;
   margin-bottom: 30px;
 }
 
-.beginners-flow-text li .left {
+.about-page .beginners-flow-text li .left {
   width: 20%;
   margin-right: 20px;
   text-align: center;
 }
 
-.beginners-flow-text li .left .step {
+.about-page .beginners-flow-text li .left .step {
   display: inline-block;
   font-size: 14px;
   font-weight: bold;
@@ -19797,13 +19829,13 @@ section .beginners-section h2 {
 }
 
 @media screen and (min-width: 768px) {
-  .beginners-flow-text li .left .step {
+  .about-page .beginners-flow-text li .left .step {
     font-size: 16px;
     margin-bottom: 10px;
   }
 }
 
-.beginners-flow-text li .left .image {
+.about-page .beginners-flow-text li .left .image {
   font-size: 40px;
   line-height: 1;
   color: #de9610;
@@ -19812,34 +19844,34 @@ section .beginners-section h2 {
 }
 
 @media screen and (min-width: 768px) {
-  .beginners-flow-text li .left .image {
+  .about-page .beginners-flow-text li .left .image {
     font-size: 50px;
   }
 }
 
-.beginners-flow-text li .right {
+.about-page .beginners-flow-text li .right {
   width: 80%;
   align-self: center;
 }
 
-.beginners-flow-text li .right p.ttl {
+.about-page .beginners-flow-text li .right p.ttl {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
 }
 
-.beginners-flow-text li .right p.desc {
+.about-page .beginners-flow-text li .right p.desc {
   font-size: 14px;
 }
 
 @media screen and (min-width: 768px) {
-  .beginners-feature .feature-wrap {
+  .about-page .beginners-feature .feature-wrap {
     display: flex;
     justify-content: space-between;
   }
 }
 
-.beginners-feature .feature {
+.about-page .beginners-feature .feature {
   text-align: left;
   width: 100%;
   border: 1px solid #c0c0c0;
@@ -19848,53 +19880,15 @@ section .beginners-section h2 {
 }
 
 @media screen and (min-width: 768px) {
-  .beginners-feature .feature {
+  .about-page .beginners-feature .feature {
     width: 49%;
     margin-bottom: 0;
   }
 }
 
-.beginners-feature .feature .ttl {
+.about-page .beginners-feature .feature .ttl {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
-}
-
-@media (max-width: 768px) {
-  /* 固定ページ（デフォルト） */
-
-  .page-section ol {
-    margin-left: 20px;
-  }
-
-  .page-section ul {
-    margin-left: 10px;
-  }
-}
-
-@media (max-width: 568px) {
-  /* 固定ページ（デフォルト） */
-
-  .page-section h1 {
-    font-size: 20px;
-    margin: 12px 0;
-  }
-
-  .page-section p {
-    font-size: 12px;
-  }
-
-  .page-section .agree-box {
-    padding: 8px 0 16px;
-  }
-
-  .page-section .list-decimal {
-    padding: 4px 8px;
-    padding-right: 0;
-  }
-
-  .page-section ol {
-    margin-left: 10px;
-  }
 }
 
