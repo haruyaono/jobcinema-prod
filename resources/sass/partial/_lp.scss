@@ -1,438 +1,383 @@
 /*****LPページ*******/
 .lp-contents .header {
-    height: 115px;
-    color: #fff;
+  height: 60px;
+  color: #fff;
+  @include mq(medium) {
+    height: 75px;
   }
-  .lp-contents .header .inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-  }
-  .lp-contents .header p {
-      margin-bottom: 0;
-  }
-  .lp-contents .logo {
+}
+.lp-contents .header .inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+.lp-contents .header p {
+  margin-bottom: 0;
+}
+.lp-contents .logo {
+  width: 40%;
+  @include mq(medium) {
     width: 25%;
   }
-  .lp-contents .logo img {
-    width: 100%;
+}
+.lp-contents .logo img {
+  width: 100%;
+}
+.lp-contents .header .contact {
+  float: left;
+  margin-right: 40px;
+}
+.contact p {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.contact p.number {
+  font-size: 1rem;
+}
+.contact p.number:before {
+  display: inline-block;
+  font-family: "Font Awesome 5 Free";
+  content: "\f095";
+  font-weight: 900;
+  padding-left: 5px; /*文字との隙間*/
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+a.form-app {
+  float: left;
+  color: #fff;
+  display: inline-block;
+  padding: 0.5em 1em;
+  font-size: 0.8rem;
+  border: 1px solid #fff;
+  @include mq(medium) {
+    padding: 0.5em 2em;
+    font-size: 1rem;
   }
-  .lp-contents .header .contact {
-    float: left;
-    margin-right: 40px;
-  }
-  .contact p {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  .contact p.number {
-    font-size: 21px;
-  }
-  .contact p.number:before {
-    display: inline-block;
-    font-family: "Font Awesome 5 Free";
-    content: "\f095";
-    font-weight: 900;
-    padding-left : 5px;/*文字との隙間*/
-    -webkit-transform: rotateY(180deg);
-    transform: rotateY(180deg);
-  }
-   a.form-app {
-    float: left;
-    color: #fff;
-    display: inline-block;
-    padding: .5em 2em;
-    font-size: 24px;
-    border: 2px solid #fff;
-    border-radius: 40px;
-    margin-right: 20px;
-  }
-  a.form-app::after{
-    display: inline-block;
-    font-family: "Font Awesome 5 Free";
-    content: "\f0a6";
-    font-weight: 900;
-    padding-left : 5px;/*文字との隙間*/
-    transition: all .3s;
-  }
-  a.form-app:hover::after{
-    transform: translateY(-5px);
-  }
-  .header-right::after{
-    clear: both;
-  }
-  
-  .main-lp {
-    width: 100%;
-  }
-  .main-lp .inner{
-    text-align: center;
-    padding: 0 3%;
-  }
-  .lp-main-image {
-    width: 90%;
-  }
-  .main-lp h1 {
-    font-size: 24px;
-    text-align: center;
+}
+.header-right::after {
+  clear: both;
+}
+
+.main-lp {
+  width: 100%;
+}
+.main-lp .inner {
+  text-align: center;
+}
+.lp-main-image {
+  width: 90%;
+}
+.main-lp h1 {
+  font-size: 1rem;
+  text-align: center;
+  margin: 40px 0 30px;
+  display: inline-block;
+  padding: 0 45px;
+  @include mq(medium) {
+    font-size: 1.3rem;
     margin: 60px 0 60px;
-    position: relative;
-    display: inline-block;
     padding: 0 45px;
   }
-  .main-lp h1:before, .main-lp h1:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    display: inline-block;
-    width: 44px;
-    height: 2px;
-    background-color: black;
-    -webkit-transform: rotate(-60deg);
-    transform: rotate(-60deg);
-  }
-  .main-lp h1:before {
-    -webkit-transform: rotate(60deg);
-    transform: rotate(60deg);
-    left:0;
-  }
-  .main-lp h1:after {
-    right: 0;
-  }
-  .main-lp section h2 {
-    font-size: 36px;
+}
+.main-lp section h2 {
+  font-size: 1rem;
+  margin: 40px 0 20px;
+  @include mq(medium) {
+    font-size: 1.4rem;
     margin: 80px 0 40px;
   }
-  .main-lp section h2 i {
-    display: inline-block;
-    padding-right: 5px;/*文字との隙間*/
+}
+.main-lp section h2 i {
+  display: inline-block;
+  padding-right: 5px; /*文字との隙間*/
+}
+
+.lp-contents section p {
+  font-size: 0.8rem;
+  @include mq(medium) {
+    font-size: 0.9rem;
   }
-  
-  .lp-contents section p {
-    font-size: 18px;
+}
+.lp-contents .section1-p1 {
+  font-size: 0.8rem;
+  color: #de9610;
+  font-weight: bold;
+  margin-bottom: 0;
+  @include mq(medium) {
+    font-size: 1.5rem;
   }
-  .lp-contents .section1-p1{
-    font-size: 32px;
-    color: #DE9610;
-    font-weight: bold;
-    margin-bottom: 0;
+}
+.lp-contents .section1-p1 span {
+  font-size: 1rem;
+  @include mq(medium) {
+    font-size: 2rem;
   }
-  .lp-contents .section1-p1 span {
-    font-size: 40px;
+}
+.lp-contents .section1-p2 {
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  @include mq(medium) {
+    font-size: 1rem;
   }
-  .lp-contents .section1-p2{
-    font-size: 24px;
-  }
-  .plan {
+}
+.plan {
+  width: 100%;
+  background-color: rgba(58, 171, 210, 0.1);
+  margin: 0 auto;
+  margin-top: 50px;
+  padding: 0 2%;
+  padding-bottom: 40px;
+  @include mq(medium) {
     width: 90%;
-    background-color:rgba(58,171,210,0.1);
-    margin: 0 auto;
-    margin-top: 80px;
     padding-bottom: 40px;
+    margin-top: 80px;
   }
-  .plan .plan-title {
-    margin-top: -50px;
-    font-size: 36px;
-    color: #C93A40;
-    font-weight: bold;
-    display: inline-block;
-    padding: 10px 30px;
-    background: #fff;
-    border-radius: 40px;
+}
+.plan .plan-title {
+  margin-top: -50px;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #c93a40;
+  font-weight: bold;
+  display: inline-block;
+  padding: 10px 30px;
+  background: #fff;
+  border-radius: 40px;
+  @include mq(medium) {
+    font-size: 1.4rem;
   }
-  
-  .plan1 p  {
-    font-size: 21px;
+}
+
+.plan1 p {
+  font-size: 1.2rem;
+}
+.plan1 p:nth-child(2) {
+  font-weight: bold;
+}
+.plan1 p:last-child {
+  font-weight: bold;
+}
+.plan1 ol {
+  counter-reset: number; /*数字をリセット*/
+  list-style-type: none !important; /*数字を一旦消す*/
+  padding: 0.5em;
+  display: inline-block;
+  text-align: left;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+.plan1 ol li {
+  position: relative;
+  padding-left: 30px;
+  line-height: 1.5em;
+  padding: 0.5em 0.5em 0.5em 30px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #de9610;
+
+  @include mq(medium) {
+    font-size: 1.2rem;
   }
-  .plan1 p:nth-child(2) {
-    font-weight: bold;
-  }
-  .plan1 p:last-child{
-    font-weight: bold;
-  }
-  .plan1 ol {
-    counter-reset:number; /*数字をリセット*/
-    list-style-type: none!important; /*数字を一旦消す*/
-    padding:0.5em;
-    display: inline-block;
-    text-align: left;
-    margin-bottom: 20px;
-    margin-left: 20px;
-  }
-  .plan1 ol li {
-    position: relative;
-    padding-left: 30px;
-    line-height: 1.5em;
-    padding: 0.5em 0.5em 0.5em 30px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #DE9610;
-  }
-  
-  .plan1 ol li:before{
-    /* 以下数字をつける */
-    position: absolute;
-    counter-increment: number;
-    content: counter(number);
-    /*以下数字のデザイン変える*/
-    display:inline-block;
-    background: #DE9610;
-    color: white;
-    font-family: 'Avenir','Arial Black','Arial',sans-serif;
-    font-weight:bold;
-    font-size: 15px;
-    border-radius: 50%;
-    left: 0;
+}
+
+.plan1 ol li:before {
+  /* 以下数字をつける */
+  position: absolute;
+  counter-increment: number;
+  content: counter(number);
+  /*以下数字のデザイン変える*/
+  display: inline-block;
+  background: #de9610;
+  color: white;
+  font-family: "Avenir", "Arial Black", "Arial", sans-serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  @include mq(medium) {
     width: 25px;
     height: 25px;
     line-height: 25px;
-    text-align: center;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
   }
-  
-  .plan2 p {
-    font-weight: bold;
-  }
-  .plan2 .d-flex{
-    justify-content: space-around;
-  }
-  .plan2 .plan-cost {
-    position: relative;
+}
+
+.plan2 p {
+  font-weight: bold;
+}
+.plan2 .plan-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.plan2 .plan-cost {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  line-height: 130px;
+  border-radius: 50%;
+  background: #fff;
+  filter: drop-shadow(3px 3px rgba(0, 0, 0, 0.1));
+  @include mq(medium) {
     width: 200px;
     height: 200px;
     line-height: 200px;
-    border-radius: 50%;
-    background: #fff;
-        filter: drop-shadow(3px 3px rgba(0,0,0,0.1));
-  
   }
-  .plan2 .plan-cost p:nth-child(1){
-    width: 100%;
-    display: inline-block;
-    position: absolute;
+}
+.plan2 .plan-cost p:nth-child(1) {
+  width: 100%;
+  display: inline-block;
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  font-size: 1rem;
+  @include mq(medium) {
     top: -45%;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-    font-size: 24px;
+    font-size: 1.3rem;
   }
-  .plan2 .plan-cost p:nth-child(2){
-    font-size: 21px;
+}
+.plan2 .plan-cost p:nth-child(2) {
+  font-size: 0.8rem;
+  @include mq(medium) {
+    font-size: 1.2rem;
   }
-  .plan2 .plan-cost p:nth-child(2) span {
-    font-size: 40px;
-    color: #DE9610;
+}
+.plan2 .plan-cost p:nth-child(2) span {
+  font-size: 1rem;
+  color: #de9610;
+  @include mq(medium) {
+    font-size: 2rem;
   }
-  
-  .section2 .d-flex {
-    align-items: flex-start;
-  }
-  .section2 .point {
-    width: 29%;
-    margin: 0 2%;
-  }
-  .section2 .point img {
-    width: 50%;
-  }
-  
-  .section3 .flow {
-    margin: 0 auto;
-    width: 90%;
-    padding: 20px ;
-    background-color:rgba(222,150,16,0.1);
-    text-align: left;
-    margin-top: -10px;
-  }
-  .section3 .flow p {
-    margin-bottom: 1em;
-  }
-  .section3 .flow p:first-child{
-    font-size: 24px;
-    font-weight: bold;
-  }
-  .section3 .flow p:last-child{
-    width: 90%;
-    margin: 0 auto;
-  }
-  .section3 .flow p:first-child span {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background: #fff;
-    text-align: center;
-    line-height: 35px;
-    margin-right: 10px;
-  }
-  .section3 img {
-    width: 70%;
-    margin: 0 auto;
-  }
-  .section3 .app-concept {
-    margin: 60px 0 40px;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  .section3 .app-concept span {
-    font-size: 40px;
-    display: inline-block;
-    background: linear-gradient(transparent 60%, #E15E64 90%)
-  }
-  
-  .section3 a.form-app {
-    color: #C93A40;
-    border: 2px solid #C93A40;
-    font-weight: bold;
-    float: none;
-    font-size: 24px;
-  }
-  .section3 .contact {
-    margin-top: 20px;
+}
+
+.section2 .point-list {
+  @include mq(medium) {
     display: flex;
-    justify-content: center;
-    margin-right: 0;
-    float: none;
+    align-items: center;
+    justify-content: space-between;
   }
-  .section3 .number {
-    margin-left: 20px;
-  }
-  
-  .section4 {
-    clear: both;
-  }
-  .section4 .q-a {
-    width: 90%;
-    margin: 0 auto;
-    text-align: left;
-  }
-  .section4 .q-a .q{
+}
+.section2 .point {
+  margin-bottom: 20px;
+  @include mq(medium) {
     margin-bottom: 0;
+    margin: 0 2%;
+    width: 29%;
   }
-  .section4 .q-a .q::before {
-    content: "Q";
-    color: #3893B5;
-    padding-right: 10px;
-    font-size: 28px;
+}
+.section2 .point img {
+  width: 15%;
+  @include mq(medium) {
+    width: 30%;
   }
-  .section4 .q-a .a {
-    background-color:rgba(58,171,210,0.1);
-    padding: 10px 20px;
-    line-height: 2;
-  }
-  .section4 .q-a .a span {
-    font-weight: bold;
-    color: #DE9610;
-  }
-  .lp-contents footer .logo {
-      margin: 0 auto;
-      width: 15%;
-  }
+}
 
-  @media (max-width:768px) {
-
-    /****** LPページ ************/
-    .lp-contents .header {
-        height: auto;
-    }
-    .lp-contents .header .logo img {
-        width: 100%;
-    }
-    .contact {
-        margin-right: 20px;
-    }
-    .contact p {
-        font-size: 2.3vw;
-    }
-    .contact p.number {
-        font-size: 2.7vw;
-    }
-    a.form-app {
-        padding: .5em 2em;
-        font-size: 3.1vw;
-        border: 2px solid #fff;
-        border-radius: 40px;
-        margin-right: 10px;
-    }
-    .main-lp .inner {
-        padding: 0 2%;
-    }
-    .main-lp h1 {
-        font-size: 3.5vw;
-        margin: 40px 0 40px;
-        padding: 0 35px;
-    }
-    .main-lp section h2 {
-        font-size: 4.3vw;
-        margin: 40px 0 20px;
-    }
-    .lp-contents .section1-p1 {
-        font-size: 3.5vw;
-    }
-    .lp-contents .section1-p1 span {
-        font-size: 4.3vw;
-    }
-    .lp-contents .section1-p2 {
-        font-size: 3.1vw;
-    }
-    .plan {
-        width: 100%;
-        padding: 0 2%;
-        padding-bottom: 40px;
-    }
-    .plan .plan-title {
-        font-size: 4.6vw;
-    }
-
+.section3 .flow {
+  margin: 0 auto;
+  width: 90%;
+  padding: 20px;
+  background-color: rgba(222, 150, 16, 0.1);
+  text-align: left;
+  margin-top: -10px;
+}
+.section3 .flow p {
+  margin-bottom: 0.5em;
+}
+.section3 .flow p:first-child {
+  font-size: 0.8rem;
+  font-weight: bold;
+  @include mq(medium) {
+    font-size: 1.2rem;
   }
+}
+.section3 .flow p:last-child {
+  width: 90%;
+  margin: 0 auto;
+}
+.section3 .flow p:first-child span {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #fff;
+  text-align: center;
+  line-height: 25px;
+  margin-right: 10px;
+}
+.section3 img {
+  width: 70%;
+  margin: 0 auto;
+}
+.section3 .app-concept {
+  margin: 40px 0 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  @include mq(medium) {
+    font-size: 1.2rem;
+    margin: 40px 0 20px;
+  }
+}
+.section3 .app-concept span {
+  font-size: 1rem;
+  display: inline-block;
+  background: linear-gradient(transparent 60%, #e15e64 90%);
+  @include mq(medium) {
+    font-size: 2rem;
+  }
+}
 
-  @media (max-width: 568px) {
-  /****** LPページ ************/
-    .lp-contents .header {
-        height: 60px;
-    }
-    .lp-contents .header .contact {
-        margin-right: 10px;
-    }
-    .lp-contents .header a.form-app {
-        padding: .2em 1em;
-    }
-    .lp-contents section p {
-        font-size: 3.2vw;
-    }
-    .plan1 ol li {
-        padding: 0.5em 0.5em 0.5em 30px;
-        font-size: 4.2vw;
-    }
-    .plan2 .plan-cost {
-        width: 130px;
-        height: 130px;
-        line-height: 130px;
-    }
-    .plan2 .plan-cost p:nth-child(1) {
-        top: -50%;
-        font-size: 4.2vw;
-    }
-    .plan2 .plan-cost p:nth-child(2) {
-        font-size: 3.7vw;
-    }
-    .plan2 .plan-cost p:nth-child(2) span {
-        font-size: 7vw;
-    }
-    .section3 .flow p:first-child {
-        font-size: 4.2vw;
-        font-weight: bold;
-    }
-    .section3 .app-concept {
-        margin: 40px 0 20px;
-        font-size: 4.5vw;
-    }
-    .section3 .app-concept span {
-        font-size: 6vw;
-    }
-    .section3 a.form-app {
-    font-size: 3.5vw;
-    }
+.section3 a.form-app {
+  color: #c93a40;
+  border: 1px solid #c93a40;
+  font-weight: bold;
+  float: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.1rem;
+  @include mq(medium) {
+    font-size: 1rem;
+  }
+}
+.section3 .number {
+  margin-left: 20px;
+}
+
+.section4 {
+  clear: both;
+}
+.section4 .q-a {
+  width: 90%;
+  margin: 0 auto;
+  text-align: left;
+}
+.section4 .q-a .q {
+  margin-bottom: 0;
+}
+.section4 .q-a .q::before {
+  content: "Q";
+  color: #3893b5;
+  padding-right: 10px;
+  font-size: 1.2rem;
+}
+.section4 .q-a .a {
+  background-color: rgba(58, 171, 210, 0.1);
+  padding: 10px 20px;
+  line-height: 2;
+}
+.section4 .q-a .a span {
+  font-weight: bold;
+  color: #de9610;
+}
+.lp-contents footer .logo {
+  margin: 0 auto;
+  width: 15%;
 }
