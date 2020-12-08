@@ -4,221 +4,211 @@
   .inner {
     padding: 0;
   }
-}
-
-.page-section p {
-  margin-bottom: 0.5em;
-}
-.static-page h1 {
-  font-size: 18px;
-  line-height: 1.7;
-  font-weight: bold;
-  margin: 16px 0;
-  padding: 0;
-
-  @include mq(medium) {
-    font-size: 24px;
+  p {
+    font-size: 12px;
+    margin-bottom: 0.5em;
+    @include mq(medium) {
+      font-size: 0.9rem;
+    }
   }
-  &::before,
-  &::after {
-    display: none !important;
+  ol,
+  ul {
+    margin-left: 10px;
+    @include mq(medium) {
+      margin-left: 0;
+    }
   }
-}
-.page-section h2 {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 16px 0;
-}
-.page-section .page-subtitle {
-  font-size: 16px;
-  font-weight: bold;
-}
+  h1 {
+    font-size: 18px;
+    line-height: 1.7;
+    font-weight: bold;
+    margin: 16px 0;
+    padding: 0;
 
-.page-section-close-btn {
-  margin-top: 40px;
-  text-align: center;
-}
+    @include mq(medium) {
+      font-size: 24px;
+    }
+    &::before,
+    &::after {
+      display: none !important;
+    }
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 16px 0;
+  }
+  .page-subtitle {
+    font-size: 16px;
+    font-weight: bold;
+  }
 
-.page-thum-wrap {
-  margin-right: 16px;
-  margin-bottom: 16px;
-  width: 40%;
-  float: left;
-}
-.page-thum-wrap img {
-  width: 100%;
-}
-
-/* 利用規約 */
-.page-section .agree-box {
-  padding: 8px 16px 16px;
-}
-.page-section .list-decimal {
-  list-style-type: decimal;
-  padding: 4px 16px;
-  padding-right: 0;
-}
-.page-section .list-decimal.round-brackets li {
-  position: relative;
-  left: 0;
-  top: 0;
-  margin-left: 0.5em;
-  list-style-type: none;
-  counter-increment: cnt;
-}
-.page-section .list-decimal.round-brackets li:before {
-  display: marker;
-  content: "(" counter(cnt) ") ";
-  position: absolute;
-  left: -1.75em;
-}
-
-/*JOB CiNEMAとは？ページ  */
-.about-page .beginners-intr {
-  width: 100%;
-  @include mq(medium) {
-    width: 80%;
-    margin: 0 auto;
+  .page-section-close-btn {
+    margin-top: 40px;
     text-align: center;
   }
-}
-section .beginners-section h2 {
-  font-size: 16px;
-  margin-top: 50px;
-  margin-bottom: 25px;
-  @include mq(medium) {
-    font-size: 20px;
-    margin-bottom: 40px;
-  }
-}
-.flow-btn-wrap {
-  display: flex;
-}
-.flow-btn {
-  display: inline-block;
-  width: 50%;
-  border: 1px solid $yellow;
-  border-bottom: 0;
-  font-size: 14px;
-  color: #de9610;
-  font-weight: bold;
-  padding: 6px 0;
-  text-align: center;
-  cursor: pointer;
-  @include mq(medium) {
-    font-size: 16px;
-    padding: 6px 16px;
-  }
-}
-.tab-current {
-  background-color: #de9610;
-  color: #fff;
-}
-.beginners-flow-text {
-  border: 1px solid $yellow;
-  padding: 16px;
-  display: none;
-}
-.content-current {
-  display: block;
-}
-.beginners-flow-text {
-  text-align: left;
-  li {
-    display: flex;
-    margin-bottom: 30px;
-    .left {
-      width: 20%;
-      margin-right: 20px;
-      text-align: center;
-    }
-    .left .step {
-      display: inline-block;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 5px;
-      @include mq(medium) {
-        font-size: 16px;
-        margin-bottom: 10px;
-      }
-    }
-    .left .image {
-      font-size: 40px;
-      line-height: 1;
-      color: $yellow;
-      display: block;
-      text-align: center;
-      @include mq(medium) {
-        font-size: 50px;
-      }
-    }
-    .right {
-      width: 80%;
-      align-self: center;
-    }
-    .right p.ttl {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    .right p.desc {
-      font-size: 14px;
-    }
-  }
-}
 
-.beginners-feature {
-  .feature-wrap {
-    @include mq(medium) {
-      display: flex;
-      justify-content: space-between;
-    }
+  .page-thum-wrap {
+    margin-right: 16px;
+    margin-bottom: 16px;
+    width: 40%;
+    float: left;
   }
-  .feature {
-    text-align: left;
+  .page-thum-wrap img {
     width: 100%;
-    border: 1px solid $lightgray;
-    padding: 16px;
-    margin-bottom: 20px;
-    @include mq(medium) {
-      width: 49%;
-      margin-bottom: 0;
-    }
-    .ttl {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
   }
-}
 
-@media (max-width: 768px) {
-  /* 固定ページ（デフォルト） */
-  .page-section ol {
-    margin-left: 20px;
-  }
-  .page-section ul {
-    margin-left: 10px;
-  }
-}
-
-@media (max-width: 568px) {
-  /* 固定ページ（デフォルト） */
-  .page-section h1 {
-    font-size: 20px;
-    margin: 12px 0;
-  }
-  .page-section p {
+  /* 利用規約 */
+  .agree-box {
     font-size: 12px;
-  }
-  .page-section .agree-box {
     padding: 8px 0 16px;
+    @include mq(medium) {
+      font-size: 0.9rem;
+      padding: 8px 16px 16px;
+    }
   }
-  .page-section .list-decimal {
+  .list-decimal {
     padding: 4px 8px;
     padding-right: 0;
+    list-style-type: decimal;
+    @include mq(medium) {
+      padding: 4px 16px;
+      padding-right: 0;
+    }
   }
-  .page-section ol {
-    margin-left: 10px;
+  .list-decimal.round-brackets li {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-left: 0.5em;
+    list-style-type: none;
+    counter-increment: cnt;
+  }
+  .list-decimal.round-brackets li:before {
+    display: marker;
+    content: "(" counter(cnt) ") ";
+    position: absolute;
+    left: -1.75em;
+  }
+}
+
+/*JOB CiNEMAとは？ */
+.about-page {
+  .beginners-intr {
+    width: 100%;
+    @include mq(medium) {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+    }
+  }
+  .beginners-section h2 {
+    font-size: 16px;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    @include mq(medium) {
+      font-size: 20px;
+      margin-bottom: 40px;
+    }
+  }
+  .flow-btn-wrap {
+    display: flex;
+  }
+  .flow-btn {
+    display: inline-block;
+    width: 50%;
+    border: 1px solid $yellow;
+    border-bottom: 0;
+    font-size: 14px;
+    color: #de9610;
+    font-weight: bold;
+    padding: 6px 0;
+    text-align: center;
+    cursor: pointer;
+    @include mq(medium) {
+      font-size: 16px;
+      padding: 6px 16px;
+    }
+  }
+  .tab-current {
+    background-color: #de9610;
+    color: #fff;
+  }
+  .beginners-flow-text {
+    border: 1px solid $yellow;
+    padding: 16px;
+    display: none;
+  }
+  .content-current {
+    display: block;
+  }
+  .beginners-flow-text {
+    text-align: left;
+    li {
+      display: flex;
+      margin-bottom: 30px;
+      .left {
+        width: 20%;
+        margin-right: 20px;
+        text-align: center;
+      }
+      .left .step {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        @include mq(medium) {
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
+      }
+      .left .image {
+        font-size: 40px;
+        line-height: 1;
+        color: $yellow;
+        display: block;
+        text-align: center;
+        @include mq(medium) {
+          font-size: 50px;
+        }
+      }
+      .right {
+        width: 80%;
+        align-self: center;
+      }
+      .right p.ttl {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      .right p.desc {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .beginners-feature {
+    .feature-wrap {
+      @include mq(medium) {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+    .feature {
+      text-align: left;
+      width: 100%;
+      border: 1px solid $lightgray;
+      padding: 16px;
+      margin-bottom: 20px;
+      @include mq(medium) {
+        width: 49%;
+        margin-bottom: 0;
+      }
+      .ttl {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    }
   }
 }

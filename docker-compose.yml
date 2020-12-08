@@ -21,7 +21,6 @@ services:
       - mysql
     volumes:
       - ./:/var/www/html/src/:delegated
-      - ./docker/supervisor/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
     restart: always
     links:
      - mysql
