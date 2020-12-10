@@ -86,7 +86,7 @@
                     </div>
                     <div class="seeker-jobapp-result-btn">
                         <a href="{{ route('seeker.edit.report', [$apply]) }}" class="btn btn-yellow"><i class="far fa-circle mr-2"></i>採用</a>
-                        <a href="javascript:void(0)" class="btn btn-secondary" onclick="submit()"><i class="fas fa-times mr-2"></i>不採用</a>
+                        <a href="javascript:void(0)" id="SaveReportUnadopt" class="btn btn-secondary"><i class="fas fa-times mr-2"></i>不採用</a>
                         <form id="seeker-apply-unadopt-form" action="{{ route('seeker.update.report', [$apply]) }}" method="POST" style="display: none;">
                             @csrf
                             @method('PUT')
@@ -107,14 +107,15 @@
 @endsection
 
 @section('js')
-<script defer>
-    function submit() {
-        event.preventDefault();
-        if (confirm("「不採用」で間違いありませんか？")) {
-            document.getElementById('seeker-apply-unadopt-form').submit();
-        } else {
-            return false
-        }
-    }
+<script>
+    $(function() {
+        $("#SaveReportUnadopt").click(function(event) {
+            if (confirm("「不採用」で間違いありませんか？")) {
+                submit('seeker-apply-unadopt-form', event);
+            } else {
+                return false
+            }
+        });
+    });
 </script>
 @endsection
