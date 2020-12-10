@@ -31,9 +31,9 @@
         　 <h1><span class="ib-only-pc">求人サイト</span>JOBCiNEMAに関するお問い合わせ</h1>
         <p>お問い合わせいただいた内容に関するご返答は、3営業日以内に行わせていただきます。<br>下記フォームに必要事項をご記入ください。</p>
         @if($c_flag == 'seeker')
-        <p class="c-complete-textbox">企業担当者専用のお問い合わせは<br class="c-568-only"><a class="txt-blue-link" href="/contact_e">こちら</a>になります。</p>
+        <p class="c-complete-textbox">企業担当者専用のお問い合わせは<br class="c-568-only"><a class="txt-blue-link" href="{{ route('contact.e.get') }}">こちら</a>になります。</p>
         @elseif($c_flag == 'employer')
-        <p class="c-complete-textbox">求職者専用のお問い合わせは<br class="c-568-only"><a class="txt-blue-link" href="/contact_s">こちら</a>になります。</p>
+        <p class="c-complete-textbox">求職者専用のお問い合わせは<br class="c-568-only"><a class="txt-blue-link" href="{{ route('contact.s.get') }}">こちら</a>になります。</p>
         @endif
 
         @if(count($errors) > 0)

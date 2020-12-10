@@ -3,17 +3,17 @@
     ref="slick"
     :options="slickOptions">
         <a href="/beginners">
-            <img src="/uploads/images/jobcinema_hedd_sam4_aのコピー.png" alt="JOBCiNEMAとは">
+            <img src="/img/common/jobcinema_hedd_sam4_aのコピー.png" alt="JOBCiNEMAとは">
         </a>
         <a href="/lp" target="_blank">
-            <img src="/uploads/images/jobcinema_hedd_sam5_aのコピー.png" alt="広告掲載企業募集について">
+            <img src="/img/common/jobcinema_hedd_sam5_aのコピー.png" alt="広告掲載企業募集について">
         </a>
-        <a href="/published-contact">
-            <img src="/uploads/images/jobcinema_hedd_sam6_aのコピー.png" alt="お祝い金申請について">
+        <a href="/reward_request">
+            <img src="/img/common/jobcinema_hedd_sam6_aのコピー.png" alt="お祝い金申請について">
         </a>
     </slick>
 </template>
- 
+
 <script>
     // vue-slickをインポート
     import Slick from 'vue-slick';

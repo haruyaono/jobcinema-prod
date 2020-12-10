@@ -20,10 +20,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown1">
                             @if (Auth::guard('employer')->check())
                             <a class="dropdown-item" href="{{ route('enterprise.index.joblist') }}">
-                                {{ __('求人票を作成') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('enterprise.index.joblist') }}">
-                                {{ __('求人票の一覧') }}
+                                {{ __('求人票を作成・確認') }}
                             </a>
                             <a class="dropdown-item" href="{{ route('enterprise.index.application') }}">
                                 {{ __('応募者を見る') }}

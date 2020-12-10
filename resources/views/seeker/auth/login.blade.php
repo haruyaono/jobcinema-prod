@@ -96,7 +96,7 @@
                             </div>
 
                             <div class="c-login-link-in-user-login">
-                                <a href="{{url('/employer/login')}}"><i class="fas fa-building d-block"></i>企業用ログインはこちら</a>
+                                <a href="{{ route('employer.login') }}"><i class="fas fa-building d-block"></i>企業用ログインはこちら</a>
                             </div>
                         </div>
                     </div>
