@@ -1,5 +1,4 @@
 /node_modules
-/public/img/uploads/JobSheet/
 /public/storage
 /storage/*.key
 /vendor
