@@ -39787,7 +39787,7 @@ var render = function() {
     _c("a", { attrs: { href: "/beginners" } }, [
       _c("img", {
         attrs: {
-          src: "/uploads/images/jobcinema_hedd_sam4_aのコピー.png",
+          src: "/img/common/jobcinema_hedd_sam4_aのコピー.png",
           alt: "JOBCiNEMAとは"
         }
       })
@@ -39796,16 +39796,16 @@ var render = function() {
     _c("a", { attrs: { href: "/lp", target: "_blank" } }, [
       _c("img", {
         attrs: {
-          src: "/uploads/images/jobcinema_hedd_sam5_aのコピー.png",
+          src: "/img/common/jobcinema_hedd_sam5_aのコピー.png",
           alt: "広告掲載企業募集について"
         }
       })
     ]),
     _vm._v(" "),
-    _c("a", { attrs: { href: "/published-contact" } }, [
+    _c("a", { attrs: { href: "/reward_request" } }, [
       _c("img", {
         attrs: {
-          src: "/uploads/images/jobcinema_hedd_sam6_aのコピー.png",
+          src: "/img/common/jobcinema_hedd_sam6_aのコピー.png",
           alt: "お祝い金申請について"
         }
       })

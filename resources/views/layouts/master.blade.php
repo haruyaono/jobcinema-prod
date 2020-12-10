@@ -36,6 +36,7 @@
     @yield('js')
     <script>
         function submit(id, event) {
+            event.preventDefault();
             document.getElementById(id).submit();
         }
     </script>

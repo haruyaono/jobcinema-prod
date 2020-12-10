@@ -156,23 +156,18 @@
 @endsection
 
 @section('js')
-<script defer>
-    function submit(event, form_id) {
-        event.preventDefault();
-        document.getElementById(form_id).submit();
-    }
-
+<script>
     $(function() {
         $("#SaveReportStatusCancel").click(function(event) {
             if (confirm("本当に報告を取り消しますか？")) {
-                submit(event, 'seeker-apply-report-cancel-form');
+                submit('seeker-apply-report-cancel-form', event);
             } else {
                 return false
             }
         });
         $("#SaveReportDeclineCancel").click(function(event) {
             if (confirm("「辞退」するとお祝い金の受け取りや応募がキャンセルされます。よろしいですか？")) {
-                submit(event, 'seeker-apply-report-decline-form');
+                submit('seeker-apply-report-decline-form', event);
             } else {
                 return false
             }
