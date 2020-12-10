@@ -17,12 +17,12 @@ class CategoryController extends Controller
 
     public function index($url)
     {
-        if ($url != 'type' || $url != 'area' || $url != 'salary') {
-            abort(404);
+        if ($url == 'type' || $url == 'area' || $url == 'salary') {
+
+            $categories = $this->CategoryRepository->getCategories();
+            return view('front.jobs.category', compact('categories', 'url'));
         }
 
-        $categories = $this->CategoryRepository->getCategories();
-
-        return view('front.jobs.category', compact('categories', 'url'));
+        abort(404);
     }
 }
