@@ -1,64 +1,70 @@
-**地元だけの求人サービス**
+## JOB CiNEMA(ジョブシネマ)とは 
+JOBCiNEMAは、北海道釧路市限定のオープンソース求人サービスです。  
+企業様が撮影した職場の雰囲気を動画として配信することで、求職者に本物の魅力を伝えることができます。
 
-JOBCiNEMAは職場を上映する求人サービスです。  
-他社の求人サイトとは異なり、求職者側は採用企業様が撮影した職場の雰囲気を動画として見れるため、求職者への訴求がより強力になります。
+こちらのサイトにアクセスしてください。 
+<a href="https://job-cinema.comt" target="_blank">https://job-cinema.com</a>  
 
----
+## 機能
+### 求職者
+- 認証
+- 求人検索（フリーワード検索、カテゴリ検索）  
+- 求人ソート（カテゴリでソート、お祝い金額でソート） 
+- 閲覧履歴
+- レコメンド
+- お気に入り
+- 応募管理
+- お祝い金申請
+- プロフィール/経歴編集  
+- メールアドレス/パスワード変更
+- お問い合わせ
+- 退会  
 
-## URL
-https://job-cinema.com
+### 企業  
+- 認証(仮登録→本登録)
+- 求人票登録
+- 求人票管理
+- 応募管理（応募者の採用処理）
+- 企業情報編集  
+- お問い合わせ
 
----
+### 管理者
+- 認証
+- 求人票データ管理
+- 応募データ管理
+- お祝い金申請ユーザー管理
+- 企業データ管理
+- カテゴリ設定
+- お祝い金設定
+- 成果報酬設定
 
-## 機能一覧
-**求職者**  
-・会員登録  
-・プロフィール編集  
-・求人案件の閲覧・応募  
-・気になった求人をキープすることでマイページで閲覧可能  
-・応募先の確認  
-・採用結果通知の確認  
-・応募先の選考辞退  
-・お祝い金申請  
+## 動作環境
+### サーバ
+- PHP7.2.2以降
+- MySQL 5.6.4
+- Laravel 7.2
 
-**採用担当者**  
-・会員登録  
-仮登録→会社情報入力で本登録完了  
-・求人票のCRUD（サービス運営者の承認が要するものあり）  
-・応募者の確認  
-・採用判定（採用結果は応募者に通知される）  
-・会社情報の編集  
+### クラウドサービス
+#### AWS
+- VPC/EC2/ELB/ECS/ECR/S3/RDS/SES/Lambda/SNS/ElastiCache/CodePipeline/Route53/ACM/CloudWatch
+###### AWSアーキテクチャ
+<img src="https://cacoo.com/diagrams/hRPo5h6xqTi9HR7K-D2A7F-w760-h570.png" alt="Exment">
 
-**共通**  
-・お問い合わせ  
-・アカウント退会  
-・メールアドレス、パスワード変更  
+### 開発環境
+- Docker（Docker Compose）
 
-**管理者**  
-・管理画面へのログイン  
-・求人票一覧、企業一覧の確認  
-・申請された求人票の承認作業  
-・お祝い金申請ユーザー一覧  
-・求人掲載企業の課金額を確認（企業別、月別で確認可能）  
-・求人票のCRUD  
+### バージョン管理
+- Git
+- GitHub
 
----
+### その他
+- jQuery
+- Vue
+- Cron
+- Supervisor
 
-## 使用技術  
+## サポートブラウザ
+- グーグルクローム
 
-・PHP 7.2.19  
-・Laravel 5.7.28  
-・Nginx  
-・MySQL 5.6.4  
-・AWS(VPC/EC2/ELB/ECS/ECR/CodePipeline/S3/RDS/ElastiCache/Route53/ACM/SES/IAM/Lambda/SNS/CloudWatch)  
-・Javascript  
-・Vue.js  
-・Jquery  
-・ffmpeg  
-・supervisor  
-・Docker（Docker Compose）
-・Git（SaaS:BitBucket）  
-
-## AWSアーキテクチャ
-https://cacoo.com/diagrams/6OmWrFguYPX4zSjf/D1746
-
+## スクリーンショット
+- 準備中

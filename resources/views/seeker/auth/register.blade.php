@@ -73,7 +73,7 @@
                                         </div>
 
                                         <div class="form-group row mb-0">
-                                            <p><a class="txt-blue-link" href="/terms_service">利用規約</a>に同意のうえ、ご登録してください。</p>
+                                            <p><a class="txt-blue-link" href="/terms_service" target="_blank">利用規約</a>に同意のうえ、ご登録してください。</p>
                                             <div class="col-md-6 offset-md-3">
                                                 <button type="submit" class="btn">
                                                     {{ __('会員登録する') }}

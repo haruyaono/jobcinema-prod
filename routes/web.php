@@ -51,7 +51,7 @@ Route::namespace('Front')->group(function () {
   Route::post('contact_s/complete', 'ContactsController@postContactSeeker')->name('contact.seeker.post');
   Route::post('contact_e/complete', 'ContactsController@postContactEmployer')->name('contact.employer.post');
   // LP・固定ページ
-  Route::get('lp', 'PageController@getLp')->name('lp.get');
+  Route::get('lp', 'PageController@getLp')->name('show.lp');
   Route::get('beginners', 'PageController@getBeginner');
   Route::get('terms_service', 'PageController@getTermsService');
   Route::get('terms_service_e', 'PageController@getTermsServiceE');
