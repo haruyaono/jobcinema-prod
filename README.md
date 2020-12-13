@@ -48,7 +48,8 @@ JOBCiNEMAは、北海道釧路市限定のオープンソース求人サービ�
 #### AWS
 - VPC/EC2/ELB/ECS/ECR/S3/RDS/SES/Lambda/SNS/ElastiCache/CodePipeline/Route53/ACM/CloudWatch
 ###### AWSアーキテクチャ
-<img src="https://cacoo.com/diagrams/hRPo5h6xqTi9HR7K-D2A7F-w760-h570.png" alt="Exment">
+<a href="https://cacoo.com/diagrams/hRPo5h6xqTi9HR7K/D2A7F" target="_blank">リンク</a>  
+<img src="https://cacoo.com/diagrams/hRPo5h6xqTi9HR7K-D2A7F-w1200-h900.png" alt="AWSアーキテクチャ">
 
 ### 開発環境
 - Docker（Docker Compose）
