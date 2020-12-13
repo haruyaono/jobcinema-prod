@@ -11,7 +11,7 @@
     <div class="wrap" id="app">
         <!-- 背景用の動画ファイル -->
         @if(url()->current() != url('lp') && url()->current() != url('contact'))
-        <video id="bg-video" src="{{ asset('/uploads/images/back-retro.mp4') }}" autoplay loop muted></video>
+        <video id="bg-video" src="{{ asset('/img/common/back-retro.mp4') }}" autoplay loop muted></video>
         @endif
         <!-- 背景上に表示させるコンテンツ -->
         <div class="contents @if(url()->current() == url('lp')) lp-contents @endif">

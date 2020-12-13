@@ -56,15 +56,15 @@
         <p class="section1-p2">JOB CiNEMAは、企業様のストレスを最小限にするために<br>３つのポイントを実践しています。</p>
         <div class="point-list">
           <div class="point">
-            <img src="{{ asset('/uploads/images/point1.png') }}" alt="JOB CiNEMA">
+            <img src="{{ asset('/img/common/point1.png') }}" alt="JOB CiNEMA">
             <p>管理画面からいつでも求人票編集・停止できます。<br>急な募集でもOK！</p>
           </div>
           <div class="point">
-            <img src="{{ asset('/uploads/images/point2.png') }}" alt="JOB CiNEMA">
+            <img src="{{ asset('/img/common/point2.png') }}" alt="JOB CiNEMA">
             <p>採用して初勤務が終わるまで料金はかかりません。<br>無駄な損失を無くし、マッチした人のみ採用できます。</p>
           </div>
           <div class="point">
-            <img src="{{ asset('/uploads/images/point3.png') }}" alt="JOB CiNEMA">
+            <img src="{{ asset('/img/common/point3.png') }}" alt="JOB CiNEMA">
             <p>管理画面からいつでも求人票の編集が可能です。<br>募集情報を変更したい時も、すぐに対応できます。</p>
           </div>
         </div>
@@ -75,12 +75,12 @@
           <p><span>1</span>企業会員登録</p>
           <p>「会員登録」ボタンから仮登録後、メールに記載された本登録用URLから必要事項を入力し本登録。</p>
         </div>
-        <img src="{{ asset('/uploads/images/flow1.png') }}" alt="JOB CiNEMA">
+        <img src="{{ asset('/img/common/flow1.png') }}" alt="JOB CiNEMA">
         <div class="flow">
           <p><span>2</span>求人票作成・審査</p>
           <p>ログイン後の企業マイページから求人票を作成し掲載申請できます。「申請中」は、当方で審査いたします。</p>
         </div>
-        <img src="{{ asset('/uploads/images/flow2.png') }}" alt="JOB CiNEMA">
+        <img src="{{ asset('/img/common/flow2.png') }}" alt="JOB CiNEMA">
         <div class="flow">
           <p><span>3</span>掲載スタート</p>
           <p>無事、求人票の審査が通った時点で掲載がスタート！</p>
@@ -149,7 +149,7 @@
     </div>
     <div class="footer-bottom footer-bottom-lp">
       <div class="footer-bottom-left">
-        <img src="{{ asset('/uploads/images/jobcinema_rogo_re.png') }}" alt="">
+        <img src="{{ asset('/img/common/jobcinema_rogo_re.png') }}" alt="">
         <p class="copy">©{{ config('app.name')}}</p>
       </div>
       <div class="footer-bottom-right ib-only-pc">

@@ -52,7 +52,7 @@ $isDetail = $routeName === 'show.front.job_sheet.detail' ? true : false;
 
     <div class="footer-bottom">
       <div class="footer-bottom-left">
-        <img src="{{ asset('/images/jobcinema_rogo_re.png') }}" alt="">
+        <img src="{{ asset('img/common/jobcinema_rogo_re.png') }}" alt="">
         <p class="copy">©JOB CiNEMA</p>
       </div>
     </div>
