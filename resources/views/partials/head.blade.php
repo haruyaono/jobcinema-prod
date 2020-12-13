@@ -47,4 +47,4 @@
 </script>
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
 
-<link rel="icon" type="image/png" href="{{asset('/uploads/images/job_cinema_fav.png')}}" sizes="32x32">
+<link rel="icon" type="image/png" href="{{asset('/img/common/job_cinema_fav.png')}}" sizes="32x32">

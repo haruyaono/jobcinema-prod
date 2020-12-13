@@ -32,7 +32,7 @@
         　 <h1 class="mb-5">代表挨拶</h1>
         <div class="page-thum-wrap">
           <figure>
-            <img src="{{ asset('/uploads/images/profile_1.png') }}" alt="代表の写真">
+            <img src="{{ asset('/img/common/profile_1.png') }}" alt="代表の写真">
           </figure>
         </div>
         <div class="page-textarea">
