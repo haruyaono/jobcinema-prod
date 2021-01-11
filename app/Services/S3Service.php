@@ -44,7 +44,8 @@ class S3Service implements ObjectStorageInterface
             $identifier = getIdentifier((string) $i);
             if ($jobitem->{'job_mov_' . $i}) {
 
-                if (config('app.env') == 'production' || config('app.env') == 'stage') {
+//                if (config('app.env') == 'production' || config('app.env') == 'stage') {
+                if (false) {
                     $path = pathinfo($jobitem->{'job_mov_' . $i});
                     $filename = $path['filename'] . '_hls.m3u8';
                     if ($this->s3Client->doesObjectExist(config('app.bucket'), config('jobcinema.jobitem_movie_dir') . $jobitem->id . '/' . $identifier . '/' .  $filename)) {
