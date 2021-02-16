@@ -88,6 +88,11 @@ class JobItem extends Model
         return $this->hasMany(Apply::class);
     }
 
+    public function ads(): HasMany
+    {
+        return $this->hasMany(AdItem::class, 'job_item_id');
+    }
+
     public function existsCongratsMoney()
     {
         return $this->categories()->wherePivot('ancestor_slug', 'status')->first()->congratsMoney()->exists();

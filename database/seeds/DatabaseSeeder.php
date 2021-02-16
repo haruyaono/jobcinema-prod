@@ -35,6 +35,10 @@ class DatabaseSeeder extends Seeder
         $this->call(AchievementRewardTableSeeder::class);
         $this->call(CongratsMoneyTableSeeder::class);
         $this->call(AdminTableSeeder::class);
+        $this->call(EmployersTableSeeder::class);
+        $this->call(CompaniesTableSeeder::class);
+        $this->call(AdItemTableSeeder::class);
+        $this->call(JobItemTableSeeder::class);
 
         // factory(Profile::class, 20)->create();
         // factory(JobItem::class, 20)->create();

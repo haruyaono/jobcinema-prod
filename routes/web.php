@@ -187,7 +187,7 @@ Route::group(['prefix' => 'enterprise'], function () {
   });
 });
 
-Route::post('/dashboard/line_callback', 'Admin\LineController@callback');
+//Route::post('/dashboard/line_callback', 'Admin\LineController@callback');
 // 管理者
 Route::group(['prefix' => 'admin'], function () {
   Route::namespace('Admin')->group(function () {
@@ -203,11 +203,13 @@ Route::group(['prefix' => 'admin'], function () {
         'index'
       ]);
       Route::group(['prefix' => 'data'], function () {
+        Route::resource('ad_item', 'AdItemController');
         Route::resource('job_sheet', 'JobItemController')->except(['create', 'store', 'destroy']);
         Route::resource('application', 'ApplicationController')->except(['create', 'store', 'destroy']);
         Route::resource('reward', 'RewardController')->except(['create', 'store', 'destroy']);
         Route::resource('enterprise', 'EnterpriseController')->except(['create', 'store', 'destroy']);
       });
+      Route::get("ad_item/job_item/{company}", 'AdItemController@jobItem');
 
       Route::group(['prefix' => 'setting'], function () {
         Route::namespace('Setting')->group(function () {

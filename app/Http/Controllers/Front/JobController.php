@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Services\AdItemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use App\Models\JobItem;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
+  private $AdItemService;
   private $JobItem;
   private $JobItemService;
   private $S3Service;
@@ -22,12 +24,14 @@ class JobController extends Controller
   private $CategoryRepository;
 
   public function __construct(
+    AdItemService $AdItemService,
     JobItem $JobItem,
     JobItemService $jobItemService,
     S3Service $s3Service,
     JobItemSearchService $jobItemSearchService,
     CategoryRepository $categoryRepository
   ) {
+    $this->AdItemService = $AdItemService;
     $this->JobItem = $JobItem;
     $this->JobItemService = $jobItemService;
     $this->S3Service = $s3Service;
@@ -40,8 +44,9 @@ class JobController extends Controller
     $jobitems = $this->JobItem->activeJobitem()->get();
     $topNewJobs = $jobitems->sortBy('created_at')->take(3);
     $categories = $this->CategoryRepository->getCategories();
+    $adItems = json_encode($this->AdItemService->getCurrentItems(date("Y-m-d H:i:s")));
 
-    return view('front.index', compact('jobitems', 'topNewJobs', 'categories'));
+    return view('front.index', compact('jobitems', 'topNewJobs', 'categories', 'adItems'));
   }
 
   public function show(Request $request, JobItem $jobitem)

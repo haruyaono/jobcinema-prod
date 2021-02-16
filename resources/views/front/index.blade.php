@@ -10,7 +10,9 @@
 
 @section('contents')
 <div class="main-slider-wrap">
-	<slick-top></slick-top>
+	<slick-top
+		v-bind:ad-items='{{ $adItems }}'
+	></slick-top>
 </div>
 <div class="main-wrap">
 	<div class="only-pc">

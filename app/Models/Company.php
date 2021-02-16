@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AdItem;
 use App\Models\Employer;
 use App\Models\JobItem;
 use App\Traits\ExtendExplode;
@@ -30,6 +31,11 @@ class Company extends Model
     public function jobs(): HasMany
     {
         return $this->hasMany(JobItem::class, 'company_id');
+    }
+
+    public function ads(): HasMany
+    {
+        return $this->hasMany(AdItem::class, 'company_id');
     }
 
     public function employer(): belongsTo

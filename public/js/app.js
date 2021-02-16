@@ -2439,6 +2439,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 // vue-slickをインポート
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2446,6 +2451,11 @@ __webpack_require__.r(__webpack_exports__);
   name: 'v-slick-top',
   components: {
     Slick: vue_slick__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    adItems: {
+      type: Object
+    }
   },
   data: function data() {
     return {
@@ -39783,34 +39793,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("slick", { ref: "slick", attrs: { options: _vm.slickOptions } }, [
-    _c("a", { attrs: { href: "/beginners" } }, [
-      _c("img", {
-        attrs: {
-          src: "/img/common/jobcinema_hedd_sam4_aのコピー.png",
-          alt: "JOBCiNEMAとは"
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _c("a", { attrs: { href: "/lp", target: "_blank" } }, [
-      _c("img", {
-        attrs: {
-          src: "/img/common/jobcinema_hedd_sam5_aのコピー.png",
-          alt: "広告掲載企業募集について"
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _c("a", { attrs: { href: "/reward_request" } }, [
-      _c("img", {
-        attrs: {
-          src: "/img/common/jobcinema_hedd_sam6_aのコピー.png",
-          alt: "お祝い金申請について"
-        }
-      })
-    ])
-  ])
+  return _c(
+    "slick",
+    { ref: "slick", attrs: { options: _vm.slickOptions } },
+    _vm._l(_vm.adItems, function(adItem) {
+      return _c("div", [
+        _c("a", { attrs: { href: adItem.href } }, [
+          _c("img", { attrs: { src: adItem.src, alt: adItem.alt } })
+        ])
+      ])
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

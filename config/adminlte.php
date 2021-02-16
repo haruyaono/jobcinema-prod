@@ -247,6 +247,11 @@ return [
             'url'  => 'admin/data/job_sheet',
         ],
         [
+            'text' => '広告管理',
+            'icon' => 'nav-icon fas fa-ad',
+            'url' => 'admin/data/ad_item',
+        ],
+        [
             'text'    => '応募管理',
             'icon'    => 'nav-icon fas fa-tasks',
             'url'  => 'admin/data/application',
