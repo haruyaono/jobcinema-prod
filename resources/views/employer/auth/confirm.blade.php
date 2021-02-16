@@ -51,7 +51,7 @@
                 </tr>
                 <tr>
                   <th scope="row">ご担当者様のお名前</th>
-                  <td colspan="2">{{ Session::get('company_form.last_name') }} {{ Session::get('company_form.e_first_name') }}</td>
+                  <td colspan="2">{{ Session::get('company_form.last_name') }} {{ Session::get('company_form.first_name') }}</td>
                 </tr>
                 <tr>
                   <th scope="row">ご担当者様の電話番号</th>
