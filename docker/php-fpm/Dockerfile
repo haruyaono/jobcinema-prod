@@ -45,7 +45,6 @@ RUN php artisan config:clear
 RUN php artisan route:clear
 RUN php artisan view:clear
 RUN php artisan storage:link
-RUN php artisan queue:work
 
 ## Laravel Permission
 RUN chmod -R a+w storage/ bootstrap/cache
