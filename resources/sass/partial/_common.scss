@@ -625,6 +625,24 @@ input {
   line-height: 40px;
 }
 
+/* 常時表示広告 */
+.main-default-ad {
+  margin: auto;
+  width: 75%;
+  height: 300px;
+  .ad_item {
+    float: left;
+    margin-top: 25px;
+  }
+  .center {
+    margin-right: 40px;
+    margin-left: 40px;
+  }
+  .ad_def_img {
+    height: 250px;
+  }
+}
+
 /* モーダル tingle.js */
 .tingle-modal {
   padding: 40px;

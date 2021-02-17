@@ -14,6 +14,23 @@
 		v-bind:ad-items='{{ $adItems }}'
 	></slick-top>
 </div>
+<div class="main-default-ad">
+	<div class="ad_item">
+		<a href="/beginners">
+			<img class="ad_def_img" src="/img/common/jobcinema_hedd_sam4_aのコピー.png" alt="JOBCiNEMAとは"/>
+		</a>
+	</div>
+	<div class="ad_item center">
+		<a href="/lp">
+			<img class="ad_def_img" src="/img/common/jobcinema_hedd_sam5_aのコピー.png" alt="広告掲載企業募集について"/>
+		</a>
+	</div>
+	<div class="ad_item">
+		<a href="/reward_request">
+			<img class="ad_def_img" src="/img/common/jobcinema_hedd_sam6_aのコピー.png" alt="お祝い金申請について"/>
+		</a>
+	</div>
+</div>
 <div class="main-wrap">
 	<div class="only-pc">
 		<search-component></search-component>

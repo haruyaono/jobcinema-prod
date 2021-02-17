@@ -13568,6 +13568,28 @@ input {
   line-height: 40px;
 }
 
+/* 常時表示広告 */
+
+.main-default-ad {
+  margin: auto;
+  width: 75%;
+  height: 300px;
+}
+
+.main-default-ad .ad_item {
+  float: left;
+  margin-top: 25px;
+}
+
+.main-default-ad .center {
+  margin-right: 40px;
+  margin-left: 40px;
+}
+
+.main-default-ad .ad_def_img {
+  height: 250px;
+}
+
 /* モーダル tingle.js */
 
 .tingle-modal {
