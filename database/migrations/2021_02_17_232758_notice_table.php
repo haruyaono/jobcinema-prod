@@ -13,7 +13,15 @@ class NoticeTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('notice', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string("subject");
+            $table->text("content");
+            $table->string("target");
+            $table->boolean("is_delivered");
+            $table->timestamp("delivered_at")->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +31,6 @@ class NoticeTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('notice');
     }
 }
