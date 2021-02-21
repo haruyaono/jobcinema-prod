@@ -77,6 +77,9 @@ Route::group(['middleware' => 'auth:seeker', 'prefix' => 'mypage', 'namespace' =
   Route::get('change_email', 'UserController@getChangeEmail')->name('seeker.mypage.changeemail.get');
   Route::post('change_email', 'UserController@postChangeEmail')->name('seeker.mypage.changeemail.post');
 
+  Route::get('notice', 'NoticeController@index')->name('seeker.index.notice');
+  Route::get('notice/{notice}', 'NoticeController@show')->name('seeker.show.notice');
+
   Route::delete('delete', 'UserController@delete')->name('seeker.delete');
 });
 
