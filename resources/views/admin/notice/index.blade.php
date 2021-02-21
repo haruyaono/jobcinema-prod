@@ -39,7 +39,7 @@
                                 <tr>
                                     <td>{{ $notice->id }}</td>
                                     <td>{{ $notice->subject }}</td>
-                                    <td>{{ $notice->content }}</td>
+                                    <td><p style="white-space: pre-wrap;">{{ $notice->content }}</p></td>
                                     <td>{{ $notice->target }}</td>
                                     <td>@if($notice->is_delivered)配信中@else未配信@endif</td>
                                     <td class="project-actions text-right">
