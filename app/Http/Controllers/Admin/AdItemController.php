@@ -95,7 +95,8 @@ class AdItemController
         return response()->json([
             'message' => $message,
             'status' => $status,
-        ]);}
+        ]);
+    }
 
     public function jobItem($company)
     {

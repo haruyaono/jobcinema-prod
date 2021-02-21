@@ -204,6 +204,7 @@ Route::group(['prefix' => 'admin'], function () {
       ]);
       Route::group(['prefix' => 'data'], function () {
         Route::resource('ad_item', 'AdItemController');
+        Route::resource('notice', 'NoticeController');
         Route::resource('job_sheet', 'JobItemController')->except(['create', 'store', 'destroy']);
         Route::resource('application', 'ApplicationController')->except(['create', 'store', 'destroy']);
         Route::resource('reward', 'RewardController')->except(['create', 'store', 'destroy']);
