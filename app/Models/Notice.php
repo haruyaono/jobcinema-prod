@@ -16,7 +16,6 @@ class Notice extends Model
     ];
 
     protected $dates = [
-        'delivered_at',
         'created_at',
         'updated_at',
     ];

@@ -19,7 +19,6 @@ class NoticeTable extends Migration
             $table->text("content");
             $table->string("target");
             $table->boolean("is_delivered");
-            $table->timestamp("delivered_at")->nullable();
             $table->timestamps();
         });
     }
