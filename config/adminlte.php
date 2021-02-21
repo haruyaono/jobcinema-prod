@@ -243,8 +243,8 @@ return [
         ],
         [
             'text'        => 'お知らせ管理',
-            'url'         => '#',
             'icon'        => 'nav-icon fas fa-bell',
+            'url'         => 'admin/data/notice',
         ],
         [
             'text'    => '求人票テーブル',
