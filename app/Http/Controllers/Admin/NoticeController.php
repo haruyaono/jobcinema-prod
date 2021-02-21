@@ -6,22 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Notice\StoreNoticeRequest;
 use App\Http\Requests\Admin\Notice\UpdateNoticeRequest;
 use App\Models\Notice;
-use App\Services\NoticeService;
-use App\Services\NoticeReadService;
 use Illuminate\Support\Arr;
 
 class NoticeController extends Controller
 {
-    private $NoticeService;
-    private $NoticeReadService;
-
-    public function __construct(
-        NoticeService $noticeService,
-        NoticeReadService $noticeReadService
-    ) {
-        $this->NoticeService = $noticeService;
-        $this->NoticeReadService = $noticeReadService;
-    }
+    public function __construct() {}
 
     public function index()
     {
