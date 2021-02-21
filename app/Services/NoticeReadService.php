@@ -22,7 +22,7 @@ class NoticeReadService
     }
 
     public function readCompany(int $cid, int $nid) {
-        Notice::create([
+        NoticeRead::create([
             'notice_id' => $nid,
             'company_id' => $cid,
         ]);
@@ -40,7 +40,7 @@ class NoticeReadService
     }
 
     public function readUser(int $uid, int $nid) {
-        Notice::create([
+        NoticeRead::create([
             'notice_id' => $nid,
             'user_id' => $uid,
         ]);

@@ -46,7 +46,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <a class="floatL" href="{{ route('enterprise.show.notice', ['notice' => $notice->id]) }}">{{ $notice->subject }}</a>
-                                                <div class="floatR alignright">未読</div>
+                                                @if(!$nrs->isReadCompany($cid, $notice->id))
+                                                    <div class="floatR alignright">未読</div>
+                                                @endif
                                             </div>
                                         </div>
                                     @endforeach
