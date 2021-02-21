@@ -162,6 +162,10 @@ Route::group(['prefix' => 'enterprise'], function () {
       Route::get('joblist', 'JobItemController@index')->name('enterprise.index.joblist');
       Route::get('joblist/{jobitem}', 'JobItemController@show')->name('enterprise.show.joblist.detail');
 
+      // お知らせ
+      Route::get('notice', 'NoticeController@index')->name('enterprise.index.notice');
+      Route::get('notice/{notice}', 'NoticeController@show')->name('enterprise.show.notice');
+
       // ステータス変更
       Route::get('joblist/job/apply_cancel/{jobitem}', 'JobItemStatusController@editStatusApplyCancel')->name('enterprise.edit.jobsheet.status.apply_cancel');
       Route::put('joblist/job/apply_cancel/{jobitem}', 'JobItemStatusController@updateStatus')->name('enterprise.update.jobsheet.status.apply_cancel');
