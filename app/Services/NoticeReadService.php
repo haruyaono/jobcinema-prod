@@ -10,8 +10,10 @@ class NoticeReadService
 {
     public function __construct() {}
 
-    public function unreadCount(int $cid): int {
-
+    public function unreadCountCompany(int $cid): int {
+        $nowNoticeCount = Notice::where("is_delivered", true)->where("target", "全体")->orWhere("target", "企業")->count();
+        $readCount = NoticeRead::where("company_id", $cid)->count();
+        return $nowNoticeCount - $readCount;
     }
 
     public function isReadCompany(int $cid, int $nid): bool {
@@ -24,6 +26,12 @@ class NoticeReadService
             'notice_id' => $nid,
             'company_id' => $cid,
         ]);
+    }
+
+    public function unreadCountUser(int $uid): int {
+        $nowNoticeCount = Notice::where("is_delivered", true)->where("target", "全体")->orWhere("target", "応募者")->count();
+        $readCount = NoticeRead::where("user_id", $uid)->count();
+        return $nowNoticeCount - $readCount;
     }
 
     public function isReadUser(int $uid, int $nid): bool {
