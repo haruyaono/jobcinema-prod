@@ -77,6 +77,9 @@ Route::group(['middleware' => 'auth:seeker', 'prefix' => 'mypage', 'namespace' =
   Route::get('change_email', 'UserController@getChangeEmail')->name('seeker.mypage.changeemail.get');
   Route::post('change_email', 'UserController@postChangeEmail')->name('seeker.mypage.changeemail.post');
 
+  Route::get('notice', 'NoticeController@index')->name('seeker.index.notice');
+  Route::get('notice/{notice}', 'NoticeController@show')->name('seeker.show.notice');
+
   Route::delete('delete', 'UserController@delete')->name('seeker.delete');
 });
 
@@ -162,6 +165,10 @@ Route::group(['prefix' => 'enterprise'], function () {
       Route::get('joblist', 'JobItemController@index')->name('enterprise.index.joblist');
       Route::get('joblist/{jobitem}', 'JobItemController@show')->name('enterprise.show.joblist.detail');
 
+      // お知らせ
+      Route::get('notice', 'NoticeController@index')->name('enterprise.index.notice');
+      Route::get('notice/{notice}', 'NoticeController@show')->name('enterprise.show.notice');
+
       // ステータス変更
       Route::get('joblist/job/apply_cancel/{jobitem}', 'JobItemStatusController@editStatusApplyCancel')->name('enterprise.edit.jobsheet.status.apply_cancel');
       Route::put('joblist/job/apply_cancel/{jobitem}', 'JobItemStatusController@updateStatus')->name('enterprise.update.jobsheet.status.apply_cancel');
@@ -204,6 +211,7 @@ Route::group(['prefix' => 'admin'], function () {
       ]);
       Route::group(['prefix' => 'data'], function () {
         Route::resource('ad_item', 'AdItemController');
+        Route::resource('notice', 'NoticeController');
         Route::resource('job_sheet', 'JobItemController')->except(['create', 'store', 'destroy']);
         Route::resource('application', 'ApplicationController')->except(['create', 'store', 'destroy']);
         Route::resource('reward', 'RewardController')->except(['create', 'store', 'destroy']);

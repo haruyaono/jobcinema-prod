@@ -242,6 +242,11 @@ return [
             'icon'        => 'nav-icon fas fa-tachometer-alt',
         ],
         [
+            'text'        => 'お知らせ管理',
+            'icon'        => 'nav-icon fas fa-bell',
+            'url'         => 'admin/data/notice',
+        ],
+        [
             'text'    => '求人票テーブル',
             'icon'    => 'nav-icon fas fa-book',
             'url'  => 'admin/data/job_sheet',

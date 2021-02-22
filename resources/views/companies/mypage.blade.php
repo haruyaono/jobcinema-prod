@@ -33,6 +33,9 @@
                             <a href="{{ route('enterprise.index.joblist') }}"><i class="fas fa-edit mr-3"></i>求人票の作成・確認<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">
+                            <a href="{{ route('enterprise.index.notice') }}"><i class="fas fa-bell mr-3"></i>お知らせを見る<i class="fas fa-angle-double-right"></i></a>
+                        </div>
+                        <div class="e-mypage-card-item">
                             <a href="{{ route('enterprise.index.application') }}"><i class="fas fa-address-card mr-3"></i>応募者を見る<i class="fas fa-angle-double-right"></i></a>
                         </div>
                         <div class="e-mypage-card-item">

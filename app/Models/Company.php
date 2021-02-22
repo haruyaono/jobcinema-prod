@@ -28,6 +28,10 @@ class Company extends Model
      */
     protected $hidden = [];
 
+    public function readNotice(): HasMany {
+        return $this->hasMany(NoticeRead::class, 'company_id');
+    }
+
     public function jobs(): HasMany
     {
         return $this->hasMany(JobItem::class, 'company_id');

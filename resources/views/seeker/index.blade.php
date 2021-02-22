@@ -12,7 +12,6 @@
 <!-- パンくず -->
 <div id="breadcrumb" class="bread only-pc">
     <ol>
-        </li>
         <li>
             マイページ
         </li>
@@ -35,10 +34,10 @@
                     <div class="mypage-btn-list-wrap">
                         <ul class="mypage-btn-list-inner">
                             <li>
-                                <a class="btn-gray" href="{{ route('seeker.index.job') }}">応募管理</a>
+                                <a class="btn-gray" href="{{ route('seeker.index.notice') }}">お知らせ確認</a>
                             </li>
                             <li>
-                                <a class="btn-gray" href="{{ route('seeker.edit.profile') }}">会員情報編集</a>
+                                <a class="btn-gray" href="{{ route('seeker.index.job') }}">応募管理</a>
                             </li>
                         </ul>
                         <ul class="mypage-btn-list-inner">
@@ -46,13 +45,18 @@
                                 <a class="btn-gray" href="{{ route('seeker.edit.career') }}">現在の状況・希望編集</a>
                             </li>
                             <li>
-                                <a class="btn-gray" href="{{ route('seeker.mypage.changepassword.get') }}">パスワード変更</a>
+                                <a class="btn-gray" href="{{ route('seeker.edit.profile') }}">会員情報編集</a>
                             </li>
                         </ul>
                         <ul class="mypage-btn-list-inner">
                             <li>
                                 <a class="btn-gray" href="{{ route('seeker.mypage.changeemail.get') }}">メールアドレス変更</a>
                             </li>
+                            <li>
+                                <a class="btn-gray" href="{{ route('seeker.mypage.changepassword.get') }}">パスワード変更</a>
+                            </li>
+                        </ul>
+                        <ul class="mypage-btn-list-inner">
                             @if($user)
                             <li>
                                 <a class="btn-gray" href="{{ route('seeker.logout') }}" onclick="event.preventDefault();
