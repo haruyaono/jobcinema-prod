@@ -13,7 +13,7 @@ class JobItemCategoryTableSeeder extends Seeder
     public function run()
     {
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 5,
             'ancestor_id' => 1,
             'ancestor_slug' => 'status',
@@ -21,7 +21,7 @@ class JobItemCategoryTableSeeder extends Seeder
             'parent_slug' => NULL
         ]);
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 17,
             'ancestor_id' => 7,
             'ancestor_slug' => 'type',
@@ -29,7 +29,7 @@ class JobItemCategoryTableSeeder extends Seeder
             'parent_slug' => NULL
         ]);
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 40,
             'ancestor_id' => 25,
             'ancestor_slug' => 'area',
@@ -37,7 +37,7 @@ class JobItemCategoryTableSeeder extends Seeder
             'parent_slug' => NULL
         ]);
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 51,
             'ancestor_id' => 49,
             'ancestor_slug' => 'salary',
@@ -45,7 +45,7 @@ class JobItemCategoryTableSeeder extends Seeder
             'parent_slug' => 'salary_h'
         ]);
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 65,
             'ancestor_id' => 49,
             'ancestor_slug' => 'salary',
@@ -53,7 +53,7 @@ class JobItemCategoryTableSeeder extends Seeder
             'parent_slug' => 'salary_d'
         ]);
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 88,
             'ancestor_id' => 49,
             'ancestor_slug' => 'salary',
@@ -61,7 +61,7 @@ class JobItemCategoryTableSeeder extends Seeder
             'parent_slug' => 'salary_m'
         ]);
         JobItemCategory::create([
-            'job_item_id' => 2,
+            'job_item_id' => 1,
             'category_id' => 94,
             'ancestor_id' => 89,
             'ancestor_slug' => 'date',
