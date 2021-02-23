@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
         $this->call(JobItemTableSeeder::class);
         $this->call(NoticeTableSeeder::class);
         $this->call(NoticeReadTableSeeder::class);
+        $this->call(JobItemCategoryTableSeeder::class);
 
         // factory(Profile::class, 20)->create();
         // factory(JobItem::class, 20)->create();
