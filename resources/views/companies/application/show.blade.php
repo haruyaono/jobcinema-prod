@@ -120,6 +120,7 @@
                     </table>
                 </div>
 
+                @if($apply->recruitment_status == 1)
                 <div class="sectionItemTtl">
                     <p>採用処理</p>
                 </div>
@@ -130,6 +131,7 @@
                         <a href="{{ route('enterprise.show.application.report', [$apply, 'type' => 'decline']) }}" class="companyBtn companyBtnCyan">辞退</a>
                     </div>
                 </div>
+                @endif
 
                 <div class="text-center mt-5">
                     <a class="btn back-btn" href="#" onclick="javascript:window.history.back(-1);return false;"><i class="fas fa-reply mr-3"></i>前に戻る</a>

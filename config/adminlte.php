@@ -271,6 +271,11 @@ return [
             'icon'    => 'nav-icon fas fa-building',
             'url'  => 'admin/data/enterprise',
         ],
+        [
+            'text'    => '成果報酬管理',
+            'icon'    => 'nav-icon fas fa-money-check-alt',
+            'url'  => 'admin/data/achieve_reward',
+        ],
         // [
         //     'text'    => 'メールチェック',
         //     'icon'    => 'nav-icon fas fa-envelope',

@@ -181,6 +181,7 @@ Route::group(['prefix' => 'enterprise'], function () {
       Route::get('applications/{apply}/report', 'ApplicationController@showReportForm')->name('enterprise.show.application.report');
       Route::put('applications/{apply}/report', 'ApplicationController@updateReport')->name('enterprise.update.application.report');
       Route::get('applications/index/unadopt_decline', 'ApplicationController@getUnadoptOrDecline')->name('enterprise.get.application.unadopt_or_decline');
+      Route::get('applications/pay/reward', 'ApplicationController@payReward')->name('enterprise.update.application.pay_reward');
       #会社・企業
       Route::get('mypage', 'CompanyController@index')->name('enterprise.index.mypage');
       Route::get('edit', 'CompanyController@edit')->name('enterprise.edit.profile');
