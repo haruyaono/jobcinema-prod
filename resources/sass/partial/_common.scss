@@ -628,18 +628,21 @@ input {
 /* 常時表示広告 */
 .main-default-ad {
   margin: auto;
-  width: 75%;
-  height: 300px;
+  width: 90vw;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .ad_item {
     float: left;
-    margin-top: 25px;
+    width: 30%;
   }
   .center {
-    margin-right: 40px;
-    margin-left: 40px;
+    margin-right: 5%;
+    margin-left: 5%;
   }
   .ad_def_img {
-    height: 250px;
+    width: 100%;
   }
 }
 
@@ -1575,6 +1578,13 @@ input {
 .td-only-sp {
   display: none;
 }
+
+@media (max-width: 1295px) {
+  .main-default-ad {
+    display: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   .only-pc,
   .ib-only-pc,

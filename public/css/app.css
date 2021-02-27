@@ -13572,22 +13572,25 @@ input {
 
 .main-default-ad {
   margin: auto;
-  width: 75%;
-  height: 300px;
+  width: 90vw;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .main-default-ad .ad_item {
   float: left;
-  margin-top: 25px;
+  width: 30%;
 }
 
 .main-default-ad .center {
-  margin-right: 40px;
-  margin-left: 40px;
+  margin-right: 5%;
+  margin-left: 5%;
 }
 
 .main-default-ad .ad_def_img {
-  height: 250px;
+  width: 100%;
 }
 
 /* モーダル tingle.js */
@@ -14640,6 +14643,12 @@ input {
 .tr-only-sp,
 .td-only-sp {
   display: none;
+}
+
+@media (max-width: 1295px) {
+  .main-default-ad {
+    display: none !important;
+  }
 }
 
 @media (max-width: 768px) {
