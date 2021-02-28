@@ -62,6 +62,11 @@ class Apply extends Model
         return $this->hasOne(RewardBilling::class);
     }
 
+    public function achieve_reward(): HasOne
+    {
+        return $this->hasOne(AchieveRewardBilling::class);
+    }
+
     public function getIsWithinHalfYearAttribute(): bool
     {
         $before6month = date("Y-m-d H:i:s", strtotime("-6 month"));

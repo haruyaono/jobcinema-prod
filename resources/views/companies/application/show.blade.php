@@ -120,6 +120,7 @@
                     </table>
                 </div>
 
+                @if($apply->recruitment_status == 1)
                 <div class="sectionItemTtl">
                     <p>採用処理</p>
                 </div>
@@ -130,6 +131,42 @@
                         <a href="{{ route('enterprise.show.application.report', [$apply, 'type' => 'decline']) }}" class="companyBtn companyBtnCyan">辞退</a>
                     </div>
                 </div>
+                @elseif($apply->recruitment_status == 2 && !$apply->achieve_reward->is_payed)
+                <div class="sectionItemTtl">
+                    <p>成果報酬振り込み先</p>
+                </div>
+                <div class="sectionItem">
+                    <table class="table companyTable companyApplyItemTable">
+                        <tr>
+                            <th>銀行名</th>
+                            <td>○○銀行</td>
+                        </tr>
+                        <tr>
+                            <th>銀行コード</th>
+                            <td>0123</td>
+                        </tr>
+                        <tr>
+                            <th>支店名</th>
+                            <td>☓☓支店</td>
+                        </tr>
+                        <tr>
+                            <th>支店コード</th>
+                            <td>012</td>
+                        </tr>
+                        <tr>
+                            <th>口座名義</th>
+                            <td>ド）リブロース</td>
+                        </tr>
+                        <tr>
+                            <th>振り込み金額</th>
+                            <td>{{ number_format($apply->recruitment_fee) }} 円</td>
+                        </tr>
+                    </table>
+                    <div class="companyBtnWrap">
+                        <a href="{{ route('enterprise.update.application.achieve_reward', ['apply' => $apply]) }}" class="companyBtn companyBtnOrange">振り込みました</a>
+                    </div>
+                </div>
+                @endif
 
                 <div class="text-center mt-5">
                     <a class="btn back-btn" href="#" onclick="javascript:window.history.back(-1);return false;"><i class="fas fa-reply mr-3"></i>前に戻る</a>
