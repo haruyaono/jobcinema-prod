@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\RecruitmentRequestMail;
 use Illuminate\Console\Command;
 use App\Models\Apply;
+use Illuminate\Support\Facades\Mail;
 
 class RecruitmentRequestBatch extends Command
 {
@@ -41,8 +43,8 @@ class RecruitmentRequestBatch extends Command
         $applies = new Apply();
         $over59nonRec = $applies->where("recruitment_status", 1)->where("updated_at", "<=", date("Y-m-d H:i:s",strtotime("-59 day")))->get();
         foreach ($over59nonRec as $item) {
-            $address = $item->company->employer->email;
-
+            $user = $item->company->employer;
+            Mail::to($user)->queue(new RecruitmentRequestMail($user));
         }
         return 0;
     }
