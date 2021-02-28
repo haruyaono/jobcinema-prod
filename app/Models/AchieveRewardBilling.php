@@ -20,4 +20,8 @@ class AchieveRewardBilling extends Model
         'updated_at',
     ];
 
+    public function apply()
+    {
+        return $this->belongsTo(Apply::class);
+    }
 }

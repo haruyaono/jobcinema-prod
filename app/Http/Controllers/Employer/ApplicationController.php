@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Employer;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Apply;
+use App\Models\AchieveRewardBilling;
 use App\Services\JobItemService;
 use App\Services\S3Service;
 use App\Repositories\CategoryRepository;
@@ -22,6 +23,7 @@ class ApplicationController extends Controller
   private $S3Service;
   private $CategoryRepository;
   private $applyRepository;
+  private $achieveRewardBilling;
 
   /**
    * ApplicationController constructor.
@@ -30,12 +32,14 @@ class ApplicationController extends Controller
     JobItemService $jobItemService,
     S3Service $s3Service,
     ApplyRepository $applyRepository,
-    CategoryRepository $categoryRepository
+    CategoryRepository $categoryRepository,
+    AchieveRewardBilling $achieveRewardBilling
   ) {
     $this->JobItemService = $jobItemService;
     $this->S3Service = $s3Service;
     $this->CategoryRepository = $categoryRepository;
     $this->applyRepository = $applyRepository;
+    $this->achieveRewardBilling = $achieveRewardBilling;
 
     $this->middleware(function ($request, $next) {
       $this->employer = \Auth::user('employer');
@@ -127,6 +131,12 @@ class ApplicationController extends Controller
       ];
       $flag = 'adopt';
       $message = '採用を決定しました';
+      if( $this->achieveRewardBilling->where("apply_id", $apply->id)->count() == 0 ) {
+          $this->achieveRewardBilling->create([
+              'apply_id' => $apply->id,
+              'is_payed' => false
+          ]);
+      }
     } elseif ($pushed == 'SaveUnAdoptStatus') {
       $data = [
         'e_recruit_status' => 2,
@@ -153,6 +163,13 @@ class ApplicationController extends Controller
     }
 
     return redirect()->back()->with('flash_message_success', $message);
+  }
+
+  public function updateAchieveReward(Apply $apply)
+  {
+      $reward = $this->achieveRewardBilling->where("apply_id", $apply->id)->first();
+      $reward->update(['is_payed' => true, 'payed_at' => date("Y-m-d H:i:s")]);
+      return redirect()->back()->with('flash_message_success', '成果報酬を支払い済みに変更しました。');
   }
 
   public function getUnadoptOrDecline()
