@@ -131,41 +131,62 @@
                         <a href="{{ route('enterprise.show.application.report', [$apply, 'type' => 'decline']) }}" class="companyBtn companyBtnCyan">辞退</a>
                     </div>
                 </div>
-                @elseif($apply->recruitment_status == 2 && !$apply->achieve_reward->is_payed)
-                <div class="sectionItemTtl">
-                    <p>成果報酬振り込み先</p>
-                </div>
-                <div class="sectionItem">
-                    <table class="table companyTable companyApplyItemTable">
-                        <tr>
-                            <th>銀行名</th>
-                            <td>○○銀行</td>
-                        </tr>
-                        <tr>
-                            <th>銀行コード</th>
-                            <td>0123</td>
-                        </tr>
-                        <tr>
-                            <th>支店名</th>
-                            <td>☓☓支店</td>
-                        </tr>
-                        <tr>
-                            <th>支店コード</th>
-                            <td>012</td>
-                        </tr>
-                        <tr>
-                            <th>口座名義</th>
-                            <td>ド）リブロース</td>
-                        </tr>
-                        <tr>
-                            <th>振り込み金額</th>
-                            <td>{{ number_format($apply->recruitment_fee) }} 円</td>
-                        </tr>
-                    </table>
-                    <div class="companyBtnWrap">
-                        <a href="{{ route('enterprise.update.application.achieve_reward', ['apply' => $apply]) }}" class="companyBtn companyBtnOrange">振り込みました</a>
+                @elseif($apply->recruitment_status == 2)
+                    @if($apply->achieve_reward->is_payed)
+                        @if(strtotime(date("Y-m-d",strtotime($apply->recruit_confirm . "+30 day"))) >= strtotime(date("Y-m-d")))
+                        <div class="sectionItemTtl">
+                            <p>成果報酬返金依頼</p>
+                        </div>
+                        <div class="sectionItem">
+                            <div class="companyBtnWrap">
+                                @if($apply->achieve_reward->is_return_requested == 1)
+                                    @if($apply->achieve_reward->is_returned == 1)
+                                    <p>返金済み</p>
+                                    @else
+                                    <p>返金依頼済み</p>
+                                    @endif
+                                @else
+                                <a href="{{ route('enterprise.update.application.achieve_reward_rev', ['apply' => $apply]) }}" class="companyBtn companyBtnOrange">返金依頼</a>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                    @else
+                    <div class="sectionItemTtl">
+                        <p>成果報酬振り込み先</p>
                     </div>
-                </div>
+                    <div class="sectionItem">
+                        <table class="table companyTable companyApplyItemTable">
+                            <tr>
+                                <th>銀行名</th>
+                                <td>○○銀行</td>
+                            </tr>
+                            <tr>
+                                <th>銀行コード</th>
+                                <td>0123</td>
+                            </tr>
+                            <tr>
+                                <th>支店名</th>
+                                <td>☓☓支店</td>
+                            </tr>
+                            <tr>
+                                <th>支店コード</th>
+                                <td>012</td>
+                            </tr>
+                            <tr>
+                                <th>口座名義</th>
+                                <td>ド）リブロース</td>
+                            </tr>
+                            <tr>
+                                <th>振り込み金額</th>
+                                <td>{{ number_format($apply->recruitment_fee) }} 円</td>
+                            </tr>
+                        </table>
+                        <div class="companyBtnWrap">
+                            <a href="{{ route('enterprise.update.application.achieve_reward', ['apply' => $apply]) }}" class="companyBtn companyBtnOrange">振り込みました</a>
+                        </div>
+                    </div>
+                    @endif
                 @endif
 
                 <div class="text-center mt-5">

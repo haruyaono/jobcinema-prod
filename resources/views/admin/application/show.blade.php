@@ -100,6 +100,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <label class="col-sm-2 text-sm-right">採用確定日</label>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <p>{{ $apply->recruit_confirm ?: '未確定' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 text-sm-right">面接予定日</label>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <p>{{ $apply->interview ?: '未確定' }}</p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="row">
                                 <label class="col-sm-2 text-sm-right">お祝い金フラグ</label>

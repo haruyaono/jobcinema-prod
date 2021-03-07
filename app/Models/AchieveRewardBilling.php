@@ -12,10 +12,14 @@ class AchieveRewardBilling extends Model
         'apply_id',
         'is_payed',
         'payed_at',
+        'is_return_requested',
+        'return_requested_at',
+        'is_returned',
     ];
 
     protected $dates = [
         'payed_at',
+        'return_requested_at',
         'created_at',
         'updated_at',
     ];

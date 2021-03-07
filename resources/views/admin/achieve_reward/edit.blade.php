@@ -87,6 +87,59 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-2 text-sm-right">支払い</label>
+                                    <div class="col-1">
+                                        <div class="input-group">
+                                            <input name="data[AchieveReward][is_payed]" type="hidden" value="0">
+                                            <input name="data[AchieveReward][is_payed]" type="checkbox" class="form-control" value="1" @if($achieve_reward->is_payed) checked @endif >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-2 text-sm-right">支払い日</label>
+                                    <div class="col-sm-2">
+                                        <div class="input-group">
+                                            <input name="data[AchieveReward][payed_at]" type="date" class="form-control" value="{{ substr($achieve_reward->payed_at, 0, 10) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-2 text-sm-right">返金依頼</label>
+                                    <div class="col-1">
+                                        <div class="input-group">
+                                            <input name="data[AchieveReward][is_return_requested]" type="hidden" value="0">
+                                            <input name="data[AchieveReward][is_return_requested]" type="checkbox" class="form-control" value="1" @if($achieve_reward->is_return_requested) checked @endif >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-2 text-sm-right">返金依頼日</label>
+                                    <div class="col-sm-2">
+                                        <div class="input-group">
+                                            <input name="data[AchieveReward][return_requested_at]" type="date" class="form-control" value="{{ substr($achieve_reward->return_requested_at, 0, 10) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-2 text-sm-right">返金処理を行ったらチェックを入れてください</label>
+                                    <div class="col-1">
+                                        <div class="input-group">
+                                            <input name="data[AchieveReward][is_returned]" type="hidden" value="0">
+                                            <input name="data[AchieveReward][is_returned]" type="checkbox" class="form-control" value="1" @if($achieve_reward->is_returned) checked @endif >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-2">
                                 </div>

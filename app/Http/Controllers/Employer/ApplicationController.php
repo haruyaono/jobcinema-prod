@@ -128,6 +128,7 @@ class ApplicationController extends Controller
         'e_nofirst_attendance' => $input['e_nofirst_attendance'],
         'e_recruit_status' => 1,
         'recruitment_status' => 2,
+        'recruit_confirm' => date("Y-m-d"),
       ];
       $flag = 'adopt';
       $message = '採用を決定しました';
@@ -162,14 +163,21 @@ class ApplicationController extends Controller
       Mail::to($apply->user->email)->queue(new ApplyReport($apply, $flag, $mail));
     }
 
-    return redirect()->back()->with('flash_message_success', $message);
+    return view('companies.application.show', compact('apply'))->with('flash_message_success', $message);
   }
 
   public function updateAchieveReward(Apply $apply)
   {
       $reward = $this->achieveRewardBilling->where("apply_id", $apply->id)->first();
       $reward->update(['is_payed' => true, 'payed_at' => date("Y-m-d H:i:s")]);
-      return redirect()->back()->with('flash_message_success', '成果報酬を支払い済みに変更しました。');
+      return view('companies.application.show', compact('apply'))->with('flash_message_success', '成果報酬を支払い済みに変更しました。');
+  }
+
+  public function updateAchieveRewardRev(Apply $apply)
+  {
+      $reward = $this->achieveRewardBilling->where("apply_id", $apply->id)->first();
+      $reward->update(['is_return_requested' => true, 'return_requested_at' => date("Y-m-d H:i:s")]);
+      return view('companies.application.show', compact('apply'))->with('flash_message_success', '成果報酬返金を依頼しました。');
   }
 
   public function getUnadoptOrDecline()

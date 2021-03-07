@@ -77,6 +77,30 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">返金依頼</label>
+                                <div class="col-sm-8">
+                                    @if($achieve_reward->is_return_requested) 受付 @else 無し @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">返金依頼日</label>
+                                <div class="col-sm-8">
+                                    {{ ($achieve_reward->return_requested_at == null)?"無し" :$achieve_reward->return_requested_at->toDateString() }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">返金処理</label>
+                                <div class="col-sm-8">
+                                    @if($achieve_reward->is_returned) 済み @else 無し @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

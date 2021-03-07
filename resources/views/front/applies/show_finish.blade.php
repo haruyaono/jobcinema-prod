@@ -20,8 +20,10 @@
         <section class="apply-after-job-info">
           <h2>応募先：{{$jobitem->job_office}}</h2>
           <div class="apply-after-sub">
+            <p>次のステップは、面接日の確定です。</p>
+            <p>下記採用窓口へ電話をかけ、企業と面接日の確定を行ってください。</p>
+            <p>確定後、MYページにある「応募管理」画面から、面接日を入力してください。</p>
             <p>MYページは<a href="{{ route('seeker.index.mypage') }}" class="txt-blue-link">こちら</a>です。</p>
-            <p>「応募後の流れ」は応募管理からも確認できます。</p>
           </div>
           <table>
             <tr>

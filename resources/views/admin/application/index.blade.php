@@ -159,6 +159,8 @@
                             <th class>企業ステータス</th>
                             <th>初出社日(応募者)</th>
                             <th>初出社日(企業)</th>
+                            <th>採用確定日</th>
+                            <th>面接日</th>
                             <th class="nosort">操作</th>
                         </tr>
                     </thead>
@@ -174,6 +176,8 @@
                             <td>{{ config('const.RECRUITMENT_STATUS.' . $apply->e_recruit_status) }}</td>
                             <td>{{ $apply->s_first_attendance }}</td>
                             <td>{{ $apply->e_first_attendance }}</td>
+                            <td>{{ $apply->recruit_confirm ?: '未確定' }}</td>
+                            <td>{{ $apply->interview ?: '未確定' }}</td>
                             <td class="project-actions text-right">
                                 <a class="btn btn-primary btn-sm" href="{{ route('application.show', $apply->id) }}">
                                     <i class="fas fa-eye">
