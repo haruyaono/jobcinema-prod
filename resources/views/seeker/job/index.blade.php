@@ -110,6 +110,9 @@
                                 <p class="mb-3"><a href="{{ route('show.front.job_sheet.detail', [$apply->jobitem]) }}">詳細を見る</a></p>
                                 @if($apply->s_recruit_status === 0 )
                                 <p><a href="{{ route('seeker.show.job', [$apply]) }}" class="btn btn-yellow">結果を報告</a></p>
+                                @if($apply->interview == NULL)
+                                <p><a href="{{ route('seeker.show.job_interview', [$apply]) }}" class="btn btn-yellow">面接日を設定</a></p>
+                                @endif
                                 <p>
                                     <a id="SaveReportDeclineCancel" href="javascript:void(0)" class="btn btn-secondary jobapp-cancel-btn">選考を辞退</a>
                                     <form id="seeker-apply-report-decline-form" action="{{ route('seeker.update.report', [$apply]) }}" method="POST" style="display: none;">

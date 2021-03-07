@@ -19,6 +19,9 @@ class AchieveRewardBillingTable extends Migration
             $table->foreign('apply_id')->references('id')->on('applies');
             $table->boolean('is_payed')->nullable();
             $table->timestamp('payed_at')->nullable();
+            $table->boolean('is_return_requested')->nullable();
+            $table->timestamp('return_requested_at')->nullable();
+            $table->boolean('is_returned')->nullable();
             $table->timestamps();
         });
     }

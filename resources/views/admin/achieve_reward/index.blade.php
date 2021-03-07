@@ -22,6 +22,9 @@
                             <th>応募</th>
                             <th>支払い</th>
                             <th>支払日</th>
+                            <th>返金依頼</th>
+                            <th>返金依頼日</th>
+                            <th>返金処理</th>
                             <th>登録日</th>
                             <th>更新日</th>
                             <th class="nosort">操作</th>
@@ -35,6 +38,9 @@
                                     <td><a href="/admin/data/application/{{ $achieve_reward->apply_id }}">{{ $achieve_reward->apply_id }}</a></td>
                                     <td> @if($achieve_reward->is_payed) 支払い済み @else 未払い @endif </td>
                                     <td>{{ ($achieve_reward->payed_at == null)?"未払い" :$achieve_reward->payed_at->toDateString() }}</td>
+                                    <td> @if($achieve_reward->is_return_requested) 受付 @else 無し @endif </td>
+                                    <td>{{ ($achieve_reward->return_requested_at == null)?"無し" :$achieve_reward->return_requested_at->toDateString() }}</td>
+                                    <td> @if($achieve_reward->is_returned) 済み @else 無し @endif </td>
                                     <td>{{ $achieve_reward->created_at->toDateString() }}</td>
                                     <td>{{ $achieve_reward->updated_at->toDateString() }}</td>
                                     <td class="project-actions text-right">

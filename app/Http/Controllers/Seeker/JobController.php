@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Seeker;
 
+use App\Http\Requests\Request;
 use App\Models\Apply;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -39,6 +40,17 @@ class JobController extends Controller
         }
 
         return view('seeker.job.show_report', compact('apply'));
+    }
+
+    public function showReportInterview(Apply $apply)
+    {
+        $this->authorize('view', $apply);
+
+        if ($apply->IsWithinHalfYear === false) {
+            return redirect()->route('seeker.index.job');
+        }
+
+        return view('seeker.job.show_report_interview', compact('apply'));
     }
 
     public function editReport(Apply $apply)
@@ -113,6 +125,12 @@ class JobController extends Controller
 
         $apply->update($data);
 
+        session()->flash('flash_message_success', 'ご報告ありがとうございました！');
+        return redirect()->route('seeker.index.job');
+    }
+
+    public function updateReportInterview(Request $request, Apply $apply) {
+        $apply->update($request->input('data'));
         session()->flash('flash_message_success', 'ご報告ありがとうございました！');
         return redirect()->route('seeker.index.job');
     }

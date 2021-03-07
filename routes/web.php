@@ -69,8 +69,10 @@ Route::group(['middleware' => 'auth:seeker', 'prefix' => 'mypage', 'namespace' =
 
   Route::get('application', 'JobController@index')->name('seeker.index.job');
   Route::get('application/{apply}', 'JobController@showReport')->name('seeker.show.job');
+  Route::get('application/{apply}/interview', 'JobController@showReportInterview')->name('seeker.show.job_interview');
   Route::get('application/{apply}/report', 'JobController@editReport')->name('seeker.edit.report');
   Route::put('application/{apply}/report', 'JobController@updateReport')->name('seeker.update.report');
+  Route::put('application/{apply}/report_interview', 'JobController@updateReportInterview')->name('seeker.update.report_interview');
 
   Route::get('changepassword', 'UserController@getChangePasswordForm')->name('seeker.mypage.changepassword.get');
   Route::post('changepassword', 'UserController@postChangePassword')->name('seeker.mypage.changepassword.post');
@@ -181,6 +183,7 @@ Route::group(['prefix' => 'enterprise'], function () {
       Route::get('applications/{apply}/report', 'ApplicationController@showReportForm')->name('enterprise.show.application.report');
       Route::put('applications/{apply}/report', 'ApplicationController@updateReport')->name('enterprise.update.application.report');
       Route::get('applications/{apply}/achieve_reward', 'ApplicationController@updateAchieveReward')->name('enterprise.update.application.achieve_reward');
+      Route::get('applications/{apply}/achieve_reward_rev', 'ApplicationController@updateAchieveRewardRev')->name('enterprise.update.application.achieve_reward_rev');
       Route::get('applications/index/unadopt_decline', 'ApplicationController@getUnadoptOrDecline')->name('enterprise.get.application.unadopt_or_decline');
       #会社・企業
       Route::get('mypage', 'CompanyController@index')->name('enterprise.index.mypage');

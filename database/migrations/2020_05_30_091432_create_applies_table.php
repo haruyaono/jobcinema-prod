@@ -26,6 +26,8 @@ class CreateAppliesTable extends Migration
             $table->text('s_nofirst_attendance')->nullable();
             $table->date('e_first_attendance')->nullable();
             $table->text('e_nofirst_attendance')->nullable();
+            $table->date('recruit_confirm')->nullable();
+            $table->date('interview')->nullable();
             $table->unsignedInteger('recruitment_fee')->default(0);
             $table->unsignedInteger('recruitment_status')->default(0);
             $table->unsignedInteger('read')->default(0);
