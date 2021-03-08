@@ -32,9 +32,13 @@ phases:
     commands:
       - echo Build started on 'date'
       - echo Building the Docker image...
+      - echo docker build -t ${REPOSITORY_URI_PHP_FPM}:latest -f docker/php-fpm/Dockerfile .
       - docker build -t ${REPOSITORY_URI_PHP_FPM}:latest -f docker/php-fpm/Dockerfile .
+      - echo docker build -t ${REPOSITORY_URI_NGINX}:latest -f docker/nginx/Dockerfile .
       - docker build -t ${REPOSITORY_URI_NGINX}:latest -f docker/nginx/Dockerfile .
+      - echo docker tag ${REPOSITORY_URI_PHP_FPM}:latest ${REPOSITORY_URI_PHP_FPM}:$IMAGE_TAG
       - docker tag ${REPOSITORY_URI_PHP_FPM}:latest ${REPOSITORY_URI_PHP_FPM}:$IMAGE_TAG
+      - echo docker tag ${REPOSITORY_URI_NGINX}:latest ${REPOSITORY_URI_NGINX}:$IMAGE_TAG
       - docker tag ${REPOSITORY_URI_NGINX}:latest ${REPOSITORY_URI_NGINX}:$IMAGE_TAG
   post_build: # ECRへのプッシュ
     commands:
