@@ -159,23 +159,23 @@
                         <table class="table companyTable companyApplyItemTable">
                             <tr>
                                 <th>銀行名</th>
-                                <td>○○銀行</td>
+                                <td>釧路信用金庫</td>
                             </tr>
                             <tr>
                                 <th>銀行コード</th>
-                                <td>0123</td>
+                                <td>1027</td>
                             </tr>
                             <tr>
                                 <th>支店名</th>
-                                <td>☓☓支店</td>
+                                <td>本店</td>
                             </tr>
                             <tr>
                                 <th>支店コード</th>
-                                <td>012</td>
+                                <td>001</td>
                             </tr>
                             <tr>
                                 <th>口座名義</th>
-                                <td>ド）リブロース</td>
+                                <td>ド）リブラス</td>
                             </tr>
                             <tr>
                                 <th>振り込み金額</th>
