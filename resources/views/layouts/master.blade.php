@@ -15,15 +15,6 @@
         @endif
         <!-- 背景上に表示させるコンテンツ -->
         <div class="contents @if(url()->current() == url('lp')) lp-contents @endif">
-            <div class="wide-notice-overlay">
-                <div class="wide-notice-layout">
-                    <div class="notice-box">
-                        <p>現在、ベータ版を公開中です。</p>
-                        <p>不具合が発生した場合はお問い合わせよりご報告ください。</p>
-                    </div>
-                    <span class="notice-close"></span>
-                </div>
-            </div>
             <!-- ヘッダー -->
             @yield('header')
             @yield('contents')

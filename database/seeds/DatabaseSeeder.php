@@ -31,19 +31,10 @@ class DatabaseSeeder extends Seeder
         DB::table('profiles')->truncate();
         DB::table('favourites')->truncate();
 
-        $this->call(UsersTableSeeder::class);
-        $this->call(ProfilesTableSeeder::class);
         $this->call(CategoryTableSeeder::class);
         $this->call(AchievementRewardTableSeeder::class);
         $this->call(CongratsMoneyTableSeeder::class);
         $this->call(AdminTableSeeder::class);
-        $this->call(EmployersTableSeeder::class);
-        $this->call(CompaniesTableSeeder::class);
-        $this->call(AdItemTableSeeder::class);
-        $this->call(JobItemTableSeeder::class);
-        $this->call(NoticeTableSeeder::class);
-        $this->call(NoticeReadTableSeeder::class);
-        $this->call(JobItemCategoryTableSeeder::class);
 
         // factory(Profile::class, 20)->create();
         // factory(JobItem::class, 20)->create();
