@@ -30,11 +30,12 @@ if (\Auth::guard('seeker')->check()) {
         @else
         <li>
           <a href="{{ route('seeker.index.mypage') }}">
-            @if(!empty(Auth::guard('seeker')->user()->last_name) && !empty(Auth::guard('seeker')->user()->first_name))
-            <i class="fas fa-user mr-1"></i>{{ Auth::guard('seeker')->user()->last_name }}さん <span class="caret"></span>
-            @else
-            <i class="fas fa-user mr-1"></i>ゲストさん<span class="caret"></span>
-            @endif
+          <i class="fas fa-user mr-1"></i>マイページ<span class="caret"></span>
+{{--          @if(!empty(Auth::guard('seeker')->user()->last_name) && !empty(Auth::guard('seeker')->user()->first_name))--}}
+{{--          <i class="fas fa-user mr-1"></i>{{ Auth::guard('seeker')->user()->last_name }}さん <span class="caret"></span>--}}
+{{--          @else--}}
+{{--          <i class="fas fa-user mr-1"></i>ゲストさん<span class="caret"></span>--}}
+{{--          @endif--}}
           </a>
         </li>
         <li>
