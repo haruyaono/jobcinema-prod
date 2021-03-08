@@ -46,7 +46,7 @@ class AllowCongratsMoney extends Command
             // お祝い金申請ステータスが1 且つ 企業側の初出社日から30日経過した応募
             $applies = Apply::where('congrats_application_status', 1)
                 ->whereNotNull('user_id')
-                ->where('e_first_attendance', '<', (new Carbon())->subDays(30))
+                ->where('recruit_confirm', '<', (new Carbon())->subDays(31))
                 ->get();
 
             foreach ($applies as $apply) {
