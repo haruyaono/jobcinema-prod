@@ -18,7 +18,7 @@
 <main class="main-lp">
   <div class="inner">
     <div class="pad">
-      <h1>アルバイトの求人掲載でお困りの企業様へ</h1>
+      <h1 style="font-size: 2rem; font-weight: bolder;">アルバイトの求人掲載でお困りの企業様へ</h1>
       <img class="lp-main-image" src="{{ asset('/img/common/job-cinema_lp.png') }}" alt="JOB CiNEMA">
 
       <section class="section1">
@@ -117,7 +117,7 @@
         </div>
         <div class="q-a">
           <p class="q">費用発生のタイミングは？</p>
-          <p class="a">研修も含め1日でも出社された時点で費用は発生いたします。</p>
+          <p class="a">採用決定時点で費用は発生致します。</p>
         </div>
         <div class="q-a">
           <p class="q">料金の支払い方法は？</p>

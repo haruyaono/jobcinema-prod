@@ -29,7 +29,7 @@
   <section class="main-section static-page">
     <div class="inner">
       <div class="pad">
-        　 <h1 class="mb-5">代表挨拶</h1>
+        <h1 class="mb-5">代表挨拶</h1>
         <div class="page-thum-wrap">
           <figure>
             <img src="{{ asset('/img/common/profile_1.png') }}" alt="代表の写真">
@@ -49,9 +49,7 @@
           <p>革命とは何か。僕は子供たちの未来に灯火を灯すことだと思っています。「釧路に住んでいても夢を見れる」という前例を作りたい。僕自身が未来の子供たちの灯火になりたい。その想いで今後も挑戦を続けていきたいと思います。</p>
         </div>
 
-        <p class="mt-5 pl-3">
-          <p class="text-right">代表　武田 将也</p>
-        </p>
+        <p class="mt-5 pl-3 text-right">代表　武田 将也</p>
         <p class="page-section-close-btn">
           <a href="#" onclick="javascript:window.history.back(-1);return false;">戻る</a>
         </p>

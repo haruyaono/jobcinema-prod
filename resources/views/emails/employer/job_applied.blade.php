@@ -1,6 +1,6 @@
 <p>求人サイト JOBCiNEMA</p>
 <p>{{ $employer['last_name'] }} {{ $employer['first_name'] }} 様</p>
-<p>応募がありました。<br>応募者に電話もしくはメールで連絡をして下さい。</p>
+<p>応募がありました。<br>応募者からのご連絡をお待ち下さい。</p>
 <p>■応募があった求人<br>
     【求人番号】 {{ $jobitem['id'] }}<br>
     【勤務先名】 {{ $jobitem['job_office'] }}<br>

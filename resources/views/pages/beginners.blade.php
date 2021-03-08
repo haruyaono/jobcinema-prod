@@ -56,7 +56,7 @@
                 </div>
                 <div class="right">
                   <p class="ttl">電話で面接を申し込む！</p>
-                  <p class="desc">応募先の企業に電話をしましょう！<br>企業から連絡が来る場合もあります！</p>
+                  <p class="desc">応募先の企業に電話をしましょう！</p>
                 </div>
               </li>
               <li>
@@ -75,7 +75,7 @@
                   <span class="image"><i class="far fa-smile"></i></span>
                 </div>
                 <div class="right">
-                  <p class="ttl">30日後にお祝い金を申請！</p>
+                  <p class="ttl">31日後にお祝い金を申請！</p>
                   <p class="desc">お祝い金申請メールが届いたらWeb申請をしてお金を受け取れるようにしましょう！</p>
                 </div>
               </li>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="right">
                   <p class="ttl">求職者からのご連絡で面接日を決定</p>
-                  <p class="desc">応募者と連絡しましょう！<br>求職者からご連絡が入る場合もあります。</p>
+                  <p class="desc">応募者からの連絡をお待ち下さい！</p>
                 </div>
               </li>
               <li>
