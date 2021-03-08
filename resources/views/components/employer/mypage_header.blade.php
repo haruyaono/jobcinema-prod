@@ -5,7 +5,7 @@
         <div class="header-top cf">
             <div class="companyHeaderLeft floatL">
                 @if (Auth::guard('employer')->check())
-                <p class="h3 mb-0 font-white mt-2">{{ Auth::guard('employer')->user()->company->cname ?: 'ゲスト' }}様の管理ページ</p>
+                <a href="{{ route('enterprise.index.mypage') }}" class="h3 mb-0 font-white mt-2">{{ Auth::guard('employer')->user()->company->cname ?: 'ゲスト' }}様の管理ページ</a>
                 @else
                 <div class="logo"><a href="/"><img src="{{ asset('/img/common/jobcinema_rogo_re.png') }}" alt=""></a></div>
                 @endif
