@@ -56,6 +56,11 @@
                             <div class="header-date">
                                 応募日：{{ $apply->getCreatedAtTransform('Y-m-d') }}
                             </div>
+                            @if($apply->interview != NULL)
+                            <div class="header-date">
+                                面接日：{{ $apply->interview }}
+                            </div>
+                            @endif
                             @if($apply->congrats_status === 1)
                             <div class="header-money">
                                 この企業に採用されるとお祝い金<span class="ml-2">{{ $apply->custom_congrats_amount }}<span>

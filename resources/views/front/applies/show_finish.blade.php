@@ -14,16 +14,17 @@
     <div class="inner">
       <div class="pad">
 
-        <h1 class="txt-h1">応募完了</h1>
-        <p>応募が完了しました。</p>
+        <h1 class="txt-h1">次のステップへ進んでください。</h1>
+        <p>まだ応募は完了しておりません！</p>
         <p>選考フローに沿って、次のステップに進みましょう。</p>
         <section class="apply-after-job-info">
           <h2>応募先：{{$jobitem->job_office}}</h2>
           <div class="apply-after-sub">
-            <p>次のステップは、面接日の確定です。</p>
-            <p>下記採用窓口へ電話をかけ、企業と面接日の確定を行ってください。</p>
-            <p>確定後、MYページにある「応募管理」画面から、面接日を入力してください。</p>
+            <p><span style="background:linear-gradient(transparent 50%, #fec1fe 0%);">次のステップは、面接日の確定です。</span></p>
+            <p><span style="background:linear-gradient(transparent 50%, #fec1fe 0%);">下記採用窓口へ電話をかけ、企業と面接日の確定を行ってください。</span></p>
+            <p><span style="background:linear-gradient(transparent 50%, #fec1fe 0%);">確定後、MYページにある「応募管理」画面から、面接日を入力してください。</span></p>
             <p>MYページは<a href="{{ route('seeker.index.mypage') }}" class="txt-blue-link">こちら</a>です。</p>
+            <p><span style="color: #ff4444">※面接日の入力が確認できない場合、お祝い金を申請できません。</span></p>
           </div>
           <table>
             <tr>
@@ -35,7 +36,7 @@
             <tr>
               <th>採用窓口</th>
               <td>
-                {{ $jobitem->company->full_phone }}
+                <a href="tel:{{ $jobitem->company->full_phone }}">{{ $jobitem->company->full_phone }}</a>
               </td>
             </tr>
             <tr>

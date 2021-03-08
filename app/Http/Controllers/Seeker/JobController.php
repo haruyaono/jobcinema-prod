@@ -131,7 +131,9 @@ class JobController extends Controller
 
     public function updateReportInterview(Request $request, Apply $apply) {
         $apply->update($request->input('data'));
-        session()->flash('flash_message_success', 'ご報告ありがとうございました！');
+        session()->flash('flash_message_success', '応募が完了しました！
+お祝い金の申請は、採用確定日から31日経過後に可能となります！
+不採用の場合は申請できません。');
         return redirect()->route('seeker.index.job');
     }
 }
