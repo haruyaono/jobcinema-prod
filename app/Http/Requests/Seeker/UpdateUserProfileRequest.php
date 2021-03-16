@@ -34,6 +34,11 @@ class UpdateUserProfileRequest extends FormRequest
             'data.profile.postcode02' => 'nullable|numeric|digits:4',
             'data.profile.prefecture' => 'nullable|string|max:191',
             'data.profile.city' => 'nullable|string|max:191',
+            'data.profile.bank_name' => 'nullable|string|max:191',
+            'data.profile.branch_name' => 'nullable|string|max:191',
+            'data.profile.account_type' => 'nullable|string|max:191',
+            'data.profile.account_number' => 'nullable|string|max:191',
+            'data.profile.account_name' => 'nullable|string|max:191',
         ];
     }
 }

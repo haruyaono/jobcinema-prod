@@ -83,11 +83,24 @@
                                     <div class="form-group">
                                         <label for="">住所</label>
                                         <div class="form-row m-0">
-                                            <input class="form-control form-control-sm col-3 {{ $errors->has('data.profile.postcode01') ? 'is-invalid' : '' }}" type="text" name="data[profile][postcode01]" maxlength="3" value="@if(old('data.profile.postcode01')){{ old('data.profile.postcode01')}}@else{{ count($postcode) !== 0 ? $postcode[0] : '' }}@endif">&nbsp;-&nbsp;<input class="form-control form-control-sm col-4 {{ $errors->has('data.profile.postcode02') ? 'is-invalid' : '' }}" type="text" name="data[profile][postcode02]" maxlength="4" value="@if(old('data.profile.postcode02')){{ old('data.profile.postcode02')}}@else{{ count($postcode) !== 0 ? $postcode[1] : '' }}@endif" onKeyUp="AjaxZip3.zip2addr('data[profile][postcode01]','data[profile][postcode02]','data[profile][prefecture]', 'data[profile][city]');">
+                                            <input class="form-control form-control-sm col-3 {{ $errors->has('data.profile.postcode01') ? 'is-invalid' : '' }}" placeholder="000" type="text" name="data[profile][postcode01]" maxlength="3" value="@if(old('data.profile.postcode01')){{ old('data.profile.postcode01')}}@else{{ count($postcode) !== 0 ? $postcode[0] : '' }}@endif">&nbsp;-&nbsp;<input class="form-control form-control-sm col-4 {{ $errors->has('data.profile.postcode02') ? 'is-invalid' : '' }}" placeholder="0000" type="text" name="data[profile][postcode02]" maxlength="4" value="@if(old('data.profile.postcode02')){{ old('data.profile.postcode02')}}@else{{ count($postcode) !== 0 ? $postcode[1] : '' }}@endif" onKeyUp="AjaxZip3.zip2addr('data[profile][postcode01]','data[profile][postcode02]','data[profile][prefecture]', 'data[profile][city]');">
                                         </div>
-                                        <input class="form-control form-control-sm mt-3 col-8 {{ $errors->has('data.profile.prefecture') ? 'is-invalid' : '' }}" type="text" name="data[profile][prefecture]" value="{{ old('data.profile.prefecture') ?: $profile->prefecture }}">
-                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.city') ? 'is-invalid' : '' }}" type="text" name="data[profile][city]" value="{{ old('data.profile.city') ?: $profile->city }}">
-                                        <div class="text-danger">※番地や建物名は不要です</div>
+                                        <input class="form-control form-control-sm mt-3 col-8 {{ $errors->has('data.profile.prefecture') ? 'is-invalid' : '' }}" placeholder="都道府県" type="text" name="data[profile][prefecture]" value="{{ old('data.profile.prefecture') ?: $profile->prefecture }}">
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.city') ? 'is-invalid' : '' }}" placeholder="市区町村" type="text" name="data[profile][city]" value="{{ old('data.profile.city') ?: $profile->city }}">
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.address') ? 'is-invalid' : '' }}" placeholder="丁目番地" type="text" name="data[profile][address]" value="{{ old('data.profile.address') ?: $profile->address }}">
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.building') ? 'is-invalid' : '' }}" placeholder="建物名" type="text" name="data[profile][building]" value="{{ old('data.profile.building') ?: $profile->building }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">口座情報</label>
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.bank_name') ? 'is-invalid' : '' }}" placeholder="銀行名" type="text" name="data[profile][bank_name]" value="{{ old('data.profile.bank_name') ?: $profile->prefecture }}">
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.branch_name') ? 'is-invalid' : '' }}" placeholder="支店名" type="text" name="data[profile][branch_name]" value="{{ old('data.profile.branch_name') ?: $profile->branch_name }}">
+                                        <select name="data[profile][account_type]">
+                                            <option>口座タイプ</option>
+                                            <option value="普通" @if(old('data.profile.account_type') == "普通" || $profile->account_type == "普通") selected @endif>普通</option>
+                                            <option value="当座" @if(old('data.profile.account_type') == "普通" || $profile->account_type == "普通") selected @endif>当座</option>
+                                        </select>
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.account_number') ? 'is-invalid' : '' }}" placeholder="口座番号" type="text" name="data[profile][account_number]" value="{{ old('data.profile.account_number') ?: $profile->account_number }}">
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.account_name') ? 'is-invalid' : '' }}" placeholder="口座名" type="text" name="data[profile][account_name]" value="{{ old('data.profile.account_name') ?: $profile->account_name }}">
                                     </div>
                                     <div class="form-group">
                                         <div class="text-center">
@@ -102,6 +115,8 @@
                     <p class="mt-5"><i class="fas fa-arrow-left mr-1"></i><a href="{{ route('seeker.index.mypage') }}" class="txt-blue-link">前に戻る</a></p>
                 </div>
             </div>
+        </div>
+    </div>
 </section>
 </div>
 @endsection

@@ -201,6 +201,41 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">
+                                                    <label for="" class="col-form-label col-form-label-sm">銀行名</label><span class="text-danger ml-1">*</span>
+                                                </th>
+                                                <td>
+                                                    <input size="28" type="text" class="form-control form-control-sm {{ $errors->has('company_form.company.bank_name') ? ' is-invalid' : '' }}" name="company_form[company][bank_name]" value="{{ old('company_form.company.bank_name') ?: $employer->company->bank_name }}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <label for="" class="col-form-label col-form-label-sm">支店名</label><span class="text-danger ml-1">*</span>
+                                                </th>
+                                                <td>
+                                                    <input size="28" type="text" class="form-control form-control-sm {{ $errors->has('company_form.company.branch_name') ? ' is-invalid' : '' }}" name="company_form[company][branch_name]" value="{{ old('company_form.company.branch_name') ?: $employer->company->branch_name }}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <label for="" class="col-form-label col-form-label-sm">口座タイプ</label><span class="text-danger ml-1">*</span>
+                                                </th>
+                                                <td>
+                                                    <select name="company_form[company][account_type]">
+                                                        <option value="普通" @if(old('company_form.company.account_type') == "普通" || $employer->company->account_type == "普通") selected @endif>普通</option>
+                                                        <option value="当座" @if(old('company_form.company.account_type') == "当座" || $employer->company->account_type == "当座") selected @endif>当座</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <label for="" class="col-form-label col-form-label-sm">口座番号</label><span class="text-danger ml-1">*</span>
+                                                </th>
+                                                <td>
+                                                    <input size="28" type="text" class="form-control form-control-sm {{ $errors->has('company_form.company.account_number') ? ' is-invalid' : '' }}" name="company_form[company][account_number]" value="{{ old('company_form.company.account_number') ?: $employer->company->account_number }}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
                                                     <label class="col-form-label col-form-label-sm">振込人名義（カタカナ）</label><span class="text-danger ml-1">*</span>
                                                 </th>
                                                 <td>
