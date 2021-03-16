@@ -247,6 +247,56 @@
                         </div>
                         <div class="form-group">
                             <div class="row">
+                                <label class="col-sm-2 text-sm-right">銀行名</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
+                                        </div>
+                                        <input name="data[Enterprise][bank_name]" class="form-control" placeholder="入力 銀行名" value="{{ old('data.Enterprise.bank_name') ?: $enterprise->bank_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">支店名</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
+                                        </div>
+                                        <input name="data[Enterprise][branch_name]" class="form-control" placeholder="入力 支店名" value="{{ old('data.Enterprise.branch_name') ?: $enterprise->branch_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">account_type</label>
+                                <div class="col-sm-8">
+                                    <select name="data[Enterprise][account_type]">
+                                        <option value="普通" @if(old('data.Enterprise.account_type') == "普通" || $enterprise->account_type == "普通") selected @endif>普通</option>
+                                        <option value="当座" @if(old('data.Enterprise.account_type') == "当座" || $enterprise->account_type == "当座") selected @endif>当座</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2 text-sm-right">口座番号</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
+                                        </div>
+                                        <input name="data[Enterprise][account_number]" class="form-control" placeholder="入力 口座番号" value="{{ old('data.Enterprise.account_number') ?: $enterprise->account_number }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
                                 <label class="col-sm-2 text-sm-right">振込人名義（カタカナ）</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">

@@ -153,8 +153,10 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-2 text-sm-right">振込人名義</label>
+                            <label class="col-sm-2 text-sm-right">口座情報</label>
                             <div class="col-sm-8">
+                                {{ $enterprise->bank_name }} {{ $enterprise->branch_name }}<br>
+                                {{ $enterprise->account_type }} {{ $enterprise->account_number }}<br>
                                 {{ $enterprise->transfer_person_name }}
                             </div>
                         </div>

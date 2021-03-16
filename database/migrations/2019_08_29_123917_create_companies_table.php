@@ -37,7 +37,6 @@ class CreateCompaniesTable extends Migration
             $table->string('branch_name')->comment('支店名')->nullable();
             $table->string('account_type')->comment('口座タイプ')->nullable();
             $table->string('account_number')->comment('口座番号')->nullable();
-            $table->string('transfer_person_name')->comment('振込人名')->nullable();
             $table->timestamps();
         });
     }
