@@ -272,6 +272,11 @@ return [
             'url'  => 'admin/data/enterprise',
         ],
         [
+            'text'    => '求職者テーブル',
+            'icon'    => 'nav-icon fas fa-user-friends',
+            'url'  => 'admin/data/user',
+        ],
+        [
             'text'    => '成果報酬管理',
             'icon'    => 'nav-icon fas fa-money-check-alt',
             'url'  => 'admin/data/achieve_reward',

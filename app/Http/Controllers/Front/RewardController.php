@@ -34,19 +34,31 @@ class RewardController extends Controller
 
     if ($applies->isEmpty()) return redirect()->back()->with('flash_message_danger', 'お祝い金申請可能な応募はありません');
 
-    DB::transaction(function ($applies) {
-      foreach ($applies as $apply) {
+    foreach ($applies as $apply) {
         if ($apply->user_id == null) continue;
         $apply->update([
-          'congrats_application_status' => 3
+            'congrats_application_status' => 3
         ]);
         $apply->reward()->create([
-          'user_id' => $apply->user_id,
-          'status' => 1,
-          'billing_amount' => $apply->recruitment_fee
+            'user_id' => $apply->user_id,
+            'status' => 1,
+            'billing_amount' => $apply->recruitment_fee
         ]);
-      }
-    });
+    }
+
+//    DB::transaction(function ($applies) {
+//      foreach ($applies as $apply) {
+//        if ($apply->user_id == null) continue;
+//        $apply->update([
+//          'congrats_application_status' => 3
+//        ]);
+//        $apply->reward()->create([
+//          'user_id' => $apply->user_id,
+//          'status' => 1,
+//          'billing_amount' => $apply->recruitment_fee
+//        ]);
+//      }
+//    });
 
     return redirect()->back()->with('flash_message_success', '申請を受け付けました');
   }

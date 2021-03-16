@@ -220,6 +220,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('application', 'ApplicationController')->except(['create', 'store', 'destroy']);
         Route::resource('reward', 'RewardController')->except(['create', 'store', 'destroy']);
         Route::resource('enterprise', 'EnterpriseController')->except(['create', 'store', 'destroy']);
+        Route::resource('user', 'UserController')->except(['create', 'store', 'destroy']);
         Route::resource('achieve_reward', 'AchieveRewardController')->except(['create', 'store', 'destroy']);
       });
       Route::get("ad_item/job_item/{company}", 'AdItemController@jobItem');
