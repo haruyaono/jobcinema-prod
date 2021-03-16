@@ -33,6 +33,11 @@ class CreateCompaniesTable extends Migration
             $table->string('ceo')->comment('代表者様')->nullable();
             $table->string('capital')->comment('資本金')->nullable();
             $table->string('employee_number')->comment('従業員数')->nullable();
+            $table->string('bank_name')->comment('銀行名')->nullable();
+            $table->string('branch_name')->comment('支店名')->nullable();
+            $table->string('account_type')->comment('口座タイプ')->nullable();
+            $table->string('account_number')->comment('口座番号')->nullable();
+            $table->string('transfer_person_name')->comment('振込人名')->nullable();
             $table->timestamps();
         });
     }

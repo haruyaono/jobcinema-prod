@@ -30,6 +30,11 @@ class CompaniesTableSeeder extends Seeder
             'ceo' => '山田・マイケル・太郎',
             'capital' => '1億',
             'employee_number' => '11~50人',
+            'bank_name' => '日本銀行',
+            'branch_name' => '本店',
+            'account_type' => '普通',
+            'account_number' => '1234567',
+            'transfer_person_name' => '株式会社Example 代表取締役 山田・M・太郎',
         ]);
     }
 }
