@@ -131,7 +131,7 @@
                                             <?php
                                             $index--;
                                             ?>
-                                            <a class="btn-gradient-3d-orange" href="{{ $index === 0 ? route('enterprise.edit.jobsheet.mainimage', $jobitem) : route('enterprise.edit.jobsheet.subimage' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン写真を登録' : 'サブ写真を登録' }}</a>
+                                            <a class="btn-gradient-3d-orange" href="javascript:void(0);" onclick='window.open("{{ $index === 0 ? route('enterprise.edit.jobsheet.mainimage', $jobitem) : route('enterprise.edit.jobsheet.subimage' . $index, $jobitem) }}")'>{{ $index === 0 ? 'メイン写真を登録' : 'サブ写真を登録' }}</a>
                                         </p>
                                     </div>
                                     @endforeach
@@ -156,7 +156,7 @@
                                             <?php
                                             $index--;
                                             ?>
-                                            <a class="btn-gradient-3d-blue" href="{{ $index === 0 ? route('enterprise.edit.jobsheet.mainmovie', $jobitem) : route('enterprise.edit.jobsheet.submovie' . $index, $jobitem) }}" target="_blank">{{ $index === 0 ? 'メイン動画を登録' : 'サブ動画を登録' }}</a>
+                                            <a class="btn-gradient-3d-blue" href="javascript:void(0);" onclick='window.open("{{ $index === 0 ? route('enterprise.edit.jobsheet.mainmovie', $jobitem) : route('enterprise.edit.jobsheet.submovie' . $index, $jobitem) }}")'>{{ $index === 0 ? 'メイン動画を登録' : 'サブ動画を登録' }}</a>
                                         </p>
                                     </div>
                                     @endforeach

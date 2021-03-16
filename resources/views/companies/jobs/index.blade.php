@@ -62,7 +62,7 @@
                                 ＜アルバイト・パート＞<br class="only-sp">職種別・市区町村ごとに1つ作成してください。<br><br>
                                 例）<br class="only-sp">アルバイト・パートと社員を同時に掲載する場合<br>アルバイト・パートで１つ、社員で１つ作成します。<br>アルバイト・パートの求人票の中に社員募集の条件などを記載することはNGです。<br>同様に、社員の求人票の中にアルバイト・パート募集の条件などを記載することはNGです。<br>
                                 <div class="btn-wrap mt-3">
-                                    <a href="{{ route('enterprise.index.jobsheet.step1') }}" class="font-yellow font20" target="_blank">＋求人票を新規作成</a>
+                                    <a href="javascript:void(0);" onclick="window.open('{{ route('enterprise.index.jobsheet.step1') }}')" class="font-yellow font20">＋求人票を新規作成</a>
                                 </div>
                             </div>
                         </div>
