@@ -64,7 +64,7 @@
                         <div class="form-group text-center">
                             <button type="submit" name="submit" value="submit" class="btn btn-primary">登録する</button>
                             <a href="javascript:void(0);" class="btn btn-secondary" id="deleteImage">登録された画像を削除</a>
-                            <a class="create-image-back-btn" href="javascript:void(0);" 　class="btn btn-outline-secondary" id="close_button">戻る</a>
+                            <a class="create-image-back-btn" href="javascript:void(0);" class="btn btn-outline-secondary" id="close_button">戻る</a>
                         </div>
                     </form>
                 </div>

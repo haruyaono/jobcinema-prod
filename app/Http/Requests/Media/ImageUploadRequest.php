@@ -20,7 +20,7 @@ class ImageUploadRequest extends AbstractMediaUploadRequest
 
     protected function getMediaValidateParams(): array
     {
-        return ['required', 'image', 'max:20000', 'mimes:jpeg,gif,png'];
+        return ['required', 'image', 'max:20000', 'mimes:jpeg,gif,png,jpg'];
     }
 
     protected function isArray(): bool
