@@ -128,8 +128,8 @@
                             <div class="row">
                                 <label class="col-sm-2 text-sm-right">口座情報</label>
                                 <div class="col-sm-8">
-                                    {{ $user->profile->bank_name }} ({{ $user->profile->bank_code }})<br>
-                                    {{ $user->profile->branch_name }} ({{ $user->profile->branch_code }})<br>
+                                    {{ $user->profile->bank_name }} {{ $user->profile->branch_name }}<br>
+                                    {{ $user->profile->account_type  }} {{ $user->profile->account_number }}<br>
                                     {{ $user->profile->account_name }}
                                 </div>
                             </div>

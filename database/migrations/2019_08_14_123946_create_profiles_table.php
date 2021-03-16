@@ -26,10 +26,10 @@ class CreateProfilesTable extends Migration
             $table->string('phone1')->nullable();
             $table->string('phone2')->nullable();
             $table->string('phone3')->nullable();
-            $table->string('bank_code')->nullable();
             $table->string('bank_name')->nullable();
-            $table->string('branch_code')->nullable();
             $table->string('branch_name')->nullable();
+            $table->string('account_type')->nullable();
+            $table->string('account_number')->nullable();
             $table->string('account_name')->nullable();
             $table->string('occupation')->nullable();
             $table->string('final_education')->comment('最終学歴')->nullable();

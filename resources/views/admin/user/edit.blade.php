@@ -283,19 +283,6 @@
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-sm-2 text-sm-right">銀行コード</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
-                                            </div>
-                                            <input name="data[profile][bank_code]" class="form-control" placeholder="入力 銀行コード" value="{{ old('data.profile.bank_code') ?: $user->profile->bank_code }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
                                     <label class="col-sm-2 text-sm-right">支店名</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
@@ -309,13 +296,24 @@
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-sm-2 text-sm-right">支店コード</label>
+                                    <label class="col-sm-2 text-sm-right">口座タイプ</label>
+                                    <div class="col-sm-8">
+                                        <select class="custom-select" name="data[profile][account_type]">
+                                            <option value="普通" @if(old('data.profile.account_type')== "普通" || $user->profile->account_type=="普通") selected @endif>普通</option>
+                                            <option value="当座" @if(old('data.profile.account_type')== "当座" || $user->profile->account_type=="当座") selected @endif>当座</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-2 text-sm-right">口座番号</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
                                             </div>
-                                            <input name="data[profile][branch_code]" class="form-control" placeholder="入力 支店コード" value="{{ old('data.profile.branch_code') ?: $user->profile->branch_code }}">
+                                            <input name="data[profile][account_bank]" class="form-control" placeholder="入力 口座番号" value="{{ old('data.profile.account_bank') ?: $user->profile->account_bank }}">
                                         </div>
                                     </div>
                                 </div>
