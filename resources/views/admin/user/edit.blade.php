@@ -313,7 +313,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
                                             </div>
-                                            <input name="data[profile][account_bank]" class="form-control" placeholder="入力 口座番号" value="{{ old('data.profile.account_bank') ?: $user->profile->account_bank }}">
+                                            <input name="data[profile][account_number]" class="form-control" placeholder="入力 口座番号" value="{{ old('data.profile.account_number') ?: $user->profile->account_number }}">
                                         </div>
                                     </div>
                                 </div>
