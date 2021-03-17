@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="">口座情報</label>
-                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.bank_name') ? 'is-invalid' : '' }}" placeholder="銀行名" type="text" name="data[profile][bank_name]" value="{{ old('data.profile.bank_name') ?: $profile->prefecture }}">
+                                        <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.bank_name') ? 'is-invalid' : '' }}" placeholder="銀行名" type="text" name="data[profile][bank_name]" value="{{ old('data.profile.bank_name') ?: $profile->bank_name }}">
                                         <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.branch_name') ? 'is-invalid' : '' }}" placeholder="支店名" type="text" name="data[profile][branch_name]" value="{{ old('data.profile.branch_name') ?: $profile->branch_name }}">
                                         <select name="data[profile][account_type]">
                                             <option>口座タイプ</option>
