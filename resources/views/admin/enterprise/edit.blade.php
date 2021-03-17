@@ -273,7 +273,7 @@
                         </div>
                         <div class="form-group">
                             <div class="row">
-                                <label class="col-sm-2 text-sm-right">account_type</label>
+                                <label class="col-sm-2 text-sm-right">口座タイプ</label>
                                 <div class="col-sm-8">
                                     <select name="data[Enterprise][account_type]">
                                         <option value="普通" @if(old('data.Enterprise.account_type') == "普通" || $enterprise->account_type == "普通") selected @endif>普通</option>
