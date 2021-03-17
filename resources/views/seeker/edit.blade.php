@@ -97,7 +97,7 @@
                                         <select name="data[profile][account_type]">
                                             <option>口座タイプ</option>
                                             <option value="普通" @if(old('data.profile.account_type') == "普通" || $profile->account_type == "普通") selected @endif>普通</option>
-                                            <option value="当座" @if(old('data.profile.account_type') == "普通" || $profile->account_type == "普通") selected @endif>当座</option>
+                                            <option value="当座" @if(old('data.profile.account_type') == "当座" || $profile->account_type == "当座") selected @endif>当座</option>
                                         </select>
                                         <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.account_number') ? 'is-invalid' : '' }}" placeholder="口座番号" type="text" name="data[profile][account_number]" value="{{ old('data.profile.account_number') ?: $profile->account_number }}">
                                         <input class="form-control form-control-sm mt-3 {{ $errors->has('data.profile.account_name') ? 'is-invalid' : '' }}" placeholder="口座名" type="text" name="data[profile][account_name]" value="{{ old('data.profile.account_name') ?: $profile->account_name }}">
