@@ -52,14 +52,23 @@
                                 @method('PUT')
                                 <div class="card-body text-left">
                                     <div class="form-group">
-                                        <label class="d-block" for="">お名前(カナ)（必須）</label>
+                                        <label class="d-block" for="">お名前（必須）</label>
                                         <div class="mypage-nameform">
                                             <input type="text" class="form-control {{ $errors->has('data.user.last_name') ? 'is-invalid' : '' }}" name="data[user][last_name]" value="{{ old('data.user.last_name') ?: $user->last_name }}">
                                         </div>
                                         <div class="mypage-nameform">
                                             <input type="text" class="form-control {{ $errors->has('data.user.first_name') ? 'is-invalid' : '' }}" name="data[user][first_name]" value="{{ old('data.user.first_name') ?: $user->first_name }}">
                                         </div>
-                                        <div class="text-danger">※ひらがな、もしくはカタカナでご入力下さい</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="d-block" for="">お名前(カナ)（必須）</label>
+                                        <div class="mypage-nameform">
+                                            <input type="text" class="form-control {{ $errors->has('data.user.last_name_kana') ? 'is-invalid' : '' }}" name="data[user][last_name_kana]" value="{{ old('data.user.last_name_kana') ?: $user->last_name_kana }}">
+                                        </div>
+                                        <div class="mypage-nameform">
+                                            <input type="text" class="form-control {{ $errors->has('data.user.first_name_kana') ? 'is-invalid' : '' }}" name="data[user][first_name_kana]" value="{{ old('data.user.first_name_kana') ?: $user->first_name_kana }}">
+                                        </div>
+                                        <div class="text-danger">カタカナでご入力下さい</div>
                                     </div>
                                     <div class="form-group">
                                         <label for="">連絡先電話番号（必須）</label>
