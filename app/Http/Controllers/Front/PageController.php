@@ -28,6 +28,10 @@ class PageController extends Controller
   {
     return view('pages.ceo');
   }
+  public function getInfo()
+  {
+    return view('pages.info');
+  }
   public function getManageAbout()
   {
     return view('pages.manage_about');

@@ -31,11 +31,12 @@
       <div class="pad">
         　 <h1 class="mb-5">運営について</h1>
         <div class="page-textarea">
-          <p>運営　釧路なび　JOB CiNEMA事業部</p>
-          <p>代表　武田　将也</p>
-          <p>所在地　〒085-0013　北海道釧路市栄町2丁目6-7すみ友館4F「ELFoo1」内</p>
-          <p>電話番号　<a href="tel:080-8297-8600">080-8297-8600</a></p>
-          <p>メールアドレス　<a href="mailto:masaya.takeda@kushiro-navi.com">masaya.takeda@kushiro-navi.com</a></p>
+          <p>運営　合同会社Libroth</p>
+          <p>共同代表　菅原　京介</p>
+          <p>共同代表　武田　将也</p>
+          <p>所在地　〒085-0014　北海道釧路市末広町5丁目13</p>
+          <p>電話番号　<a href="tel:080-9616-8651">080-9616-8651</a></p>
+          <p>メールアドレス　<a href="mailto:bar.elfoo1@gmail.com">bar.elfoo1@gmail.com</a></p>
           <p class="page-section-close-btn">
             <a href="#" onclick="javascript:window.history.back(-1);return false;">戻る</a>
           </p>
