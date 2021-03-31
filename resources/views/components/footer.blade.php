@@ -17,8 +17,8 @@ $isDetail = $routeName === 'show.front.job_sheet.detail' ? true : false;
                 <li><a href="/terms_service" target="_blank">利用規約</a></li>
                 <!-- <li><a href="#">プライバシーポリシー</a></li> -->
                 <li><a href="/manage_about">運営について</a></li>
-{{--                <li><a href="/ceo">代表挨拶</a></li>--}}
-                <li><a href="/info">会社概要</a></li>
+                <li><a href="/info">代表挨拶</a></li>
+{{--                <li><a href="/info">会社概要</a></li>--}}
                 <li><a href="{{ route('index.front.job_sheet.search') }}">求人を探す</a></li>
                 <li><a href="{{ route('contact.s.get') }}">お問い合わせ</a></li>
                 <!-- <li><a href="#">サイトマップ</a></li> -->

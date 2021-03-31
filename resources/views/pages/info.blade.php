@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
-@section('title', '会社概要')
-@section('description', 'JOBCiNEMA会社概要')
+@section('title', '代表挨拶')
+@section('description', 'JOBCiNEMA代表挨拶')
 
 @section('header')
     @component('components.header')
@@ -19,7 +19,7 @@
             </li>
             <li>
                 <a>
-                    会社概要
+                    代表挨拶
                 </a>
             </li>
         </ol>
@@ -29,7 +29,7 @@
         <section class="main-section static-page">
             <div class="inner">
                 <div class="pad">
-                    <h1 class="mb-5">会社概要</h1>
+                    <h1 class="mb-5">代表挨拶</h1>
                     <div class="page-thum-wrap">
                         <figure>
                             <img src="{{ asset('/img/common/profile.jpg') }}" alt="代表の写真">

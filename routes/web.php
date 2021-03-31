@@ -55,7 +55,7 @@ Route::namespace('Front')->group(function () {
   Route::get('beginners', 'PageController@getBeginner');
   Route::get('terms_service', 'PageController@getTermsService');
   Route::get('terms_service_e', 'PageController@getTermsServiceE');
-  Route::get('ceo', 'PageController@getCeo');
+//  Route::get('ceo', 'PageController@getCeo');
   Route::get('info', 'PageController@getInfo');
   Route::get('manage_about', 'PageController@getManageAbout');
 });
