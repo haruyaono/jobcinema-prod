@@ -134,6 +134,9 @@ if (\Auth::guard('seeker')->check()) {
                 <li class="hamburgerLoginMyMenuLinkList">
                   <a class="hamburgerLoginApplicationMypage" href="{{ route('seeker.index.mypage') }}">マイページ</a>
                 </li>
+                  <li class="hamburgerLoginMyMenuLinkList">
+                    <a class="hamburgerLoginApplicationMypage" href="{{ route('create.front.reward') }}">お祝い金申請</a>
+                  </li>
                 @endif
               </ul>
             </div>
